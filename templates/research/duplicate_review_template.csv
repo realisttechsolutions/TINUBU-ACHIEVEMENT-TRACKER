@@ -1,0 +1,2 @@
+duplicate_id,record_id_1,title_1,record_id_2,title_2,match_confidence,resolution_action,merged_canonical_id,notes
+[EXAMPLE-ONLY-DUP-01],[PRJ-001],Coastal Highway Phase 1,[PRJ-044],Lagos Coastal Corridor Phase 1,0.92,Merge,[PRJ-001],"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Duplicate candidate resolved via canonical ID assignment."

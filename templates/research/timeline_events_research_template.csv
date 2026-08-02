@@ -1,0 +1,2 @@
+id,slug,date,date_precision,year,quarter,title,stage,category,sector_slug,summary,details,lead_agency,geopolitical_zone,primary_source_url,internal_notes
+[EXAMPLE-ONLY-TML-01],sample-fec-approval-event,2024-02-15,exact-day,2024,Q1,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] FEC Approves Infrastructure Fund",approval,Infrastructure,infrastructure,"Non-production timeline event example.","FEC approves capital fund allocation.",Federal Ministry of Works,National,https://works.gov.ng,Sample internal note

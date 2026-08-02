@@ -1,0 +1,2 @@
+freshness_id,record_id,velocity_class,last_verified_date,stale_threshold_days,freshness_status,assigned_reviewer,next_review_date,action_taken
+[EXAMPLE-ONLY-FRSH-01],[DEMO-NON-PROD-IND-001],High Velocity,2024-06-30,30,Current,researcher-01@tat.gov.ng,2024-09-30,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] High velocity monthly metric audit verified current."

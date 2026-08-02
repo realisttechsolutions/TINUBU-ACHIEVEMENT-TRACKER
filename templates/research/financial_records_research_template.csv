@@ -1,0 +1,2 @@
+id,entity_type,entity_id,financial_type,amount,currency,reporting_period,source_url,internal_notes
+[EXAMPLE-ONLY-FIN-01],project,[EXAMPLE-ONLY-PRJ-01],fec_approved_contract,1200000000.00,USD,2024-Q1,https://works.gov.ng,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Contract approval figure separate from disbursement expenditure."

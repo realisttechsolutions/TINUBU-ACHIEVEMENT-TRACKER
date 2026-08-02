@@ -1,0 +1,2 @@
+review_id,record_id,editor_id,publication_decision,qualification_notes,truth_rules_audit_pass,approved_date,internal_notes
+[EXAMPLE-ONLY-PUB-01],[DEMO-NON-PROD-001],editor-lead@tat.gov.ng,publishable-with-qualification,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Qualified display: Phase 1 construction ongoing.",TRUE,2024-04-15,Passed editorial 12 truth rules audit

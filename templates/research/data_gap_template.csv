@@ -1,0 +1,2 @@
+gap_id,sector_slug,subsector,topic_summary,missing_entity_type,priority,expected_source_agency,target_completion_date,notes
+[EXAMPLE-ONLY-GAP-01],economy,taxation,State level tax harmonization statistics,indicator,High,Federal Inland Revenue Service (FIRS),2024-Q3,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Identified data gap for future research mission focus."
