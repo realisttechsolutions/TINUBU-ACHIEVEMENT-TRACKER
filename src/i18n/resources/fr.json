@@ -1,0 +1,81 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "close": "Fermer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "view": "Voir",
+    "download": "Télécharger",
+    "subscribe": "S'abonner",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "home": "Accueil",
+    "clear": "Effacer",
+    "all": "Tout",
+    "category": "Catégorie",
+    "date": "Date",
+    "source": "Source",
+    "updated": "Mis à jour",
+    "current": "Actuel",
+    "projected": "Projeté",
+    "since": "Depuis",
+    "from": "De",
+    "to": "À",
+    "year": "Année",
+    "month": "Mois",
+    "quarter": "Trimestre",
+    "annual": "Annuel",
+    "monthly": "Mensuel",
+    "quarterly": "Trimestriel",
+    "growth": "Croissance",
+    "increase": "Augmentation",
+    "decrease": "Diminution",
+    "improvement": "Amélioration",
+    "progress": "Progrès",
+    "achievement": "Réalisation",
+    "validation": "Validation",
+    "implementation": "Mise en œuvre",
+    "launched": "Lancé",
+    "completed": "Terminé",
+    "ongoing": "En cours",
+    "planned": "Planifié"
+  },
+  "navigation": {
+    "dashboard": "Tableau de Bord",
+    "economicReforms": "Réformes Économiques",
+    "securityProgress": "Progrès Sécuritaire",
+    "dataSources": "Sources de Données",
+    "infrastructure": "Infrastructure",
+    "socialServices": "Services Sociaux",
+    "downloads": "Téléchargements"
+  },
+  "hero": {
+    "title": "Tracker des Réalisations de l'Espoir Renouvelé",
+    "subtitle": "Un hub de données complet présentant les politiques et réalisations du Président Bola Ahmed Tinubu dans les secteurs économique, sécuritaire, social et infrastructurel depuis mai 2023.",
+    "exploreProgress": "Explorer les Progrès",
+    "viewTimeline": "Voir la Chronologie",
+    "stats": {
+      "annualSavings": "Économies Annuelles des Réformes",
+      "studentBeneficiaries": "Bénéficiaires de Prêts Étudiants",
+      "gdpGrowth": "Croissance PIB Projetée d'ici 2026"
+    }
+  },
+  "footer": {
+    "description": "Un hub de progrès basé sur les données présentant les politiques et réalisations du Président Bola Tinubu dans les secteurs économique, sécuritaire, social et infrastructurel depuis mai 2023.",
+    "copyright": "Tinubu Progress Watch. Tous droits réservés."
+  },
+  "language": {
+    "switchLanguage": "Changer de Langue",
+    "nigerian": "Nigérian",
+    "global": "Global",
+    "switching": "Changement de langue...",
+    "poweredBy": "Alimenté par la Traduction IA"
+  }
+}

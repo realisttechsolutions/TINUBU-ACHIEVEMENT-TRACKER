@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/schemas/research/sector_indicator.schema.json",
+  "title": "Sector Indicator Research Schema",
+  "description": "Validation schema for sector performance indicators and time-series metric research data",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "sectorSlug",
+    "value",
+    "classification",
+    "sourceName",
+    "sourceLevel",
+    "lastUpdated"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 150
+    },
+    "sectorSlug": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "security",
+        "infrastructure",
+        "social-services",
+        "governance"
+      ]
+    },
+    "value": {
+      "type": "string",
+      "description": "Formatted display metric value (e.g. '$3.2 Billion' or '3.46%')"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "previousValue": {
+      "type": "string"
+    },
+    "change": {
+      "type": "string"
+    },
+    "trend": {
+      "type": "string",
+      "enum": ["up", "down", "neutral"]
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "Actual",
+        "Provisional",
+        "Projected",
+        "Target"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "sourceName": {
+      "type": "string"
+    },
+    "sourceUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "sourceLevel": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "lastUpdated": {
+      "type": "string"
+    },
+    "chartData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "number" }
+        }
+      }
+    },
+    "internalNotes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

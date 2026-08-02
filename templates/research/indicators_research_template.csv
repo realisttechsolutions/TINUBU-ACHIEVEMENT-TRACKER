@@ -1,0 +1,2 @@
+id,name,sector_slug,value,unit,previous_value,change,trend,classification,description,source_name,source_url,source_level,last_updated,internal_notes
+[DEMO-NON-PROD-IND-001],[DEMO-NON-PROD] Capital Importation Volume,economy,$3.37 Billion,USD,$1.09 Billion,+210%,up,Actual,"Non-production sample indicator representing foreign capital inflow research formatting.",National Bureau of Statistics (NBS),https://nigerianstat.gov.ng,2,2024-Q2,Non-production example record for validation tests

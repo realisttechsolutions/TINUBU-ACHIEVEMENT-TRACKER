@@ -1,0 +1,52 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Intentar de Nuevo",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "view": "Ver",
+    "download": "Descargar",
+    "subscribe": "Suscribirse",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "home": "Inicio"
+  },
+  "navigation": {
+    "dashboard": "Panel de Control",
+    "economicReforms": "Reformas Económicas",
+    "securityProgress": "Progreso de Seguridad",
+    "dataSources": "Fuentes de Datos",
+    "infrastructure": "Infraestructura",
+    "socialServices": "Servicios Sociales",
+    "downloads": "Descargas"
+  },
+  "hero": {
+    "title": "Rastreador de Logros de Esperanza Renovada",
+    "subtitle": "Un centro de datos integral que muestra las políticas y logros del Presidente Bola Ahmed Tinubu en los sectores económico, de seguridad, social e infraestructura desde mayo de 2023.",
+    "exploreProgress": "Explorar Progreso",
+    "viewTimeline": "Ver Cronología",
+    "stats": {
+      "annualSavings": "Ahorros Anuales de Reformas",
+      "studentBeneficiaries": "Beneficiarios de Préstamos Estudiantiles",
+      "gdpGrowth": "Crecimiento PIB Proyectado para 2026"
+    }
+  },
+  "footer": {
+    "description": "Un centro de progreso basado en datos que muestra las políticas y logros del Presidente Bola Tinubu en los sectores económico, de seguridad, social e infraestructura desde mayo de 2023.",
+    "copyright": "Tinubu Progress Watch. Todos los derechos reservados."
+  },
+  "language": {
+    "switchLanguage": "Cambiar Idioma",
+    "nigerian": "Nigeriano",
+    "global": "Global",
+    "switching": "Cambiando idioma...",
+    "poweredBy": "Impulsado por Traducción IA"
+  }
+}

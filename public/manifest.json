@@ -1,0 +1,39 @@
+{
+    "name": "Renewed Hope Achievements Tracker",
+    "short_name": "RH Tracker",
+    "description": "A data-driven progress hub showcasing President Bola Tinubu's economic and financial policies and achievements since May 2023.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2E3192",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "48x48",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "government",
+        "news",
+        "education"
+    ],
+    "lang": "en-NG",
+    "dir": "ltr",
+    "scope": "/",
+    "screenshots": [],
+    "prefer_related_applications": false
+}
