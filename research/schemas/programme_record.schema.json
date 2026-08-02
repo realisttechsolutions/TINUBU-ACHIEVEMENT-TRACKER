@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/programme_record.schema.json",
+  "title": "Programme Intervention Record Schema",
+  "description": "Validation schema for non-physical social interventions and credit schemes.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "programme_type",
+    "sector_slug",
+    "lead_agency",
+    "status",
+    "summary"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "programme_type": { "type": "string" },
+    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "lead_agency": { "type": "string" },
+    "status": { "type": "string" },
+    "target_beneficiary_group": { "type": "string" },
+    "financial_envelope": { "type": "string" },
+    "summary": { "type": "string" },
+    "full_description": { "type": "string" },
+    "source_url": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

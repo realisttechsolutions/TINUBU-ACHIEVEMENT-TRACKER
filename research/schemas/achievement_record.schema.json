@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/achievement_record.schema.json",
+  "title": "Achievement Record Research Schema",
+  "description": "Canonical schema for achievement records in Tinubu Achievement Tracker V2",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "achievement_type",
+    "sector",
+    "summary",
+    "full_description",
+    "impact_outcome",
+    "beneficiaries_or_scope",
+    "status",
+    "classification",
+    "publication_status",
+    "lead_ministry_or_agency",
+    "verification_date"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 5, "maxLength": 250 },
+    "short_title": { "type": "string", "maxLength": 80 },
+    "achievement_type": {
+      "type": "string",
+      "enum": ["physical-project", "policy-reform", "programme-intervention", "institutional-improvement", "reported-outcome"]
+    },
+    "sector": {
+      "type": "string",
+      "enum": ["economy", "security", "infrastructure", "social-services", "governance"]
+    },
+    "summary": { "type": "string", "minLength": 10, "maxLength": 400 },
+    "full_description": { "type": "string", "minLength": 20 },
+    "impact_outcome": { "type": "string", "minLength": 5 },
+    "beneficiaries_or_scope": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "announced", "approved", "enacted", "effective", "funded", "funding_released", "procurement", "implementation_planning", "implementation_ongoing", "partially_delivered", "completed", "operational", "outcome_reported", "independently_assessed", "suspended", "superseded", "repealed", "under_review", "archived", "withdrawn"]
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+    },
+    "publication_status": {
+      "type": "string",
+      "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]
+    },
+    "lead_ministry_or_agency": { "type": "string" },
+    "geopolitical_zone": { "type": "string" },
+    "states_covered": { "type": "string" },
+    "start_date": { "type": "string" },
+    "completion_or_current_date": { "type": "string" },
+    "verification_date": { "type": "string" },
+    "featured_image": { "type": "string" },
+    "related_achievement_slugs": { "type": "string" },
+    "internal_notes": { "type": "string" },
+    "researcher_id": { "type": "string" },
+    "evidence_raw_url": { "type": "string" }
+  },
+  "additionalProperties": false
+}

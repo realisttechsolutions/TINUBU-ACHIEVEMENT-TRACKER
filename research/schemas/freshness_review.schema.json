@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/freshness_review.schema.json",
+  "title": "Freshness Review Schema",
+  "description": "Validation schema for tracking velocity-based data freshness thresholds.",
+  "type": "object",
+  "required": [
+    "freshness_id",
+    "record_id",
+    "velocity_class",
+    "last_verified_date",
+    "stale_threshold_days",
+    "freshness_status"
+  ],
+  "properties": {
+    "freshness_id": { "type": "string" },
+    "record_id": { "type": "string" },
+    "velocity_class": { "type": "string", "enum": ["high_velocity", "medium_velocity", "low_velocity", "event_driven"] },
+    "last_verified_date": { "type": "string" },
+    "stale_threshold_days": { "type": ["number", "string"] },
+    "freshness_status": { "type": "string", "enum": ["current", "review_due", "stale", "superseded", "archived", "under_review"] },
+    "assigned_reviewer": { "type": "string" },
+    "next_review_date": { "type": "string" },
+    "action_taken": { "type": "string" }
+  },
+  "additionalProperties": false
+}

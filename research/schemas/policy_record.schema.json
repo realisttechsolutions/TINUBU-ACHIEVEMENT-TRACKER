@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/policy_record.schema.json",
+  "title": "Policy Record Research Schema",
+  "description": "Validation schema for policy and legal reform research records.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "policy_type",
+    "status",
+    "publication_status",
+    "legal_authority",
+    "sector_slug",
+    "lead_agency",
+    "summary",
+    "full_description",
+    "effective_date"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 5, "maxLength": 250 },
+    "short_title": { "type": "string", "maxLength": 80 },
+    "policy_type": {
+      "type": "string",
+      "enum": ["executive_action", "legislation", "regulation", "fiscal_reform", "monetary_financial_reform", "trade_investment_reform", "administrative_reform", "social_policy", "security_policy", "infrastructure_policy", "national_strategy", "programme_framework", "other"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "announced", "approved", "enacted", "effective", "implementation_planning", "implementation_ongoing", "partially_delivered", "completed", "operational", "outcome_reported", "independently_assessed", "suspended", "superseded", "repealed", "under_review", "archived", "withdrawn"]
+    },
+    "publication_status": {
+      "type": "string",
+      "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]
+    },
+    "legal_authority": {
+      "type": "string",
+      "enum": ["constitution", "act", "amendment_act", "executive_order", "regulation", "gazette", "budget", "federal_executive_council", "presidential_directive", "ministerial_directive", "agency_framework", "other"]
+    },
+    "authority_reference": { "type": "string" },
+    "sector_slug": {
+      "type": "string",
+      "enum": ["economy", "security", "infrastructure", "social-services", "governance"]
+    },
+    "lead_agency": { "type": "string" },
+    "responsible_institutions": { "type": "string" },
+    "summary": { "type": "string", "maxLength": 400 },
+    "full_description": { "type": "string" },
+    "background_context": { "type": "string" },
+    "key_objectives": { "type": "string" },
+    "effective_date": { "type": "string" },
+    "announcement_date": { "type": "string" },
+    "approval_date": { "type": "string" },
+    "states_covered": { "type": "string" },
+    "geopolitical_scope": { "type": "string" },
+    "reported_outcomes": { "type": "string" },
+    "internal_notes": { "type": "string" },
+    "researcher_id": { "type": "string" }
+  },
+  "additionalProperties": false
+}

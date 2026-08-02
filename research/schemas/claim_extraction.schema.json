@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/claim_extraction.schema.json",
+  "title": "Claim Extraction Research Schema",
+  "description": "Validation schema for atomic factual claims extracted from source text.",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "entity_id",
+    "claim_type",
+    "claim_text",
+    "data_classification",
+    "source_id"
+  ],
+  "properties": {
+    "claim_id": { "type": "string", "minLength": 3 },
+    "entity_id": { "type": "string" },
+    "claim_type": {
+      "type": "string",
+      "enum": ["Legal Status", "Policy Action", "Implementation Status", "Project Status", "Financial Value", "Beneficiary Value", "Statistical Indicator", "Geographic Scope", "Timeline Event", "Reported Outcome", "Institutional Responsibility", "Context"]
+    },
+    "claim_text": { "type": "string", "minLength": 5 },
+    "structured_value": { "type": ["string", "number"] },
+    "unit": { "type": "string" },
+    "reporting_period": { "type": "string" },
+    "data_classification": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+    },
+    "geographic_scope": { "type": "string" },
+    "source_id": { "type": "string" },
+    "evidence_location": { "type": "string" },
+    "evidence_summary": { "type": "string" },
+    "limitation": { "type": "string" }
+  },
+  "additionalProperties": false
+}

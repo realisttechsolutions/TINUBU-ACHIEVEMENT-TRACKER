@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_record.schema.json",
+  "title": "Indicator Definition Schema",
+  "description": "Validation schema for performance metric and indicator definitions.",
+  "type": "object",
+  "required": [
+    "indicator_id",
+    "slug",
+    "name",
+    "sector_slug",
+    "unit",
+    "source_agency",
+    "data_classification"
+  ],
+  "properties": {
+    "indicator_id": { "type": "string", "minLength": 3 },
+    "slug": { "type": "string" },
+    "name": { "type": "string", "minLength": 3 },
+    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "subsector": { "type": "string" },
+    "unit": { "type": "string" },
+    "baseline_value": { "type": "string" },
+    "baseline_date": { "type": "string" },
+    "target_value": { "type": "string" },
+    "target_date": { "type": "string" },
+    "calculation_methodology": { "type": "string" },
+    "source_agency": { "type": "string" },
+    "data_classification": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+    },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

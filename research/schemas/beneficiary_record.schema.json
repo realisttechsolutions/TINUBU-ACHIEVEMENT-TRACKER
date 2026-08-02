@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/beneficiary_record.schema.json",
+  "title": "Beneficiary Record Schema",
+  "description": "Validation schema separating registered applicants from active disbursement recipients.",
+  "type": "object",
+  "required": [
+    "id",
+    "entity_type",
+    "entity_id",
+    "beneficiary_stage",
+    "count_value",
+    "beneficiary_type",
+    "reporting_period"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "entity_type": { "type": "string", "enum": ["achievement", "programme", "project"] },
+    "entity_id": { "type": "string" },
+    "beneficiary_stage": {
+      "type": "string",
+      "enum": ["applicant", "registered_participant", "approved_beneficiary", "disbursement_recipient", "active_beneficiary"]
+    },
+    "count_value": { "type": ["number", "string"] },
+    "beneficiary_type": {
+      "type": "string",
+      "enum": ["individual", "household", "msme", "student", "farmer", "patient"]
+    },
+    "reporting_period": { "type": "string" },
+    "source_url": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

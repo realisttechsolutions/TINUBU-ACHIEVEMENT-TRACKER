@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/data_gap.schema.json",
+  "title": "Data Gap Schema",
+  "description": "Validation schema for tracking research data gaps and missing information priorities.",
+  "type": "object",
+  "required": [
+    "gap_id",
+    "sector_slug",
+    "topic_summary",
+    "priority"
+  ],
+  "properties": {
+    "gap_id": { "type": "string" },
+    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "subsector": { "type": "string" },
+    "topic_summary": { "type": "string" },
+    "missing_entity_type": { "type": "string" },
+    "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "expected_source_agency": { "type": "string" },
+    "target_completion_date": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,2 @@
+indicator_id,slug,name,sector_slug,subsector,unit,baseline_value,baseline_date,target_value,target_date,calculation_methodology,source_agency,data_classification,internal_notes
+[EXAMPLE-ONLY-IND-001],foreign-direct-investment-inflow,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Foreign Direct Investment Inflow",economy,monetary-and-financial-systems,USD Billion,$1.09 Billion,2023-Q2,$5.00 Billion,2027,Aggregated quarterly BOP statistics from CBN,Central Bank of Nigeria,independently_reported,Sample internal note

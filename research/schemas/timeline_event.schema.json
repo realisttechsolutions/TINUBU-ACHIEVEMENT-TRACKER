@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/timeline_event.schema.json",
+  "title": "Timeline Event Schema",
+  "description": "Validation schema for dated timeline events and implementation milestones.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "date",
+    "year",
+    "quarter",
+    "title",
+    "stage",
+    "category",
+    "sector_slug",
+    "summary"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "date": { "type": "string" },
+    "date_precision": { "type": "string", "enum": ["exact-day", "month", "quarter", "year", "range"] },
+    "year": { "type": ["number", "string"] },
+    "quarter": { "type": "string", "enum": ["Q1", "Q2", "Q3", "Q4"] },
+    "title": { "type": "string" },
+    "stage": {
+      "type": "string",
+      "enum": ["announcement", "approval", "appropriation", "implementation", "operational", "impact"]
+    },
+    "category": { "type": "string" },
+    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "summary": { "type": "string" },
+    "details": { "type": "string" },
+    "lead_agency": { "type": "string" },
+    "geopolitical_zone": { "type": "string" },
+    "primary_source_url": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

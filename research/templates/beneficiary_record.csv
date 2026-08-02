@@ -1,0 +1,2 @@
+id,entity_type,entity_id,beneficiary_stage,count_value,beneficiary_type,reporting_period,source_url,internal_notes
+[EXAMPLE-ONLY-BEN-001],programme,[EXAMPLE-ONLY-PRG-001],disbursement_recipient,25000,student,2024-Q2,https://nelf.gov.ng,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Active disbursement recipients count separate from registered applicants."

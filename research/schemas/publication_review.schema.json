@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/publication_review.schema.json",
+  "title": "Publication Review Schema",
+  "description": "Validation schema for senior editor editorial sign-off and 13 Truth Rules compliance audit.",
+  "type": "object",
+  "required": [
+    "review_id",
+    "record_id",
+    "editor_id",
+    "publication_decision",
+    "truth_rules_audit_pass",
+    "approved_date"
+  ],
+  "properties": {
+    "review_id": { "type": "string" },
+    "record_id": { "type": "string" },
+    "editor_id": { "type": "string" },
+    "publication_decision": {
+      "type": "string",
+      "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]
+    },
+    "qualification_notes": { "type": "string" },
+    "truth_rules_audit_pass": { "type": ["boolean", "string"] },
+    "approved_date": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

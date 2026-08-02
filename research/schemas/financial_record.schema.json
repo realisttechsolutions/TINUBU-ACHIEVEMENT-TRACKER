@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/financial_record.schema.json",
+  "title": "Financial Record Schema",
+  "description": "Validation schema separating contract approval, funding release, and expenditure.",
+  "type": "object",
+  "required": [
+    "id",
+    "entity_type",
+    "entity_id",
+    "financial_type",
+    "amount",
+    "currency",
+    "reporting_period"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "entity_type": { "type": "string", "enum": ["achievement", "project", "programme", "policy"] },
+    "entity_id": { "type": "string" },
+    "financial_type": {
+      "type": "string",
+      "enum": ["budget_allocation", "fec_approved_contract", "released_funding", "expenditure_disbursed", "private_investment"]
+    },
+    "amount": { "type": ["number", "string"] },
+    "currency": { "type": "string", "default": "NGN" },
+    "reporting_period": { "type": "string" },
+    "source_url": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

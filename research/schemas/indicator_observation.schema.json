@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_observation.schema.json",
+  "title": "Indicator Observation Schema",
+  "description": "Validation schema for specific dated indicator metric observations.",
+  "type": "object",
+  "required": [
+    "observation_id",
+    "indicator_id",
+    "reporting_period",
+    "numeric_value",
+    "display_value",
+    "unit",
+    "data_classification",
+    "source_id"
+  ],
+  "properties": {
+    "observation_id": { "type": "string", "minLength": 3 },
+    "indicator_id": { "type": "string" },
+    "reporting_period": { "type": "string" },
+    "numeric_value": { "type": ["number", "string"] },
+    "display_value": { "type": "string" },
+    "unit": { "type": "string" },
+    "data_classification": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+    },
+    "source_id": { "type": "string" },
+    "verification_status": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

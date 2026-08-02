@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/project_record.schema.json",
+  "title": "Physical Project Record Schema",
+  "description": "Validation schema for capital physical infrastructure projects.",
+  "type": "object",
+  "required": [
+    "id",
+    "slug",
+    "title",
+    "project_type",
+    "sector_slug",
+    "lead_agency",
+    "status",
+    "summary"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 3 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 5 },
+    "project_type": { "type": "string" },
+    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "lead_agency": { "type": "string" },
+    "location_scope": { "type": "string" },
+    "status": { "type": "string" },
+    "progress_percentage": { "type": ["number", "string"] },
+    "budget_or_value": { "type": "string" },
+    "states_covered": { "type": "string" },
+    "summary": { "type": "string" },
+    "full_description": { "type": "string" },
+    "source_url": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

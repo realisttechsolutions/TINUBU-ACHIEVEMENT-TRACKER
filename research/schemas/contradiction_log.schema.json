@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/contradiction_log.schema.json",
+  "title": "Contradiction Log Schema",
+  "description": "Validation schema for preserving conflicting numbers, dates, and claims internally.",
+  "type": "object",
+  "required": [
+    "contradiction_id",
+    "record_id",
+    "field_name",
+    "claimed_value_a",
+    "claimed_value_b",
+    "severity",
+    "resolution_status"
+  ],
+  "properties": {
+    "contradiction_id": { "type": "string" },
+    "record_id": { "type": "string" },
+    "field_name": { "type": "string" },
+    "claimed_value_a": { "type": "string" },
+    "source_a_url": { "type": "string" },
+    "claimed_value_b": { "type": "string" },
+    "source_b_url": { "type": "string" },
+    "severity": { "type": "string", "enum": ["minor", "material", "critical"] },
+    "resolution_status": { "type": "string", "enum": ["unresolved", "under_review", "resolved", "qualified"] },
+    "canonical_selection_rationale": { "type": "string" },
+    "internal_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

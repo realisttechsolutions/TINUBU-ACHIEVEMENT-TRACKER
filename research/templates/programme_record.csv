@@ -1,0 +1,2 @@
+id,slug,title,programme_type,sector_slug,lead_agency,status,target_beneficiary_group,financial_envelope,summary,full_description,source_url,internal_notes
+[EXAMPLE-ONLY-PRG-001],sample-student-loan-scheme,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] National Student Financial Aid Scheme",programme-intervention,social-services,NELFUND,operational,Tertiary Students,50 Billion NGN,"Non-production example for programme research template validation.","Detailed programme intervention overview.",https://nelf.gov.ng,Sample internal note

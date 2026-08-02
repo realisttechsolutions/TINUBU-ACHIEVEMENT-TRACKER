@@ -1,0 +1,2 @@
+claim_id,entity_id,claim_type,claim_text,structured_value,unit,reporting_period,data_classification,geographic_scope,source_id,evidence_location,evidence_summary,limitation
+[EXAMPLE-ONLY-CLM-001],[DEMO-NON-PROD-001],Financial Value,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Contract awarded for Phase 1 construction",47,KM,2024-Q1,actual,multi-state,[EXAMPLE-ONLY-SRC-001],Page 4 Gazette,Contract award announcement for Phase 1 construction,Phase 1 section only

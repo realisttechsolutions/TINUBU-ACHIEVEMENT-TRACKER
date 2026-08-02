@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/entity_discovery.schema.json",
+  "title": "Entity Discovery Research Schema",
+  "description": "Validation schema for initial entity discovery leads prior to structured claim extraction.",
+  "type": "object",
+  "required": [
+    "candidate_record_type",
+    "candidate_title",
+    "sector",
+    "institution",
+    "discovery_source"
+  ],
+  "properties": {
+    "candidate_record_type": {
+      "type": "string",
+      "enum": ["physical-project", "policy-reform", "programme-intervention", "institutional-improvement", "reported-outcome", "reform", "executive_action", "legislation", "regulation"]
+    },
+    "candidate_title": { "type": "string", "minLength": 3 },
+    "aliases": { "type": "string" },
+    "sector": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "subsector": { "type": "string" },
+    "institution": { "type": "string" },
+    "geography": { "type": "string" },
+    "possible_existing_record": { "type": "string" },
+    "discovery_source": { "type": "string" },
+    "initial_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}
