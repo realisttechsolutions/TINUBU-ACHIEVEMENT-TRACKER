@@ -3,42 +3,43 @@ import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
-import { FileText, Search, ShieldCheck, Scale, Calendar, Building2, FileSpreadsheet } from "lucide-react";
+import { Building2, MapPin, Calendar, HardHat, FileSpreadsheet, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CANONICAL_SECTORS } from "@/adapters/canonicalData";
 
-export const PoliciesCatalogue: React.FC = () => {
+export const ProjectsCatalogue: React.FC = () => {
   const [selectedSector, setSelectedSector] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const policies = dataAdapter.getPolicies(selectedSector).filter(p => {
+  const projects = dataAdapter.getProjects(selectedSector).filter(p => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
-    return p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q) || p.leadMinistry.toLowerCase().includes(q);
+    return p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q) || p.contractor?.toLowerCase().includes(q);
   });
 
   const handleExportCsv = () => {
     dataAdapter.exportToCsv(
-      policies.map(p => ({
+      projects.map(p => ({
         id: p.id,
         title: p.title,
-        type: p.policyTypeLabel,
         sector: p.sectorName,
-        lead_ministry: p.leadMinistry,
+        executing_agency: p.executingAgency,
         status: p.statusLabel,
-        approval_date: p.approvalDate,
-        gazette_number: p.gazetteNumber || "N/A"
+        progress_percentage: p.progressPercentage,
+        contractor: p.contractor,
+        states: p.statesCovered.join("; "),
+        contract_value: p.contractValue
       })),
-      "tinubu_policies_and_reforms_export"
+      "tinubu_capital_projects_export"
     );
   };
 
   return (
     <>
       <PageHead
-        title="Policy & Reform Intelligence Directory | Tinubu Achievement Tracker"
-        description="Searchable legal gazette directory of executive orders, statutory acts of parliament, and structural policy frameworks under President Bola Ahmed Tinubu's administration."
-        keywords="Nigeria policies, Electricity Act 2023, Student Loans Act 2024, Pharmaceutical Executive Order, legal gazette Nigeria"
+        title="Capital Projects Catalogue | Tinubu Achievement Tracker"
+        description="Verified inventory of major capital engineering, transport corridors, highways, rail links, power plants, and housing estates under President Bola Ahmed Tinubu's administration."
+        keywords="Nigeria capital projects, Lagos Calabar Coastal Highway, Sokoto Badagry Highway, Karsana housing, national infrastructure"
       />
 
       <div className="bg-gov-canvas dark:bg-gov-navy/10 min-h-screen py-8 sm:py-12 font-sans space-y-8">
@@ -48,16 +49,16 @@ export const PoliciesCatalogue: React.FC = () => {
             <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
-                  <Scale className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Statutory Acts & Executive Orders • 2023 — 2026</span>
+                  <Building2 className="h-3.5 w-3.5 text-gov-emerald" />
+                  <span>Physical Capital Infrastructure • 2023 — 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
-                  Policy & Reform Intelligence Directory
+                  National Capital Projects Catalogue
                 </h1>
 
                 <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal">
-                  Inspect the statutory foundations of the administration's reform agenda with official gazette references, legal instruments, and enacting ministries.
+                  Track the construction, contractor mobilization, progress milestones, and verified delivery across national highways, rail links, ports, and housing cities.
                 </p>
               </div>
 
@@ -68,19 +69,9 @@ export const PoliciesCatalogue: React.FC = () => {
                 className="bg-white/10 hover:bg-white/20 border-white/20 text-white font-bold text-xs h-10 px-4 rounded-xl gap-2 shadow-sm shrink-0"
               >
                 <FileSpreadsheet className="h-4 w-4 text-gov-gold" />
-                <span>Export Policies (CSV)</span>
+                <span>Export Projects (CSV)</span>
               </Button>
             </div>
-          </div>
-
-          {/* Canonical Policy Registry Subheading */}
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold font-display text-gov-navy dark:text-white">
-              Canonical Policy Registry
-            </h2>
-            <span className="text-xs text-gov-slate">
-              {policies.length} Policies Indexed
-            </span>
           </div>
 
           {/* Search & Sector Filters */}
@@ -89,7 +80,7 @@ export const PoliciesCatalogue: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search policy name, act, or enacting ministry..."
+              placeholder="Search by project name, contractor, or corridor..."
               className="w-full sm:w-96 h-10 px-3.5 rounded-xl border border-gov-border bg-gov-canvas dark:bg-white/5 text-xs sm:text-sm text-gov-navy dark:text-white placeholder:text-gov-slate focus:outline-none focus:ring-2 focus:ring-gov-navy"
             />
 
@@ -98,59 +89,80 @@ export const PoliciesCatalogue: React.FC = () => {
               onChange={(e) => setSelectedSector(e.target.value)}
               className="w-full sm:w-64 h-10 px-3 rounded-xl border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs font-semibold text-gov-navy dark:text-white focus:outline-none cursor-pointer"
             >
-              <option value="all">All Policy Sectors</option>
+              <option value="all">All Infrastructure Sectors</option>
               {CANONICAL_SECTORS.map(s => (
                 <option key={s.id} value={s.id}>{s.publicLabel}</option>
               ))}
             </select>
           </div>
 
-          {/* Policies Grid */}
+          {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {policies.map((pol) => (
+            {projects.map((proj) => (
               <div
-                key={pol.id}
-                id={pol.slug}
+                key={proj.id}
+                id={proj.slug}
                 className="p-6 rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border hover:border-gov-gold/50 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gov-border/60 pb-3">
                     <div className="flex items-center gap-2">
-                      <StatusBadge status={pol.status} size="sm" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-gov-navy bg-gov-canvas dark:bg-white/10 px-2 py-0.5 rounded border">
-                        {pol.policyTypeLabel}
+                      <StatusBadge status={proj.status} size="sm" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2 py-0.5 rounded">
+                        {proj.sectorName.split(' ')[0]}
                       </span>
                     </div>
-                    {pol.isDemo && <DemoWatermark compact />}
+                    {proj.isDemo && <DemoWatermark compact />}
                   </div>
 
                   <h3 className="text-lg font-bold font-display text-gov-navy dark:text-white leading-snug">
-                    {pol.title}
+                    {proj.title}
                   </h3>
 
                   <p className="text-xs text-gov-slate leading-relaxed">
-                    {pol.summary}
+                    {proj.summary}
                   </p>
 
+                  {/* Progress Percentage Bar */}
+                  <div className="space-y-1.5 pt-2">
+                    <div className="flex items-center justify-between text-xs font-semibold">
+                      <span className="text-gov-slate">Execution Progress</span>
+                      <span className="text-gov-navy dark:text-gov-gold font-bold tabular-nums">
+                        {proj.progressPercentage}%
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-gov-canvas dark:bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full bg-gov-emerald transition-all duration-500 rounded-full"
+                        style={{ width: `${proj.progressPercentage}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contractor & Value Info */}
                   <div className="grid grid-cols-2 gap-2 pt-2 text-xs">
-                    <div className="p-2.5 rounded-lg bg-gov-canvas dark:bg-white/5 space-y-0.5">
-                      <div className="text-[10px] text-gov-slate font-bold uppercase">Enacting Ministry</div>
-                      <div className="text-xs font-semibold text-gov-navy dark:text-white truncate">
-                        {pol.leadMinistry}
+                    {proj.contractor && (
+                      <div className="p-2.5 rounded-lg bg-gov-canvas dark:bg-white/5 space-y-0.5">
+                        <div className="text-[10px] text-gov-slate font-bold uppercase">Contractor</div>
+                        <div className="text-xs font-semibold text-gov-navy dark:text-white truncate">
+                          {proj.contractor}
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-gov-canvas dark:bg-white/5 space-y-0.5">
-                      <div className="text-[10px] text-gov-slate font-bold uppercase">Gazette / Law No.</div>
-                      <div className="text-xs font-mono font-bold text-gov-gold truncate">
-                        {pol.gazetteNumber || "Official Instrument"}
+                    )}
+                    {proj.contractValue && (
+                      <div className="p-2.5 rounded-lg bg-gov-canvas dark:bg-white/5 space-y-0.5">
+                        <div className="text-[10px] text-gov-slate font-bold uppercase">Contract Value</div>
+                        <div className="text-xs font-extrabold text-gov-emerald truncate">
+                          {proj.contractValue}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="pt-3 border-t border-gov-border/60 flex items-center justify-between text-[11px] text-gov-slate">
-                  <span>Sector: <strong className="text-gov-navy dark:text-white">{pol.sectorName}</strong></span>
-                  <span>Date: {pol.approvalDate}</span>
+                  <span>MDA: <strong className="text-gov-navy dark:text-white">{proj.executingAgency}</strong></span>
+                  <span>States: {proj.statesCovered.slice(0, 2).join(', ')}</span>
                 </div>
               </div>
             ))}
@@ -161,4 +173,4 @@ export const PoliciesCatalogue: React.FC = () => {
   );
 };
 
-export default PoliciesCatalogue;
+export default ProjectsCatalogue;

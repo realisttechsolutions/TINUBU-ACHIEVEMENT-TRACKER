@@ -1,253 +1,189 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import PageHead from "@/components/SEO/PageHead";
 import { 
   TrendingUp, 
   ShieldCheck, 
   Building2, 
   HeartPulse, 
-  Wheat, 
-  GraduationCap, 
-  Heart, 
-  Zap, 
-  Laptop,
+  Landmark, 
+  Layers, 
   ArrowRight, 
-  CheckCircle2, 
-  AlertCircle, 
-  Layers,
-  Database,
-  Building,
-  ExternalLink,
-  Search
+  Search,
+  CheckCircle2,
+  FileSpreadsheet
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import HeroSection from "@/components/ui/hero-section";
-import SectionHeader from "@/components/common/SectionHeader";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DataClassificationBadge } from "@/components/common/DataClassificationBadge";
-import { SourceBadge } from "@/components/common/SourceBadge";
-import { getPublicSectors, getDevelopingSectors } from "@/services/sectorService";
-import { SectorRecord } from "@/types/sector";
+import { Button } from "@/components/ui/button";
+import { CANONICAL_PUBLIC_GROUPS, CANONICAL_SECTORS } from "@/adapters/canonicalData";
+import { dataAdapter } from "@/adapters/dataAdapter";
 
-// Icon mapping helper
-const renderSectorIcon = (iconName: string, className: string = "h-6 w-6") => {
-  switch (iconName) {
-    case "TrendingUp": return <TrendingUp className={className} />;
-    case "ShieldCheck": return <ShieldCheck className={className} />;
-    case "Building2": return <Building2 className={className} />;
-    case "HeartPulse": return <HeartPulse className={className} />;
-    case "Wheat": return <Wheat className={className} />;
-    case "GraduationCap": return <GraduationCap className={className} />;
-    case "Heart": return <Heart className={className} />;
-    case "Zap": return <Zap className={className} />;
-    case "Laptop": return <Laptop className={className} />;
-    default: return <Layers className={className} />;
-  }
-};
-
-const SectorsCatalogue: React.FC = () => {
-  const publicSectors = getPublicSectors();
-  const developingSectors = getDevelopingSectors();
+export const SectorsCatalogue: React.FC = () => {
+  const [selectedGroup, setSelectedGroup] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredPublicSectors = publicSectors.filter(s =>
-    s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.leadMinistries.some(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const sectors = CANONICAL_SECTORS.filter(s => {
+    if (selectedGroup !== "all" && s.parentPublicGroup !== selectedGroup) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      return s.name.toLowerCase().includes(q) || s.summary.toLowerCase().includes(q) || s.leadInstitutions.some(i => i.toLowerCase().includes(q));
+    }
+    return true;
+  });
+
+  const handleExportCsv = () => {
+    dataAdapter.exportToCsv(
+      CANONICAL_SECTORS.map(s => ({
+        sector_id: s.id,
+        name: s.name,
+        public_group: s.parentPublicGroupLabel,
+        achievements_count: s.achievementCount,
+        projects_count: s.projectCount,
+        policies_count: s.policyCount,
+        lead_institutions: s.leadInstitutions.join("; ")
+      })),
+      "tinubu_canonical_sectors_export"
+    );
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
-      <Navbar />
+    <>
+      <PageHead
+        title="National Sector Performance Catalogue | Tinubu Achievement Tracker"
+        description="Comprehensive directory of the 15 canonical research sectors organized under 5 public navigation groups under President Bola Ahmed Tinubu's administration (2023 - 2026)."
+        keywords="Nigeria sectors, economic reforms, infrastructure, agriculture, security, education, health, power, digital economy, Contract v1.1.2"
+      />
 
-      <main className="flex-grow">
-        <HeroSection
-          title="National Sector Performance Catalogue"
-          subtitle="Explore canonical, evidence-backed sectoral progress, verified macroeconomic and social indicators, implementation stages, and lead government ministries."
-          action={{ text: "Explore Active Sectors", href: "#active-sectors" }}
-          backgroundImage="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
-          highlightStats={[
-            { value: `${publicSectors.length}`, label: "Active Sectors" },
-            { value: "100%", label: "Source-Attributed" },
-            { value: "4", label: "Evidence Levels" }
-          ]}
-        />
+      <div className="bg-gov-canvas dark:bg-gov-navy/10 min-h-screen py-8 sm:py-12 font-sans space-y-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Header Banner */}
+          <div className="bg-gov-navy text-white rounded-3xl p-6 sm:p-10 border border-gov-gold/30 shadow-2xl space-y-4 relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-2 max-w-3xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
+                  <Layers className="h-3.5 w-3.5 text-gov-emerald" />
+                  <span>15 Canonical Sectors • 5 Public Navigation Groups</span>
+                </div>
 
-        <section id="active-sectors" className="container mx-auto px-4 py-12">
-          {/* Section Title & Search */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-            <SectionHeader
-              title="Published National Sectors"
-              description="Sectors backed by official gazettes, NBS statistics, CBN bulletins, and verified institutional sources."
-              centered={false}
-            />
+                <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
+                  National Sector Performance Catalogue
+                </h1>
 
-            {/* Filter Input */}
-            <div className="relative w-full md:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gov-slate" />
+                <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal">
+                  All documented policies, capital infrastructure developments, and verified public outcomes classified according to the Contract v1.1.2 research taxonomy.
+                </p>
+              </div>
+
+              <Button
+                onClick={handleExportCsv}
+                variant="outline"
+                size="sm"
+                className="bg-white/10 hover:bg-white/20 border-white/20 text-white font-bold text-xs h-10 px-4 rounded-xl gap-2 shadow-sm shrink-0"
+              >
+                <FileSpreadsheet className="h-4 w-4 text-gov-gold" />
+                <span>Export Sectors (CSV)</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Group Filter Tabs & Search */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border flex flex-col sm:flex-row gap-4 items-center justify-between shadow-sm">
+            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto scrollbar-none pb-1 sm:pb-0">
+              <button
+                type="button"
+                onClick={() => setSelectedGroup("all")}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
+                  selectedGroup === "all"
+                    ? "bg-gov-navy text-gov-gold shadow-sm"
+                    : "bg-gov-canvas dark:bg-white/5 text-gov-slate hover:text-gov-navy"
+                }`}
+              >
+                All 15 Sectors
+              </button>
+              {CANONICAL_PUBLIC_GROUPS.map((g) => (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setSelectedGroup(g.id)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
+                    selectedGroup === g.id
+                      ? "bg-gov-navy text-gov-gold shadow-sm"
+                      : "bg-gov-canvas dark:bg-white/5 text-gov-slate hover:text-gov-navy"
+                  }`}
+                >
+                  {g.label.split('&')[0]}
+                </button>
+              ))}
+            </div>
+
+            <div className="w-full sm:w-72 relative">
+              <Search className="h-4 w-4 text-gov-slate absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Filter sectors by name or ministry..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-gov-navy/40 border border-gov-border rounded-lg focus:outline-none focus:ring-2 focus:ring-gov-emerald"
+                placeholder="Search sector or agency..."
+                className="w-full h-9 pl-9 pr-3 rounded-xl border border-gov-border bg-gov-canvas dark:bg-white/5 text-xs text-gov-navy dark:text-white placeholder:text-gov-slate focus:outline-none"
               />
             </div>
           </div>
 
-          {/* Active Sectors Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {filteredPublicSectors.map((sector) => (
-              <Card
-                key={sector.slug}
-                className="group hover:shadow-xl transition-all duration-300 border-gov-border hover:border-gov-emerald dark:bg-gov-navy/30 overflow-hidden flex flex-col justify-between"
+          {/* Sectors 3-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sectors.map((sector) => (
+              <div
+                key={sector.id}
+                className="p-6 rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border hover:border-gov-gold/50 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between group"
               >
-                <div>
-                  {/* Top Bar with Accent Color */}
-                  <div
-                    className="h-1.5 w-full"
-                    style={{ backgroundColor: sector.colorTheme }}
-                  />
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2.5 py-1 rounded-md">
+                      {sector.parentPublicGroupLabel}
+                    </span>
+                    <span className="text-xs font-semibold text-gov-slate">
+                      {sector.achievementCount} Achievements
+                    </span>
+                  </div>
 
-                  <CardContent className="p-6">
-                    {/* Header: Icon & Status Badge */}
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div
-                        className="p-3 rounded-xl text-white shadow-sm"
-                        style={{ backgroundColor: sector.colorTheme }}
-                      >
-                        {renderSectorIcon(sector.iconName, "h-6 w-6")}
-                      </div>
+                  <h3 className="text-lg font-bold font-display text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors leading-snug">
+                    {sector.publicLabel}
+                  </h3>
 
-                      <div className="flex flex-col items-end gap-1">
-                        <Badge
-                          variant={sector.publicationStatus === "active" ? "default" : "secondary"}
-                          className={`text-[10px] uppercase font-bold tracking-wider ${
-                            sector.publicationStatus === "active"
-                              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                              : "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-                          }`}
-                        >
-                          {sector.publicationStatus === "active" ? "Active" : "Qualified"}
-                        </Badge>
-                      </div>
+                  <p className="text-xs text-gov-slate leading-relaxed line-clamp-3">
+                    {sector.summary}
+                  </p>
+
+                  <div className="p-3 rounded-xl bg-gov-canvas dark:bg-white/5 space-y-1">
+                    <div className="text-[10px] text-gov-slate font-bold uppercase">
+                      {sector.highlightStat.label}
                     </div>
-
-                    {/* Sector Title */}
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-gov-emerald transition-colors">
-                      <Link to={`/sectors/${sector.slug}`}>{sector.title}</Link>
-                    </h3>
-
-                    {/* Sector Summary */}
-                    <p className="text-sm text-gov-slate line-clamp-3 mb-6">
-                      {sector.summary}
-                    </p>
-
-                    {/* Key Indicators Preview */}
-                    {sector.indicators.length > 0 && (
-                      <div className="space-y-2 mb-6 bg-gov-canvas dark:bg-gov-navy/50 p-3 rounded-lg border border-gov-border/50">
-                        <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider block mb-1">
-                          Key Indicator Highlight
-                        </span>
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-xs text-gov-navy dark:text-white font-medium">
-                            {sector.indicators[0].name}
-                          </span>
-                          <span className="text-base font-extrabold text-gov-emerald">
-                            {sector.indicators[0].value}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px] text-gov-slate pt-1 border-t border-gov-border/40">
-                          <span>Source: {sector.indicators[0].sourceName}</span>
-                          <DataClassificationBadge classification={sector.indicators[0].classification} />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Qualification Note Alert if applicable */}
-                    {sector.qualificationNote && (
-                      <div className="mb-4 text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 p-2.5 rounded border border-amber-200 dark:border-amber-800 flex items-start gap-2">
-                        <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                        <span>{sector.qualificationNote}</span>
-                      </div>
-                    )}
-
-                    {/* Lead Ministries List */}
-                    <div className="space-y-1.5 mb-6">
-                      <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider block">
-                        Lead Responsible Agencies
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {sector.leadMinistries.map((ministry, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center text-xs bg-gov-canvas dark:bg-gov-navy px-2 py-1 rounded border border-gov-border text-gov-navy dark:text-slate-200"
-                          >
-                            <Building className="h-3 w-3 mr-1 text-gov-gold" />
-                            {ministry.name}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="text-base font-black text-gov-navy dark:text-white tabular-nums">
+                      {sector.highlightStat.value}
                     </div>
-                  </CardContent>
+                    <div className="text-[10px] text-gov-emerald font-semibold">
+                      {sector.highlightStat.subtext}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Footer Action Link */}
-                <div className="p-6 pt-0">
+                <div className="pt-3 border-t border-gov-border/60 flex items-center justify-between">
+                  <div className="text-[11px] text-gov-slate">
+                    {sector.projectCount} Projects • {sector.policyCount} Policies
+                  </div>
+
                   <Link
                     to={`/sectors/${sector.slug}`}
-                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-gov-navy hover:bg-gov-emerald text-white text-sm font-semibold rounded-lg transition-all duration-300 group-hover:shadow-md"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors"
                   >
-                    View Sector Dashboard
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <span>Sector Hub</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-gov-gold group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
-
-          {/* Developing Sectors Architecture Section */}
-          {developingSectors.length > 0 && (
-            <div className="mt-16 pt-12 border-t border-gov-border">
-              <SectionHeader
-                title="Developing Sectors & Architecture Roadmap"
-                description="Sectors registered in the product model undergoing formal data audit before public activation."
-                centered={false}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                {developingSectors.map((sector) => (
-                  <Card key={sector.slug} className="border border-dashed border-gov-border bg-gov-canvas/50 dark:bg-gov-navy/20 p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-gov-slate/10 rounded-lg text-gov-slate">
-                        {renderSectorIcon(sector.iconName, "h-6 w-6")}
-                      </div>
-                      <div className="flex-grow">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-lg font-bold text-gov-navy dark:text-white">{sector.title}</h4>
-                          <Badge variant="outline" className="text-xs border-amber-500 text-amber-600 bg-amber-50 dark:bg-amber-950/30">
-                            Developing Sector
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-gov-slate mt-2">{sector.summary}</p>
-                        {sector.qualificationNote && (
-                          <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-2 bg-amber-50/50 dark:bg-amber-950/20 p-2 rounded border border-amber-200/50">
-                            {sector.qualificationNote}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
-      </main>
-
-      <Footer />
-    </div>
+        </div>
+      </div>
+    </>
   );
 };
 

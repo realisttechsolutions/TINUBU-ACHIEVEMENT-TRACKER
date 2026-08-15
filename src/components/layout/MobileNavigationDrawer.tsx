@@ -1,160 +1,296 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { X, Download, Globe, Shield, ExternalLink } from "lucide-react";
-import { navigationGroups } from "@/navigation/navigation.config";
+import { 
+  X, 
+  Search, 
+  ChevronRight, 
+  ChevronDown, 
+  Award, 
+  Building2, 
+  FileText, 
+  Users, 
+  Compass, 
+  Clock, 
+  Database, 
+  Download, 
+  ShieldCheck, 
+  LayoutDashboard,
+  Layers,
+  MapPin
+} from "lucide-react";
 import BrandLockup from "./BrandLockup";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useTranslation } from "@/hooks/useTranslation";
-import ThemeToggle from "../ui/ThemeToggle";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+import { CANONICAL_PUBLIC_GROUPS, CANONICAL_SECTORS } from "@/adapters/canonicalData";
 
 interface MobileNavigationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenSearch?: () => void;
 }
 
 export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   isOpen,
   onClose,
+  onOpenSearch,
 }) => {
   const location = useLocation();
-  const { t } = useTranslation();
-  const { currentLanguage, changeLanguage, availableLanguages } = useLanguage();
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Close on Escape key & manage scroll locking
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      closeButtonRef.current?.focus();
-      document.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  return (
-    <div
-      aria-modal="true"
-      role="dialog"
-      aria-label="Mobile Navigation Menu"
-      className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs animate-fade-in lg:hidden"
-    >
-      {/* Backdrop overlay trigger */}
-      <div className="absolute inset-0" onClick={onClose} aria-hidden="true" />
+  const isActive = (path: string) => location.pathname === path;
 
-      {/* Drawer Body */}
-      <div className="relative w-full max-w-sm bg-white dark:bg-gov-darkSurface h-full shadow-2xl flex flex-col justify-between overflow-y-auto border-l border-gov-border z-10">
-        {/* Header section */}
-        <div className="p-4 border-b border-gov-border flex items-center justify-between bg-gov-canvas dark:bg-gov-navy/20">
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden flex">
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Drawer Panel */}
+      <div className="relative ml-0 mr-auto w-full max-w-sm h-full bg-white dark:bg-gov-darkSurface shadow-2xl flex flex-col z-10 animate-slide-in-right overflow-y-auto">
+        {/* Header */}
+        <div className="p-4 border-b border-gov-border flex items-center justify-between bg-gov-navy text-white">
           <BrandLockup compact onClick={onClose} />
           <button
-            ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label="Close navigation menu"
-            className="p-2 rounded-md text-gov-slate hover:text-gov-navy hover:bg-gov-border/40 focus:outline-none focus:ring-2 focus:ring-gov-navy"
+            aria-label="Close navigation drawer"
+            className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Navigation Content */}
-        <div className="p-5 space-y-6 flex-grow">
-          {navigationGroups.map((group) => (
-            <div key={group.id} className="space-y-2">
-              <h3 className="text-xs font-bold text-gov-slate uppercase tracking-wider px-2">
-                {group.title}
-              </h3>
-              <div className="space-y-1">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.path;
+        {/* Quick Search Bar */}
+        <div className="p-3 border-b border-gov-border bg-gov-canvas dark:bg-white/5">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onOpenSearch?.();
+            }}
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-white dark:bg-gov-navy border border-gov-border text-xs text-gov-slate shadow-sm"
+          >
+            <span className="flex items-center gap-2">
+              <Search className="h-4 w-4 text-gov-gold" />
+              <span>Search achievements, sectors, states...</span>
+            </span>
+            <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">⌘K</kbd>
+          </button>
+        </div>
 
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={onClose}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                        isActive
-                          ? "bg-gov-navy text-white font-semibold shadow-xs"
-                          : "text-gov-text dark:text-gray-200 hover:bg-gov-canvas dark:hover:bg-gov-navy/30"
-                      }`}
-                    >
-                      <Icon
-                        className={`h-4 w-4 shrink-0 ${
-                          isActive ? "text-gov-gold" : "text-gov-slate"
-                        }`}
-                      />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+        {/* Navigation Body */}
+        <div className="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
+          {/* Main Core Links */}
+          <div className="space-y-1">
+            <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
+              Core Platform
             </div>
-          ))}
-
-          {/* Action Button: Reports & Downloads */}
-          <div className="pt-2">
-            <Button
-              className="w-full bg-gov-emerald hover:bg-emerald-800 text-white flex items-center justify-center gap-2 py-2.5"
-              asChild
+            
+            <Link
+              to="/"
               onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                isActive("/") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
+              }`}
             >
-              <Link to="/downloads">
-                <Download className="h-4 w-4 text-gov-gold" />
-                <span>Reports & Downloads</span>
+              <span>Home Overview</span>
+              <ChevronRight className="h-4 w-4 opacity-50" />
+            </Link>
+
+            <Link
+              to="/achievements"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                isActive("/achievements") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Award className="h-4 w-4 text-gov-gold" />
+                <span>Achievements Explorer</span>
+              </span>
+              <ChevronRight className="h-4 w-4 opacity-50" />
+            </Link>
+
+            <Link
+              to="/impact-map"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                isActive("/impact-map") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Compass className="h-4 w-4 text-gov-emerald" />
+                <span>Nigeria Impact Map</span>
+              </span>
+              <ChevronRight className="h-4 w-4 opacity-50" />
+            </Link>
+
+            <Link
+              to="/timeline"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                isActive("/timeline") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Clock className="h-4 w-4 text-gov-gold" />
+                <span>Administration Timeline</span>
+              </span>
+              <ChevronRight className="h-4 w-4 opacity-50" />
+            </Link>
+          </div>
+
+          {/* Initiatives Group */}
+          <div className="space-y-1">
+            <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
+              Documented Initiatives
+            </div>
+
+            <Link
+              to="/projects"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/projects") ? "bg-gov-navy text-white" : "text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Building2 className="h-4 w-4 text-blue-600" />
+                <span>Capital Infrastructure Projects</span>
+              </span>
+            </Link>
+
+            <Link
+              to="/policies"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/policies") ? "bg-gov-navy text-white" : "text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <FileText className="h-4 w-4 text-indigo-600" />
+                <span>Policies & Structural Reforms</span>
+              </span>
+            </Link>
+
+            <Link
+              to="/programmes"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/programmes") ? "bg-gov-navy text-white" : "text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Users className="h-4 w-4 text-emerald-600" />
+                <span>Social Intervention Programmes</span>
+              </span>
+            </Link>
+          </div>
+
+          {/* Sectors Directory Accordion */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider">
+                15 Canonical Sectors
+              </span>
+              <Link
+                to="/sectors"
+                onClick={onClose}
+                className="text-xs font-semibold text-gov-emerald hover:underline"
+              >
+                All Sectors
               </Link>
-            </Button>
+            </div>
+
+            <div className="space-y-1.5">
+              {CANONICAL_PUBLIC_GROUPS.map((group) => {
+                const isExpanded = expandedGroup === group.id;
+                const groupSectors = CANONICAL_SECTORS.filter(s => s.parentPublicGroup === group.id);
+
+                return (
+                  <div key={group.id} className="border border-gov-border rounded-lg overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedGroup(isExpanded ? null : group.id)}
+                      className="w-full flex items-center justify-between p-2.5 bg-gov-canvas dark:bg-white/5 text-xs font-bold text-gov-navy dark:text-white"
+                    >
+                      <span>{group.label}</span>
+                      <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-180 text-gov-gold" : ""}`} />
+                    </button>
+
+                    {isExpanded && (
+                      <div className="p-2 space-y-1 bg-white dark:bg-gov-darkSurface">
+                        {groupSectors.map((sector) => (
+                          <Link
+                            key={sector.id}
+                            to={`/sectors/${sector.slug}`}
+                            onClick={onClose}
+                            className="block px-2.5 py-1.5 text-xs text-gov-slate hover:text-gov-navy dark:hover:text-white hover:bg-gov-canvas rounded"
+                          >
+                            {sector.publicLabel}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Embedded Language Selector */}
-          <div className="pt-4 border-t border-gov-border space-y-2">
-            <label className="text-xs font-bold text-gov-slate uppercase tracking-wider px-2 flex items-center gap-1.5">
-              <Globe className="h-3.5 w-3.5 text-gov-navy" />
-              <span>Language / Harshe</span>
-            </label>
-            <select
-              value={currentLanguage}
-              onChange={(e) => changeLanguage(e.target.value)}
-              className="w-full h-10 px-3 rounded-md border border-gov-border bg-gov-canvas text-sm font-medium text-gov-navy focus:outline-none focus:ring-2 focus:ring-gov-navy"
+          {/* Evidence & Data Resources */}
+          <div className="space-y-1">
+            <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
+              Evidence & Public Data
+            </div>
+
+            <Link
+              to="/data"
+              onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
-              {availableLanguages.map((lang) => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.nativeName} ({lang.name})
-                </option>
-              ))}
-            </select>
-          </div>
+              <Database className="h-4 w-4 text-emerald-600" />
+              <span>Interactive Data Explorer</span>
+            </Link>
 
-          {/* Theme Control */}
-          <div className="pt-2 flex items-center justify-between px-2 text-sm text-gov-slate">
-            <span className="text-xs font-bold uppercase tracking-wider">Appearance</span>
-            <ThemeToggle />
+            <Link
+              to="/data-sources"
+              onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+            >
+              <ShieldCheck className="h-4 w-4 text-amber-600" />
+              <span>Sources & Evidence Standards</span>
+            </Link>
+
+            <Link
+              to="/downloads"
+              onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+            >
+              <Download className="h-4 w-4 text-purple-600" />
+              <span>Download Centre (CSV / JSON)</span>
+            </Link>
+
+            <Link
+              to="/dashboard"
+              onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
+            >
+              <LayoutDashboard className="h-4 w-4 text-blue-600" />
+              <span>Macro Analytics Dashboard</span>
+            </Link>
           </div>
         </div>
 
-        {/* Footer Note inside Drawer */}
-        <div className="p-4 border-t border-gov-border bg-gov-canvas dark:bg-gov-navy/10 text-xs text-gov-slate space-y-1">
-          <p className="font-semibold text-gov-navy dark:text-white">Tinubu Achievement Tracker</p>
-          <p className="text-[11px] leading-relaxed">
-            Evidence-based national progress platform compiling public & institutional statistics.
-          </p>
+        {/* Footer in Drawer */}
+        <div className="p-4 border-t border-gov-border bg-gov-canvas dark:bg-gov-darkSurface flex items-center justify-between">
+          <div className="text-[11px] text-gov-slate">
+            <span>Mandate: 2023 — 2026</span>
+          </div>
+          <ThemeToggle />
         </div>
       </div>
     </div>

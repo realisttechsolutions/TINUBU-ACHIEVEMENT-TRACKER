@@ -1,16 +1,22 @@
 import React from "react";
-import { Search, X, LayoutGrid, List, SlidersHorizontal } from "lucide-react";
+import { Search, X, LayoutGrid, List, SlidersHorizontal, RotateCcw, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CANONICAL_PUBLIC_GROUPS, CANONICAL_SECTORS, DEMO_NIGERIA_STATES } from "@/adapters/canonicalData";
+
+export interface FilterState {
+  searchQuery: string;
+  publicGroup: string;
+  sectorId: string;
+  status: string;
+  verificationStatus: string;
+  state: string;
+  year: string;
+  sortBy: 'newest' | 'oldest' | 'title' | 'status';
+}
 
 interface AchievementFilterBarProps {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  selectedSector: string;
-  onSectorChange: (sector: string) => void;
-  selectedStatus: string;
-  onStatusChange: (status: string) => void;
-  selectedType: string;
-  onTypeChange: (type: string) => void;
+  filters: FilterState;
+  onFilterChange: (filters: Partial<FilterState>) => void;
   viewMode: "grid" | "list";
   onViewModeChange: (mode: "grid" | "list") => void;
   onResetFilters: () => void;
@@ -18,142 +24,199 @@ interface AchievementFilterBarProps {
 }
 
 export const AchievementFilterBar: React.FC<AchievementFilterBarProps> = ({
-  searchQuery,
-  onSearchChange,
-  selectedSector,
-  onSectorChange,
-  selectedStatus,
-  onStatusChange,
-  selectedType,
-  onTypeChange,
+  filters,
+  onFilterChange,
   viewMode,
   onViewModeChange,
   onResetFilters,
   totalResultsCount,
 }) => {
   const hasActiveFilters =
-    searchQuery.trim() !== "" ||
-    selectedSector !== "all" ||
-    selectedStatus !== "all" ||
-    selectedType !== "all";
+    filters.searchQuery.trim() !== "" ||
+    filters.publicGroup !== "all" ||
+    filters.sectorId !== "all" ||
+    filters.status !== "all" ||
+    filters.verificationStatus !== "all" ||
+    filters.state !== "all" ||
+    filters.year !== "all";
 
   return (
-    <div className="bg-white dark:bg-gov-darkSurface border border-gov-border rounded-xl p-4 sm:p-5 shadow-xs space-y-4 font-sans">
-      {/* Top Controls Bar */}
+    <div className="bg-white dark:bg-gov-darkSurface border border-gov-border rounded-2xl p-4 sm:p-6 shadow-sm space-y-4 font-sans">
+      {/* Primary Search & Quick Filters */}
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-        {/* Search Input */}
+        {/* Text Search */}
         <div className="sm:col-span-6 relative">
-          <Search className="h-4 w-4 text-gov-navy absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="h-4 w-4 text-gov-navy dark:text-gov-gold absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search policies, projects, agencies, or locations..."
-            className="w-full h-10 pl-9 pr-8 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-navy/20 text-xs sm:text-sm text-gov-navy dark:text-white placeholder:text-gov-slate focus:outline-none focus:ring-2 focus:ring-gov-navy"
+            value={filters.searchQuery}
+            onChange={(e) => onFilterChange({ searchQuery: e.target.value })}
+            placeholder="Search policies, projects, MDAs, states, or outcomes..."
+            className="w-full h-11 pl-10 pr-9 rounded-xl border border-gov-border bg-gov-canvas dark:bg-white/5 text-xs sm:text-sm text-gov-navy dark:text-white placeholder:text-gov-slate focus:outline-none focus:ring-2 focus:ring-gov-navy dark:focus:ring-gov-gold"
           />
-          {searchQuery && (
+          {filters.searchQuery && (
             <button
-              onClick={() => onSearchChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gov-slate hover:text-gov-navy"
+              onClick={() => onFilterChange({ searchQuery: "" })}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gov-slate hover:text-gov-navy dark:hover:text-white p-1"
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        {/* Sector Select */}
+        {/* 15 Canonical Sectors Dropdown */}
         <div className="sm:col-span-3">
           <select
-            value={selectedSector}
-            onChange={(e) => onSectorChange(e.target.value)}
+            value={filters.sectorId}
+            onChange={(e) => onFilterChange({ sectorId: e.target.value })}
             aria-label="Filter by Sector"
-            className="w-full h-10 px-3 rounded-lg border border-gov-border bg-gov-canvas text-xs font-semibold text-gov-navy focus:outline-none focus:ring-2 focus:ring-gov-navy cursor-pointer"
+            className="w-full h-11 px-3 rounded-xl border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs font-semibold text-gov-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-gov-navy cursor-pointer"
           >
-            <option value="all">All Sectors</option>
-            <option value="economy">Economy & Fiscal</option>
-            <option value="security">Security & Defense</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="social-services">Social Services</option>
+            <option value="all">All 15 Canonical Sectors</option>
+            {CANONICAL_SECTORS.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.publicLabel}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* Status Select */}
+        {/* Status Dropdown */}
         <div className="sm:col-span-3">
           <select
-            value={selectedStatus}
-            onChange={(e) => onStatusChange(e.target.value)}
-            aria-label="Filter by Status"
-            className="w-full h-10 px-3 rounded-lg border border-gov-border bg-gov-canvas text-xs font-semibold text-gov-navy focus:outline-none focus:ring-2 focus:ring-gov-navy cursor-pointer"
+            value={filters.status}
+            onChange={(e) => onFilterChange({ status: e.target.value })}
+            aria-label="Filter by Implementation Status"
+            className="w-full h-11 px-3 rounded-xl border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs font-semibold text-gov-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-gov-navy cursor-pointer"
           >
-            <option value="all">All Statuses</option>
-            <option value="Operational">Operational</option>
-            <option value="Implementation Ongoing">Implementation Ongoing</option>
-            <option value="Completed">Completed</option>
-            <option value="Outcome Recorded">Outcome Recorded</option>
-            <option value="Approved">Approved</option>
+            <option value="all">All Implementation Statuses</option>
+            <option value="operational">Operational</option>
+            <option value="implementation_ongoing">Ongoing Execution</option>
+            <option value="completed">Completed</option>
+            <option value="approved">Approved</option>
+            <option value="enacted">Enacted into Law</option>
+            <option value="funding_released">Funding Released</option>
+            <option value="outcome_reported">Outcome Reported</option>
           </select>
         </div>
       </div>
 
-      {/* Secondary Bar: Type Select, View Mode Toggle, and Count */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gov-border/60">
-        <div className="flex items-center gap-3 flex-wrap">
-          {/* Type Select */}
+      {/* Secondary Multi-Faceted Filters */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-gov-border/60 text-xs">
+        {/* State Filter */}
+        <div>
+          <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">State / FCT</label>
           <select
-            value={selectedType}
-            onChange={(e) => onTypeChange(e.target.value)}
-            aria-label="Filter by Type"
-            className="h-8 px-2.5 rounded border border-gov-border bg-gov-canvas text-xs font-semibold text-gov-navy focus:outline-none cursor-pointer"
+            value={filters.state}
+            onChange={(e) => onFilterChange({ state: e.target.value })}
+            className="w-full h-9 px-2.5 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs text-gov-navy dark:text-white cursor-pointer"
           >
-            <option value="all">All Achievement Types</option>
-            <option value="physical-project">Physical Projects</option>
-            <option value="policy-reform">Policy Reforms</option>
-            <option value="programme-intervention">Interventions</option>
-            <option value="reported-outcome">Reported Outcomes</option>
+            <option value="all">All 36 States + FCT</option>
+            {DEMO_NIGERIA_STATES.map((st) => (
+              <option key={st.slug} value={st.name}>
+                {st.name} ({st.geopoliticalZone})
+              </option>
+            ))}
           </select>
+        </div>
 
-          <span className="text-xs text-gov-slate font-medium">
-            Showing <strong className="text-gov-navy dark:text-white font-bold">{totalResultsCount}</strong> records
+        {/* Verification Status */}
+        <div>
+          <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">Verification</label>
+          <select
+            value={filters.verificationStatus}
+            onChange={(e) => onFilterChange({ verificationStatus: e.target.value })}
+            className="w-full h-9 px-2.5 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs text-gov-navy dark:text-white cursor-pointer"
+          >
+            <option value="all">All Verification Tiers</option>
+            <option value="source_confirmed">Source Confirmed</option>
+            <option value="independently_corroborated">Independently Corroborated</option>
+            <option value="cross_referenced">Cross Referenced</option>
+            <option value="under_review">Under Review</option>
+          </select>
+        </div>
+
+        {/* Year Filter */}
+        <div>
+          <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">Mandate Year</label>
+          <select
+            value={filters.year}
+            onChange={(e) => onFilterChange({ year: e.target.value })}
+            className="w-full h-9 px-2.5 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs text-gov-navy dark:text-white cursor-pointer"
+          >
+            <option value="all">All Years (2023 - 2026)</option>
+            <option value="2023">2023 (Inauguration & Reforms)</option>
+            <option value="2024">2024 (Scale & Delivery)</option>
+            <option value="2025">2025 (Operational Milestones)</option>
+            <option value="2026">2026 (Consolidated Outcomes)</option>
+          </select>
+        </div>
+
+        {/* Sort By */}
+        <div>
+          <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">Sort By</label>
+          <select
+            value={filters.sortBy}
+            onChange={(e) => onFilterChange({ sortBy: e.target.value as any })}
+            className="w-full h-9 px-2.5 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs text-gov-navy dark:text-white cursor-pointer"
+          >
+            <option value="newest">Date: Newest First</option>
+            <option value="oldest">Date: Oldest First</option>
+            <option value="title">Title: A to Z</option>
+            <option value="status">Status Priority</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Footer Controls & Active Chips */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gov-border/60">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-bold text-gov-navy dark:text-white tabular-nums">
+            {totalResultsCount}
           </span>
+          <span className="text-gov-slate">
+            verified record{totalResultsCount === 1 ? "" : "s"} match criteria
+          </span>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={onResetFilters}
+              className="ml-2 inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 hover:underline"
+            >
+              <RotateCcw className="h-3 w-3" />
+              <span>Reset All</span>
+            </button>
+          )}
         </div>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          {hasActiveFilters && (
-            <button
-              onClick={onResetFilters}
-              className="text-xs text-gov-slate hover:text-gov-emerald font-bold underline mr-2"
-            >
-              Reset Filters
-            </button>
-          )}
-
-          <div className="inline-flex rounded-md border border-gov-border p-0.5 bg-gov-canvas">
-            <button
-              type="button"
-              onClick={() => onViewModeChange("grid")}
-              aria-label="Grid view"
-              className={`p-1.5 rounded text-xs transition-colors ${
-                viewMode === "grid"
-                  ? "bg-gov-navy text-gov-gold shadow-xs"
-                  : "text-gov-slate hover:text-gov-navy"
-              }`}
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => onViewModeChange("list")}
-              aria-label="List view"
-              className={`p-1.5 rounded text-xs transition-colors ${
-                viewMode === "list"
-                  ? "bg-gov-navy text-gov-gold shadow-xs"
-                  : "text-gov-slate hover:text-gov-navy"
-              }`}
-            >
-              <List className="h-4 w-4" />
-            </button>
-          </div>
+        <div className="flex items-center gap-1.5 self-end sm:self-auto">
+          <button
+            type="button"
+            onClick={() => onViewModeChange("grid")}
+            aria-label="Grid View"
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "grid"
+                ? "bg-gov-navy text-gov-gold shadow-sm"
+                : "bg-gov-canvas dark:bg-white/10 text-gov-slate hover:text-gov-navy"
+            }`}
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewModeChange("list")}
+            aria-label="List View"
+            className={`p-2 rounded-lg transition-colors ${
+              viewMode === "list"
+                ? "bg-gov-navy text-gov-gold shadow-sm"
+                : "bg-gov-canvas dark:bg-white/10 text-gov-slate hover:text-gov-navy"
+            }`}
+          >
+            <List className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </div>

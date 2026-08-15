@@ -10,123 +10,53 @@ import {
   Award, 
   ShieldCheck, 
   Archive, 
+  AlertCircle,
   HelpCircle,
   LucideIcon
 } from "lucide-react";
 
-export type AchievementStatus =
-  | "Announced"
-  | "Approved"
-  | "Funded"
-  | "Procurement Stage"
-  | "Implementation Ongoing"
-  | "Partially Delivered"
-  | "Completed"
-  | "Operational"
-  | "Outcome Recorded"
-  | "Independently Confirmed"
-  | "Archived"
-  | "Under Review";
-
-interface StatusBadgeProps {
-  status: AchievementStatus;
+export interface StatusBadgeProps {
+  status: string;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
 interface StatusConfig {
   label: string;
-  bgColor: string;
-  textColor: string;
-  borderColor: string;
+  className: string;
   icon: LucideIcon;
 }
 
-const statusMap: Record<AchievementStatus, StatusConfig> = {
-  Announced: {
-    label: "Announced",
-    bgColor: "bg-amber-50 text-amber-800 border-amber-200",
-    textColor: "text-amber-800",
-    borderColor: "border-amber-200",
-    icon: Megaphone,
-  },
-  Approved: {
-    label: "Approved",
-    bgColor: "bg-blue-50 text-blue-800 border-blue-200",
-    textColor: "text-blue-800",
-    borderColor: "border-blue-200",
-    icon: FileCheck,
-  },
-  Funded: {
-    label: "Funded",
-    bgColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
-    textColor: "text-emerald-800",
-    borderColor: "border-emerald-200",
-    icon: DollarSign,
-  },
-  "Procurement Stage": {
-    label: "Procurement Stage",
-    bgColor: "bg-slate-50 text-slate-700 border-slate-200",
-    textColor: "text-slate-700",
-    borderColor: "border-slate-200",
-    icon: ShoppingBag,
-  },
-  "Implementation Ongoing": {
-    label: "Implementation Ongoing",
-    bgColor: "bg-sky-50 text-sky-800 border-sky-200",
-    textColor: "text-sky-800",
-    borderColor: "border-sky-200",
-    icon: Clock,
-  },
-  "Partially Delivered": {
-    label: "Partially Delivered",
-    bgColor: "bg-amber-50 text-amber-900 border-amber-300",
-    textColor: "text-amber-900",
-    borderColor: "border-amber-300",
-    icon: Activity,
-  },
-  Completed: {
-    label: "Completed",
-    bgColor: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold",
-    textColor: "text-emerald-900",
-    borderColor: "border-emerald-300",
-    icon: CheckCircle2,
-  },
-  Operational: {
-    label: "Operational",
-    bgColor: "bg-emerald-700 text-white border-emerald-800 font-semibold",
-    textColor: "text-white",
-    borderColor: "border-emerald-800",
-    icon: Activity,
-  },
-  "Outcome Recorded": {
-    label: "Outcome Recorded",
-    bgColor: "bg-indigo-50 text-indigo-900 border-indigo-200",
-    textColor: "text-indigo-900",
-    borderColor: "border-indigo-200",
-    icon: Award,
-  },
-  "Independently Confirmed": {
-    label: "Independently Confirmed",
-    bgColor: "bg-emerald-50 text-emerald-950 border-emerald-400 font-semibold",
-    textColor: "text-emerald-950",
-    borderColor: "border-emerald-400",
-    icon: ShieldCheck,
-  },
-  Archived: {
-    label: "Archived",
-    bgColor: "bg-slate-100 text-slate-600 border-slate-200",
-    textColor: "text-slate-600",
-    borderColor: "border-slate-200",
-    icon: Archive,
-  },
-  "Under Review": {
-    label: "Under Review",
-    bgColor: "bg-orange-50 text-orange-800 border-orange-200",
-    textColor: "text-orange-800",
-    borderColor: "border-orange-200",
-    icon: HelpCircle,
-  },
+const statusConfigs: Record<string, StatusConfig> = {
+  // Canonical snake_case codes
+  proposed: { label: "Proposed", className: "bg-blue-50 text-blue-700 border-blue-200", icon: HelpCircle },
+  announced: { label: "Announced", className: "bg-amber-50 text-amber-800 border-amber-200", icon: Megaphone },
+  approved: { label: "Approved", className: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: FileCheck },
+  enacted: { label: "Enacted into Law", className: "bg-indigo-100 text-indigo-900 border-indigo-300 font-semibold", icon: FileCheck },
+  effective: { label: "In Force", className: "bg-indigo-50 text-indigo-800 border-indigo-200", icon: FileCheck },
+  funded: { label: "Budget Allocated", className: "bg-emerald-50 text-emerald-800 border-emerald-200", icon: DollarSign },
+  funding_released: { label: "Funding Released", className: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold", icon: DollarSign },
+  procurement: { label: "In Procurement", className: "bg-slate-50 text-slate-700 border-slate-200", icon: ShoppingBag },
+  implementation_planning: { label: "Planning Phase", className: "bg-amber-50 text-amber-800 border-amber-200", icon: Clock },
+  implementation_ongoing: { label: "Ongoing Execution", className: "bg-sky-50 text-sky-800 border-sky-200", icon: Clock },
+  partially_delivered: { label: "Partially Delivered", className: "bg-lime-50 text-lime-800 border-lime-200", icon: Activity },
+  completed: { label: "Completed", className: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold", icon: CheckCircle2 },
+  operational: { label: "Operational", className: "bg-gov-navy text-gov-gold border-gov-gold/40 font-bold", icon: Activity },
+  outcome_reported: { label: "Outcome Reported", className: "bg-emerald-50 text-emerald-800 border-emerald-200", icon: Award },
+  independently_assessed: { label: "Independently Assessed", className: "bg-purple-50 text-purple-800 border-purple-200 font-semibold", icon: ShieldCheck },
+  suspended: { label: "Suspended", className: "bg-red-50 text-red-700 border-red-200", icon: AlertCircle },
+  superseded: { label: "Superseded", className: "bg-gray-100 text-gray-700 border-gray-300", icon: Archive },
+  repealed: { label: "Repealed", className: "bg-red-50 text-red-700 border-red-200", icon: AlertCircle },
+  under_review: { label: "Under Review", className: "bg-amber-50 text-amber-800 border-amber-200", icon: HelpCircle },
+  archived: { label: "Archived", className: "bg-gray-100 text-gray-700 border-gray-300", icon: Archive },
+  withdrawn: { label: "Withdrawn", className: "bg-red-50 text-red-700 border-red-200", icon: AlertCircle },
+
+  // Human readable title mappings
+  "Operational": { label: "Operational", className: "bg-gov-navy text-gov-gold border-gov-gold/40 font-bold", icon: Activity },
+  "Completed": { label: "Completed", className: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold", icon: CheckCircle2 },
+  "Implementation Ongoing": { label: "Ongoing Execution", className: "bg-sky-50 text-sky-800 border-sky-200", icon: Clock },
+  "Approved": { label: "Approved", className: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: FileCheck },
+  "Announced": { label: "Announced", className: "bg-amber-50 text-amber-800 border-amber-200", icon: Megaphone }
 };
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
@@ -134,27 +64,33 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   size = "md",
   className = "",
 }) => {
-  const config = statusMap[status] || statusMap["Under Review"];
+  const normalizedKey = status ? status.toLowerCase().replace(/\s+/g, '_') : 'under_review';
+  const config = statusConfigs[status] || statusConfigs[normalizedKey] || {
+    label: status || "Under Review",
+    className: "bg-gray-100 text-gray-700 border-gray-300",
+    icon: HelpCircle
+  };
+
   const Icon = config.icon;
 
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-xs gap-1",
-    md: "px-2.5 py-1 text-xs font-medium gap-1.5",
-    lg: "px-3 py-1.5 text-sm font-medium gap-2",
+    sm: "px-2 py-0.5 text-[10px] gap-1",
+    md: "px-2.5 py-1 text-xs gap-1.5",
+    lg: "px-3 py-1.5 text-sm gap-2"
   };
 
   const iconSizes = {
     sm: "h-3 w-3",
     md: "h-3.5 w-3.5",
-    lg: "h-4 w-4",
+    lg: "h-4 w-4"
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-md border ${config.bgColor} ${sizeClasses[size]} ${className}`}
-      title={`Status: ${config.label}`}
+      className={`inline-flex items-center rounded-full border ${config.className} ${sizeClasses[size]} ${className}`}
+      title={`Implementation Status: ${config.label}`}
     >
-      <Icon className={`${iconSizes[size]} shrink-0`} aria-hidden="true" />
+      <Icon className={`${iconSizes[size]} shrink-0`} />
       <span>{config.label}</span>
     </span>
   );

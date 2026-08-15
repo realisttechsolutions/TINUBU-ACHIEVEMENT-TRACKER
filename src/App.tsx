@@ -14,17 +14,21 @@ import './i18n/i18n';
 
 // Lazy load all page components for code splitting
 const Index = lazy(() => import("./pages/Index"));
+const AchievementsCatalogue = lazy(() => import("./pages/AchievementsCatalogue"));
+const AchievementDetail = lazy(() => import("./pages/AchievementDetail"));
 const SectorsCatalogue = lazy(() => import("./pages/SectorsCatalogue"));
 const SectorDetail = lazy(() => import("./pages/SectorDetail"));
+const ProjectsCatalogue = lazy(() => import("./pages/ProjectsCatalogue"));
+const PoliciesCatalogue = lazy(() => import("./pages/PoliciesCatalogue"));
+const ProgrammesCatalogue = lazy(() => import("./pages/ProgrammesCatalogue"));
 const ImpactMapPage = lazy(() => import("./pages/ImpactMapPage"));
 const StatesCatalogue = lazy(() => import("./pages/StatesCatalogue"));
 const StateDetail = lazy(() => import("./pages/StateDetail"));
 const TimelinePage = lazy(() => import("./pages/TimelinePage"));
+const DataExplorer = lazy(() => import("./pages/DataExplorer"));
 const DataSources = lazy(() => import("./pages/DataSources"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Downloads = lazy(() => import("./pages/Downloads"));
-const AchievementsCatalogue = lazy(() => import("./pages/AchievementsCatalogue"));
-const AchievementDetail = lazy(() => import("./pages/AchievementDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const LegacySectorRedirect = lazy(() => import("./components/common/LegacySectorRedirect"));
 
@@ -50,16 +54,24 @@ const App = () => (
               <Suspense fallback={<SuspenseFallback />}>
                 <AppShell>
                   <Routes>
-                    {/* Main routes */}
+                    {/* Core Discovery Routes */}
                     <Route path="/" element={<Index />} />
                     <Route path="/achievements" element={<AchievementsCatalogue />} />
                     <Route path="/achievements/:slug" element={<AchievementDetail />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    
+                    {/* Entity Catalogues */}
+                    <Route path="/projects" element={<ProjectsCatalogue />} />
+                    <Route path="/policies" element={<PoliciesCatalogue />} />
+                    <Route path="/programmes" element={<ProgrammesCatalogue />} />
+
+                    {/* Timeline Routes */}
                     <Route path="/timeline" element={<TimelinePage />} />
                     <Route path="/policy-timeline" element={<TimelinePage />} />
                     
                     {/* Geographic Experience Routes */}
                     <Route path="/impact-map" element={<ImpactMapPage />} />
+                    <Route path="/map" element={<ImpactMapPage />} />
                     <Route path="/states" element={<StatesCatalogue />} />
                     <Route path="/states/:slug" element={<StateDetail />} />
 
@@ -67,15 +79,17 @@ const App = () => (
                     <Route path="/sectors" element={<SectorsCatalogue />} />
                     <Route path="/sectors/:slug" element={<SectorDetail />} />
 
-                    {/* Legacy Sector Redirects */}
+                    {/* Evidence, Data Explorer & Platform routes */}
+                    <Route path="/data" element={<DataExplorer />} />
+                    <Route path="/sources" element={<DataSources />} />
+                    <Route path="/data-sources" element={<DataSources />} />
+                    <Route path="/downloads" element={<Downloads />} />
+
+                    {/* Legacy Sector Redirects for Backwards Compatibility */}
                     <Route path="/economic-reforms" element={<LegacySectorRedirect targetSlug="economy" />} />
                     <Route path="/security-progress" element={<LegacySectorRedirect targetSlug="security" />} />
                     <Route path="/infrastructure" element={<LegacySectorRedirect targetSlug="infrastructure" />} />
                     <Route path="/social-services" element={<LegacySectorRedirect targetSlug="social-services" />} />
-
-                    {/* Evidence & Platform routes */}
-                    <Route path="/data-sources" element={<DataSources />} />
-                    <Route path="/downloads" element={<Downloads />} />
 
                     {/* 404 catch-all route */}
                     <Route path="*" element={<NotFound />} />
