@@ -1,26 +1,11 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import Ajv from 'ajv';
 
-const cwd = process.cwd();
+const root = process.cwd();
+const EXPECTED_SCHEMA_COUNT = 18;
+const EXPECTED_TEMPLATE_COUNT = 18;
 
-console.log('======================================================================');
-console.log('TINUBU ACHIEVEMENT TRACKER — RESEARCH FOUNDATION VALIDATOR');
-console.log('======================================================================\n');
-
-let totalErrors = 0;
-
-function logPass(msg) {
-  console.log(`✅ PASS: ${msg}`);
-}
-
-function logFail(msg) {
-  console.error(`❌ FAIL: ${msg}`);
-  totalErrors++;
-}
-
-// 1. CHECK REQUIRED DOCUMENTATION FILES (30 exact files)
-console.log('--- 1. VERIFYING REQUIRED DOCUMENTATION FILES (30 FILES) ---');
 const requiredDocs = [
   'docs/research/MISSION_R01_RESEARCH_DATA_BLUEPRINT.md',
   'docs/research/TAT_RESEARCH_OBJECTIVES.md',
@@ -52,147 +37,402 @@ const requiredDocs = [
   'docs/research/TAT_DATA_VERSIONING_AND_CORRECTION_STANDARD.md',
   'docs/research/TAT_RESEARCH_RISK_REGISTER.md',
   'docs/research/TAT_RESEARCH_TO_DEVELOPMENT_HANDOFF.md',
-  'docs/research/TAT_MISSION_R01_COMPLIANCE_MATRIX.md'
+  'docs/research/TAT_MISSION_R01_COMPLIANCE_MATRIX.md',
 ];
 
-requiredDocs.forEach(docPath => {
-  const fullPath = path.join(cwd, docPath);
-  if (fs.existsSync(fullPath)) {
-    const size = fs.statSync(fullPath).size;
-    if (size > 100) {
-      logPass(`${docPath} (${size} bytes)`);
-    } else {
-      logFail(`${docPath} is too small (${size} bytes)`);
-    }
-  } else {
-    logFail(`Missing required document: ${docPath}`);
-  }
-});
+const pipeDelimitedFields = new Set([
+  'aliases',
+  'key_objectives',
+  'related_achievement_slugs',
+  'reported_outcomes',
+  'responsible_institutions',
+  'states_covered',
+]);
+const actorIdentifierFields = new Set([
+  'assigned_reviewer',
+  'editor_id',
+  'researcher_id',
+  'revised_by',
+]);
+const nonDateFieldsEndingInDate = new Set(['candidate_title']);
 
-// 2. COMPILE SCHEMAS WITH AJV (DRAFT-07)
-console.log('\n--- 2. COMPILING JSON SCHEMAS WITH AJV (DRAFT-07) ---');
-const ajv = new Ajv({ allErrors: true, strict: false });
+let totalErrors = 0;
 
-const schemaDir = path.join(cwd, 'research/schemas');
-if (!fs.existsSync(schemaDir)) {
-  logFail(`Schema directory does not exist: ${schemaDir}`);
-} else {
-  const schemaFiles = fs.readdirSync(schemaDir).filter(f => f.endsWith('.json'));
-  if (schemaFiles.length !== 18) {
-    logFail(`Expected 18 schema files in research/schemas/, found ${schemaFiles.length}`);
-  }
-  schemaFiles.forEach(sFile => {
-    try {
-      const sPath = path.join(schemaDir, sFile);
-      const sContent = JSON.parse(fs.readFileSync(sPath, 'utf8'));
-      const validate = ajv.compile(sContent);
-      if (typeof validate === 'function') {
-        logPass(`Compiled schema: research/schemas/${sFile} (${sContent.title})`);
-      } else {
-        logFail(`Failed to compile schema: ${sFile}`);
-      }
-    } catch (e) {
-      logFail(`Schema error in ${sFile}: ${e.message}`);
-    }
-  });
+function pass(message) {
+  console.log(`PASS: ${message}`);
 }
 
-// 3. PARSE & VALIDATE CSV TEMPLATES
-console.log('\n--- 3. VALIDATING 18 CANONICAL CSV TEMPLATES & EXAMPLE MARKERS ---');
-const templateDir = path.join(cwd, 'research/templates');
-if (!fs.existsSync(templateDir)) {
-  logFail(`Template directory does not exist: ${templateDir}`);
-} else {
-  const csvFiles = fs.readdirSync(templateDir).filter(f => f.endsWith('.csv'));
-  if (csvFiles.length !== 18) {
-    logFail(`Expected 18 CSV template files in research/templates/, found ${csvFiles.length}`);
+function fail(message) {
+  console.error(`FAIL: ${message}`);
+  totalErrors += 1;
+}
+
+function isHttpUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
   }
-  
-  // Custom CSV parser handling quoted strings & commas
-  function parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
+}
+
+function isEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isIdentifier(value) {
+  return (
+    /^\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\]$/.test(value) ||
+    /^[a-z0-9]+(?:[-_][a-z0-9]+)*$/.test(value) ||
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+  );
+}
+
+function isIsoCurrency(value) {
+  if (!/^[A-Z]{3}$/.test(value)) return false;
+  try {
+    return Intl.supportedValuesOf('currency').includes(value);
+  } catch {
+    return false;
+  }
+}
+
+function isCalendarDate(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) return false;
+  const [, year, month, day] = match.map(Number);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return (
+    parsed.getUTCFullYear() === year &&
+    parsed.getUTCMonth() === month - 1 &&
+    parsed.getUTCDate() === day
+  );
+}
+
+function isYear(value) {
+  return /^(19|20|21)\d{2}$/.test(value);
+}
+
+function isMonth(value) {
+  const match = /^(19|20|21)\d{2}-(0[1-9]|1[0-2])$/.exec(value);
+  return Boolean(match);
+}
+
+function isQuarter(value) {
+  return /^(19|20|21)\d{2}-Q[1-4]$/.test(value);
+}
+
+function isFiscalYear(value) {
+  return /^FY(19|20|21)\d{2}$/.test(value) || /^(19|20|21)\d{2}\/\d{2}$/.test(value);
+}
+
+function isDateRange(value) {
+  const parts = value.split('/');
+  if (parts.length !== 2) return false;
+  return parts.every(part => isCalendarDate(part) || isMonth(part) || isYear(part));
+}
+
+function isReportingDate(value) {
+  return (
+    isCalendarDate(value) ||
+    isMonth(value) ||
+    isQuarter(value) ||
+    isYear(value) ||
+    isFiscalYear(value) ||
+    isDateRange(value)
+  );
+}
+
+function dateMatchesPrecision(value, precision) {
+  const checks = {
+    'exact-day': isCalendarDate,
+    month: isMonth,
+    quarter: isQuarter,
+    year: isYear,
+    range: isDateRange,
+  };
+  return Boolean(checks[precision]?.(value));
+}
+
+function isDateField(field) {
+  if (nonDateFieldsEndingInDate.has(field)) return false;
+  return (
+    field === 'date' ||
+    field === 'reporting_period' ||
+    field === 'start_date' ||
+    field === 'completion_or_current_date' ||
+    field.endsWith('_date')
+  );
+}
+
+function parseCsv(content, fileName) {
+  const text = content.replace(/^\uFEFF/, '');
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
+  let quoteClosed = false;
+
+  const pushField = () => {
+    row.push(field);
+    field = '';
+    quoteClosed = false;
+  };
+  const pushRow = () => {
+    pushField();
+    if (row.some(value => value.length > 0)) rows.push(row);
+    row = [];
+  };
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (inQuotes) {
       if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"';
-          i++;
+        if (text[index + 1] === '"') {
+          field += '"';
+          index += 1;
         } else {
-          inQuotes = !inQuotes;
+          inQuotes = false;
+          quoteClosed = true;
         }
-      } else if (char === ',' && !inQuotes) {
-        result.push(current.trim());
-        current = '';
       } else {
-        current += char;
+        field += char;
       }
+      continue;
     }
-    result.push(current.trim());
-    return result;
+
+    if (quoteClosed) {
+      if (char === ',') pushField();
+      else if (char === '\n') pushRow();
+      else if (char !== '\r') {
+        throw new Error(`${fileName}: unexpected character after closing quote at offset ${index}`);
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      if (field.length > 0) {
+        throw new Error(`${fileName}: quote inside an unquoted field at offset ${index}`);
+      }
+      inQuotes = true;
+    } else if (char === ',') {
+      pushField();
+    } else if (char === '\n') {
+      pushRow();
+    } else if (char !== '\r') {
+      field += char;
+    }
   }
 
-  csvFiles.forEach(cFile => {
-    const cPath = path.join(templateDir, cFile);
-    const content = fs.readFileSync(cPath, 'utf8').trim();
-    const lines = content.split('\n').filter(l => l.trim().length > 0);
-    
-    if (lines.length < 2) {
-      logFail(`CSV template ${cFile} lacks data row (has ${lines.length} lines)`);
-      return;
-    }
-    
-    const headers = parseCSVLine(lines[0]);
-    const exampleRow = parseCSVLine(lines[1]);
-    
-    if (headers.length !== exampleRow.length) {
-      logFail(`${cFile}: Header count (${headers.length}) does not match data row count (${exampleRow.length})`);
-    } else {
-      logPass(`${cFile} header & row count matched (${headers.length} columns)`);
-    }
-
-    // Check non-production example marker
-    if (content.includes('[EXAMPLE ONLY - NOT A PRODUCTION RECORD]') || content.includes('[DEMO-NON-PROD')) {
-      logPass(`${cFile} contains valid non-production marker`);
-    } else {
-      logFail(`${cFile} MISSING required non-production example marker`);
-    }
-  });
+  if (inQuotes) throw new Error(`${fileName}: unclosed quoted field`);
+  if (field.length > 0 || row.length > 0) pushRow();
+  return rows;
 }
 
-// 4. CHECK INTERNAL MARKDOWN LINKS
-console.log('\n--- 4. CHECKING RELATIVE MARKDOWN LINKS ---');
-const allDocs = fs.readdirSync(path.join(cwd, 'docs/research')).filter(f => f.endsWith('.md'));
-let brokenLinks = 0;
-
-allDocs.forEach(docFile => {
-  const dPath = path.join(cwd, 'docs/research', docFile);
-  const content = fs.readFileSync(dPath, 'utf8');
-  const linkRegex = /\[([^\]]+)\]\((file:\/\/\/[^\)]+|[^\)]+\.md)\)/g;
-  let match;
-  while ((match = linkRegex.exec(content)) !== null) {
-    const linkTarget = match[2];
-    if (linkTarget.startsWith('file:///')) {
-      const decodedPath = decodeURIComponent(linkTarget.replace('file:///', ''));
-      if (!fs.existsSync(decodedPath)) {
-        logFail(`In ${docFile}: Broken absolute file link -> ${decodedPath}`);
-        brokenLinks++;
-      }
+function validateRequiredValues(row, schema, context) {
+  for (const field of schema.required ?? []) {
+    if (typeof row[field] !== 'string' || row[field].trim() === '') {
+      fail(`${context}: required field '${field}' is blank`);
     }
   }
-});
-if (brokenLinks === 0) {
-  logPass(`All Markdown file links verified successfully.`);
 }
 
-console.log('\n======================================================================');
-if (totalErrors === 0) {
-  console.log('🎉 SUCCESS: ALL VALIDATION CHECKS PASSED (0 ERRORS)');
-  console.log('======================================================================');
-  process.exit(0);
+function validateDomainValues(row, context) {
+  for (const [field, rawValue] of Object.entries(row)) {
+    const value = rawValue.trim();
+    if (!value) continue;
+
+    if ((field === 'url' || field.endsWith('_url') || field === 'featured_image') && !isHttpUrl(value)) {
+      fail(`${context}: '${field}' is not an HTTP(S) URL`);
+    }
+
+    const identifierField = field === 'id' || field.endsWith('_id') || /^record_id_[12]$/.test(field);
+    if (identifierField) {
+      const valid = actorIdentifierFields.has(field)
+        ? isIdentifier(value) || isEmail(value)
+        : isIdentifier(value);
+      if (!valid) fail(`${context}: '${field}' is not a valid identifier`);
+    }
+
+    if (pipeDelimitedFields.has(field) && value.includes('|')) {
+      const parts = value.split('|');
+      if (parts.some(part => !part || part !== part.trim())) {
+        fail(`${context}: '${field}' contains an empty item or whitespace around '|'`);
+      }
+      if (field === 'related_achievement_slugs' && parts.some(part => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(part))) {
+        fail(`${context}: '${field}' contains an invalid slug`);
+      }
+    }
+
+    if (isDateField(field) && !isReportingDate(value)) {
+      fail(`${context}: '${field}' has an invalid date or reporting-period value '${value}'`);
+    }
+  }
+
+  if (row.date_precision && row.date && !dateMatchesPrecision(row.date, row.date_precision)) {
+    fail(`${context}: 'date' does not match date_precision '${row.date_precision}'`);
+  }
+  if (
+    row.publication_date_precision &&
+    row.publication_date &&
+    !dateMatchesPrecision(row.publication_date, row.publication_date_precision)
+  ) {
+    fail(`${context}: 'publication_date' does not match publication_date_precision '${row.publication_date_precision}'`);
+  }
+  if (row.currency && !isIsoCurrency(row.currency)) {
+    fail(`${context}: currency '${row.currency}' is not a recognized three-letter currency code`);
+  }
+  if (row.amount && (!/^\d+(?:\.\d{1,2})?$/.test(row.amount) || Number(row.amount) <= 0)) {
+    fail(`${context}: amount must be a positive base-unit decimal with at most two fractional digits`);
+  }
+  if (row.count_value && (!/^\d+$/.test(row.count_value) || Number(row.count_value) < 0)) {
+    fail(`${context}: count_value must be a non-negative integer`);
+  }
+  if (row.progress_percentage && (!/^\d+(?:\.\d+)?$/.test(row.progress_percentage) || Number(row.progress_percentage) < 0 || Number(row.progress_percentage) > 100)) {
+    fail(`${context}: progress_percentage must be between 0 and 100`);
+  }
+  if (row.match_confidence && (!/^\d+(?:\.\d+)?$/.test(row.match_confidence) || Number(row.match_confidence) < 0 || Number(row.match_confidence) > 1)) {
+    fail(`${context}: match_confidence must be between 0 and 1`);
+  }
+  if (row.stale_threshold_days && (!/^\d+$/.test(row.stale_threshold_days) || Number(row.stale_threshold_days) <= 0)) {
+    fail(`${context}: stale_threshold_days must be a positive integer`);
+  }
+  if (row.year && !isYear(row.year)) {
+    fail(`${context}: year must be a four-digit calendar year`);
+  }
+  if (row.truth_rules_audit_pass && !/^(true|false)$/.test(row.truth_rules_audit_pass)) {
+    fail(`${context}: truth_rules_audit_pass must be true or false`);
+  }
+}
+
+console.log('TINUBU ACHIEVEMENT TRACKER - RESEARCH FOUNDATION VALIDATOR');
+
+console.log(`\n1. Required documentation (${requiredDocs.length} files)`);
+for (const relativePath of requiredDocs) {
+  const filePath = path.join(root, relativePath);
+  if (!fs.existsSync(filePath)) {
+    fail(`Missing required document: ${relativePath}`);
+    continue;
+  }
+  const content = fs.readFileSync(filePath, 'utf8').trim();
+  if (content.length <= 100) fail(`${relativePath} is not substantive (${content.length} characters)`);
+}
+if (totalErrors === 0) pass(`All ${requiredDocs.length} required documents exist and exceed the minimum size check`);
+
+console.log('\n2. Draft-07 schema compilation');
+const ajv = new Ajv({ allErrors: true, strict: false });
+ajv.addFormat('uri', { type: 'string', validate: isHttpUrl });
+const schemaDirectory = path.join(root, 'research/schemas');
+const schemas = new Map();
+if (!fs.existsSync(schemaDirectory)) {
+  fail(`Missing schema directory: ${schemaDirectory}`);
 } else {
-  console.error(`💥 FAILURE: ${totalErrors} VALIDATION ERROR(S) DETECTED`);
-  console.log('======================================================================');
+  const schemaFiles = fs.readdirSync(schemaDirectory).filter(file => file.endsWith('.json')).sort();
+  if (schemaFiles.length !== EXPECTED_SCHEMA_COUNT) {
+    fail(`Expected ${EXPECTED_SCHEMA_COUNT} schemas, found ${schemaFiles.length}`);
+  }
+  for (const fileName of schemaFiles) {
+    try {
+      const schema = JSON.parse(fs.readFileSync(path.join(schemaDirectory, fileName), 'utf8'));
+      if (schema.$schema !== 'http://json-schema.org/draft-07/schema#') {
+        fail(`${fileName}: expected an explicit Draft-07 $schema declaration`);
+      }
+      schemas.set(fileName.replace('.schema.json', ''), {
+        schema,
+        validate: ajv.compile(schema),
+      });
+    } catch (error) {
+      fail(`${fileName}: ${error.message}`);
+    }
+  }
+  if (schemas.size === EXPECTED_SCHEMA_COUNT) pass(`Compiled all ${EXPECTED_SCHEMA_COUNT} Draft-07 schemas with AJV`);
+}
+
+console.log('\n3. CSV parsing, schema validation, and field checks');
+const templateDirectory = path.join(root, 'research/templates');
+if (!fs.existsSync(templateDirectory)) {
+  fail(`Missing template directory: ${templateDirectory}`);
+} else {
+  const templateFiles = fs.readdirSync(templateDirectory).filter(file => file.endsWith('.csv')).sort();
+  if (templateFiles.length !== EXPECTED_TEMPLATE_COUNT) {
+    fail(`Expected ${EXPECTED_TEMPLATE_COUNT} templates, found ${templateFiles.length}`);
+  }
+  for (const fileName of templateFiles) {
+    const schemaEntry = schemas.get(fileName.replace('.csv', ''));
+    if (!schemaEntry) {
+      fail(`${fileName}: no matching JSON schema`);
+      continue;
+    }
+
+    let rows;
+    try {
+      rows = parseCsv(fs.readFileSync(path.join(templateDirectory, fileName), 'utf8'), fileName);
+    } catch (error) {
+      fail(error.message);
+      continue;
+    }
+    if (rows.length < 2) {
+      fail(`${fileName}: expected a header and at least one non-production row`);
+      continue;
+    }
+
+    const [headers, ...dataRows] = rows;
+    const duplicateHeaders = headers.filter((header, index) => headers.indexOf(header) !== index);
+    if (duplicateHeaders.length > 0) fail(`${fileName}: duplicate header(s): ${[...new Set(duplicateHeaders)].join(', ')}`);
+
+    const schemaFields = Object.keys(schemaEntry.schema.properties ?? {});
+    const missingHeaders = schemaFields.filter(field => !headers.includes(field));
+    const unexpectedHeaders = headers.filter(field => !schemaFields.includes(field));
+    if (missingHeaders.length > 0) fail(`${fileName}: missing schema header(s): ${missingHeaders.join(', ')}`);
+    if (unexpectedHeaders.length > 0) fail(`${fileName}: unexpected header(s): ${unexpectedHeaders.join(', ')}`);
+
+    dataRows.forEach((values, rowIndex) => {
+      const context = `${fileName} row ${rowIndex + 2}`;
+      if (values.length !== headers.length) {
+        fail(`${context}: expected ${headers.length} columns, found ${values.length}`);
+        return;
+      }
+      const row = Object.fromEntries(headers.map((header, index) => [header, values[index]]));
+      if (!Object.values(row).some(value => value.includes('[EXAMPLE ONLY - NOT A PRODUCTION RECORD]') || value.includes('[DEMO-NON-PROD'))) {
+        fail(`${context}: missing a non-production marker`);
+      }
+      validateRequiredValues(row, schemaEntry.schema, context);
+      if (!schemaEntry.validate(row)) {
+        const details = schemaEntry.validate.errors
+          ?.map(error => `${error.instancePath || '/'} ${error.message}`)
+          .join('; ');
+        fail(`${context}: JSON Schema validation failed: ${details}`);
+      }
+      validateDomainValues(row, context);
+    });
+  }
+  if (totalErrors === 0) pass(`Parsed and validated all ${EXPECTED_TEMPLATE_COUNT} templates against their schemas`);
+}
+
+console.log('\n4. Markdown file links');
+const docsDirectory = path.join(root, 'docs/research');
+if (fs.existsSync(docsDirectory)) {
+  for (const fileName of fs.readdirSync(docsDirectory).filter(file => file.endsWith('.md'))) {
+    const filePath = path.join(docsDirectory, fileName);
+    const content = fs.readFileSync(filePath, 'utf8');
+    const links = content.matchAll(/\[[^\]]+\]\(([^)]+\.md)(?:#[^)]+)?\)/g);
+    for (const match of links) {
+      const target = match[1];
+      let resolved;
+      if (target.startsWith('file:///')) {
+        resolved = decodeURIComponent(target.slice('file:///'.length));
+      } else {
+        resolved = path.resolve(path.dirname(filePath), target);
+      }
+      if (!fs.existsSync(resolved)) fail(`${fileName}: broken Markdown link '${target}'`);
+    }
+  }
+}
+if (totalErrors === 0) pass('All checked Markdown file links resolve');
+
+console.log('');
+if (totalErrors > 0) {
+  console.error(`VALIDATION FAILED: ${totalErrors} error(s)`);
   process.exit(1);
 }
+console.log('VALIDATION PASSED: 0 errors');
