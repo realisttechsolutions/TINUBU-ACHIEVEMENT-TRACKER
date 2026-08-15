@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Local Firebase SQL Connect / PGlite state
+.firebase/
+firebase-debug.log
+dataconnect-debug.log
+dataconnect/.dataconnect/
+dataconnect/.dataconnect-generated/
+*.tsbuildinfo
+database/.local-data/
+database/.reports/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

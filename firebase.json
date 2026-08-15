@@ -1,0 +1,17 @@
+{
+  "dataconnect": {
+    "source": "dataconnect"
+  },
+  "emulators": {
+    "dataconnect": {
+      "host": "127.0.0.1",
+      "port": 9399,
+      "postgresHost": "127.0.0.1",
+      "postgresPort": 5432,
+      "dataDir": "database/.local-data/sql-connect"
+    },
+    "ui": {
+      "enabled": false
+    }
+  }
+}

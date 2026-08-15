@@ -1,0 +1,5 @@
+connectorId: "tat-public"
+generate:
+  javascriptSdk:
+    outputDir: "../../backend/generated/sql-connect-public"
+    package: "@tat/sql-connect-public"
