@@ -1,8 +1,8 @@
-# Tinubu Achievement Tracker — Internal vs. Public Data Boundary Standard (v1.1.1)
+# Tinubu Achievement Tracker — Internal vs. Public Data Boundary Standard (v1.1.2)
 
-**Standard Version:** 1.1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Target Engineering Specification:** Implementation-Neutral Architecture (Non-canonical Target: Firebase SQL Connect / PostgreSQL)  
 
 ---

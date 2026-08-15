@@ -1,8 +1,8 @@
 # Tinubu Achievement Tracker — Atomic Evidence Standard (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Schema Mapping:** `research/schemas/claim_extraction.schema.json` & `research/schemas/claim_source_relationship.schema.json`  
 
 ---

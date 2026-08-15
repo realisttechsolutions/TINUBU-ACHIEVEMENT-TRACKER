@@ -1,9 +1,9 @@
-# Tinubu Achievement Tracker — Hierarchical Sector Taxonomy (v1.1)
+# Tinubu Achievement Tracker — Hierarchical Sector Taxonomy (v1.1.2)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
-**Schema Mapping:** `research/schemas/canonical-vocabulary.v1.1.json`  
+**Governing Contract:** Research Contract v1.1.2
+**Schema Mapping:** `research/schemas/canonical-vocabulary.v1.1.2.json`
 
 ---
 
@@ -49,7 +49,7 @@ Research Contract v1.1 adopts a **three-level hierarchical taxonomy** separating
 | 11. housing_urban_development          | Housing and Urban Development (Renewed Hope Estates)     |
 | 12. environment_climate                | Environment and Climate (Afforestation, Erosion, ESG)   |
 | 13. governance_public_service          | Governance and Public Service (Civil Service, Reforms)   |
-| 14. foreign_affairs_international_coop | Foreign Affairs & Global Cooperation (Bilateral, FDI)    |
+| 14. foreign_affairs_international_cooperation | Foreign Affairs & Global Cooperation (Bilateral, FDI) |
 | 15. culture_tourism_creative_economy   | Culture, Tourism, Media & Creative Economy (Film, Arts)  |
 +────────────────────────────────────────┴──────────────────────────────────────────────────────────+
 ```

@@ -20,5 +20,5 @@ This document outlines the 14-stage repeatable research workflow for human resea
 11. Schema Validation (Automated JSON Schema & CSV linting)
 12. Editorial Review (Applying 13 Truth Rules & public copy audit)
 13. Human Approval (Senior Editor sign-off on Medium/High/Critical risk claims)
-14. Database Preparation (Staging CSV generation for Supabase ingestion)
+14. Engineering Handoff Preparation (validated staging package for an approved implementation)
 ```

@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Tinubu Achievement Tracker — Canonical Vocabulary Registry v1.1.1",
-  "description": "SUPERSEDED historical vocabulary retained for audit history only. The sole active authority is canonical-vocabulary.v1.1.2.json.",
-  "schema_version": "1.1.1",
-  "authority_status": "SUPERSEDED",
-  "superseded_by": "canonical-vocabulary.v1.1.2.json",
+  "title": "Tinubu Achievement Tracker — Canonical Vocabulary Registry v1.1.2",
+  "description": "The definitive, authoritative machine-readable source of truth for all controlled vocabularies, classification schemes, sector taxonomies, and domain enums across Research Contract v1.1.2.",
+  "schema_version": "1.1.2",
+  "authority_status": "CANONICAL",
+  "supersedes": "canonical-vocabulary.v1.1.json; canonical-vocabulary.v1.1.1.json",
   "last_updated": "2026-08-15",
-  "governing_contract": "TAT_RESEARCH_CONTRACT_V1_1_1.md",
+  "governing_contract": "TAT_RESEARCH_CONTRACT_V1_1_2.md",
   "public_navigation_groups": [
     { "code": "economy", "label": "Economy & Macro Reforms", "description": "Macroeconomic policy, fiscal reforms, monetary stability, trade, industry, energy, and digital economy." },
     { "code": "security", "label": "Security & National Stability", "description": "Defense, national security, counter-terrorism, border control, policing, and rule of law." },

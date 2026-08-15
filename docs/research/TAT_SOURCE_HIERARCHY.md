@@ -1,9 +1,9 @@
 # Tinubu Achievement Tracker — Six-Tier Source Hierarchy Standard (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
-**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.json`  
+**Governing Contract:** Research Contract v1.1.2
+**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.2.json`
 
 ---
 

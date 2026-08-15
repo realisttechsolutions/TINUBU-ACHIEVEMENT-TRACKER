@@ -1,8 +1,8 @@
 # Tinubu Achievement Tracker — Source Role Architecture Standard (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Template Binding:** `research/templates/claim_source_relationship.csv`  
 **Schema Binding:** `research/schemas/claim_source_relationship.schema.json`  
 

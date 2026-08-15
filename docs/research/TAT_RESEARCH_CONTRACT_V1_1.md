@@ -1,5 +1,8 @@
 # Tinubu Achievement Tracker — Master Research Contract v1.1
 
+> [!WARNING]
+> **STATUS: SUPERSEDED BY [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md).** This version is retained only for immutable history and must not be used as the active research authority.
+
 **Contract Version:** 1.1 (Consolidated Post-Codex Audit)  
 **Effective Date:** 2026-08-15  
 **Governing Authority:** Editorial Board, Data Governance Directorate & Technical Architecture Team  

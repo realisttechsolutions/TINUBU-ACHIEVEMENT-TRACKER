@@ -1,5 +1,8 @@
 # Technical Handoff & Architecture Proposals — Tinubu Achievement Tracker V2
 
+> [!WARNING]
+> **STATUS: LEGACY — NOT AN ACTIVE RESEARCH STANDARD.** This historical implementation proposal contains retired SQL/RLS mechanics. Active research requirements are defined by [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md) and [`TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`](./TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md); engineering mechanisms belong under `docs/engineering/`.
+
 This document provides technical architecture proposals for backend development teams (Codex).
 
 > [!IMPORTANT]

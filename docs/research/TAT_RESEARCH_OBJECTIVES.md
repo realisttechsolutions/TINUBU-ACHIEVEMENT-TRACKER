@@ -22,7 +22,7 @@ This document defines the core strategic and operational research objectives acr
 ## 3. Database Objectives
 - Structure all research outputs into normalized, schema-validated database records.
 - Enable multi-faceted search, sector filtering, map visualizations, time-series charts, and executive report exports.
-- Support seamless CSV/JSON ingestion into Supabase staging tables.
+- Support validated CSV/JSON interchange with any approved relational implementation through an engineering-owned staging boundary.
 
 ---
 

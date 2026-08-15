@@ -2,7 +2,7 @@
 
 **Document Version:** 1.1  
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Target Engineering Mission:** Engineering Mission E01 (Local Firebase SQL Connect Prototype & Adapters)  
 
 ---
@@ -17,7 +17,7 @@
 
 ## 2. Decoupling Database Contracts from Frontend View Models
 
-Frontend types in `src/types/*` are **presentation models** designed for user experience, component ergonomics, and route filtering. Database schemas and generated Firebase SQL Connect operation types are **relational data contracts** designed for relational integrity and strict typing.
+Frontend types in `src/types/*` are **presentation models** designed for user experience, component ergonomics, and route filtering. Approved backend schemas and generated operation types are **engineering data contracts** designed for relational integrity and strict typing. Firebase SQL Connect/PostgreSQL is the current proposed implementation target, not part of the immutable research ontology.
 
 The system will connect these two layers using **pure, strongly-typed mapping adapters**:
 

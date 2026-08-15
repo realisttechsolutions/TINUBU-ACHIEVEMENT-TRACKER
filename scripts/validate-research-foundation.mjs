@@ -7,10 +7,10 @@ const EXPECTED_SCHEMA_COUNT = 19;
 const EXPECTED_TEMPLATE_COUNT = 19;
 const EXACT_EXAMPLE_MARKER = '[EXAMPLE ONLY - NOT A PRODUCTION RECORD]';
 
-// All 43 indexed research documents
+// Expected v1.1.2 authority groups; the validator also reconciles these with
+// the document-index table and the filesystem rather than trusting this list.
 const canonicalDocs = [
-  'docs/research/TAT_RESEARCH_CONTRACT_V1_1_1.md',
-  'docs/research/TAT_RESEARCH_CONTRACT_V1_1.md',
+  'docs/research/TAT_RESEARCH_CONTRACT_V1_1_2.md',
   'docs/research/TAT_CODEX_AUDIT_RESOLUTION_LOG.md',
   'docs/research/TAT_RESEARCH_DOCUMENT_INDEX.md',
   'docs/research/TAT_FRONTEND_CONTRACT_ALIGNMENT_REQUIREMENTS.md',
@@ -46,10 +46,11 @@ const supportingDocs = [
   'docs/research/TAT_RESEARCH_OBJECTIVES.md',
   'docs/research/TAT_RESEARCH_PRIORITISATION_STANDARD.md',
   'docs/research/TAT_RESEARCH_RISK_CLASSIFICATION.md',
-  'docs/research/TAT_RESEARCH_TO_DEVELOPMENT_HANDOFF.md',
 ];
 
 const historicalRetiredDocs = [
+  'docs/research/TAT_RESEARCH_CONTRACT_V1_1_1.md',
+  'docs/research/TAT_RESEARCH_CONTRACT_V1_1.md',
   'docs/research/CANONICAL_TAXONOMIES.md',
   'docs/research/DATA_INGESTION_CONTRACT.md',
   'docs/research/EVIDENCE_GOVERNANCE_AND_VERIFICATION.md',
@@ -58,6 +59,7 @@ const historicalRetiredDocs = [
   'docs/research/SUPABASE_DATA_CONTRACT_AND_ENTITY_MAP.md',
   'docs/research/TAT_SUPABASE_DATA_CONTRACT_V1.md',
   'docs/research/TAT_SUPABASE_ENTITY_RELATIONSHIP_MAP.md',
+  'docs/research/TAT_RESEARCH_TO_DEVELOPMENT_HANDOFF.md',
 ];
 
 const allIndexedDocs = [...canonicalDocs, ...supportingDocs, ...historicalRetiredDocs];
@@ -82,6 +84,18 @@ const actorIdentifierFields = new Set([
   'lead_actor'
 ]);
 const nonDateFieldsEndingInDate = new Set(['candidate_title']);
+const datePrecisionBindings = {
+  achievement_record: { precisionField: 'date_precision', valueFields: ['date'] },
+  beneficiary_record: { precisionField: 'date_precision', valueFields: ['reporting_period'] },
+  claim_extraction: { precisionField: 'date_precision', valueFields: ['date_value'] },
+  financial_record: { precisionField: 'date_precision', valueFields: ['reporting_period'] },
+  indicator_observation: { precisionField: 'date_precision', valueFields: ['period'] },
+  policy_record: { precisionField: 'date_precision', valueFields: ['approval_date', 'effective_date'] },
+  programme_record: { precisionField: 'date_precision', valueFields: ['launch_date'] },
+  project_record: { precisionField: 'date_precision', valueFields: ['start_date', 'completion_or_current_date'] },
+  source_capture: { precisionField: 'publication_date_precision', valueFields: ['publication_date'] },
+  timeline_event: { precisionField: 'date_precision', valueFields: ['event_date'] },
+};
 
 let totalErrors = 0;
 
@@ -191,6 +205,12 @@ function checkPeriodBounds(start, end) {
   return start <= end;
 }
 
+function sectorMatchesParent(publicGroup, sectorId, registry) {
+  if (!publicGroup || !sectorId || !registry?.canonical_sectors) return true;
+  const sector = registry.canonical_sectors.find(item => item.sector_id === sectorId);
+  return Boolean(sector && sector.parent_public_group === publicGroup);
+}
+
 function isDateField(field) {
   if (nonDateFieldsEndingInDate.has(field)) return false;
   return (
@@ -289,7 +309,7 @@ function validateRequiredValues(row, schema, context) {
   }
 }
 
-function validateDomainValues(row, context) {
+function validateDomainValues(row, schemaName, context) {
   for (const [field, rawValue] of Object.entries(row)) {
     const value = rawValue.trim();
     if (!value) continue;
@@ -343,18 +363,17 @@ function validateDomainValues(row, context) {
     }
   }
 
-  if (row.date_precision && row.date && !dateMatchesPrecision(row.date, row.date_precision)) {
-    fail(`${context}: 'date' does not match date_precision '${row.date_precision}'`);
+  const dateBinding = datePrecisionBindings[schemaName];
+  if (dateBinding) {
+    const precision = row[dateBinding.precisionField];
+    for (const field of dateBinding.valueFields) {
+      if (precision && row[field] && !dateMatchesPrecision(row[field], precision)) {
+        fail(`${context}: '${field}' does not match ${dateBinding.precisionField} '${precision}'`);
+      }
+    }
   }
-  if (row.date_precision && row.date_value && !dateMatchesPrecision(row.date_value, row.date_precision)) {
-    fail(`${context}: 'date_value' does not match date_precision '${row.date_precision}'`);
-  }
-  if (
-    row.publication_date_precision &&
-    row.publication_date &&
-    !dateMatchesPrecision(row.publication_date, row.publication_date_precision)
-  ) {
-    fail(`${context}: 'publication_date' does not match publication_date_precision '${row.publication_date_precision}'`);
+  if (row.public_navigation_group && row.sector && !sectorMatchesParent(row.public_navigation_group, row.sector, vocabRegistry)) {
+    fail(`${context}: sector '${row.sector}' is not a child of public_navigation_group '${row.public_navigation_group}'`);
   }
   if (row.period_start && row.period_end && !checkPeriodBounds(row.period_start, row.period_end)) {
     fail(`${context}: period_start (${row.period_start}) must be <= period_end (${row.period_end})`);
@@ -389,25 +408,81 @@ function validateDomainValues(row, context) {
 // MAIN VALIDATION EXECUTION
 // ----------------------------------------------------
 console.log('===================================================================');
-console.log('TINUBU ACHIEVEMENT TRACKER - RESEARCH FOUNDATION VALIDATOR v1.1.1');
+console.log('TINUBU ACHIEVEMENT TRACKER - RESEARCH FOUNDATION VALIDATOR v1.1.2');
 console.log('===================================================================');
 
-// 1. Documentation inventory validation (all 43 indexed documents)
-console.log(`\n1. Documentation inventory check (${allIndexedDocs.length} total indexed documents)`);
-for (const relativePath of allIndexedDocs) {
-  const filePath = path.join(root, relativePath);
-  if (!fs.existsSync(filePath)) {
-    fail(`Missing indexed document: ${relativePath}`);
-    continue;
+// 1. Document index, expected authority status, and filesystem reconciliation
+console.log(`\n1. Document registry and filesystem reconciliation (${allIndexedDocs.length} expected documents)`);
+const documentationErrorsBefore = totalErrors;
+const documentIndexPath = path.join(root, 'docs/research/TAT_RESEARCH_DOCUMENT_INDEX.md');
+const allowedDocumentStatuses = new Set(['CANONICAL', 'SUPPORTING', 'SUPERSEDED', 'DEPRECATED', 'LEGACY']);
+const expectedStatusByPath = new Map([
+  ...canonicalDocs.map(relativePath => [relativePath, 'CANONICAL']),
+  ...supportingDocs.map(relativePath => [relativePath, 'SUPPORTING']),
+  ...[
+    'docs/research/TAT_RESEARCH_CONTRACT_V1_1_1.md',
+    'docs/research/TAT_RESEARCH_CONTRACT_V1_1.md',
+    'docs/research/CANONICAL_TAXONOMIES.md',
+    'docs/research/DATA_INGESTION_CONTRACT.md',
+    'docs/research/EVIDENCE_GOVERNANCE_AND_VERIFICATION.md',
+    'docs/research/RESEARCH_TEMPLATES_GUIDE.md',
+  ].map(relativePath => [relativePath, 'SUPERSEDED']),
+  ...[
+    'docs/research/RESEARCH_TO_DEV_HANDOFF.md',
+    'docs/research/SUPABASE_DATA_CONTRACT_AND_ENTITY_MAP.md',
+    'docs/research/TAT_SUPABASE_DATA_CONTRACT_V1.md',
+    'docs/research/TAT_SUPABASE_ENTITY_RELATIONSHIP_MAP.md',
+  ].map(relativePath => [relativePath, 'DEPRECATED']),
+  ['docs/research/TAT_RESEARCH_TO_DEVELOPMENT_HANDOFF.md', 'LEGACY'],
+]);
+
+const indexedStatusByPath = new Map();
+if (!fs.existsSync(documentIndexPath)) {
+  fail('Missing authoritative document index');
+} else {
+  const indexContent = fs.readFileSync(documentIndexPath, 'utf8');
+  const rowPattern = /^\|\s*\d+\s*\|\s*`(docs\/research\/[^`]+\.md)`\s*\|\s*\*\*(CANONICAL|SUPPORTING|SUPERSEDED|DEPRECATED|LEGACY)\*\*/gm;
+  for (const match of indexContent.matchAll(rowPattern)) {
+    const [, relativePath, status] = match;
+    if (!allowedDocumentStatuses.has(status)) fail(`Document index: invalid status '${status}' for ${relativePath}`);
+    if (indexedStatusByPath.has(relativePath)) fail(`Document index: duplicate entry '${relativePath}'`);
+    indexedStatusByPath.set(relativePath, status);
   }
+}
+
+const filesystemDocs = fs.readdirSync(path.join(root, 'docs/research'))
+  .filter(fileName => fileName.endsWith('.md'))
+  .map(fileName => `docs/research/${fileName}`)
+  .sort();
+const filesystemDocSet = new Set(filesystemDocs);
+for (const relativePath of filesystemDocs) {
+  if (!indexedStatusByPath.has(relativePath)) fail(`Document index: filesystem document is not registered: ${relativePath}`);
+}
+for (const relativePath of indexedStatusByPath.keys()) {
+  if (!filesystemDocSet.has(relativePath)) fail(`Document index: registered document does not exist: ${relativePath}`);
+}
+for (const [relativePath, expectedStatus] of expectedStatusByPath) {
+  if (indexedStatusByPath.get(relativePath) !== expectedStatus) {
+    fail(`Document index: ${relativePath} expected status ${expectedStatus}, found ${indexedStatusByPath.get(relativePath) || 'UNREGISTERED'}`);
+  }
+}
+if (expectedStatusByPath.size !== filesystemDocs.length) {
+  fail(`Document authority configuration has ${expectedStatusByPath.size} entries but filesystem has ${filesystemDocs.length}`);
+}
+for (const relativePath of filesystemDocs) {
+  const filePath = path.join(root, relativePath);
   const content = fs.readFileSync(filePath, 'utf8').trim();
   if (content.length <= 100) fail(`${relativePath} is not substantive (${content.length} characters)`);
 }
-if (totalErrors === 0) pass(`All ${allIndexedDocs.length} indexed documents exist and pass substance checks (17 Canonical, 18 Supporting, 8 Superseded/Deprecated)`);
+if (totalErrors === documentationErrorsBefore) {
+  const statusCounts = [...indexedStatusByPath.values()].reduce((counts, status) => ({ ...counts, [status]: (counts[status] || 0) + 1 }), {});
+  pass(`Document index exactly matches ${filesystemDocs.length} Markdown files (${Object.entries(statusCounts).map(([status, count]) => `${count} ${status}`).join(', ')})`);
+}
 
-// 2. Canonical Vocabulary Registry validation (v1.1.1)
-console.log('\n2. Canonical machine-readable vocabulary registry v1.1.1');
-const vocabPath = path.join(root, 'research/schemas/canonical-vocabulary.v1.1.1.json');
+// 2. Canonical Vocabulary Registry validation (v1.1.2)
+console.log('\n2. Canonical machine-readable vocabulary registry v1.1.2');
+const vocabularyErrorsBefore = totalErrors;
+const vocabPath = path.join(root, 'research/schemas/canonical-vocabulary.v1.1.2.json');
 let vocabRegistry = null;
 const vocabSets = new Map();
 
@@ -416,7 +491,9 @@ if (!fs.existsSync(vocabPath)) {
 } else {
   try {
     vocabRegistry = JSON.parse(fs.readFileSync(vocabPath, 'utf8'));
-    if (vocabRegistry.schema_version !== '1.1.1') fail('canonical-vocabulary: expected schema_version 1.1.1');
+    if (vocabRegistry.schema_version !== '1.1.2') fail('canonical-vocabulary: expected schema_version 1.1.2');
+    if (vocabRegistry.authority_status !== 'CANONICAL') fail('canonical-vocabulary: v1.1.2 must have CANONICAL authority status');
+    if (vocabRegistry.governing_contract !== 'TAT_RESEARCH_CONTRACT_V1_1_2.md') fail('canonical-vocabulary: wrong governing contract');
 
     // Extract all vocabulary arrays into sets
     const arrayNamespaces = [
@@ -435,6 +512,14 @@ if (!fs.existsSync(vocabPath)) {
       'gap_evidence_types', 'indicator_frequencies', 'duplicate_resolution_actions',
       'nominal_or_real'
     ];
+
+    const actualArrayNamespaces = Object.entries(vocabRegistry).filter(([, value]) => Array.isArray(value)).map(([name]) => name);
+    for (const ns of actualArrayNamespaces) {
+      if (!arrayNamespaces.includes(ns)) fail(`canonical-vocabulary: unexpected uncontrolled array namespace '${ns}'`);
+    }
+    if (actualArrayNamespaces.length !== arrayNamespaces.length) {
+      fail(`canonical-vocabulary: expected exactly ${arrayNamespaces.length} controlled array namespaces, found ${actualArrayNamespaces.length}`);
+    }
 
     for (const ns of arrayNamespaces) {
       if (!Array.isArray(vocabRegistry[ns])) {
@@ -464,7 +549,14 @@ if (!fs.existsSync(vocabPath)) {
       }
     }
 
-    if (totalErrors === 0) pass(`Canonical vocabulary v1.1.1 validated across ${vocabSets.size} distinct controlled namespaces`);
+    for (const historicalFile of ['canonical-vocabulary.v1.1.json', 'canonical-vocabulary.v1.1.1.json']) {
+      const historical = JSON.parse(fs.readFileSync(path.join(root, 'research/schemas', historicalFile), 'utf8'));
+      if (historical.authority_status !== 'SUPERSEDED' || historical.superseded_by !== 'canonical-vocabulary.v1.1.2.json') {
+        fail(`${historicalFile}: must be explicitly SUPERSEDED by canonical-vocabulary.v1.1.2.json`);
+      }
+    }
+
+    if (totalErrors === vocabularyErrorsBefore) pass(`Canonical vocabulary v1.1.2 validated across exactly ${vocabSets.size} controlled namespaces; prior registries are superseded`);
   } catch (error) {
     fail(`canonical-vocabulary parsing failed: ${error.message}`);
   }
@@ -476,6 +568,8 @@ const ajv = new Ajv({ allErrors: true, strict: false });
 ajv.addFormat('uri', { type: 'string', validate: isHttpUrl });
 const schemaDirectory = path.join(root, 'research/schemas');
 const schemas = new Map();
+const localEnumAllowlist = new Set(['publication_review.truth_rules_audit_pass']);
+let exactEnumMappingChecks = 0;
 
 function getVocabNamespace(schemaName, propName) {
   if (schemaName === 'correction_record' && propName === 'status') return 'correction_lifecycle_statuses';
@@ -547,18 +641,37 @@ if (!fs.existsSync(schemaDirectory)) {
       if (schema.$schema !== 'http://json-schema.org/draft-07/schema#') {
         fail(`${fileName}: expected an explicit Draft-07 $schema declaration`);
       }
+      if (schema.type !== 'object') fail(`${fileName}: root type must be object`);
+      if (schema.additionalProperties !== false) fail(`${fileName}: additionalProperties must be false`);
+      if (!Array.isArray(schema.required) || schema.required.length === 0) fail(`${fileName}: required must be a non-empty array`);
+      for (const requiredField of schema.required || []) {
+        if (!schema.properties?.[requiredField]) fail(`${fileName}: required field '${requiredField}' has no property definition`);
+      }
+      if (!ajv.validateSchema(schema)) {
+        fail(`${fileName}: invalid Draft-07 schema structure: ${ajv.errorsText(ajv.errors)}`);
+      }
 
-      // Check schema enums against vocabulary
+      // Check exact bidirectional schema-enum equality against vocabulary.
       for (const [propName, propDef] of Object.entries(schema.properties || {})) {
         if (propDef.enum) {
           const vocabNs = getVocabNamespace(baseSchemaName, propName);
-          if (vocabNs && vocabSets.has(vocabNs)) {
-            const allowedSet = vocabSets.get(vocabNs);
-            for (const enumVal of propDef.enum) {
-              if (!allowedSet.has(enumVal)) {
-                fail(`${fileName}: property '${propName}' contains unregistered/deprecated enum code '${enumVal}' (not in vocabulary '${vocabNs}')`);
-              }
-            }
+          const localKey = `${baseSchemaName}.${propName}`;
+          if (!vocabNs) {
+            if (!localEnumAllowlist.has(localKey)) fail(`${fileName}: enum property '${propName}' has no controlled-vocabulary mapping or local allowlist entry`);
+            continue;
+          }
+          if (!vocabSets.has(vocabNs)) {
+            fail(`${fileName}: enum property '${propName}' maps to missing vocabulary namespace '${vocabNs}'`);
+            continue;
+          }
+          exactEnumMappingChecks += 1;
+          const schemaSet = new Set(propDef.enum);
+          const vocabularySet = vocabSets.get(vocabNs);
+          for (const enumVal of schemaSet) {
+            if (!vocabularySet.has(enumVal)) fail(`${fileName}: '${propName}' has extra/unregistered code '${enumVal}' outside '${vocabNs}'`);
+          }
+          for (const canonicalValue of vocabularySet) {
+            if (!schemaSet.has(canonicalValue)) fail(`${fileName}: '${propName}' is missing canonical code '${canonicalValue}' from '${vocabNs}'`);
           }
         }
       }
@@ -572,7 +685,7 @@ if (!fs.existsSync(schemaDirectory)) {
     }
   }
   if (schemas.size === EXPECTED_SCHEMA_COUNT && totalErrors === 0) {
-    pass(`Compiled all ${EXPECTED_SCHEMA_COUNT} Draft-07 schemas with AJV; all enums verified against canonical vocabulary`);
+    pass(`Compiled ${EXPECTED_SCHEMA_COUNT} Draft-07 schemas; verified exact bidirectional equality for ${exactEnumMappingChecks} mapped enum properties and ${localEnumAllowlist.size} explicit local enum`);
   }
 }
 
@@ -639,7 +752,7 @@ if (!fs.existsSync(templateDirectory)) {
           .join('; ');
         fail(`${context}: JSON Schema validation failed: ${details}`);
       }
-      validateDomainValues(row, context);
+      validateDomainValues(row, fileName.replace('.csv', ''), context);
       parsedRows.push(row);
     });
 
@@ -648,96 +761,88 @@ if (!fs.existsSync(templateDirectory)) {
   if (totalErrors === 0) pass(`Parsed and validated all ${EXPECTED_TEMPLATE_COUNT} CSV templates against schemas and exact example marker`);
 }
 
-// 5. Cross-File Referential Integrity and Composite Uniqueness Validation
-console.log('\n5. Cross-file referential integrity & composite uniqueness validation');
-if (templateDataMap.size === EXPECTED_TEMPLATE_COUNT) {
-  // Collect all known IDs
-  const allSourceIds = new Set(templateDataMap.get('source_capture')?.map(r => r.source_id) || []);
-  const allClaimIds = new Set(templateDataMap.get('claim_extraction')?.map(r => r.claim_id) || []);
-  const allIndicatorIds = new Set(templateDataMap.get('indicator_record')?.map(r => r.indicator_id) || []);
-  
-  const allRecordIds = new Set([
-    ...(templateDataMap.get('achievement_record')?.map(r => r.achievement_id) || []),
-    ...(templateDataMap.get('policy_record')?.map(r => r.policy_id) || []),
-    ...(templateDataMap.get('project_record')?.map(r => r.project_id) || []),
-    ...(templateDataMap.get('programme_record')?.map(r => r.programme_id) || []),
-    ...(templateDataMap.get('entity_discovery')?.map(r => r.candidate_id) || []),
-    ...(templateDataMap.get('indicator_record')?.map(r => r.indicator_id) || [])
-  ]);
+const primaryIdFields = {
+  achievement_record: 'achievement_id', beneficiary_record: 'id', claim_extraction: 'claim_id',
+  claim_source_relationship: 'relationship_id', contradiction_log: 'contradiction_id',
+  correction_record: 'correction_id', data_gap: 'gap_id', duplicate_review: 'review_id',
+  entity_discovery: 'candidate_id', financial_record: 'id', freshness_review: 'review_id',
+  indicator_observation: 'id', indicator_record: 'indicator_id', policy_record: 'policy_id',
+  programme_record: 'programme_id', project_record: 'project_id', publication_review: 'review_id',
+  source_capture: 'source_id', timeline_event: 'event_id',
+};
 
-  // Validate claim_extraction record_ids
-  for (const claim of templateDataMap.get('claim_extraction') || []) {
-    if (!allRecordIds.has(claim.record_id)) {
-      fail(`claim_extraction '${claim.claim_id}': references nonexistent record_id '${claim.record_id}'`);
+const recordPrimaryFields = [
+  ['achievement_record', 'achievement_id'], ['policy_record', 'policy_id'],
+  ['project_record', 'project_id'], ['programme_record', 'programme_id'],
+  ['entity_discovery', 'candidate_id'], ['indicator_record', 'indicator_id'],
+];
+
+const foreignKeyConfiguration = [
+  ['claim_extraction', 'record_id', 'records', false],
+  ['claim_source_relationship', 'claim_id', 'claims', false],
+  ['claim_source_relationship', 'source_id', 'sources', false],
+  ['claim_source_relationship', 'superseded_by_relationship_id', 'relationships', true],
+  ['financial_record', 'record_id', 'records', false], ['financial_record', 'claim_id', 'claims', false],
+  ['beneficiary_record', 'record_id', 'records', false], ['beneficiary_record', 'claim_id', 'claims', false],
+  ['indicator_observation', 'indicator_id', 'indicators', false], ['indicator_observation', 'claim_id', 'claims', false],
+  ['timeline_event', 'record_id', 'records', false], ['timeline_event', 'evidence_source_id', 'sources', true],
+  ['contradiction_log', 'claim_id_a', 'claims', false], ['contradiction_log', 'claim_id_b', 'claims', false],
+  ['contradiction_log', 'source_id_a', 'sources', false], ['contradiction_log', 'source_id_b', 'sources', false],
+  ['correction_record', 'record_id', 'records', false], ['correction_record', 'claim_id', 'claims', false],
+  ['correction_record', 'source_id', 'sources', false],
+  ['publication_review', 'record_id', 'records', false], ['freshness_review', 'record_id', 'records', false],
+  ['duplicate_review', 'record_id_1', 'records', false], ['duplicate_review', 'record_id_2', 'records', false],
+  ['duplicate_review', 'primary_record_id', 'records', false],
+];
+
+function collectPackageIntegrityErrors(dataMap) {
+  const errors = [];
+  const globalPrimaryIds = new Map();
+  for (const [templateName, idField] of Object.entries(primaryIdFields)) {
+    const localIds = new Set();
+    for (const [rowIndex, row] of (dataMap.get(templateName) || []).entries()) {
+      const value = row[idField];
+      if (!value) continue;
+      if (localIds.has(value)) errors.push(`${templateName} row ${rowIndex + 2}: duplicate primary identifier '${value}'`);
+      localIds.add(value);
+      if (globalPrimaryIds.has(value)) errors.push(`${templateName} row ${rowIndex + 2}: primary identifier '${value}' duplicates ${globalPrimaryIds.get(value)}`);
+      else globalPrimaryIds.set(value, `${templateName}.${idField}`);
     }
   }
 
-  // Validate claim_source_relationship integrity & composite uniqueness
+  const targets = {
+    sources: new Set((dataMap.get('source_capture') || []).map(row => row.source_id)),
+    claims: new Set((dataMap.get('claim_extraction') || []).map(row => row.claim_id)),
+    indicators: new Set((dataMap.get('indicator_record') || []).map(row => row.indicator_id)),
+    relationships: new Set((dataMap.get('claim_source_relationship') || []).map(row => row.relationship_id)),
+    records: new Set(recordPrimaryFields.flatMap(([templateName, idField]) => (dataMap.get(templateName) || []).map(row => row[idField]))),
+  };
+
+  for (const [templateName, field, targetName, optional] of foreignKeyConfiguration) {
+    for (const [rowIndex, row] of (dataMap.get(templateName) || []).entries()) {
+      const value = row[field];
+      if (optional && !value) continue;
+      if (!targets[targetName].has(value)) errors.push(`${templateName} row ${rowIndex + 2}: '${field}' references nonexistent ${targetName} identifier '${value}'`);
+    }
+  }
+
   const relationshipCompositeKeys = new Set();
-  for (const rel of templateDataMap.get('claim_source_relationship') || []) {
-    if (!allClaimIds.has(rel.claim_id)) {
-      fail(`claim_source_relationship '${rel.relationship_id}': references nonexistent claim_id '${rel.claim_id}'`);
-    }
-    if (!allSourceIds.has(rel.source_id)) {
-      fail(`claim_source_relationship '${rel.relationship_id}': references nonexistent source_id '${rel.source_id}'`);
-    }
-    const compKey = `${rel.claim_id}|${rel.source_id}|${rel.source_role}|${rel.relationship_type}|${rel.evidence_location}`;
-    if (relationshipCompositeKeys.has(compKey)) {
-      fail(`claim_source_relationship '${rel.relationship_id}': duplicate composite relationship key '${compKey}'`);
-    }
-    relationshipCompositeKeys.add(compKey);
+  for (const [rowIndex, relationship] of (dataMap.get('claim_source_relationship') || []).entries()) {
+    const key = `${relationship.claim_id}|${relationship.source_id}|${relationship.source_role}|${relationship.relationship_type}|${relationship.evidence_location}`;
+    if (relationshipCompositeKeys.has(key)) errors.push(`claim_source_relationship row ${rowIndex + 2}: duplicate composite relationship key '${key}'`);
+    relationshipCompositeKeys.add(key);
   }
+  return errors;
+}
 
-  // Validate financial_records
-  for (const fin of templateDataMap.get('financial_record') || []) {
-    if (!allRecordIds.has(fin.record_id)) fail(`financial_record '${fin.id}': nonexistent record_id '${fin.record_id}'`);
-    if (!allClaimIds.has(fin.claim_id)) fail(`financial_record '${fin.id}': nonexistent claim_id '${fin.claim_id}'`);
+// 5. Configured FK, primary-ID, and relationship uniqueness validation
+console.log('\n5. Configured foreign keys, primary identifiers & relationship uniqueness');
+if (templateDataMap.size === EXPECTED_TEMPLATE_COUNT) {
+  const packageErrors = collectPackageIntegrityErrors(templateDataMap);
+  for (const message of packageErrors) fail(message);
+  if (packageErrors.length === 0) {
+    pass(`Validated ${foreignKeyConfiguration.length} configured FK fields, ${Object.keys(primaryIdFields).length} primary-ID namespaces, global primary-ID uniqueness, and the five-part relationship composite`);
   }
-
-  // Validate beneficiary_records
-  for (const ben of templateDataMap.get('beneficiary_record') || []) {
-    if (!allRecordIds.has(ben.record_id)) fail(`beneficiary_record '${ben.id}': nonexistent record_id '${ben.record_id}'`);
-    if (!allClaimIds.has(ben.claim_id)) fail(`beneficiary_record '${ben.id}': nonexistent claim_id '${ben.claim_id}'`);
-  }
-
-  // Validate indicator_observations
-  for (const obs of templateDataMap.get('indicator_observation') || []) {
-    if (!allIndicatorIds.has(obs.indicator_id)) fail(`indicator_observation '${obs.id}': nonexistent indicator_id '${obs.indicator_id}'`);
-    if (!allClaimIds.has(obs.claim_id)) fail(`indicator_observation '${obs.id}': nonexistent claim_id '${obs.claim_id}'`);
-  }
-
-  // Validate timeline_events
-  for (const tle of templateDataMap.get('timeline_event') || []) {
-    if (!allRecordIds.has(tle.record_id)) fail(`timeline_event '${tle.event_id}': nonexistent record_id '${tle.record_id}'`);
-    if (tle.evidence_source_id && !allSourceIds.has(tle.evidence_source_id)) {
-      fail(`timeline_event '${tle.event_id}': nonexistent evidence_source_id '${tle.evidence_source_id}'`);
-    }
-  }
-
-  // Validate contradiction_logs
-  for (const con of templateDataMap.get('contradiction_log') || []) {
-    if (!allClaimIds.has(con.claim_id_a)) fail(`contradiction_log '${con.contradiction_id}': nonexistent claim_id_a '${con.claim_id_a}'`);
-    if (!allClaimIds.has(con.claim_id_b)) fail(`contradiction_log '${con.contradiction_id}': nonexistent claim_id_b '${con.claim_id_b}'`);
-    if (!allSourceIds.has(con.source_id_a)) fail(`contradiction_log '${con.contradiction_id}': nonexistent source_id_a '${con.source_id_a}'`);
-    if (!allSourceIds.has(con.source_id_b)) fail(`contradiction_log '${con.contradiction_id}': nonexistent source_id_b '${con.source_id_b}'`);
-  }
-
-  // Validate correction_records
-  for (const cor of templateDataMap.get('correction_record') || []) {
-    if (!allRecordIds.has(cor.record_id)) fail(`correction_record '${cor.correction_id}': nonexistent record_id '${cor.record_id}'`);
-    if (!allClaimIds.has(cor.claim_id)) fail(`correction_record '${cor.correction_id}': nonexistent claim_id '${cor.claim_id}'`);
-    if (!allSourceIds.has(cor.source_id)) fail(`correction_record '${cor.correction_id}': nonexistent source_id '${cor.source_id}'`);
-  }
-
-  // Validate reviews
-  for (const rev of templateDataMap.get('publication_review') || []) {
-    if (!allRecordIds.has(rev.record_id)) fail(`publication_review '${rev.review_id}': nonexistent record_id '${rev.record_id}'`);
-  }
-  for (const fre of templateDataMap.get('freshness_review') || []) {
-    if (!allRecordIds.has(fre.record_id)) fail(`freshness_review '${fre.review_id}': nonexistent record_id '${fre.record_id}'`);
-  }
-
-  if (totalErrors === 0) pass('All cross-file referential foreign keys and composite uniqueness constraints validated successfully');
 }
 
 // 6. Markdown File Links Validation
@@ -764,46 +869,83 @@ if (totalErrors === 0) pass('All checked Markdown file links resolve cleanly');
 
 // 7. Permanent Fixture Runner Suite
 console.log('\n7. Permanent test fixture suite execution');
+
+function countSchemaVocabularyErrors(testSchema, fileName) {
+  let errors = 0;
+  const schemaName = fileName.replace('.schema.json', '');
+  for (const [propertyName, definition] of Object.entries(testSchema.properties || {})) {
+    if (!Array.isArray(definition.enum)) continue;
+    const namespace = getVocabNamespace(schemaName, propertyName);
+    const localKey = `${schemaName}.${propertyName}`;
+    if (!namespace) {
+      if (!localEnumAllowlist.has(localKey)) errors += 1;
+      continue;
+    }
+    const vocabularySet = vocabSets.get(namespace);
+    if (!vocabularySet) {
+      errors += 1;
+      continue;
+    }
+    const schemaSet = new Set(definition.enum);
+    for (const value of schemaSet) if (!vocabularySet.has(value)) errors += 1;
+    for (const value of vocabularySet) if (!schemaSet.has(value)) errors += 1;
+  }
+  return errors;
+}
+
+function countRowValidationErrors(schemaName, row, requireMarker = true) {
+  let errors = 0;
+  const schemaEntry = schemas.get(schemaName);
+  if (!schemaEntry) return 1;
+  for (const field of schemaEntry.schema.required || []) {
+    if (typeof row[field] !== 'string' || row[field].trim() === '') errors += 1;
+  }
+  if (!schemaEntry.validate(row)) errors += schemaEntry.validate.errors?.length || 1;
+  for (const [field, rawValue] of Object.entries(row)) {
+    const value = typeof rawValue === 'string' ? rawValue.trim() : '';
+    if (value && isDateField(field) && !isReportingDate(value)) errors += 1;
+  }
+  const binding = datePrecisionBindings[schemaName];
+  if (binding) {
+    const precision = row[binding.precisionField];
+    for (const field of binding.valueFields) {
+      if (precision && row[field] && !dateMatchesPrecision(row[field], precision)) errors += 1;
+    }
+  }
+  if (row.period_start && row.period_end && !checkPeriodBounds(row.period_start, row.period_end)) errors += 1;
+  if (row.public_navigation_group && row.sector && !sectorMatchesParent(row.public_navigation_group, row.sector, vocabRegistry)) errors += 1;
+  if (row.amount && (!/^\d+(?:\.\d{1,4})?$/.test(row.amount) || Number(row.amount) <= 0)) errors += 1;
+  if (row.count_value && (!/^\d+$/.test(row.count_value) || Number(row.count_value) < 0)) errors += 1;
+  if (requireMarker && !Object.values(row).some(value => typeof value === 'string' && value.includes(EXACT_EXAMPLE_MARKER))) errors += 1;
+  return errors;
+}
+
+function cloneCurrentPackage() {
+  return new Map([...templateDataMap.entries()].map(([name, rows]) => [name, rows.map(row => ({ ...row }))]));
+}
+
+function countCompletePackageErrors(dataMap) {
+  let errors = dataMap.size === EXPECTED_TEMPLATE_COUNT ? 0 : 1;
+  for (const [schemaName, rows] of dataMap) {
+    for (const row of rows) errors += countRowValidationErrors(schemaName, row, true);
+  }
+  errors += collectPackageIntegrityErrors(dataMap).length;
+  return errors;
+}
+
 const engineInterface = {
-  checkSchemaVocabulary: (testSchema, fileName) => {
-    let errs = 0;
-    const baseSchemaName = fileName.replace('.schema.json', '');
-    for (const [propName, propDef] of Object.entries(testSchema.properties || {})) {
-      if (propDef.enum) {
-        const vocabNs = getVocabNamespace(baseSchemaName, propName);
-        if (vocabNs && vocabSets.has(vocabNs)) {
-          const allowed = vocabSets.get(vocabNs);
-          for (const val of propDef.enum) {
-            if (!allowed.has(val)) errs += 1;
-          }
-        }
-      }
-    }
-    return errs;
-  },
-  checkReferentialIntegrity: (relationships, claims, sources) => {
-    let errs = 0;
-    for (const r of relationships) {
-      if (!claims.has(r.claim_id)) errs += 1;
-      if (!sources.has(r.source_id)) errs += 1;
-    }
-    return errs;
-  },
-  checkRelationshipUniqueness: (relationships) => {
-    let errs = 0;
-    const seen = new Set();
-    for (const r of relationships) {
-      const key = `${r.claim_id}|${r.source_id}|${r.source_role}|${r.relationship_type}|${r.evidence_location}`;
-      if (seen.has(key)) errs += 1;
-      seen.add(key);
-    }
-    return errs;
-  },
+  checkSchemaVocabulary: countSchemaVocabularyErrors,
+  getVocabularyCodes: namespace => [...(vocabSets.get(namespace) || [])],
+  countRowErrors: countRowValidationErrors,
+  cloneCurrentPackage,
+  countPackageErrors: countCompletePackageErrors,
+  checkPackageIntegrity: dataMap => collectPackageIntegrityErrors(dataMap).length,
   checkDateMatchesPrecision: dateMatchesPrecision,
   checkPeriodBounds: checkPeriodBounds,
+  checkSectorParent: (publicGroup, sector) => sectorMatchesParent(publicGroup, sector, vocabRegistry),
   checkExampleMarker: (row) => Object.values(row).some(v => typeof v === 'string' && v.includes(EXACT_EXAMPLE_MARKER)),
   parseCsv: parseCsv,
-  getSchema: (name) => schemas.get(name)
+  getSchema: name => schemas.get(name),
 };
 
 try {

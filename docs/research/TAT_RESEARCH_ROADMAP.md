@@ -1,8 +1,8 @@
 # Tinubu Achievement Tracker — Eight-Stage Research Roadmap (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Historical Scope:** 29 May 2023 through August 2026  
 
 ---
@@ -44,19 +44,19 @@ Phase 8: Continuous Monitoring (Freshness Velocity & Real-Time Gazette Tracking)
 ## 2. Detailed Phase Breakdown
 
 ### Phase 1: Foundation (Current Status: COMPLETED in Mission 01.1)
-- **Deliverables:** Contract v1.1 consolidation, Codex audit resolutions, `canonical-vocabulary.v1.1.json`, 19 CSV templates, 19 Draft-07 schemas, extended AJV validator engine, frontend alignment requirements.
-- **Exit Gate:** 100% PASS on `npm run validate:research`.
+- **Deliverables:** Frozen Contract v1.1.2, `canonical-vocabulary.v1.1.2.json`, 19 CSV templates, 19 Draft-07 schemas, exact validator and fixture suite, and frontend alignment requirements.
+- **Exit Gate:** Every configured validator and permanent fixture check passes in `npm run validate:research`.
 
 ### Engineering Gate E01 (Prerequisite for Phase 2)
 - **Deliverables:** Express 27-table logical schema in local Firebase SQL Connect emulator; generate TypeScript SDK operations; implement pure frontend mapping adapters; conduct public query parity tests. **No cloud provisioning or migrations.**
 
 ### Phase 2: Pilot Dataset (Research Mission 02)
 - **Deliverables:** 5 representative, multi-sector, multi-tier pilot records (1 policy reform, 1 capital project, 1 social intervention, 1 institutional reform, 1 macro outcome) tested through end-to-end local emulator ingestion.
-- **Exit Gate:** 100% dry-run and commit validation in local SQL Connect emulator.
+- **Exit Gate:** All approved dry-run and commit validations pass in the local engineering environment.
 
 ### Phase 3: Core National Records
 - **Deliverables:** Comprehensive capture of all major Federal Enactments (Acts of 10th National Assembly), signed Executive Orders, FEC Major Approvals, and national strategies from 29 May 2023 onward.
-- **Exit Gate:** 100% coverage of official Federal Gazettes for the administration period.
+- **Exit Gate:** The approved Gazette discovery protocol reaches its documented saturation criterion for the administration period.
 
 ### Phase 4: Sector Expansion
 - **Deliverables:** Systematic, ministry-by-ministry discovery across all 15 canonical research sectors (Power, Transport, Agriculture, Education, Health, Housing, Creative Economy, etc.).

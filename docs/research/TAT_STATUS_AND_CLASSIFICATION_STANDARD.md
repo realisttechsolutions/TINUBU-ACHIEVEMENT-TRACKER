@@ -1,19 +1,19 @@
-# Tinubu Achievement Tracker — Status & Classification Standard (v1.1.1)
+# Tinubu Achievement Tracker — Status & Classification Standard (v1.1.2)
 
-**Standard Version:** 1.1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1.1  
-**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.1.json`  
+**Governing Contract:** Research Contract v1.1.2
+**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.2.json`
 
 ---
 
 ## 1. Separation of Classification Dimensions
 
-Research Contract v1.1.1 strictly separates classification into **four independent namespaces**. Overloading multiple classification concepts into a single field is strictly prohibited:
+Research Contract v1.1.2 strictly separates classification into **five independent namespaces**. Implementation status remains a separate delivery-lifecycle field. Overloading multiple classification concepts into a single field is strictly prohibited:
 
 ```text
 +───────────────────────────────────────────────────────────────────────────────────────────────────+
-|                                4 SEPARATED CLASSIFICATION DIMENSIONS                              |
+|                                5 INDEPENDENT CLASSIFICATION DIMENSIONS                            |
 +────────────────────────────────────────┬──────────────────────────────────────────────────────────+
 | Dimension                              | Controlled Canonical Codes                               |
 +────────────────────────────────────────┼──────────────────────────────────────────────────────────+
@@ -27,11 +27,11 @@ Research Contract v1.1.1 strictly separates classification into **four independe
 |                                        | independently_corroborated, under_review, unverified,    |
 |                                        | disputed, corrected, withdrawn                           |
 +────────────────────────────────────────┼──────────────────────────────────────────────────────────+
-| 4A. INTERNAL WORKFLOW STATUS           | draft, research_review, evidence_review,                 |
+| 4. INTERNAL WORKFLOW STATUS            | draft, research_review, evidence_review,                 |
 |                                        | editorial_review, human_approval, ready_for_publication, |
 |                                        | rejected, archived                                       |
 +────────────────────────────────────────┼──────────────────────────────────────────────────────────+
-| 4B. EXTERNAL PUBLICATION STATUS        | unpublished, under_review, publishable,                  |
+| 5. EXTERNAL PUBLICATION STATUS         | unpublished, under_review, publishable,                  |
 |                                        | publishable_with_qualification, published, corrected,    |
 |                                        | withdrawn, archived                                      |
 +────────────────────────────────────────┴──────────────────────────────────────────────────────────+

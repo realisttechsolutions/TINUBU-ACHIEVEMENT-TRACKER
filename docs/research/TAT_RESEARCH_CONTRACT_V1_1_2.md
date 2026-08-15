@@ -1,14 +1,13 @@
-# Tinubu Achievement Tracker — Master Research Contract v1.1.1
+# Tinubu Achievement Tracker — Master Research Contract v1.1.2
 
-> [!WARNING]
-> **STATUS: SUPERSEDED BY [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md).** This version is retained only for immutable history and must not be used as the active research authority.
-
-**Contract Version:** 1.1.1 (Consolidated Post-Codex Final Re-Audit)  
-**Effective Date:** 2026-08-15  
-**Governing Authority:** Editorial Board, Data Governance Directorate & Research Verification Team  
-**Scope Window:** 29 May 2023 through August 2026  
-**Canonical Repository:** `https://github.com/realisttechsolutions/TINUBU-ACHIEVEMENT-TRACKER.git`  
-**Target Technical Architecture:** Implementation-Neutral Research Specification (Current Engineering Target: React / Vite SPA + Firebase SQL Connect / Cloud SQL PostgreSQL)  
+**Contract Version:** 1.1.2 (Final Mission 01 Closure)
+**Authority Status:** CANONICAL — SOLE ACTIVE MASTER RESEARCH CONTRACT
+**Supersedes:** Research Contract v1.1 and v1.1.1
+**Effective Date:** 2026-08-15
+**Governing Authority:** Editorial Board, Data Governance Directorate & Research Verification Team
+**Scope Window:** 29 May 2023 through August 2026
+**Canonical Repository:** `https://github.com/realisttechsolutions/TINUBU-ACHIEVEMENT-TRACKER.git`
+**Research Architecture:** Implementation-neutral; the current proposed engineering target is React / Vite plus Firebase SQL Connect / PostgreSQL and is not part of the immutable research ontology.
 
 ---
 
@@ -35,7 +34,7 @@ Research will continue across these dimensions until marginal research produces 
 The platform maintains a deliberately positive, achievements-focused editorial scope. Future research prioritisation concentrates on records showing tangible delivery, measurable progress, institutional reform, capital investment, operational commissioning, and positive public outcomes.
 
 > [!CRITICAL]
-> **POSITIVE SELECTION MUST NEVER WEAKEN FACTUAL ACCURACY.**  
+> **POSITIVE SELECTION MUST NEVER WEAKEN FACTUAL ACCURACY.**
 > The editorial scope determines which achievements receive research attention; it does **not** alter the truth standard governing those achievements. Public wording may be confident, engaging, and positive, but it must **never exceed the underlying verifiable evidence**.
 
 ### The 18 Mandatory Truth Invariants
@@ -62,7 +61,7 @@ The platform maintains a deliberately positive, achievements-focused editorial s
 
 ## 3. Canonical Record Taxonomy (20 Record Types)
 
-Research Contract v1.1.1 defines 20 explicit conceptual record types. Every entity captured in the research pipeline must be classified under exactly one canonical record kind:
+Research Contract v1.1.2 defines 20 explicit conceptual record types. Every entity captured in the research pipeline must be classified under exactly one canonical record kind:
 
 | # | Canonical Code | Public Label | Definition | Minimum Required Evidence |
 |---|---|---|---|---|
@@ -91,11 +90,11 @@ Research Contract v1.1.1 defines 20 explicit conceptual record types. Every enti
 
 ## 4. Separation of Classification Dimensions
 
-Research Contract v1.1.1 strictly separates classification into **four distinct, non-overlapping namespaces**:
+Research Contract v1.1.2 strictly separates classification into **five independent, non-overlapping namespaces**. Implementation status is a separate delivery-lifecycle field and is not one of these five classification dimensions:
 
 ```text
 +───────────────────────────────────────────────────────────────────────────────────────────────────+
-|                               FOUR SEPARATED CLASSIFICATION DIMENSIONS                            |
+|                               FIVE INDEPENDENT CLASSIFICATION DIMENSIONS                          |
 +─────────────────────────────────┬─────────────────────────────────┬───────────────────────────────+
 | 1. DATA VALUE NATURE            | 2. SOURCE ORIGIN                | 3. VERIFICATION STATUS        |
 | - actual                        | - government_reported           | - source_confirmed            |
@@ -107,7 +106,7 @@ Research Contract v1.1.1 strictly separates classification into **four distinct,
 | - modelled                      |                                 | - corrected                   |
 |                                 |                                 | - withdrawn                   |
 +─────────────────────────────────┴─────────────────────────────────┴───────────────────────────────+
-| 4A. INTERNAL WORKFLOW STATUS                     │ 4B. EXTERNAL PUBLICATION STATUS                |
+| 4. INTERNAL WORKFLOW STATUS                      │ 5. EXTERNAL PUBLICATION STATUS                 |
 | - draft                                          │ - unpublished                                  |
 | - research_review                                │ - under_review                                 |
 | - evidence_review                                │ - publishable                                  |
@@ -223,16 +222,18 @@ Primary escalation triggers for mandatory human sign-off are:
 - **Factual Uncertainty & Contradictions:** Unresolved competing figures or conflicting official reports.
 - **Legal & Reputational Exposure:** Active litigations, constitutional questions, or contested statutory authorities.
 - **Contextual Materiality:** Politically sensitive causal claims attributing macroeconomic shifts solely to executive action.
+- **Financial Materiality Below Numeric Floors:** Human review remains mandatory where a smaller figure is significant because of public importance, programme scale, unusual change, uncertainty, contradiction, reputational risk, legal sensitivity, political sensitivity, or statistical significance.
+- **Beneficiary Materiality Below Numeric Floors:** Human review remains mandatory where a smaller beneficiary count is significant for the same qualitative reasons, including vulnerable cohorts or disproportionate programme impact.
 
 **Configurable Escalation Floors:**
-Numeric values (e.g. financial allocations >₦100B or beneficiary totals >500k) serve as automated additional escalation floors. They are owned by the Data Governance Directorate, reviewed semi-annually, and cannot be used to bypass human review for smaller but highly sensitive claims.
+Numeric values (e.g. financial allocations >₦100B or beneficiary totals >500k) serve only as automated additional escalation floors. They are owned by the Data Governance Directorate, reviewed semi-annually, and cannot be used to bypass human review for smaller but materially significant or sensitive claims.
 
 ---
 
 ## 13. Eight-Stage Research Roadmap
 
 ```text
-Phase 1: Foundation (Contract v1.1.1, Schemas, Vocabulary, Validator Engine)
+Phase 1: Foundation (Contract v1.1.2, Schemas, Vocabulary, Validator Engine)
    │
    ▼
 [ Engineering Gate E01: Local Firebase SQL Connect Prototype & Adapters ]
@@ -264,7 +265,7 @@ Phase 8: Continuous Monitoring (Freshness Velocity & Real-Time Gazette Tracking)
 ## 14. Implementation-Neutral Architecture Boundary
 
 > [!NOTE]
-> **GOVERNANCE BOUNDARY:**  
+> **GOVERNANCE BOUNDARY:**
 > This research contract defines **WHAT** data must be collected, verified, governed, and protected. Engineering determines **HOW** technologies implement it.
-> 
+>
 > *Current non-canonical engineering target:* React / Vite SPA + Firebase SQL Connect / Cloud SQL PostgreSQL. This target may evolve without altering the core research truth contract. Specific implementation mechanisms (connector queries, custom claims, SDK methods, Cloud SQL infrastructure sizing) are documented in [`docs/engineering/`](../engineering/).

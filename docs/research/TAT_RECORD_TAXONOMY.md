@@ -6,7 +6,7 @@ This document defines the 20 conceptual record types recognized by the platform 
 
 ## 1. The 20 Conceptual Record Types
 
-| # | Record Type | Conceptual Definition | Primary Evidence Required | Supabase Destination |
+| # | Record Type | Conceptual Definition | Primary Evidence Required | Logical Entity |
 | :--- | :--- | :--- | :--- | :--- |
 | **1** | `Achievement` | Verified government action or milestone | Level 1-2 Gazette or Report | `achievements` |
 | **2** | `Policy` | Structural policy framework or directive | Level 1 Executive Order / Act | `policies` |

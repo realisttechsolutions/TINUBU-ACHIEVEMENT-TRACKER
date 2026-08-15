@@ -29,7 +29,7 @@ This document defines the complete universe of 35 entities managed within the pl
 ---
 
 ## 3. Taxonomy & Geographic Entities
-17. `Sector`: 5 primary umbrella sectors (`economy`, `security`, `infrastructure`, `social-services`, `governance`).
+17. `Sector`: 15 canonical sectors grouped under 5 public navigation groups (`economy`, `security`, `infrastructure`, `social_services`, `governance`).
 18. `Subsector`: Granular subsector classifications.
 19. `Geographic Unit`: States, FCT, geopolitical zones, sites, corridors.
 20. `Geographic Coverage`: Many-to-many record-location mapping.

@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > **STATUS: SUPERSEDED BY RESEARCH CONTRACT V1.1 & CODEX INGESTION SPECIFICATION**  
-> This legacy document has been formally superseded by [`TAT_IMPORT_EXPORT_STANDARD.md`](./TAT_IMPORT_EXPORT_STANDARD.md), [`TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`](./TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md), and [`docs/engineering/CODEX_M01_DATA_INGESTION_REVIEW.md`](../engineering/CODEX_M01_DATA_INGESTION_REVIEW.md). Ingestion will run via Firebase SQL Connect Admin SDK rather than direct Supabase sync.
+> This legacy document has been formally superseded by [`TAT_IMPORT_EXPORT_STANDARD.md`](./TAT_IMPORT_EXPORT_STANDARD.md), [`TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`](./TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md), and [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md). Implementation-specific ingestion mechanisms are engineering responsibilities.
 
 This document establishes the historical pre-consolidation data boundary proposals.
 

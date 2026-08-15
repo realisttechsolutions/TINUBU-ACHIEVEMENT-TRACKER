@@ -2,8 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/canonical-vocabulary.v1.1.json",
   "title": "Tinubu Achievement Tracker Canonical Vocabulary v1.1",
-  "description": "Authoritative machine-readable controlled vocabulary dictionary for research, ingestion, database, and frontend systems.",
+  "description": "SUPERSEDED historical vocabulary retained for audit history only. The sole active authority is canonical-vocabulary.v1.1.2.json.",
   "schema_version": "1.1",
+  "authority_status": "SUPERSEDED",
+  "superseded_by": "canonical-vocabulary.v1.1.2.json",
   "record_types": [
     { "code": "achievement", "public_label": "Achievement", "internal_description": "Positive demonstrable administration milestone or outcome meeting publication criteria", "active": true },
     { "code": "policy", "public_label": "Policy", "internal_description": "Guiding principle, national framework, or structured government strategy", "active": true },

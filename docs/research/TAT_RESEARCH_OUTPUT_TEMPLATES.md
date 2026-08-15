@@ -1,8 +1,8 @@
 # Tinubu Achievement Tracker — Research Output Templates Specification (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 **Location:** `research/templates/`  
 **Paired Schemas:** `research/schemas/`  
 

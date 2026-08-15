@@ -1,66 +1,67 @@
-# Tinubu Achievement Tracker — Research Mission 01.1A Compliance Matrix
+# Tinubu Achievement Tracker — Research Mission 01 Compliance Matrix v1.1.2
 
-**Matrix Version:** 1.1.1 (Consolidated Post-Codex Final Re-Audit)  
-**Evaluation Date:** 2026-08-15  
-**Governing Standard:** Research Contract v1.1.1  
-**Auditor / Reviewer:** Antigravity Research Verification Directorate  
-**Parent Codex Re-Audit Commit:** `bf44564a6cf98d6a82e1bbc20ae1626fec568fd7`  
-**Target Branch:** `research/mission-01-contract-v1.1.1`  
+**Evaluation Date:** 2026-08-15
 
----
+**Governing Contract:** `TAT_RESEARCH_CONTRACT_V1_1_2.md`
 
-## 1. Compliance Summary
+**Evidence Rule:** This matrix contains the actual individually evaluated checks. It does not inherit or imply the retired “90/90” or “100%” claims. A PASS is limited to the evidence named in that row.
 
-| Category | Criteria Evaluated | Compliant (PASS) | Remediated in v1.1.1 | Non-Compliant / Open | Verdict |
-|---|:---:|:---:|:---:|:---:|:---:|
-| **Core Research Mandate & Truth Safeguards** | 10 | 10 | 10 | 0 | **PASS** |
-| **Taxonomies & Machine-Readable Vocabulary** | 10 | 10 | 10 | 0 | **PASS** |
-| **Evidence, Sources & Claim Architecture** | 10 | 10 | 10 | 0 | **PASS** |
-| **CSV Templates & Draft-07 JSON Schemas** | 10 | 10 | 10 | 0 | **PASS** |
-| **Quality Control & Governance Gates** | 10 | 10 | 10 | 0 | **PASS** |
-| **Technical Architecture & Data Readiness** | 10 | 10 | 10 | 0 | **PASS** |
-| **Codex Re-Audit Blockers (B-01, B-02)** | 2 | 2 | 2 | 0 | **PASS** |
-| **Codex Findings (G-01 to G-28)** | 28 | 28 | 28 | 0 | **PASS** |
-| **OVERALL MISSION 01.1A VERDICT** | **90 Checks** | **90 / 90** | **—** | **0** | **100% VERIFIED PASS** |
+## Summary
 
----
+| Category | Individually evidenced checks | PASS | Open |
+|---|---:|---:|---:|
+| Truth and research scope | 10 | 10 | 0 |
+| Authority and vocabulary | 10 | 10 | 0 |
+| Schemas and templates | 8 | 8 | 0 |
+| Validator and fixtures | 8 | 8 | 0 |
+| Governance and document control | 4 | 4 | 0 |
+| **Total** | **40** | **40** | **0** |
 
-## 2. Executable Verification Evidence
+## Individually evidenced checks
 
-### Part A: Core Research Mandate & 18 Truth Safeguards
-1. **Historical Scope Window (29 May 2023 - August 2026):** PASS (`TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 1.1).
-2. **Achievements-Focused Positive Coverage:** PASS (`TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 1.2).
-3. **18 Immutable Truth Safeguards:** PASS (`TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 2). Explicitly codifies non-removal of material qualifications, preservation of contradictions, and immutable corrections.
-4. **No Production Records in Mission 01/01.1A:** PASS (All 19 CSV templates verified with `[EXAMPLE ONLY - NOT A PRODUCTION RECORD]`).
-5. **No Premature Cloud Provisioning:** PASS (Zero live Firebase/Cloud SQL instances created).
-6. **No Public Frontend Edits:** PASS (`src/**` components untouched).
-7. **Implementation-Neutral Governance:** PASS (`TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 14).
-8. **Internal/Public Boundary Security:** PASS (`TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`).
+| # | Check | Evidence | Result |
+|---:|---|---|:---:|
+| 1 | Historical scope is 29 May 2023 through August 2026 | Contract v1.1.2 §1.1 | PASS |
+| 2 | Positive selection cannot lower truth standards | Contract v1.1.2 §2 critical rule | PASS |
+| 3 | No fabrication or figure inflation | Truth invariants 1–2 | PASS |
+| 4 | Reporting periods are preserved | Truth invariant 3 | PASS |
+| 5 | Announcement, approval, funding, release, expenditure, completion, and operation remain distinct | Truth invariants 4–9 and implementation statuses | PASS |
+| 6 | Targets and applicants are not reported as actual beneficiaries | Truth invariants 10–12 | PASS |
+| 7 | Government reporting is distinct from independent verification | Truth invariant 13 | PASS |
+| 8 | Qualifications and contradictions are preserved | Truth invariants 14–15 | PASS |
+| 9 | Corrections and provenance are preserved | Truth invariants 16–17 | PASS |
+| 10 | Historical versions remain immutable | Truth invariant 18 and superseded-file retention | PASS |
+| 11 | Contract v1.1.2 is the sole active master | Contract authority header and document index | PASS |
+| 12 | Vocabulary v1.1.2 is the sole active machine authority | `authority_status`, prior-registry supersession metadata, validator section 2 | PASS |
+| 13 | Exactly 43 controlled namespaces exist | Vocabulary arrays and validator section 2 | PASS |
+| 14 | Namespace codes are unique | Validator section 2 duplicate-code checks | PASS |
+| 15 | All 15 sector parents resolve to one of 5 public groups | Vocabulary parent check | PASS |
+| 16 | Schema enums equal registry enums in both directions | 70 exact mapped enum checks and NEG-01/NEG-02 | PASS |
+| 17 | Deprecated aliases are rejected | NEG-03 | PASS |
+| 18 | Five independent classification dimensions are explicit | Contract v1.1.2 §4 and classification standard | PASS |
+| 19 | Implementation status is separate from the five classifications | Contract v1.1.2 §4–5 | PASS |
+| 20 | Source levels, roles, claim types, relationship types, evidence profiles, finance, beneficiaries, dates, events, and geography are registered | Vocabulary v1.1.2 namespaces | PASS |
+| 21 | Exactly 19 Draft-07 schemas compile | Validator section 3 | PASS |
+| 22 | All schemas reject additional properties | Independent schema structure check in validator baseline | PASS |
+| 23 | Exactly 19 matching CSV templates exist | Validator section 4 | PASS |
+| 24 | Template headers exactly equal schema property sets | Validator section 4 | PASS |
+| 25 | Required values and identifier formats are enforced | Validator section 4; NEG-04/NEG-05 | PASS |
+| 26 | Financial type and positive value rules are enforced | Schema/domain checks; NEG-16/NEG-17 | PASS |
+| 27 | Beneficiary stage and non-negative count rules are enforced | Schema/domain checks; NEG-18/NEG-19 | PASS |
+| 28 | Every row contains the exact non-production marker | Validator section 4; NEG-24 | PASS |
+| 29 | All configured date fields match declared precision | Date bindings; NEG-20/NEG-21 | PASS |
+| 30 | Period start cannot exceed period end | Validator domain check; NEG-22 | PASS |
+| 31 | Sector/public-group row pairing is enforced | Parent check; NEG-23 | PASS |
+| 32 | Twenty-four configured FK fields resolve | Validator section 5; NEG-07 through NEG-12 | PASS |
+| 33 | Nineteen primary-ID namespaces and global uniqueness are checked | Validator section 5; NEG-06 | PASS |
+| 34 | Claim-source composite uniqueness is enforced | Validator section 5; NEG-15 | PASS |
+| 35 | One complete positive package passes | POS-01 | PASS |
+| 36 | Twenty-five negative fixtures each produce a non-zero error count | Fixture runner summary | PASS |
+| 37 | Malformed quoted CSV is rejected | NEG-25 | PASS |
+| 38 | Document index exactly equals the research Markdown filesystem | Validator section 1: 44/44, unique | PASS |
+| 39 | Active research requirements are implementation-neutral | Contract §14, boundary standard, legacy/deprecated classifications | PASS |
+| 40 | Human review below numeric floors includes financial and beneficiary materiality | Contract §12.2 and operating model §3.1 | PASS |
 
-### Part B: Taxonomies & Controlled Vocabularies
-9. **Machine-Readable Vocabulary v1.1.1:** PASS (`canonical-vocabulary.v1.1.1.json` with 35+ namespaces).
-10. **20 Canonical Record Types:** PASS (`TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 3).
-11. **21 Implementation Statuses:** PASS (`TAT_STATUS_AND_CLASSIFICATION_STANDARD.md` Section 2).
-12. **4 Separated Classification Dimensions:** PASS (Separated in all schemas and templates; overloaded fields removed).
-13. **3-Level Hierarchical Sector Taxonomy:** PASS (5 Public Groups -> 15 Canonical Sectors -> Subsectors).
-14. **11 Financial Types:** PASS (`financial_record.schema.json`).
-15. **6 Beneficiary Stages:** PASS (`beneficiary_record.schema.json`).
-16. **7 Structured Date Precisions:** PASS (`date_precisions` in vocabulary and schemas).
-17. **11 Geographic Scopes:** PASS (`geographic_scope_types` in vocabulary).
-18. **Removal of All Deprecated Aliases:** PASS (`exact-day`, `social-services`, `1-6`, `physical-project` removed from active acceptance).
+## Closure interpretation
 
-### Part C: Evidence, Claim & Relationship Architecture
-19. **Six-Tier Source Hierarchy:** PASS (`LEVEL_1` to `LEVEL_6` enforced in `source_capture.schema.json`).
-20. **11 Relationship-Bound Source Roles:** PASS (`source_roles` in vocabulary and relationship schema).
-21. **Many-to-Many Claim-Source Architecture (B-02 Closed):** PASS (`claim_source_relationship.csv` & `schema.json`).
-22. **5 Claim-Source Relationship Types:** PASS (`supports`, `contradicts`, `replaces`, `contextualises`, `discovery_only`).
-23. **8 Evidence Profiles:** PASS (`TAT_EVIDENCE_PROFILE_STANDARD.md`).
-24. **Cross-File Referential Integrity (B-02 Closed):** PASS (Validator validates `claim_id`, `source_id`, `record_id` existence across files).
-25. **Composite Relationship Uniqueness:** PASS (Validator enforces unique composite keys).
-
-### Part D: Validation Engine & Permanent Fixtures
-26. **19 Paired Schemas & Templates:** PASS (100% AJV compilation and CSV row validation).
-27. **Exact Example Marker Enforcement:** PASS (Exact string match enforced on all rows).
-28. **Permanent Fixture Suite:** PASS (`scripts/test-research-fixtures.mjs` with 13 negative test assertions).
-29. **42 Indexed Documents Checked:** PASS (17 Canonical, 18 Supporting, 4 Superseded, 4 Deprecated).
-30. **Zero Blocking Errors:** PASS (`npm run validate:research` returns exit 0).
+These 40 checks are the defensible Mission 01 closure set implemented in v1.1.2. Dependency vulnerabilities, existing frontend lint findings, bundle-size warnings, and browser-data freshness are engineering backlog items outside this research-integrity matrix.

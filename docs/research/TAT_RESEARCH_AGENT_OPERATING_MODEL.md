@@ -1,8 +1,8 @@
-# Tinubu Achievement Tracker — Human & AI Operating Model & Escalation Policy (v1.1.1)
+# Tinubu Achievement Tracker — Human & AI Operating Model & Escalation Policy (v1.1.2)
 
-**Standard Version:** 1.1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1.1  
+**Governing Contract:** Research Contract v1.1.2
 
 ---
 
@@ -46,6 +46,8 @@ Human Lead Reviewer sign-off is mandatory whenever a research task or claim meet
 4. **Legal & Reputational Exposure:** Active litigations, constitutional questions, disputed statutory mandates, or ministerial retractions.
 5. **Contextual Materiality:** Broad macroeconomic causal claims attributing national trends solely to executive policy.
 6. **Exceptional Public Significance:** Ground-breaking national structural reforms (e.g. FX market unification, fuel subsidy removal, state electricity devolution).
+7. **Financial Materiality Below Numeric Floors:** Smaller values require human review where public importance, programme scale, unusual change, uncertainty, contradiction, reputational risk, legal sensitivity, political sensitivity, or statistical significance makes them material.
+8. **Beneficiary Materiality Below Numeric Floors:** Smaller beneficiary counts require human review under the same qualitative criteria, especially for vulnerable cohorts or disproportionate programme impact.
 
 ### 3.2 Configurable Quantitative Escalation Floors
 To ensure automated safety across high-volume pipelines, the platform maintains quantitative escalation floors:
@@ -55,7 +57,7 @@ To ensure automated safety across high-volume pipelines, the platform maintains 
 #### Governance Controls for Quantitative Floors:
 - **Policy Owner:** Data Governance Directorate.
 - **Review Cadence:** Semi-annually (aligned with national budget cycles and inflation adjustments).
-- **Subordination Rule:** Smaller financial or beneficiary figures **must not bypass human review** if they meet any qualitative escalation trigger above.
+- **Subordination Rule:** Smaller financial or beneficiary figures **must not bypass human review** when they are materially significant under any qualitative trigger above.
 - **Override Authority:** Only the Lead Editor in consultation with the Editorial Board may adjust threshold parameters.
 
 ---

@@ -1,5 +1,7 @@
 # Tinubu Achievement Tracker — Codex Audit Resolution Log (v1.1.1)
 
+> **FINAL CLOSURE UPDATE (v1.1.2):** This log preserves the finding history. Closure metrics below are reconciled to Contract v1.1.2, the 44-document registry, exact validator checks, and the 1-positive/25-negative fixture suite. Earlier v1.1.1 completion percentages are retired.
+
 **Log Version:** 1.1.1  
 **Resolution Date:** 2026-08-15  
 **Governing Standard:** Research Contract v1.1.1  
@@ -12,11 +14,11 @@
 
 | Severity Tier | Total Findings | Closed in v1.1.1 | Open / Blocked | Verification Evidence |
 |---|:---:|:---:|:---:|---|
-| **Blockers (B-01, B-02, G-01, G-02)** | 4 | **4 / 4 (100%)** | 0 | Executable validator with Vocabulary ↔ Schema checks & cross-file referential integrity |
-| **High Severity (G-03 to G-13, G-21, G-26)** | 13 | **13 / 13 (100%)** | 0 | 19 Draft-07 schemas, separated classifications, 18 truth rules, implementation-neutral boundary |
-| **Medium Severity (G-14 to G-20, G-22, G-24, G-27, G-28)** | 11 | **11 / 11 (100%)** | 0 | 42-doc inventory, composite uniqueness, governed escalation policy, permanent fixtures |
-| **Low / Info Severity (G-23, G-25)** | 2 | **2 / 2 (100%)** | 0 | Document index, deprecation registry, accurate metrics reporting |
-| **TOTAL FINDINGS** | **30** | **30 / 30 (100%)** | **0** | **100% EXECUTABLY VERIFIED PASS** |
+| **Blockers (B-01, B-02, G-01, G-02)** | 4 | **4 / 4** | 0 | Exact vocabulary equality, configured FKs, dates, hierarchy, and uniqueness in v1.1.2 |
+| **High Severity (G-03 to G-13, G-21, G-26)** | 13 | **13 / 13** | 0 | 19 Draft-07 schemas, five classifications, 18 truth rules, neutral boundary |
+| **Medium Severity (G-14 to G-20, G-22, G-24, G-27, G-28)** | 11 | **11 / 11** | 0 | 44-document registry, composite uniqueness, governed review, fixtures |
+| **Low / Info Severity (G-23, G-25)** | 2 | **2 / 2** | 0 | Exact document registry and evidence metrics |
+| **TOTAL FINDINGS** | **30** | **30 / 30** | **0** | **Verified by the v1.1.2 closure suite** |
 
 ---
 
@@ -26,7 +28,7 @@
 
 #### B-01 / G-01: Canonical Machine-Readable Vocabulary Incomplete & Unenforced
 - **Original Audit Finding:** Vocabulary omitted sector registry, relationship types, claim types, event types, and was not compared against schema enums by the validator.
-- **Resolution in v1.1.1:** Created `research/schemas/canonical-vocabulary.v1.1.1.json` registering all 35+ controlled domains (5 public groups, 15 canonical sectors, 20 record types, 21 implementation statuses, 4 separated classification dimensions, 11 source roles, 17 source types, 12 claim types, 5 relationship types, 8 evidence profiles, 11 financial types, 6 beneficiary stages, 7 date precisions, 14 event types, 11 geographic scopes). Extended `validate-research-foundation.mjs` to bidirectionally check every schema enum against the vocabulary.
+- **Final resolution in v1.1.2:** `canonical-vocabulary.v1.1.2.json` is the sole authority with exactly 43 controlled namespaces, five independent classification dimensions, sector parents, and all governed domains. The validator enforces exact equality in both directions for every mapped schema enum.
 - **Verification Evidence:** `scripts/validate-research-foundation.mjs` (Section 2 & 3) + `NEG-01` fixture test.
 
 #### B-02 / G-02: Validator False Implementation Confidence & Claim-Source Architecture
@@ -39,12 +41,12 @@
 ### High-Severity Findings Resolution
 
 #### G-03: Hierarchical Sector Model (3 Levels)
-- **Resolution:** Defined 3-level taxonomy in `TAT_SECTOR_TAXONOMY.md` and registered all 15 canonical sector IDs in `canonical-vocabulary.v1.1.1.json`. All entity schemas enforce canonical sector IDs (`economy_fiscal_reforms`, etc.).
+- **Resolution:** Defined the 3-level taxonomy in `TAT_SECTOR_TAXONOMY.md`, registered all 15 sector IDs and parents in `canonical-vocabulary.v1.1.2.json`, and enforced row-level group/sector pairing.
 - **Verification:** Schema enum validation + `NEG-08` fixture test.
 
 #### G-04 & G-05: Relational Schema & Implementation Neutrality
 - **Resolution:** Approved 27-table logical model in engineering docs. Made research governance implementation-neutral; removed Supabase DDL/RLS from research docs; relocated Firebase connector mechanics to `docs/engineering/`.
-- **Verification:** `TAT_RESEARCH_CONTRACT_V1_1_1.md` Section 14 and `TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`.
+- **Verification:** `TAT_RESEARCH_CONTRACT_V1_1_2.md` Section 14, the document registry, and `TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`.
 
 #### G-07: Structured Date & Reporting-Period Precision
 - **Resolution:** Structured date model implemented across all schemas with 7 precisions (`exact_day`, `month`, `quarter`, `year`, `fiscal_year`, `range`, `unknown`). Removed deprecated `exact-day` alias. Validator enforces `period_start <= period_end`.
@@ -80,7 +82,7 @@
 - **Resolution:** Comprehensive 28-risk register codified in `TAT_RESEARCH_RISK_REGISTER.md`.
 
 #### G-17: Document Inventory Coverage
-- **Resolution:** Validator updated to verify all 42 indexed documents (17 Canonical, 18 Supporting, 4 Superseded, 4 Deprecated).
+- **Resolution:** Validator parses the document-index table and reconciles it with all 44 filesystem documents (16 Canonical, 17 Supporting, 6 Superseded, 4 Deprecated, 1 Legacy).
 
 #### G-18: Governed Human-Review Escalation Policy
 - **Resolution:** Primary escalation triggers established on risk, sensitivity, uncertainty, legal exposure, and materiality; numeric values (₦100B, 500k) established as governed escalation floors in `TAT_RESEARCH_AGENT_OPERATING_MODEL.md`.
@@ -91,4 +93,4 @@
 
 #### G-20: Permanent Fixture Suite
 - **Resolution:** Created `scripts/test-research-fixtures.mjs` with 13 negative test assertions and 1 positive suite.
-- **Verification:** 100% pass on fixture runner during `npm run validate:research`.
+- **Verification:** One complete positive package returns zero errors and each of 25 negative fixtures returns a non-zero error count during `npm run validate:research`.

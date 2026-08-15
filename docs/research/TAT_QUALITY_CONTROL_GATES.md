@@ -1,8 +1,8 @@
 # Tinubu Achievement Tracker — Quality Control Gates & Responsibilities (v1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.2
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.2
 
 ---
 
@@ -66,7 +66,7 @@ Research Contract v1.1 organizes the quality assurance framework into **six sequ
 ### Gate 3: Automated Data Readiness
 - **Preserved Responsibilities:** Responsibility 6 (Schema Validation) & Responsibility 9 (Database Readiness).
 - **Inputs:** Structured CSV interchange templates and relational batch package.
-- **Checks:** Execute 100% AJV Draft-07 validation against `canonical-vocabulary.v1.1.json`; verify numeric decimals, ISO currencies, non-production markers, structured dates, and foreign key referential integrity; execute deterministic dry-run plan.
+- **Checks:** Execute AJV Draft-07 validation and exact enum equality against `canonical-vocabulary.v1.1.2.json`; verify numeric decimals, ISO currencies, non-production markers, structured dates, configured foreign-key integrity, identifier uniqueness, and deterministic dry-run behavior.
 - **Responsible Actor:** Schema / QA Agent.
 - **Exit Evidence:** Automated validation report with zero errors and validated batch plan hash.
 

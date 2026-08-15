@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > **STATUS: DEPRECATED — SUPERSEDED BY RESEARCH CONTRACT V1.1**  
-> This placeholder document has been formally superseded by [`TAT_RESEARCH_CONTRACT_V1_1.md`](./TAT_RESEARCH_CONTRACT_V1_1.md) and [`docs/engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md`](../engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md).
+> This placeholder document has been formally superseded by [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md); current implementation proposals belong under `docs/engineering/`.
 
 This document outlines historical proposed database naming standards.
 

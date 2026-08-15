@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > **STATUS: DEPRECATED — SUPERSEDED BY 27-TABLE RELATIONAL MODEL**  
-> This legacy entity list has been formally superseded by the approved 27-table relational logical model documented in [`docs/engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md`](../engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md) and [`TAT_RESEARCH_CONTRACT_V1_1.md`](./TAT_RESEARCH_CONTRACT_V1_1.md).
+> This legacy entity list has been formally superseded by [`TAT_RESEARCH_CONTRACT_V1_1_2.md`](./TAT_RESEARCH_CONTRACT_V1_1_2.md); current implementation proposals belong under `docs/engineering/`.
 
 This document details historical entity naming inventories.
 
