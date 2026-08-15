@@ -2,7 +2,7 @@
 ## Technical Blueprint & Directory Layout
 
 **Version:** 2.0.0 (Post-Mission 09)  
-**Framework:** Next.js 15.2.9  
+**Framework:** Next.js 15.5.21  
 **Runtime:** Node.js 18 / 20 (Firebase App Hosting on Google Cloud Run)  
 
 ---
@@ -28,7 +28,7 @@ TINUBU ACHIEVEMENTS TRACKER/
 │   └── og-image.jpg                  # Default OpenGraph preview banner
 ├── scripts/                          # Deterministic research validator scripts (v1.1.2)
 └── src/
-    ├── app/                          # Next.js 15 App Router (v15.2.9) (Root Server Layout & Routes)
+    ├── app/                          # Next.js 15 App Router (v15.5.21) (Root Server Layout & Routes)
     │   ├── layout.tsx                # Root HTML layout, font preconnects, SEO metadata
     │   ├── providers.tsx             # Client boundary (React Query, Theme, Language, Tooltips)
     │   ├── loading.tsx               # Global skeleton loading state

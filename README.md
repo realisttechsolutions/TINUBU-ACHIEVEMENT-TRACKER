@@ -12,7 +12,7 @@ The **Tinubu Achievement Tracker (TAT)** is Nigeria's authoritative, evidence-ba
 
 ## 🏛️ Architecture Highlights
 
-- **Framework:** Next.js 15.2.9 (App Router) with full SSR / SSG / dynamic rendering
+- **Framework:** Next.js 15.5.21 (App Router) with full SSR / SSG / dynamic rendering
 - **Styling & Design System:** Tailwind CSS + Radix UI primitives with Glassmorphism, accessible dark/light modes, and national sovereign color palettes
 - **Data Facade:** Universal Data Adapter (`src/adapters/dataAdapter.ts`) strictly conforming to Research Contract v1.1.2
 - **Deployment:** Google Cloud Run containerized SSR via **Firebase App Hosting** (`apphosting.yaml`)
@@ -86,7 +86,7 @@ npm run build
 ## 🛡️ Strategic Platform Mandate (ADR-001)
 
 The Tinubu Achievement Tracker uses the **Google Cloud / Firebase Enterprise Ecosystem**:
-- Next.js 15 App Router (v15.2.9) on **Firebase App Hosting** (Google Cloud Run)
+- Next.js 15 App Router (v15.5.21 - Maintenance LTS Frozen) on **Firebase App Hosting** (Google Cloud Run)
 - **Firebase Firestore** & **Google Cloud Storage**
 - **Firebase Authentication** with Claims-based RBAC
 - **Google Cloud Vertex AI** (Gemini 1.5 Pro) for Grounded AI Search
