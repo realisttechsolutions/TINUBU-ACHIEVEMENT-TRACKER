@@ -6,7 +6,7 @@ import SectorDetail from '@/views/SectorDetail';
 import Loading from '../../loading';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const sector = dataAdapter.getSectorBySlug(params.slug);
+  const resolvedParams = await params;
+  const sector = dataAdapter.getSectorBySlug(resolvedParams?.slug || '');
   if (!sector) {
     return {
       title: 'Sector Not Found | Tinubu Achievement Tracker',
@@ -35,12 +36,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${sector.name} Sector Progress & Evidence`,
       description: sector.description,
       url: `https://tinubutracker.ng/sectors/${sector.slug}`,
+      siteName: 'Tinubu Achievement Tracker',
+      locale: 'en_NG',
+      type: 'website',
     },
   };
 }
 
-export default function SectorDetailPage({ params }: Props) {
-  const sector = dataAdapter.getSectorBySlug(params.slug);
+export default async function SectorDetailPage({ params }: Props) {
+  const resolvedParams = await params;
+  const sector = dataAdapter.getSectorBySlug(resolvedParams?.slug || '');
   if (!sector) {
     notFound();
   }

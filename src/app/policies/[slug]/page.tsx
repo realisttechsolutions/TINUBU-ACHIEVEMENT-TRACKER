@@ -6,7 +6,7 @@ import PolicyDetail from '@/views/PolicyDetail';
 import Loading from '../../loading';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const policy = dataAdapter.getPolicyBySlug(params.slug);
+  const resolvedParams = await params;
+  const policy = dataAdapter.getPolicyBySlug(resolvedParams?.slug || '');
   if (!policy) {
     return {
       title: 'Policy Not Found | Tinubu Achievement Tracker',
@@ -35,12 +36,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: policy.title,
       description: policy.summary,
       url: `https://tinubutracker.ng/policies/${policy.slug}`,
+      siteName: 'Tinubu Achievement Tracker',
+      locale: 'en_NG',
+      type: 'article',
     },
   };
 }
 
-export default function PolicyDetailPage({ params }: Props) {
-  const policy = dataAdapter.getPolicyBySlug(params.slug);
+export default async function PolicyDetailPage({ params }: Props) {
+  const resolvedParams = await params;
+  const policy = dataAdapter.getPolicyBySlug(resolvedParams?.slug || '');
   if (!policy) {
     notFound();
   }

@@ -6,7 +6,7 @@ import AchievementDetail from '@/views/AchievementDetail';
 import Loading from '../../loading';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const achievement = dataAdapter.getAchievementBySlug(params.slug);
+  const resolvedParams = await params;
+  const achievement = dataAdapter.getAchievementBySlug(resolvedParams?.slug || '');
   if (!achievement) {
     return {
       title: 'Achievement Not Found | Tinubu Achievement Tracker',
@@ -35,27 +36,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: achievement.title,
       description: achievement.summary,
       url: `https://tinubutracker.ng/achievements/${achievement.slug}`,
+      siteName: 'Tinubu Achievement Tracker',
+      locale: 'en_NG',
       type: 'article',
-      images: [
-        {
-          url: '/assets/og-image.jpg',
-          width: 1200,
-          height: 630,
-          alt: achievement.title,
-        },
-      ],
+      publishedTime: achievement.date || '2023-05-29',
     },
     twitter: {
       card: 'summary_large_image',
       title: achievement.title,
       description: achievement.summary,
-      images: ['/assets/og-image.jpg'],
     },
   };
 }
 
-export default function AchievementDetailPage({ params }: Props) {
-  const achievement = dataAdapter.getAchievementBySlug(params.slug);
+export default async function AchievementDetailPage({ params }: Props) {
+  const resolvedParams = await params;
+  const achievement = dataAdapter.getAchievementBySlug(resolvedParams?.slug || '');
   if (!achievement) {
     notFound();
   }

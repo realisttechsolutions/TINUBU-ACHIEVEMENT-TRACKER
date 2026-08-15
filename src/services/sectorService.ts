@@ -22,7 +22,7 @@ export const getSectorBySlug = (slug: string): SectorRecord | undefined => {
   const normalized = slug.toLowerCase();
   return sectorsData.find((s) => 
     s.slug.toLowerCase() === normalized || 
-    ((s as any).id && String((s as any).id).toLowerCase() === normalized) ||
+    (s.id && s.id.toLowerCase() === normalized) ||
     (normalized === 'economy' && s.slug === 'economy-fiscal-reforms') ||
     (normalized === 'security' && s.slug === 'security-national-stability') ||
     (normalized === 'infrastructure' && s.slug === 'infrastructure-transportation') ||

@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  poweredByHeader: false,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
+    domains: [
+      'images.unsplash.com',
+      'firebasestorage.googleapis.com',
+      'storage.googleapis.com',
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   async redirects() {
     return [

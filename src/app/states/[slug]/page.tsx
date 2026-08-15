@@ -6,7 +6,7 @@ import StateDetail from '@/views/StateDetail';
 import Loading from '../../loading';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const state = dataAdapter.getStateBySlug(params.slug);
+  const resolvedParams = await params;
+  const state = dataAdapter.getStateBySlug(resolvedParams?.slug || '');
   if (!state) {
     return {
       title: 'State Not Found | Tinubu Achievement Tracker',
@@ -33,14 +34,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     openGraph: {
       title: `${state.name} State - Federal Achievements & Delivery`,
-      description: `Federal capital investments, infrastructure delivery, and verified outcomes in ${state.name} State.`,
+      description: `Federal capital investments and verified outcomes across ${state.capital} and ${state.name} State.`,
       url: `https://tinubutracker.ng/states/${state.slug}`,
+      siteName: 'Tinubu Achievement Tracker',
+      locale: 'en_NG',
+      type: 'website',
     },
   };
 }
 
-export default function StateDetailPage({ params }: Props) {
-  const state = dataAdapter.getStateBySlug(params.slug);
+export default async function StateDetailPage({ params }: Props) {
+  const resolvedParams = await params;
+  const state = dataAdapter.getStateBySlug(resolvedParams?.slug || '');
   if (!state) {
     notFound();
   }

@@ -20,9 +20,9 @@ export interface UniversalLinkProps extends Omit<React.AnchorHTMLAttributes<HTML
 
 export const Link = React.forwardRef<HTMLAnchorElement, UniversalLinkProps>(
   ({ href, to, children, ...props }, ref) => {
-    const target = (href || to || '#') as any;
+    const target = href || to || '#';
     return (
-      <NextLink ref={ref} href={target} {...props}>
+      <NextLink ref={ref} href={target as any} {...props}>
         {children}
       </NextLink>
     );
@@ -33,12 +33,8 @@ Link.displayName = 'Link';
 export const NavLink = Link;
 
 export function useLocation() {
-  let pathname = '/';
-  try {
-    pathname = useNextPathname() || '/';
-  } catch (e) {
-    pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
-  }
+  const nextPathname = useNextPathname();
+  const pathname = nextPathname || (typeof window !== 'undefined' ? window.location.pathname : '/');
 
   const [search, setSearch] = useState('');
   const [hash, setHash] = useState('');
@@ -55,50 +51,41 @@ export function useLocation() {
     search,
     hash,
     key: 'default',
-    state: null
+    state: null,
   };
 }
 
 export function useNavigate() {
-  try {
-    const router = useNextRouter();
-    return (to: string | number, options?: { replace?: boolean }) => {
+  const router = useNextRouter();
+
+  return useCallback(
+    (to: string | number, options?: { replace?: boolean }) => {
       if (typeof to === 'number') {
-        if (to === -1 && typeof window !== 'undefined') window.history.back();
+        if (to === -1 && typeof window !== 'undefined') {
+          window.history.back();
+        }
         return;
       }
       if (options?.replace) {
-        router?.replace?.(to as string);
+        router?.replace?.(to);
       } else {
-        router?.push?.(to as string);
+        router?.push?.(to);
       }
-    };
-  } catch (e) {
-    return (to: string | number) => {
-      if (typeof window !== 'undefined' && typeof to === 'string') {
-        window.location.href = to;
-      }
-    };
-  }
+    },
+    [router]
+  );
 }
 
 export function useParams<T extends Record<string, string | string[]> = Record<string, string>>(): T {
-  try {
-    const rrParams = useRRParams();
-    if (rrParams && Object.keys(rrParams).length > 0) {
-      return rrParams as T;
-    }
-  } catch (e) {
-    // not in react-router tree
+  const nextParams = useNextParams();
+  const rrParams = useRRParams();
+
+  if (rrParams && Object.keys(rrParams).length > 0) {
+    return rrParams as unknown as T;
   }
 
-  try {
-    const nextParams = useNextParams();
-    if (nextParams && Object.keys(nextParams).length > 0) {
-      return nextParams as T;
-    }
-  } catch (e) {
-    // not in next app router
+  if (nextParams && Object.keys(nextParams).length > 0) {
+    return nextParams as unknown as T;
   }
 
   if (typeof window !== 'undefined') {
@@ -112,13 +99,7 @@ export function useParams<T extends Record<string, string | string[]> = Record<s
 }
 
 export function useSearchParams() {
-  let nextParams: URLSearchParams | null = null;
-  try {
-    nextParams = useNextSearchParams();
-  } catch (e) {
-    nextParams = null;
-  }
-
+  const nextParams = useNextSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -126,7 +107,7 @@ export function useSearchParams() {
 
   const setSearchParams = useCallback(
     (
-      newParams: Record<string, any> | ((prev: URLSearchParams) => URLSearchParams),
+      newParams: Record<string, unknown> | ((prev: URLSearchParams) => URLSearchParams),
       options?: { replace?: boolean }
     ) => {
       const current = new URLSearchParams(nextParams ? Array.from(nextParams.entries()) : []);
@@ -149,7 +130,6 @@ export function useSearchParams() {
     [nextParams, navigate, location.pathname]
   );
 
-  // Return a tuple that also works as a callable/inspectable searchParams object
   const tuple = [searchParams, setSearchParams] as any;
   tuple.get = (key: string) => searchParams.get(key);
   tuple.getAll = (key: string) => searchParams.getAll(key);
@@ -164,11 +144,7 @@ export function Navigate({ to, replace = true }: { to: string; replace?: boolean
     navigate(to, { replace });
   }, [navigate, to, replace]);
 
-  try {
-    return <RRNavigate to={to} replace={replace} />;
-  } catch (e) {
-    return null;
-  }
+  return <RRNavigate to={to} replace={replace} />;
 }
 
 export { useNextPathname as usePathname, useNextRouter as useRouter };

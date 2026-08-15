@@ -1,5 +1,5 @@
 # TAT Firebase App Hosting Readiness Certification
-## Next.js 14 App Router Deployment Specification on Google Cloud Run
+## Next.js 15 App Router (v15.2.9) Deployment Specification on Google Cloud Run
 
 **Status:** CERTIFIED READY  
 **Deployment Target:** Firebase App Hosting (`apphosting.yaml`)  

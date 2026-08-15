@@ -77,6 +77,8 @@ export interface SectorSource {
 }
 
 export interface SectorRecord {
+  id?: string;
+  name?: string;
   slug: string;
   title: string;
   shortTitle: string;

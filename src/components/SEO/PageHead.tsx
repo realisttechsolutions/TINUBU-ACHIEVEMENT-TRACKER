@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect } from 'react';
 
@@ -26,7 +26,7 @@ export const PageHead: React.FC<PageHeadProps> = ({
       document.title = fullTitle;
       
       // Update meta description if element exists
-      let metaDesc = document.querySelector('meta[name="description"]');
+      const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc && description) {
         metaDesc.setAttribute('content', description);
       }

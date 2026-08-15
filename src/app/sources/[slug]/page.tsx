@@ -4,20 +4,22 @@ import DataSources from '@/views/DataSources';
 import Loading from '../../loading';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug || '';
   return {
-    title: `Source Record ${params.slug} | Tinubu Achievement Tracker`,
-    description: `Primary evidence and institutional publication details for source record ${params.slug}.`,
+    title: `Source Record ${slug} | Tinubu Achievement Tracker`,
+    description: `Primary evidence and institutional publication details for source record ${slug}.`,
     alternates: {
-      canonical: `https://tinubutracker.ng/sources/${params.slug}`,
+      canonical: `https://tinubutracker.ng/sources/${slug}`,
     },
   };
 }
 
-export default function SourceDetailPage({ params }: Props) {
+export default async function SourceDetailPage({ params }: Props) {
   return (
     <Suspense fallback={<Loading />}>
       <DataSources />
