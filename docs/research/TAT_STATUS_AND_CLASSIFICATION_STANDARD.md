@@ -1,55 +1,91 @@
-# Status & Classification Standards — Tinubu Achievement Tracker V2
+# Tinubu Achievement Tracker — Status & Classification Standard (v1.1)
 
-This document defines the 21 controlled implementation statuses and 12 data classifications, enforcing strict boundaries between announcements, approvals, funding, releases, completion, and outcomes.
-
----
-
-## 1. The 21 Controlled Implementation Statuses
-
-| Status Code | Display Name | Stage Significance | Minimum Evidence Required |
-| :--- | :--- | :--- | :--- |
-| `proposed` | Proposed | Pre-policy discussion | Speech or proposal note |
-| `announced` | Announced | Official proclamation | Presidential / Minister Statement |
-| `approved` | FEC / Legislative Approved | Formal contract award | FEC Resolution / Signed Order |
-| `enacted` | Enacted | Bill passed into law | Signed Act of NASS |
-| `effective` | Effective / In Force | Policy law live | Gazette Circular |
-| `funded` | Budget Allocated | Appropriation made | Signed Budget Document |
-| `funding_released` | Cash Released | Warrant issued | Accountant-General Release |
-| `procurement` | In Procurement | Tendering ongoing | BPP Tender Notice |
-| `implementation_planning` | Pre-Construction Design | Site survey / design | Engineering Mandate |
-| `implementation_ongoing` | Construction / Rollout Ongoing | Active physical work | On-site Inspection Report |
-| `partially_delivered` | Phase 1 Completed | Partial milestone live | Phase Completion Sign-off |
-| `completed` | Construction Finished | Physical work completed | Works Ministry Handover |
-| `operational` | Live & Commissioned | Service open to public | Presidential Commissioning |
-| `outcome_reported` | Metric Outcome Reached | Reported statistical result | Level 2 Statutory Report |
-| `independently_assessed` | Independently Verified | Third-party audit complete| Level 3 World Bank Report |
-| `suspended` | Temporarily Paused | Active work halted | Official Pause Notice |
-| `superseded` | Replaced by New Policy | Superseded by newer Act | Replacement Gazette |
-| `repealed` | Formally Repealed | Law revoked | Repeal Act |
-| `under_review` | Verification Audit Active | Audit in progress | Reviewer Flag |
-| `archived` | Historical Record | Outdated record | Archival Log |
-| `withdrawn` | Retracted Claim | Retracted by source | Withdrawal Notice |
+**Standard Version:** 1.1  
+**Effective Date:** 2026-08-15  
+**Governing Contract:** Research Contract v1.1  
+**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.json`  
 
 ---
 
-## 2. Inviolable Financial & Stage Distinctions
-- **Announcement $\neq$ Approval**: A speech announcing a road is NOT FEC contract approval.
-- **Approval $\neq$ Funding Release**: FEC contract approval is NOT cash release from the Treasury.
-- **Funding Release $\neq$ Expenditure**: Cash release to a ministry is NOT verified contractor disbursement.
-- **Applicant $\neq$ Active Beneficiary**: Registered applicants on a portal are NOT active disbursement recipients.
+## 1. Separation of Classification Dimensions
+
+Research Contract v1.1 strictly separates classification into **four independent namespaces**. A single overloaded classification field is strictly prohibited:
+
+```text
++───────────────────────────────────────────────────────────────────────────────────────────────────+
+|                                4 SEPARATED CLASSIFICATION DIMENSIONS                              |
++────────────────────────────────────────┬──────────────────────────────────────────────────────────+
+| Dimension                              | Controlled Codes                                         |
++────────────────────────────────────────┼──────────────────────────────────────────────────────────+
+| 1. DATA VALUE NATURE                   | actual, provisional, estimated, projected, target,       |
+|                                        | calculated, modelled                                     |
++────────────────────────────────────────┼──────────────────────────────────────────────────────────+
+| 2. SOURCE ORIGIN                       | government_reported, independently_reported,             |
+|                                        | mixed, unknown                                           |
++────────────────────────────────────────┼──────────────────────────────────────────────────────────+
+| 3. VERIFICATION STATUS                 | source_confirmed, cross_referenced,                      |
+|                                        | independently_corroborated, under_review, unverified,    |
+|                                        | disputed, corrected, withdrawn                           |
++────────────────────────────────────────┼──────────────────────────────────────────────────────────+
+| 4. WORKFLOW & PUBLICATION LIFECYCLE    | draft, research_review, editorial_review,                |
+|                                        | publishable, publishable_with_qualification,             |
+|                                        | rejected, archived                                       |
++────────────────────────────────────────┴──────────────────────────────────────────────────────────+
+```
 
 ---
 
-## 3. The 12 Controlled Data Classifications
-1. `actual`: Measured empirical historical fact.
-2. `provisional`: Preliminary statistical release subject to NBS revision.
-3. `estimated`: Calculated estimate based on engineering formulas.
-4. `projected`: Modelled forward projection.
-5. `government_target`: Policy target set by government directive.
-6. `independently_reported`: Data published by independent third party.
-7. `government_reported`: Data reported by government MDA.
-8. `calculated`: Derived metric using published baseline data.
-9. `modelled`: Econometric model output.
-10. `under_review`: Classification under verification audit.
-11. `corrected`: Revised figure following audit log.
-12. `withdrawn`: Retracted classification.
+## 2. The 21-Stage Implementation Status Architecture
+
+Every record tracked within the research repository must be assigned exactly one active implementation status code:
+
+| # | Code | Public Label | Meaning & Definition | Minimum Evidentiary Threshold | What It Proves | What It Does NOT Prove |
+|---:|---|---|---|---|---|---|
+| 1 | `proposed` | Proposed | Concept under official policy formulation | Committee white paper, memo, or bill draft | Administrative intent | Does not prove approval or funding |
+| 2 | `announced` | Announced | Publicly declared by President or Minister | Official press briefing transcript or State House release | Public commitment was made | Does not prove statutory approval or funding |
+| 3 | `approved` | Approved | Sanctioned by competent statutory authority | FEC Approval Extract, Presidential Signature, or Board Resolution | Statutory sanction granted | Does not prove funding release or contract execution |
+| 4 | `enacted` | Enacted | Statute passed by NASS and assented into law | Official Gazette with Act Number or Assent Certificate | Act is law of the Federation | Does not prove operational execution |
+| 5 | `effective` | In Force | Subsidiary regulation or order active | Gazette commencement date or regulatory directive | Instrument is legally enforceable | Does not prove full public compliance |
+| 6 | `funded` | Funded | Appropriation allocated in National Budget | Appropriation Act budget line item or facility agreement | Statutory financial envelope | Does not prove cash warrant release |
+| 7 | `funding_released` | Funding Released | Cash or warrants released to implementing MDA | Accountant-General release warrant or treasury log | Funds were disbursed to MDA | Does not prove contractor payment or execution |
+| 8 | `procurement` | In Procurement | Tendering, bidding, or BPP compliance active | BPP Certificate of No Objection or tender notice | Procurement process active | Does not prove contract award or site mobilization |
+| 9 | `implementation_planning` | Planning Phase | Detailed engineering or design being finalized | Engineering survey, EIA report, or operational plan | Groundwork underway | Does not prove physical construction |
+| 10 | `implementation_ongoing` | Ongoing Execution | Active physical construction or service rollout | Contractor progress report, site telemetry, inspection logs | Work is actively proceeding | Does not prove practical completion |
+| 11 | `partially_delivered` | Partially Delivered | Substantive phase or section delivered and usable | Handover certificate for Phase 1 or section | Phase is usable by public | Does not prove entire project completion |
+| 12 | `completed` | Completed | Full physical scope of works delivered | Certificate of Practical Completion | Construction finished | Does not prove facility is commissioned/staffed |
+| 13 | `operational` | Operational | Commissioned, staffed, and actively serving public | Commissioning ceremony log or service telemetry | Public asset is functional | Does not prove long-term outcome |
+| 14 | `outcome_reported` | Outcome Reported | Measurable public or economic outcome recorded | NBS statistical bulletin, MDA output report | Tangible public result occurred | Does not prove independent verification |
+| 15 | `independently_assessed` | Independently Assessed | Outcome corroborated by external independent audit | World Bank, NEITI, or academic evaluation report | Objective external validation | Does not prove permanent perfection |
+| 16 | `suspended` | Suspended | Temporarily paused by executive or court order | Official suspension circular or court injunction | Activity is on hold | Does not mean permanent cancellation |
+| 17 | `superseded` | Superseded | Replaced by subsequent policy or project phase | Successor policy gazette or Phase 2 contract | Replaced by newer initiative | Does not erase historical validity |
+| 18 | `repealed` | Repealed | Formally nullified or revoked by competent body | Repeal Act Gazette or Supreme Court judgment | Instrument is null and void | Does not apply retroactively |
+| 19 | `under_review` | Under Review | Factual or evidentiary status undergoing review | Editorial discrepancy ticket or contradiction log | Claim is being investigated | Does not mean the claim is false |
+| 20 | `archived` | Archived | Historical record retired from active tracking | Archival metadata record | Historical milestone completed | Does not require future freshness updates |
+| 21 | `withdrawn` | Withdrawn | Claim or record retracted due to falsification/error | Formal editorial retraction notice | Claim was erroneous/invalid | Must remain visible in audit logs |
+
+---
+
+## 3. Allowed vs Forbidden State Transitions
+
+```text
+VALID LIFECYCLE PROGRESSIONS:
+proposed  ──> announced ──> approved ──> enacted/effective ──> funded ──> funding_released
+                                                                              │
+completed <── partially_delivered <── implementation_ongoing <── procurement <┘
+   │
+   └──> operational ──> outcome_reported ──> independently_assessed
+
+FORBIDDEN TRANSITIONS (DATA INTEGRITY VIOLATIONS):
+❌ announced ──> completed       (Bypasses approval, funding, procurement, and execution)
+❌ approved ──> outcome_reported  (Bypasses execution, completion, and operations)
+❌ funded ──> operational         (Bypasses cash release, procurement, and construction)
+❌ proposed ──> funded           (Bypasses executive approval and legislative appropriation)
+```
+
+---
+
+## 4. Public Display Guidelines
+
+- Public UI cards display human-friendly badge variants mapped via strongly-typed adapters.
+- In-progress achievements (`implementation_ongoing`, `partially_delivered`) must clearly show progress indicators and percentage metrics where available.
+- Published records must never claim a higher status than supported by the latest verified evidence.

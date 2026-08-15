@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/correction_record.schema.json",
-  "title": "Correction Record Schema",
-  "description": "Validation schema for historical revisions and figure correction audit logs.",
+  "title": "Correction Record Schema v1.1",
+  "description": "Validation schema for historical revisions, claim corrections, and figure adjustment audit logs.",
   "type": "object",
   "required": [
     "correction_id",
@@ -17,6 +17,11 @@
   "properties": {
     "correction_id": { "type": "string" },
     "record_id": { "type": "string" },
+    "claim_id": { "type": "string" },
+    "correction_type": {
+      "type": "string",
+      "enum": ["fact_update", "figure_revision", "status_change", "source_addition", "scope_correction", "redaction", "retraction"]
+    },
     "field_name": { "type": "string" },
     "previous_value": { "type": "string" },
     "new_value": { "type": "string" },

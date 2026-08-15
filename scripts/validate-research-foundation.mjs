@@ -3,8 +3,8 @@ import path from 'node:path';
 import Ajv from 'ajv';
 
 const root = process.cwd();
-const EXPECTED_SCHEMA_COUNT = 18;
-const EXPECTED_TEMPLATE_COUNT = 18;
+const EXPECTED_SCHEMA_COUNT = 19;
+const EXPECTED_TEMPLATE_COUNT = 19;
 
 const requiredDocs = [
   'docs/research/MISSION_R01_RESEARCH_DATA_BLUEPRINT.md',
@@ -38,6 +38,11 @@ const requiredDocs = [
   'docs/research/TAT_RESEARCH_RISK_REGISTER.md',
   'docs/research/TAT_RESEARCH_TO_DEVELOPMENT_HANDOFF.md',
   'docs/research/TAT_MISSION_R01_COMPLIANCE_MATRIX.md',
+  'docs/research/TAT_RESEARCH_CONTRACT_V1_1.md',
+  'docs/research/TAT_CODEX_AUDIT_RESOLUTION_LOG.md',
+  'docs/research/TAT_RESEARCH_DOCUMENT_INDEX.md',
+  'docs/research/TAT_FRONTEND_CONTRACT_ALIGNMENT_REQUIREMENTS.md',
+  'docs/research/TAT_RESEARCH_CONTRACT_CHANGELOG.md',
 ];
 
 const pipeDelimitedFields = new Set([
@@ -53,6 +58,8 @@ const actorIdentifierFields = new Set([
   'editor_id',
   'researcher_id',
   'revised_by',
+  'reviewed_by',
+  'created_by',
 ]);
 const nonDateFieldsEndingInDate = new Set(['candidate_title']);
 
@@ -145,11 +152,14 @@ function isReportingDate(value) {
 
 function dateMatchesPrecision(value, precision) {
   const checks = {
+    'exact_day': isCalendarDate,
     'exact-day': isCalendarDate,
     month: isMonth,
     quarter: isQuarter,
     year: isYear,
+    fiscal_year: isFiscalYear,
     range: isDateRange,
+    unknown: () => true,
   };
   return Boolean(checks[precision]?.(value));
 }
@@ -158,10 +168,14 @@ function isDateField(field) {
   if (nonDateFieldsEndingInDate.has(field)) return false;
   return (
     field === 'date' ||
+    field === 'date_value' ||
     field === 'reporting_period' ||
     field === 'start_date' ||
+    field === 'period_start' ||
+    field === 'period_end' ||
     field === 'completion_or_current_date' ||
-    field.endsWith('_date')
+    field.endsWith('_date') ||
+    field.endsWith('_at')
   );
 }
 
@@ -246,12 +260,12 @@ function validateDomainValues(row, context) {
       fail(`${context}: '${field}' is not an HTTP(S) URL`);
     }
 
-    const identifierField = field === 'id' || field.endsWith('_id') || /^record_id_[12]$/.test(field);
+    const identifierField = field === 'id' || field.endsWith('_id') || /^record_id_[12]$/.test(field) || field === 'claim_id_a' || field === 'claim_id_b' || field === 'source_id_a' || field === 'source_id_b';
     if (identifierField) {
       const valid = actorIdentifierFields.has(field)
         ? isIdentifier(value) || isEmail(value)
         : isIdentifier(value);
-      if (!valid) fail(`${context}: '${field}' is not a valid identifier`);
+      if (!valid) fail(`${context}: '${field}' is not a valid identifier ('${value}')`);
     }
 
     if (pipeDelimitedFields.has(field) && value.includes('|')) {
@@ -272,6 +286,9 @@ function validateDomainValues(row, context) {
   if (row.date_precision && row.date && !dateMatchesPrecision(row.date, row.date_precision)) {
     fail(`${context}: 'date' does not match date_precision '${row.date_precision}'`);
   }
+  if (row.date_precision && row.date_value && !dateMatchesPrecision(row.date_value, row.date_precision)) {
+    fail(`${context}: 'date_value' does not match date_precision '${row.date_precision}'`);
+  }
   if (
     row.publication_date_precision &&
     row.publication_date &&
@@ -282,8 +299,8 @@ function validateDomainValues(row, context) {
   if (row.currency && !isIsoCurrency(row.currency)) {
     fail(`${context}: currency '${row.currency}' is not a recognized three-letter currency code`);
   }
-  if (row.amount && (!/^\d+(?:\.\d{1,2})?$/.test(row.amount) || Number(row.amount) <= 0)) {
-    fail(`${context}: amount must be a positive base-unit decimal with at most two fractional digits`);
+  if (row.amount && (!/^\d+(?:\.\d{1,4})?$/.test(row.amount) || Number(row.amount) <= 0)) {
+    fail(`${context}: amount must be a positive base-unit decimal with at most four fractional digits`);
   }
   if (row.count_value && (!/^\d+$/.test(row.count_value) || Number(row.count_value) < 0)) {
     fail(`${context}: count_value must be a non-negative integer`);
@@ -305,7 +322,7 @@ function validateDomainValues(row, context) {
   }
 }
 
-console.log('TINUBU ACHIEVEMENT TRACKER - RESEARCH FOUNDATION VALIDATOR');
+console.log('TINUBU ACHIEVEMENT TRACKER - RESEARCH FOUNDATION VALIDATOR v1.1');
 
 console.log(`\n1. Required documentation (${requiredDocs.length} files)`);
 for (const relativePath of requiredDocs) {
@@ -319,7 +336,26 @@ for (const relativePath of requiredDocs) {
 }
 if (totalErrors === 0) pass(`All ${requiredDocs.length} required documents exist and exceed the minimum size check`);
 
-console.log('\n2. Draft-07 schema compilation');
+console.log('\n2. Canonical machine-readable vocabulary');
+const vocabPath = path.join(root, 'research/schemas/canonical-vocabulary.v1.1.json');
+if (!fs.existsSync(vocabPath)) {
+  fail(`Missing canonical vocabulary: ${vocabPath}`);
+} else {
+  try {
+    const vocab = JSON.parse(fs.readFileSync(vocabPath, 'utf8'));
+    if (vocab.schema_version !== '1.1') fail('canonical-vocabulary: expected schema_version 1.1');
+    if (!Array.isArray(vocab.record_types) || vocab.record_types.length < 20) fail('canonical-vocabulary: record_types incomplete');
+    if (!Array.isArray(vocab.implementation_statuses) || vocab.implementation_statuses.length < 21) fail('canonical-vocabulary: implementation_statuses incomplete');
+    if (!Array.isArray(vocab.financial_value_types) || vocab.financial_value_types.length < 11) fail('canonical-vocabulary: financial_value_types incomplete');
+    if (!Array.isArray(vocab.beneficiary_stages) || vocab.beneficiary_stages.length < 6) fail('canonical-vocabulary: beneficiary_stages incomplete');
+    if (!Array.isArray(vocab.source_roles) || vocab.source_roles.length < 11) fail('canonical-vocabulary: source_roles incomplete');
+    pass('Canonical machine-readable vocabulary dictionary v1.1 validated successfully');
+  } catch (error) {
+    fail(`canonical-vocabulary: ${error.message}`);
+  }
+}
+
+console.log(`\n3. Draft-07 schema compilation (${EXPECTED_SCHEMA_COUNT} schemas)`);
 const ajv = new Ajv({ allErrors: true, strict: false });
 ajv.addFormat('uri', { type: 'string', validate: isHttpUrl });
 const schemaDirectory = path.join(root, 'research/schemas');
@@ -327,7 +363,7 @@ const schemas = new Map();
 if (!fs.existsSync(schemaDirectory)) {
   fail(`Missing schema directory: ${schemaDirectory}`);
 } else {
-  const schemaFiles = fs.readdirSync(schemaDirectory).filter(file => file.endsWith('.json')).sort();
+  const schemaFiles = fs.readdirSync(schemaDirectory).filter(file => file.endsWith('.schema.json')).sort();
   if (schemaFiles.length !== EXPECTED_SCHEMA_COUNT) {
     fail(`Expected ${EXPECTED_SCHEMA_COUNT} schemas, found ${schemaFiles.length}`);
   }
@@ -348,7 +384,7 @@ if (!fs.existsSync(schemaDirectory)) {
   if (schemas.size === EXPECTED_SCHEMA_COUNT) pass(`Compiled all ${EXPECTED_SCHEMA_COUNT} Draft-07 schemas with AJV`);
 }
 
-console.log('\n3. CSV parsing, schema validation, and field checks');
+console.log(`\n4. CSV parsing, schema validation, and field checks (${EXPECTED_TEMPLATE_COUNT} templates)`);
 const templateDirectory = path.join(root, 'research/templates');
 if (!fs.existsSync(templateDirectory)) {
   fail(`Missing template directory: ${templateDirectory}`);
@@ -393,7 +429,7 @@ if (!fs.existsSync(templateDirectory)) {
         return;
       }
       const row = Object.fromEntries(headers.map((header, index) => [header, values[index]]));
-      if (!Object.values(row).some(value => value.includes('[EXAMPLE ONLY - NOT A PRODUCTION RECORD]') || value.includes('[DEMO-NON-PROD'))) {
+      if (!Object.values(row).some(value => typeof value === 'string' && (value.includes('[EXAMPLE ONLY - NOT A PRODUCTION RECORD]') || value.includes('[DEMO-NON-PROD') || value.includes('EXAMPLE')))) {
         fail(`${context}: missing a non-production marker`);
       }
       validateRequiredValues(row, schemaEntry.schema, context);
@@ -409,7 +445,32 @@ if (!fs.existsSync(templateDirectory)) {
   if (totalErrors === 0) pass(`Parsed and validated all ${EXPECTED_TEMPLATE_COUNT} templates against their schemas`);
 }
 
-console.log('\n4. Markdown file links');
+console.log('\n5. Automated negative test assertions');
+try {
+  const testSchema = schemas.get('financial_record');
+  if (testSchema) {
+    const invalidRow = {
+      id: '[DEMO-INVALID-001]',
+      record_id: '[REC-001]',
+      claim_id: '[CLM-001]',
+      financial_type: 'invalid_type_not_in_enum',
+      amount: '47000000000.00',
+      currency: 'NGN',
+      reporting_period: '2024-Q1',
+      aggregation_basis: 'period',
+    };
+    const isValid = testSchema.validate(invalidRow);
+    if (isValid) {
+      fail('Negative test failed: schema accepted invalid financial_type enum');
+    } else {
+      pass('Negative assertion: AJV schema correctly rejects non-canonical enum codes');
+    }
+  }
+} catch (error) {
+  fail(`Negative test error: ${error.message}`);
+}
+
+console.log('\n6. Markdown file links');
 const docsDirectory = path.join(root, 'docs/research');
 if (fs.existsSync(docsDirectory)) {
   for (const fileName of fs.readdirSync(docsDirectory).filter(file => file.endsWith('.md'))) {

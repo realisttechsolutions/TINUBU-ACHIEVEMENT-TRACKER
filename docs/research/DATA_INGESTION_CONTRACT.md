@@ -1,6 +1,10 @@
 # Data Ingestion Contract & Field Boundaries — Tinubu Achievement Tracker V2
 
-This document establishes the official data ingestion contract between the research team, automated ingestion scripts, database migrations, and the frontend web application.
+> [!WARNING]
+> **STATUS: SUPERSEDED BY RESEARCH CONTRACT V1.1 & CODEX INGESTION SPECIFICATION**  
+> This legacy document has been formally superseded by [`TAT_IMPORT_EXPORT_STANDARD.md`](./TAT_IMPORT_EXPORT_STANDARD.md), [`TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md`](./TAT_INTERNAL_PUBLIC_DATA_BOUNDARY.md), and [`docs/engineering/CODEX_M01_DATA_INGESTION_REVIEW.md`](../engineering/CODEX_M01_DATA_INGESTION_REVIEW.md). Ingestion will run via Firebase SQL Connect Admin SDK rather than direct Supabase sync.
+
+This document establishes the historical pre-consolidation data boundary proposals.
 
 ---
 

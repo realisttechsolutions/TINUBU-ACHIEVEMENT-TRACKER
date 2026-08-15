@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/publication_review.schema.json",
-  "title": "Publication Review Schema",
-  "description": "Validation schema for senior editor editorial sign-off and 13 Truth Rules compliance audit.",
+  "title": "Publication Review Schema v1.1",
+  "description": "Validation schema for quality gate sign-off, distinct reviewer separation, and 13 Truth Rules compliance audit.",
   "type": "object",
   "required": [
     "review_id",
@@ -16,6 +16,18 @@
     "review_id": { "type": "string" },
     "record_id": { "type": "string" },
     "editor_id": { "type": "string" },
+    "review_gate": {
+      "type": "string",
+      "enum": [
+        "gate_0_task_authorization",
+        "gate_1_source_claim_capture",
+        "gate_2_resolution_evidence",
+        "gate_3_automated_data_readiness",
+        "gate_4_editorial_human_approval",
+        "gate_5_publication_stewardship",
+        "editorial_review"
+      ]
+    },
     "publication_decision": {
       "type": "string",
       "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/duplicate_review.schema.json",
-  "title": "Duplicate Review Schema",
-  "description": "Validation schema for duplicate detection and alias tracking.",
+  "title": "Duplicate Review Schema v1.1",
+  "description": "Validation schema for duplicate detection, algorithm adjudication, and alias tracking.",
   "type": "object",
   "required": [
     "duplicate_id",
@@ -20,7 +20,8 @@
     "record_id_2": { "type": "string" },
     "title_2": { "type": "string" },
     "match_confidence": { "type": ["number", "string"] },
-    "resolution_action": { "type": "string", "enum": ["merge", "separate", "alias_only", "under_review"] },
+    "algorithm_version": { "type": "string" },
+    "resolution_action": { "type": "string", "enum": ["merge", "separate", "alias_only", "under_review", "flagged"] },
     "merged_canonical_id": { "type": "string" },
     "notes": { "type": "string" }
   },

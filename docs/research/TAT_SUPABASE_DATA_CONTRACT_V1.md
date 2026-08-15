@@ -1,6 +1,10 @@
 # Supabase Data Contract V1 — Tinubu Achievement Tracker V2
 
-This document outlines the proposed database standards for Supabase integration.
+> [!WARNING]
+> **STATUS: DEPRECATED — SUPERSEDED BY RESEARCH CONTRACT V1.1**  
+> This placeholder document has been formally superseded by [`TAT_RESEARCH_CONTRACT_V1_1.md`](./TAT_RESEARCH_CONTRACT_V1_1.md) and [`docs/engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md`](../engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md).
+
+This document outlines historical proposed database naming standards.
 
 ---
 

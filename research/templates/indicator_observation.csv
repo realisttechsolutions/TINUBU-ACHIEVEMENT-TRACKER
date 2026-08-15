@@ -1,2 +1,2 @@
-observation_id,indicator_id,reporting_period,numeric_value,display_value,unit,data_classification,source_id,verification_status,notes
-[EXAMPLE-ONLY-OBS-001],[EXAMPLE-ONLY-IND-001],2024-Q2,3.37,"$3.37 Billion",USD Billion,actual,[EXAMPLE-ONLY-SRC-001],Source Confirmed,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Q2 2024 empirical observation value."
+observation_id,indicator_id,claim_id,reporting_period,numeric_value,display_value,unit,data_classification,source_id,verification_status,notes
+[EXAMPLE-ONLY-OBS-001],[EXAMPLE-ONLY-IND-001],[EXAMPLE-ONLY-CLM-001],2024-Q2,3.37,"$3.37 Billion",USD Billion,actual,[EXAMPLE-ONLY-SRC-001],source_confirmed,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Q2 2024 empirical observation value."

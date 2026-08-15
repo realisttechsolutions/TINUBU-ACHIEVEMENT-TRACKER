@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tinubuachievements.gov.ng/research/schemas/canonical-vocabulary.v1.1.json",
+  "title": "Tinubu Achievement Tracker Canonical Vocabulary v1.1",
+  "description": "Authoritative machine-readable controlled vocabulary dictionary for research, ingestion, database, and frontend systems.",
+  "schema_version": "1.1",
+  "record_types": [
+    { "code": "achievement", "public_label": "Achievement", "internal_description": "Positive demonstrable administration milestone or outcome meeting publication criteria", "active": true },
+    { "code": "policy", "public_label": "Policy", "internal_description": "Guiding principle, national framework, or structured government strategy", "active": true },
+    { "code": "reform", "public_label": "Structural Reform", "internal_description": "Systemic or structural adjustment to economic, fiscal, or institutional arrangements", "active": true },
+    { "code": "executive_action", "public_label": "Executive Action", "internal_description": "Direct presidential directive, executive order, or official committee determination", "active": true },
+    { "code": "legislation", "public_label": "Legislation", "internal_description": "Statute passed by the National Assembly and assented to by the President", "active": true },
+    { "code": "regulation", "public_label": "Regulation", "internal_description": "Enforceable subsidiary instrument issued by an authorized regulatory agency", "active": true },
+    { "code": "programme", "public_label": "Programme", "internal_description": "Structured multi-initiative government operational framework over time", "active": true },
+    { "code": "intervention", "public_label": "Social Intervention", "internal_description": "Targeted welfare, relief, subsidy, or palliative initiative for specific cohorts", "active": true },
+    { "code": "physical_project", "public_label": "Physical Infrastructure Project", "internal_description": "Tangible civil works, transport, energy, building, or engineering asset", "active": true },
+    { "code": "institutional_reform", "public_label": "Institutional Reform", "internal_description": "Restructuring, digitization, or operational improvement of an MDA", "active": true },
+    { "code": "reported_outcome", "public_label": "Reported Outcome", "internal_description": "Measurable societal, economic, or operational result resulting from government action", "active": true },
+    { "code": "timeline_event", "public_label": "Timeline Event", "internal_description": "Chronological occurrence associated with a record lifecycle", "active": true },
+    { "code": "milestone", "public_label": "Operational Milestone", "internal_description": "Substantive delivery stage within an ongoing project or reform", "active": true },
+    { "code": "indicator", "public_label": "Macro/Sector Indicator", "internal_description": "Quantitative statistical time series measuring national or sector performance", "active": true },
+    { "code": "indicator_observation", "public_label": "Indicator Observation", "internal_description": "Specific dated data point for a defined indicator", "active": true },
+    { "code": "source", "public_label": "Evidence Source", "internal_description": "Document, dataset, official gazette, or publication providing factual evidence", "active": true },
+    { "code": "correction_revision", "public_label": "Correction / Revision", "internal_description": "Audited post-publication adjustment, correction, or retraction of a published claim", "active": true },
+    { "code": "report", "public_label": "Research Report", "internal_description": "Synthesized thematic or periodic review publication", "active": true },
+    { "code": "dataset", "public_label": "Public Dataset", "internal_description": "Structured tabular data release published for external transparency", "active": true },
+    { "code": "methodology", "public_label": "Research Methodology", "internal_description": "Formal research standard, calculation method, or verification procedure", "active": true }
+  ],
+  "implementation_statuses": [
+    { "code": "proposed", "public_label": "Proposed", "internal_description": "Concept submitted or discussed in official policy formulation", "active": true },
+    { "code": "announced", "public_label": "Announced", "internal_description": "Formally publicized by the President, Minister, or official spokesperson", "active": true },
+    { "code": "approved", "public_label": "Approved", "internal_description": "Sanctioned by competent authority such as the Federal Executive Council (FEC)", "active": true },
+    { "code": "enacted", "public_label": "Enacted", "internal_description": "Statute passed by legislature and assented into law", "active": true },
+    { "code": "effective", "public_label": "In Force / Effective", "internal_description": "Legal instrument or policy has reached its official commencement date", "active": true },
+    { "code": "funded", "public_label": "Funded", "internal_description": "Financial allocation committed in statutory budget or financing facility", "active": true },
+    { "code": "funding_released", "public_label": "Funding Released", "internal_description": "Warrants or cash backed allocations disbursed to implementing MDA", "active": true },
+    { "code": "procurement", "public_label": "Procurement / Tendering", "internal_description": "Formal bidding, compliance, or contract award in progress", "active": true },
+    { "code": "implementation_planning", "public_label": "Implementation Planning", "internal_description": "Detailed engineering, operational designs, or frameworks being finalized", "active": true },
+    { "code": "implementation_ongoing", "public_label": "Ongoing Execution", "internal_description": "Active physical construction, reform rollout, or service delivery", "active": true },
+    { "code": "partially_delivered", "public_label": "Partially Delivered", "internal_description": "Substantive component, phase, or section delivered and usable", "active": true },
+    { "code": "completed", "public_label": "Completed", "internal_description": "Full scope of works or implementation milestones delivered", "active": true },
+    { "code": "operational", "public_label": "Operational / Commissioned", "internal_description": "Asset or system is actively serving the public or operational purpose", "active": true },
+    { "code": "outcome_reported", "public_label": "Outcome Reported", "internal_description": "Official or empirical evidence demonstrates measurable public impact", "active": true },
+    { "code": "independently_assessed", "public_label": "Independently Assessed", "internal_description": "External audit, multilateral review, or peer review confirms outcome", "active": true },
+    { "code": "suspended", "public_label": "Suspended", "internal_description": "Temporarily paused by executive, judicial, or administrative instruction", "active": true },
+    { "code": "superseded", "public_label": "Superseded", "internal_description": "Replaced by subsequent policy, project phase, or legal instrument", "active": true },
+    { "code": "repealed", "public_label": "Repealed / Revoked", "internal_description": "Formally cancelled, nullified, or struck down by competent authority", "active": true },
+    { "code": "under_review", "public_label": "Under Review", "internal_description": "Implementation status undergoing active factual re-assessment", "active": true },
+    { "code": "archived", "public_label": "Archived", "internal_description": "Historical record retained for documentation but no longer active", "active": true },
+    { "code": "withdrawn", "public_label": "Withdrawn", "internal_description": "Claim or record retracted due to falsification or material error", "active": true }
+  ],
+  "publication_statuses": [
+    { "code": "draft", "public_label": "Draft", "internal_description": "Unpublished researcher draft undergoing initial composition", "active": true },
+    { "code": "under_review", "public_label": "Under Review", "internal_description": "Undergoing formal quality control gate reviews", "active": true },
+    { "code": "publishable", "public_label": "Published", "internal_description": "Approved and visible to the public without reservations", "active": true },
+    { "code": "publishable_with_qualification", "public_label": "Published with Qualification", "internal_description": "Published with visible contextual notes, data limitations, or provisional flags", "active": true },
+    { "code": "rejected", "public_label": "Rejected", "internal_description": "Failed editorial or evidentiary verification standards", "active": true },
+    { "code": "archived", "public_label": "Archived", "internal_description": "Superseded historical public record kept for audit trail", "active": true }
+  ],
+  "workflow_statuses": [
+    { "code": "draft", "public_label": "Draft", "internal_description": "Initial extraction and researcher data entry", "active": true },
+    { "code": "research_review", "public_label": "Research Review", "internal_description": "Peer verification and taxonomy resolution", "active": true },
+    { "code": "editorial_review", "public_label": "Editorial Review", "internal_description": "Senior editorial review of factual neutrality and clarity", "active": true },
+    { "code": "approved", "public_label": "Approved", "internal_description": "Signed off by authorized lead editor / human reviewer", "active": true },
+    { "code": "published", "public_label": "Published", "internal_description": "Active in production dataset and public application", "active": true },
+    { "code": "archived", "public_label": "Archived", "internal_description": "Retired from active workflow", "active": true }
+  ],
+  "data_value_classifications": [
+    { "code": "actual", "public_label": "Actual", "internal_description": "Observed, audited, or finalized historical figure", "active": true },
+    { "code": "provisional", "public_label": "Provisional", "internal_description": "Interim reported figure subject to formal revision or year-end audit", "active": true },
+    { "code": "estimated", "public_label": "Estimated", "internal_description": "Statistically sampled or approximated calculation", "active": true },
+    { "code": "projected", "public_label": "Projected", "internal_description": "Forward-looking target or forecasted future figure", "active": true },
+    { "code": "target", "public_label": "Government Target", "internal_description": "Stated administrative aspiration, KPI, or delivery target", "active": true },
+    { "code": "calculated", "public_label": "Calculated", "internal_description": "Direct arithmetic derivation from primary official numbers", "active": true },
+    { "code": "modelled", "public_label": "Modelled", "internal_description": "Econometric or simulation-derived result", "active": true }
+  ],
+  "source_origin_classifications": [
+    { "code": "government_reported", "public_label": "Government Reported", "internal_description": "Reported directly by an official government MDA, spokesperson, or portal", "active": true },
+    { "code": "independently_reported", "public_label": "Independently Reported", "internal_description": "Produced by an independent multilateral, research institute, or external audit", "active": true },
+    { "code": "mixed", "public_label": "Mixed / Joint", "internal_description": "Joint assessment by government and external development partners", "active": true },
+    { "code": "unknown", "public_label": "Unknown / Unresolved", "internal_description": "Provenance under verification", "active": true }
+  ],
+  "verification_statuses": [
+    { "code": "source_confirmed", "public_label": "Source Confirmed", "internal_description": "Direct citation verified against primary source document", "active": true },
+    { "code": "cross_referenced", "public_label": "Cross-Referenced", "internal_description": "Corroborated across two or more consistent official sources", "active": true },
+    { "code": "independently_corroborated", "public_label": "Independently Corroborated", "internal_description": "Confirmed by non-governmental or international institutional evidence", "active": true },
+    { "code": "under_review", "public_label": "Under Review", "internal_description": "Verification under active evidentiary review", "active": true },
+    { "code": "unverified", "public_label": "Unverified", "internal_description": "Discovery lead awaiting primary documentation", "active": true },
+    { "code": "disputed", "public_label": "Disputed / Contradicted", "internal_description": "Competing figures or contradictory evidence identified and logged", "active": true },
+    { "code": "corrected", "public_label": "Corrected", "internal_description": "Prior error officially corrected via formal revision", "active": true },
+    { "code": "withdrawn", "public_label": "Withdrawn", "internal_description": "Retracted from verification due to unreliability", "active": true }
+  ],
+  "evidence_profiles": [
+    { "code": "direct_physical_delivery", "public_label": "Direct Physical Delivery", "internal_description": "Evidence includes site coordinates, contractor awards, and commissioning records", "active": true },
+    { "code": "statutory_legal_enactment", "public_label": "Statutory / Legal Enactment", "internal_description": "Evidence includes official gazette, enacted Act number, or signed executive order", "active": true },
+    { "code": "verified_administrative_disbursement", "public_label": "Verified Administrative Disbursement", "internal_description": "Evidence includes treasury release, payment platform audit, or beneficiary receipts", "active": true },
+    { "code": "statistical_indicator_movement", "public_label": "Statistical Indicator Movement", "internal_description": "Evidence includes time-series data from NBS, CBN, DMO, or international statistical bodies", "active": true },
+    { "code": "official_policy_declaration", "public_label": "Official Policy Declaration", "internal_description": "Evidence includes published national policy framework or FEC extract", "active": true },
+    { "code": "third_party_independent_assessment", "public_label": "Third-Party Independent Assessment", "internal_description": "Evidence includes independent civil society, academic, or professional evaluation", "active": true },
+    { "code": "multilateral_partner_evaluation", "public_label": "Multilateral Partner Evaluation", "internal_description": "Evidence includes World Bank, IMF, AfDB, or UN project completion report", "active": true },
+    { "code": "institutional_reform_milestone", "public_label": "Institutional Reform Milestone", "internal_description": "Evidence includes agency restructuring decree, portal launch, or service standard audit", "active": true }
+  ],
+  "source_levels": [
+    { "code": "LEVEL_1", "public_label": "Level 1: Primary Legal and Administrative Records", "internal_description": "Acts of National Assembly, Official Gazettes, Executive Orders, FEC Approvals, Signed Bilateral Treaties", "active": true },
+    { "code": "LEVEL_2", "public_label": "Level 2: Official Statistical and Administrative Data", "internal_description": "NBS statistical bulletins, CBN economic reports, DMO debt reports, Budget Office implementation reports, MDA official records", "active": true },
+    { "code": "LEVEL_3", "public_label": "Level 3: International and Independent Institutional Evidence", "internal_description": "World Bank, IMF, AfDB, UN agency reports, NEITI audits, certified independent technical audits", "active": true },
+    { "code": "LEVEL_4", "public_label": "Level 4: Credible Mainstream and Specialist Media", "internal_description": "Reputable national newspapers, international wire services, peer-reviewed journals, verified investigative reports", "active": true },
+    { "code": "LEVEL_5", "public_label": "Level 5: Official Statements and Contextual Material", "internal_description": "Official ministerial press briefings, State House press releases, government portal announcements, verified official speeches", "active": true },
+    { "code": "LEVEL_6", "public_label": "Level 6: Discovery Leads", "internal_description": "Unverified leads, social posts from verified channels, uncorroborated announcements (INTERNAL ONLY - NEVER PRIMARY PUBLIC PROOF)", "active": true }
+  ],
+  "source_roles": [
+    { "code": "primary", "public_label": "Primary Source", "internal_description": "The authoritative primary legal or administrative document establishing the claim", "active": true },
+    { "code": "official_statistical", "public_label": "Official Statistical Source", "internal_description": "Government statistical publication supplying empirical baseline or outcome data", "active": true },
+    { "code": "direct_implementation", "public_label": "Direct Implementation Record", "internal_description": "MDA project log, contractor delivery certificate, or operational telemetry", "active": true },
+    { "code": "independent_assessment", "public_label": "Independent Assessment", "internal_description": "Non-governmental or multilateral review evaluating delivery or impact", "active": true },
+    { "code": "corroborating", "public_label": "Corroborating Source", "internal_description": "Secondary source verifying the existence or progress of the claim", "active": true },
+    { "code": "supporting", "public_label": "Supporting Source", "internal_description": "Provides background, baseline context, or operational framing", "active": true },
+    { "code": "contextual", "public_label": "Contextual Source", "internal_description": "Provides broader sector, macro, or historical setting", "active": true },
+    { "code": "contradictory", "public_label": "Contradictory Source", "internal_description": "Provides competing, disputed, or divergent factual claims", "active": true },
+    { "code": "replacement", "public_label": "Replacement Source", "internal_description": "Supersedes an earlier inaccurate or broken evidence link", "active": true },
+    { "code": "archived", "public_label": "Archived Source", "internal_description": "Historical snapshot of a source that has modified or moved", "active": true },
+    { "code": "discovery_lead", "public_label": "Discovery Lead", "internal_description": "Initial trigger that led researchers to investigate the achievement", "active": true }
+  ],
+  "financial_value_types": [
+    { "code": "budget_allocation", "public_label": "Statutory Budget Allocation", "internal_description": "Amount appropriated in the National Budget (Appropriation Act)", "active": true },
+    { "code": "approved_funding", "public_label": "Approved Funding", "internal_description": "Funding approved by FEC, presidential directive, or bilateral financing agreement", "active": true },
+    { "code": "funding_released", "public_label": "Funding Released", "internal_description": "Cash or warrants released by the Ministry of Finance / Accountant-General", "active": true },
+    { "code": "reported_expenditure", "public_label": "Reported Actual Expenditure", "internal_description": "Actual audited or reported funds disbursed to contractors, vendors, or beneficiaries", "active": true },
+    { "code": "contract_value", "public_label": "Contract Award Value", "internal_description": "Total formal commercial value of an awarded procurement contract", "active": true },
+    { "code": "programme_envelope", "public_label": "Total Programme Envelope", "internal_description": "Multi-year funding envelope allocated for an overarching programme", "active": true },
+    { "code": "public_investment", "public_label": "Public Capital Investment", "internal_description": "Direct sovereign equity or capital funding invested in infrastructure/enterprises", "active": true },
+    { "code": "private_investment", "public_label": "Private Capital Mobilized / FDI", "internal_description": "Private sector capital committed or disbursed in co-financing or FDI", "active": true },
+    { "code": "revenue_generated", "public_label": "Revenue Generated", "internal_description": "Actual fiscal, customs, tax, or FX revenue collected", "active": true },
+    { "code": "revenue_estimate", "public_label": "Revenue Estimate", "internal_description": "Projected future revenue from a tax, tariff, or policy reform", "active": true },
+    { "code": "savings_estimate", "public_label": "Fiscal Savings Estimate", "internal_description": "Calculated or reported expenditure reduction resulting from reform or subsidy removal", "active": true }
+  ],
+  "beneficiary_stages": [
+    { "code": "applicant", "public_label": "Applicant", "internal_description": "Individual or entity that submitted an application or registration form", "active": true },
+    { "code": "registered_participant", "public_label": "Registered Participant", "internal_description": "Entity successfully captured on the programme database or portal", "active": true },
+    { "code": "eligible_applicant", "public_label": "Eligible / Screened Applicant", "internal_description": "Applicant verified as meeting all statutory programme criteria", "active": true },
+    { "code": "approved_beneficiary", "public_label": "Approved Beneficiary", "internal_description": "Screened applicant formally approved for benefit or award", "active": true },
+    { "code": "disbursement_recipient", "public_label": "Disbursement Recipient", "internal_description": "Approved beneficiary who has received verified financial or in-kind payout", "active": true },
+    { "code": "active_beneficiary", "public_label": "Active Beneficiary", "internal_description": "Entity currently receiving ongoing programme services, loans, or subsidies", "active": true }
+  ],
+  "beneficiary_types": [
+    { "code": "individual", "public_label": "Individual Citizen", "internal_description": "Individual Nigerian citizen", "active": true },
+    { "code": "household", "public_label": "Household", "internal_description": "Family or residential unit", "active": true },
+    { "code": "msme", "public_label": "MSME / Small Business", "internal_description": "Micro, small, or medium commercial enterprise", "active": true },
+    { "code": "student", "public_label": "Student", "internal_description": "Tertiary or vocational education student", "active": true },
+    { "code": "farmer", "public_label": "Farmer / Agri-Producer", "internal_description": "Smallholder or commercial agricultural producer", "active": true },
+    { "code": "patient", "public_label": "Patient / Healthcare Beneficiary", "internal_description": "Recipient of medical treatments or subsidized care", "active": true },
+    { "code": "enterprise", "public_label": "Large Enterprise", "internal_description": "Large corporate or industrial entity", "active": true }
+  ],
+  "date_precisions": [
+    { "code": "exact_day", "public_label": "Exact Day (YYYY-MM-DD)", "internal_description": "Full calendar date verified in source", "active": true },
+    { "code": "month", "public_label": "Month (YYYY-MM)", "internal_description": "Known month and year; exact day unspecified", "active": true },
+    { "code": "quarter", "public_label": "Quarter (YYYY-Q#)", "internal_description": "Calendar or fiscal quarter", "active": true },
+    { "code": "year", "public_label": "Year (YYYY)", "internal_description": "Calendar year", "active": true },
+    { "code": "fiscal_year", "public_label": "Fiscal Year (FY YYYY)", "internal_description": "Statutory financial year", "active": true },
+    { "code": "range", "public_label": "Date Range", "internal_description": "Bounded period between start and end dates", "active": true },
+    { "code": "unknown", "public_label": "Unknown / Approximate", "internal_description": "Date unconfirmed in primary source", "active": true }
+  ],
+  "geographic_scope_types": [
+    { "code": "national", "public_label": "National", "internal_description": "Nationwide scope across all 36 States and FCT", "active": true },
+    { "code": "geopolitical_zone", "public_label": "Geopolitical Zone", "internal_description": "One of the six recognized geopolitical zones", "active": true },
+    { "code": "state", "public_label": "State", "internal_description": "One specific Nigerian State", "active": true },
+    { "code": "fct", "public_label": "Federal Capital Territory", "internal_description": "Federal Capital Territory Abuja", "active": true },
+    { "code": "lga", "public_label": "Local Government Area", "internal_description": "Specific LGA administrative unit", "active": true },
+    { "code": "city_town", "public_label": "City / Town", "internal_description": "Urban center, town, or municipality", "active": true },
+    { "code": "project_site", "public_label": "Project Site", "internal_description": "Specific physical coordinates or facility location", "active": true },
+    { "code": "corridor", "public_label": "Transportation / Economic Corridor", "internal_description": "Interstate highway, rail line, pipeline, or economic transit zone", "active": true },
+    { "code": "multi_state", "public_label": "Multi-State", "internal_description": "Spanning multiple specific states", "active": true },
+    { "code": "coordinate", "public_label": "Geographic Coordinates", "internal_description": "Precise GPS latitude / longitude point", "active": true },
+    { "code": "geographic_boundary", "public_label": "Boundary / Territorial Waters", "internal_description": "Maritime zone, exclusive economic zone, or international boundary", "active": true }
+  ],
+  "relationship_roles": [
+    { "code": "implements", "public_label": "Implements", "internal_description": "Record delivers or operationalizes the target policy or act", "active": true },
+    { "code": "enabled_by", "public_label": "Enabled By", "internal_description": "Record was authorized or funded by the target reform or statute", "active": true },
+    { "code": "phase_of", "public_label": "Phase Of", "internal_description": "Record represents a sequential phase within a larger umbrella project", "active": true },
+    { "code": "outcome_of", "public_label": "Outcome Of", "internal_description": "Record represents an empirical result produced by the target action", "active": true },
+    { "code": "supersedes", "public_label": "Supersedes", "internal_description": "Record replaces or updates an earlier historical project or policy", "active": true },
+    { "code": "related_context", "public_label": "Related Context", "internal_description": "Record has contextual or thematic relevance to the target", "active": true }
+  ],
+  "correction_types": [
+    { "code": "fact_update", "public_label": "Factual Update", "internal_description": "Update of descriptive text or operational progress", "active": true },
+    { "code": "figure_revision", "public_label": "Numerical Figure Revision", "internal_description": "Audited correction of financial amount, beneficiary count, or metric", "active": true },
+    { "code": "status_change", "public_label": "Status Reclassification", "internal_description": "Adjustment of implementation or verification status", "active": true },
+    { "code": "source_addition", "public_label": "Source Addition / Replacement", "internal_description": "Addition of higher-tier evidence or replacement of broken link", "active": true },
+    { "code": "scope_correction", "public_label": "Geographic / Institutional Correction", "internal_description": "Correction of state coverage or responsible MDA", "active": true },
+    { "code": "redaction", "public_label": "Redaction", "internal_description": "Removal of sensitive or non-public information", "active": true },
+    { "code": "retraction", "public_label": "Full Retraction", "internal_description": "Complete withdrawal of an erroneous claim from public display", "active": true }
+  ],
+  "freshness_statuses": [
+    { "code": "fresh", "public_label": "Fresh / Current", "internal_description": "Verified within the established velocity window", "active": true },
+    { "code": "due_for_review", "public_label": "Due for Review", "internal_description": "Approaching freshness review deadline", "active": true },
+    { "code": "overdue", "public_label": "Overdue", "internal_description": "Exceeded review velocity; flagged for priority research check", "active": true },
+    { "code": "stale", "public_label": "Stale", "internal_description": "Unverified for extended duration; requires immediate verification check", "active": true },
+    { "code": "archived", "public_label": "Archived", "internal_description": "Completed historical event requiring no further freshness review", "active": true }
+  ],
+  "research_risk_levels": [
+    { "code": "low", "public_label": "Low Risk", "internal_description": "Standard official Gazette, Act of Parliament, or routine administrative milestone", "active": true },
+    { "code": "medium", "public_label": "Medium Risk", "internal_description": "Infrastructure progress claim, operational milestone, or standard fiscal figure", "active": true },
+    { "code": "high", "public_label": "High Risk", "internal_description": "Major fiscal claim (>₦100B), major beneficiary total (>500k), security milestone, or disputed claim", "active": true },
+    { "code": "critical", "public_label": "Critical Risk", "internal_description": "Major legal liability, constitutional claim, extreme political sensitivity, or major contradiction requiring multi-reviewer sign-off", "active": true }
+  ]
+}

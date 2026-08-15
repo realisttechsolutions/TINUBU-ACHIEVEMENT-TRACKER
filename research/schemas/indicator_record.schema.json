@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_record.schema.json",
-  "title": "Indicator Definition Schema",
-  "description": "Validation schema for performance metric and indicator definitions.",
+  "title": "Indicator Definition Schema v1.1",
+  "description": "Validation schema for performance metric and indicator definitions in Tinubu Achievement Tracker v1.1.",
   "type": "object",
   "required": [
     "indicator_id",
@@ -15,9 +15,34 @@
   ],
   "properties": {
     "indicator_id": { "type": "string", "minLength": 3 },
-    "slug": { "type": "string" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 3 },
-    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "sector_slug": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "security",
+        "infrastructure",
+        "social_services",
+        "social-services",
+        "governance",
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
     "subsector": { "type": "string" },
     "unit": { "type": "string" },
     "baseline_value": { "type": "string" },
@@ -28,7 +53,21 @@
     "source_agency": { "type": "string" },
     "data_classification": {
       "type": "string",
-      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+      "enum": [
+        "actual",
+        "provisional",
+        "estimated",
+        "projected",
+        "target",
+        "government_target",
+        "calculated",
+        "modelled",
+        "government_reported",
+        "independently_reported",
+        "under_review",
+        "corrected",
+        "withdrawn"
+      ]
     },
     "internal_notes": { "type": "string" }
   },

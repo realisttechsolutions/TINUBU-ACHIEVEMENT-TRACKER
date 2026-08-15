@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/timeline_event.schema.json",
-  "title": "Timeline Event Schema",
-  "description": "Validation schema for dated timeline events and implementation milestones.",
+  "title": "Timeline Event Schema v1.1",
+  "description": "Validation schema for dated timeline events, statutory steps, procurement, and implementation milestones.",
   "type": "object",
   "required": [
     "id",
@@ -18,18 +18,64 @@
   ],
   "properties": {
     "id": { "type": "string" },
-    "slug": { "type": "string" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "date": { "type": "string" },
-    "date_precision": { "type": "string", "enum": ["exact-day", "month", "quarter", "year", "range"] },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown", "exact-day"]
+    },
     "year": { "type": ["number", "string"] },
     "quarter": { "type": "string", "enum": ["Q1", "Q2", "Q3", "Q4"] },
     "title": { "type": "string" },
     "stage": {
       "type": "string",
-      "enum": ["announcement", "approval", "appropriation", "implementation", "operational", "impact"]
+      "enum": [
+        "announcement",
+        "approval",
+        "enactment",
+        "funding",
+        "funding_release",
+        "procurement",
+        "commencement",
+        "partial_delivery",
+        "completion",
+        "operation",
+        "outcome_reporting",
+        "independent_assessment",
+        "correction",
+        "appropriation",
+        "implementation",
+        "operational",
+        "impact"
+      ]
     },
     "category": { "type": "string" },
-    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "sector_slug": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "security",
+        "infrastructure",
+        "social_services",
+        "social-services",
+        "governance",
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
     "summary": { "type": "string" },
     "details": { "type": "string" },
     "lead_agency": { "type": "string" },

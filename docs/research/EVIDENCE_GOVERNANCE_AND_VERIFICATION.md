@@ -1,6 +1,10 @@
 # Evidence Governance, Verification Standards & Research Operating Model — Tinubu Achievement Tracker V2
 
-This document defines the authoritative evidence governance framework, claim verification rules, contradiction protocols, data freshness rules, research risk classifications, and multi-agent human/AI operating model for the **Tinubu Achievement Tracker (TAT) V2**.
+> [!WARNING]
+> **STATUS: SUPERSEDED BY RESEARCH CONTRACT V1.1 STANDARDS**  
+> This legacy document has been formally superseded by [`TAT_EVIDENCE_STANDARD.md`](./TAT_EVIDENCE_STANDARD.md), [`TAT_SOURCE_ROLE_STANDARD.md`](./TAT_SOURCE_ROLE_STANDARD.md), [`TAT_SOURCE_HIERARCHY.md`](./TAT_SOURCE_HIERARCHY.md), and [`TAT_RESEARCH_AGENT_OPERATING_MODEL.md`](./TAT_RESEARCH_AGENT_OPERATING_MODEL.md).
+
+This document defines the historical pre-consolidation evidence framework.
 
 ---
 

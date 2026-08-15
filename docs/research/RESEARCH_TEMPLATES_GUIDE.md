@@ -1,6 +1,10 @@
 # Research Templates & Ingestion Guide — Tinubu Achievement Tracker V2
 
-This document provides the human-readable specification and field guide for all 17 standardized research output templates (A through Q) defined under **Research Mission 01**.
+> [!WARNING]
+> **STATUS: SUPERSEDED BY CANONICAL TEMPLATES REGISTRY**  
+> This legacy document referenced 17 templates at obsolete `templates/research/` paths. It has been superseded by [`TAT_RESEARCH_OUTPUT_TEMPLATES.md`](./TAT_RESEARCH_OUTPUT_TEMPLATES.md), which indexes all 19 canonical templates under `research/templates/`.
+
+This document provides the historical pre-consolidation template guide.
 
 ---
 

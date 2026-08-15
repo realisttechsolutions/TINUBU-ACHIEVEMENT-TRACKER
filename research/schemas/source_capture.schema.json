@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/source_capture.schema.json",
-  "title": "Source Capture Research Schema",
-  "description": "Validation schema for primary legal, statutory, media, and academic source capture records.",
+  "title": "Source Capture Research Schema v1.1",
+  "description": "Validation schema for primary legal, statutory, official statistical, media, and institutional source capture records.",
   "type": "object",
   "required": [
     "source_id",
@@ -17,12 +17,35 @@
     "source_id": { "type": "string", "minLength": 3 },
     "source_title": { "type": "string", "minLength": 3 },
     "institution": { "type": "string" },
+    "source_level": {
+      "type": "string",
+      "enum": ["LEVEL_1", "LEVEL_2", "LEVEL_3", "LEVEL_4", "LEVEL_5", "LEVEL_6", "1", "2", "3", "4", "5", "6"]
+    },
     "source_type": {
       "type": "string",
-      "enum": ["gazette", "act", "executive_order", "statutory_report", "bulletin", "international_report", "media_article", "speech", "press_release", "discovery_lead"]
+      "enum": [
+        "gazette",
+        "act",
+        "executive_order",
+        "statutory_report",
+        "bulletin",
+        "international_report",
+        "media_article",
+        "speech",
+        "press_release",
+        "discovery_lead",
+        "procurement_notice",
+        "court_ruling",
+        "bilateral_agreement",
+        "portal_record",
+        "other"
+      ]
     },
-    "publication_date": { "type": "string", "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$" },
-    "publication_date_precision": { "type": "string", "enum": ["exact-day", "month", "quarter", "year", "range"] },
+    "publication_date": { "type": "string" },
+    "publication_date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown", "exact-day"]
+    },
     "url": { "type": "string", "format": "uri" },
     "access_date": { "type": "string" },
     "archive_url": { "type": "string" },
@@ -30,7 +53,10 @@
     "author": { "type": "string" },
     "publisher": { "type": "string" },
     "language": { "type": "string", "default": "en" },
-    "source_status": { "type": "string", "enum": ["active", "archived", "unverified", "deprecated"] },
+    "source_status": {
+      "type": "string",
+      "enum": ["active", "archived", "unverified", "deprecated"]
+    },
     "notes": { "type": "string" }
   },
   "additionalProperties": false

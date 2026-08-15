@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/data_gap.schema.json",
-  "title": "Data Gap Schema",
-  "description": "Validation schema for tracking research data gaps and missing information priorities.",
+  "title": "Data Gap Schema v1.1",
+  "description": "Validation schema for tracking research data gaps and missing information priorities in Tinubu Achievement Tracker v1.1.",
   "type": "object",
   "required": [
     "gap_id",
@@ -12,7 +12,32 @@
   ],
   "properties": {
     "gap_id": { "type": "string" },
-    "sector_slug": { "type": "string", "enum": ["economy", "security", "infrastructure", "social-services", "governance"] },
+    "sector_slug": {
+      "type": "string",
+      "enum": [
+        "economy",
+        "security",
+        "infrastructure",
+        "social_services",
+        "social-services",
+        "governance",
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
     "subsector": { "type": "string" },
     "topic_summary": { "type": "string" },
     "missing_entity_type": { "type": "string" },

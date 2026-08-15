@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_observation.schema.json",
-  "title": "Indicator Observation Schema",
+  "title": "Indicator Observation Schema v1.1",
   "description": "Validation schema for specific dated indicator metric observations.",
   "type": "object",
   "required": [
@@ -17,16 +17,43 @@
   "properties": {
     "observation_id": { "type": "string", "minLength": 3 },
     "indicator_id": { "type": "string" },
+    "claim_id": { "type": "string" },
     "reporting_period": { "type": "string" },
     "numeric_value": { "type": ["number", "string"] },
     "display_value": { "type": "string" },
     "unit": { "type": "string" },
     "data_classification": {
       "type": "string",
-      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+      "enum": [
+        "actual",
+        "provisional",
+        "estimated",
+        "projected",
+        "target",
+        "government_target",
+        "calculated",
+        "modelled",
+        "government_reported",
+        "independently_reported",
+        "under_review",
+        "corrected",
+        "withdrawn"
+      ]
     },
     "source_id": { "type": "string" },
-    "verification_status": { "type": "string" },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "source_confirmed",
+        "cross_referenced",
+        "independently_corroborated",
+        "under_review",
+        "unverified",
+        "disputed",
+        "corrected",
+        "withdrawn"
+      ]
+    },
     "notes": { "type": "string" }
   },
   "additionalProperties": false

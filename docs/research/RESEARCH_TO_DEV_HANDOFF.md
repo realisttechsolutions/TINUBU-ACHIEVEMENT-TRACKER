@@ -1,6 +1,10 @@
 # Research-to-Development Handoff & Supabase Blueprint — Tinubu Achievement Tracker V2
 
-This document provides backend developers (Codex) and database architects with exact database table specifications, Row-Level Security (RLS) policies, foreign key relationships, TypeScript mappings, and implementation decisions required to transition from static research files to dynamic Supabase integration.
+> [!WARNING]
+> **STATUS: DEPRECATED — SUPABASE ASSUMPTIONS RETIRED**  
+> The project architecture has transitioned from Supabase to **Firebase SQL Connect / Cloud SQL PostgreSQL**. This legacy document contains historical Supabase DDL and RLS proposals that are not applicable to Firebase SQL Connect. See [`docs/engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md`](../engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md) and [`TAT_FRONTEND_CONTRACT_ALIGNMENT_REQUIREMENTS.md`](./TAT_FRONTEND_CONTRACT_ALIGNMENT_REQUIREMENTS.md).
+
+This document provides historical pre-consolidation Supabase proposals.
 
 ---
 

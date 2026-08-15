@@ -1,2 +1,2 @@
-id,entity_type,entity_id,financial_type,amount,currency,reporting_period,source_url,internal_notes
-[EXAMPLE-ONLY-FIN-001],project,[EXAMPLE-ONLY-PRJ-001],fec_approved_contract,1200000000.00,USD,2024-Q1,https://works.gov.ng,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Contract approval figure separate from disbursement expenditure."
+id,record_id,claim_id,financial_type,amount,currency,reporting_period,date_value,date_precision,period_start,period_end,geographic_scope,geographic_unit_id,aggregation_basis,nominal_or_real,methodology,limitation,source_url,internal_notes,example_marker
+[EXAMPLE-ONLY-FIN-001],[DEMO-NON-PROD-001],[EXAMPLE-ONLY-CLM-001],approved_funding,47000000000.00,NGN,2024-Q1,2024-03-15,exact_day,2024-01-01,2024-03-31,multi_state,[GEO-NG-MULTI],period,nominal,FEC approval extract,Covers Phase 1 procurement commitment,https://budgetoffice.gov.ng/demo-doc,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD]",[EXAMPLE ONLY - NOT A PRODUCTION RECORD]

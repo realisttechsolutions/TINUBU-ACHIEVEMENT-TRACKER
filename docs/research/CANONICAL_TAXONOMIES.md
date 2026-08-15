@@ -1,6 +1,10 @@
 # Canonical Taxonomies & Controlled Vocabularies — Tinubu Achievement Tracker V2
 
-This document defines the single source of truth for all controlled vocabularies, classification schemes, source hierarchies, and metadata standards across the research pipeline, database schema, and public platform interface.
+> [!WARNING]
+> **STATUS: SUPERSEDED BY RESEARCH CONTRACT V1.1**  
+> This legacy document has been formally superseded by [`TAT_RESEARCH_CONTRACT_V1_1.md`](./TAT_RESEARCH_CONTRACT_V1_1.md) and [`canonical-vocabulary.v1.1.json`](../../research/schemas/canonical-vocabulary.v1.1.json). It is retained for historical audit context only. Do not consume this document for active schema validation or database design.
+
+This document defines the historical pre-consolidation classification schemes across the research pipeline.
 
 ---
 

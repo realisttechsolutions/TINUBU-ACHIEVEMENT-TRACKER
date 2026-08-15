@@ -1,6 +1,10 @@
 # Supabase Data Contract & Complete 35-Entity Relationship Map — Tinubu Achievement Tracker V2
 
-This document provides the complete database entity relationship map, table specifications, foreign key definitions, many-to-many relationship structures, RLS rules, and ingestion order for Supabase backend developers (Codex).
+> [!WARNING]
+> **STATUS: DEPRECATED — SUPERSEDED BY 27-TABLE RELATIONAL MODEL**  
+> This legacy document contained unenforceable polymorphic foreign keys and Supabase-specific configurations. It has been formally superseded by the approved 27-table relational logical model documented in [`docs/engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md`](../engineering/CODEX_M01_FIREBASE_SQL_CONNECT_DATABASE_REVIEW.md) and [`TAT_RESEARCH_CONTRACT_V1_1.md`](./TAT_RESEARCH_CONTRACT_V1_1.md).
+
+This document provides historical entity inventory context.
 
 ---
 

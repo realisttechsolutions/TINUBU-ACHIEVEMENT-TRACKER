@@ -1,37 +1,77 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://tinubuachievements.gov.ng/research/schemas/claim_extraction.schema.json",
-  "title": "Claim Extraction Research Schema",
-  "description": "Validation schema for atomic factual claims extracted from source text.",
+  "title": "Claim Extraction Research Schema v1.1",
+  "description": "Validation schema for atomic factual claims extracted from sources, decoupled from direct source binding (handled via claim_source_relationship).",
   "type": "object",
   "required": [
     "claim_id",
-    "entity_id",
+    "record_id",
     "claim_type",
     "claim_text",
-    "data_classification",
-    "source_id"
+    "value_nature",
+    "reporting_origin",
+    "verification_status"
   ],
   "properties": {
     "claim_id": { "type": "string", "minLength": 3 },
-    "entity_id": { "type": "string" },
+    "record_id": { "type": "string" },
     "claim_type": {
       "type": "string",
-      "enum": ["Legal Status", "Policy Action", "Implementation Status", "Project Status", "Financial Value", "Beneficiary Value", "Statistical Indicator", "Geographic Scope", "Timeline Event", "Reported Outcome", "Institutional Responsibility", "Context"]
+      "enum": [
+        "legal_status",
+        "policy_action",
+        "implementation_status",
+        "project_status",
+        "financial_value",
+        "beneficiary_value",
+        "statistical_indicator",
+        "geographic_scope",
+        "timeline_event",
+        "reported_outcome",
+        "institutional_responsibility",
+        "context"
+      ]
     },
     "claim_text": { "type": "string", "minLength": 5 },
-    "structured_value": { "type": ["string", "number"] },
-    "unit": { "type": "string" },
-    "reporting_period": { "type": "string" },
-    "data_classification": {
+    "value_nature": {
       "type": "string",
-      "enum": ["actual", "provisional", "estimated", "projected", "government_target", "independently_reported", "government_reported", "calculated", "modelled", "under_review", "corrected", "withdrawn"]
+      "enum": ["actual", "provisional", "estimated", "projected", "target", "calculated", "modelled"]
     },
-    "geographic_scope": { "type": "string" },
-    "source_id": { "type": "string" },
-    "evidence_location": { "type": "string" },
-    "evidence_summary": { "type": "string" },
-    "limitation": { "type": "string" }
+    "reporting_origin": {
+      "type": "string",
+      "enum": ["government_reported", "independently_reported", "mixed", "unknown"]
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": ["source_confirmed", "cross_referenced", "independently_corroborated", "under_review", "unverified", "disputed", "corrected", "withdrawn"]
+    },
+    "value_numeric": { "type": "string" },
+    "value_text": { "type": "string" },
+    "unit": { "type": "string" },
+    "currency": { "type": "string" },
+    "date_value": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "period_start": { "type": "string" },
+    "period_end": { "type": "string" },
+    "reporting_period_label": { "type": "string" },
+    "geographic_scope": {
+      "type": "string",
+      "enum": ["national", "geopolitical_zone", "state", "fct", "lga", "city_town", "project_site", "corridor", "multi_state", "coordinate", "geographic_boundary"]
+    },
+    "geographic_unit_id": { "type": "string" },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "limitation": { "type": "string" },
+    "created_by": { "type": "string" },
+    "created_at": { "type": "string" },
+    "validation_result": { "type": "string" },
+    "example_marker": { "type": "string" }
   },
   "additionalProperties": false
 }
