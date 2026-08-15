@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Duplicate Review Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "review_id",
+    "record_id_1",
+    "record_id_2",
+    "match_confidence",
+    "algorithm_version",
+    "resolution_action",
+    "primary_record_id",
+    "reviewer_id"
+  ],
+  "properties": {
+    "review_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id_1": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id_2": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "match_confidence": { "type": "string" },
+    "algorithm_version": { "type": "string" },
+    "resolution_action": {
+      "type": "string",
+      "enum": [
+        "merge", "keep_both_distinct", "mark_as_alias",
+        "archive_duplicate", "quarantine_for_investigation"
+      ]
+    },
+    "primary_record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "reviewer_id": { "type": "string", "minLength": 2 },
+    "resolution_notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

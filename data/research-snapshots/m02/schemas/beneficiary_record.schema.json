@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Beneficiary Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "id",
+    "record_id",
+    "claim_id",
+    "beneficiary_stage",
+    "beneficiary_type",
+    "count_value",
+    "count_basis",
+    "reporting_period"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "beneficiary_stage": {
+      "type": "string",
+      "enum": [
+        "applicant", "registered_participant", "eligible_applicant",
+        "approved_beneficiary", "disbursement_recipient", "active_beneficiary"
+      ]
+    },
+    "beneficiary_type": {
+      "type": "string",
+      "enum": ["individuals", "households", "farmers", "students", "msmes", "enterprises", "communities"]
+    },
+    "count_value": { "type": "string", "pattern": "^\\d+$" },
+    "count_basis": {
+      "type": "string",
+      "enum": ["cumulative_to_date", "period_specific", "target_capacity", "annual_average"]
+    },
+    "reporting_period": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "geographic_scope": {
+      "type": "string",
+      "enum": [
+        "national", "geopolitical_zone", "state", "fct", "lga", "city_town",
+        "project_site", "corridor", "multi_state", "coordinate", "geographic_boundary"
+      ]
+    },
+    "cohort_key": { "type": "string" },
+    "double_counting_note": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

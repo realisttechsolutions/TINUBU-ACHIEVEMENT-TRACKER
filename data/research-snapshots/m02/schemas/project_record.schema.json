@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "project_id",
+    "project_title",
+    "project_type",
+    "executing_agency",
+    "sector",
+    "status",
+    "start_date",
+    "date_precision"
+  ],
+  "properties": {
+    "project_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "project_title": { "type": "string", "minLength": 5 },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "highway_road", "bridge_tunnel", "rail_system", "port_maritime",
+        "airport_aviation", "power_plant_grid", "housing_estate", "hospital_health_center",
+        "school_educational_facility", "water_dam_irrigation", "digital_broadband", "public_building"
+      ]
+    },
+    "executing_agency": { "type": "string", "minLength": 2 },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
+    "subsector": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
+      ]
+    },
+    "states_covered": { "type": "string" },
+    "start_date": { "type": "string" },
+    "completion_or_current_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "progress_percentage": { "type": "string" },
+    "contractor": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

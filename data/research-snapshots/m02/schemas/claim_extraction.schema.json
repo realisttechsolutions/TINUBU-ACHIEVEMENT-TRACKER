@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Claim Extraction Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "record_id",
+    "claim_type",
+    "claim_text",
+    "value_nature",
+    "reporting_origin",
+    "verification_status"
+  ],
+  "properties": {
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_type": {
+      "type": "string",
+      "enum": [
+        "legal_status", "policy_action", "implementation_status", "project_status",
+        "financial_value", "beneficiary_value", "statistical_indicator", "geographic_scope",
+        "timeline_event", "reported_outcome", "institutional_responsibility", "context"
+      ]
+    },
+    "claim_text": { "type": "string", "minLength": 5 },
+    "value_nature": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "target", "calculated", "modelled"]
+    },
+    "reporting_origin": {
+      "type": "string",
+      "enum": ["government_reported", "independently_reported", "mixed", "unknown"]
+    },
+    "numeric_value": { "type": "string" },
+    "unit": { "type": "string" },
+    "date_value": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "reporting_period": { "type": "string" },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "source_confirmed", "cross_referenced", "independently_corroborated",
+        "under_review", "unverified", "disputed", "corrected", "withdrawn"
+      ]
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

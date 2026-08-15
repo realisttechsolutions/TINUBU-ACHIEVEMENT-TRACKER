@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Correction Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "correction_id",
+    "record_id",
+    "claim_id",
+    "correction_type",
+    "previous_value",
+    "corrected_value",
+    "reason",
+    "source_id",
+    "status",
+    "revised_by",
+    "revision_date"
+  ],
+  "properties": {
+    "correction_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "correction_type": {
+      "type": "string",
+      "enum": [
+        "factual_error", "numerical_update", "status_correction",
+        "date_refinement", "source_replacement", "retraction", "typographical"
+      ]
+    },
+    "previous_value": { "type": "string" },
+    "corrected_value": { "type": "string" },
+    "reason": { "type": "string", "minLength": 10 },
+    "source_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "under_review", "approved", "published", "rejected"]
+    },
+    "revised_by": { "type": "string", "minLength": 2 },
+    "revision_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

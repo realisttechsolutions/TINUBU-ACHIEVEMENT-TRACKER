@@ -1,0 +1,300 @@
+extend type AchievementProfile {
+  """
+  ✨ Implicit foreign key field based on `AchievementProfile`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "AchievementProfile.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ActorRole {
+  """
+  ✨ Implicit foreign key field based on `ActorRole`.`actor`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  actorId: UUID! @fdc_generated(from: "ActorRole.actor", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ActorRole`.`grantedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  grantedById: UUID @fdc_generated(from: "ActorRole.grantedBy", purpose: IMPLICIT_REF_FIELD)
+}
+extend type BeneficiaryRecord {
+  """
+  ✨ Implicit foreign key field based on `BeneficiaryRecord`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID! @fdc_generated(from: "BeneficiaryRecord.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `BeneficiaryRecord`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "BeneficiaryRecord.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `BeneficiaryRecord`.`geographicUnit`. It must match the value of `GeographicUnit`.`id`. See `@ref` for how to customize it.
+  """
+  geographicUnitId: UUID @fdc_generated(from: "BeneficiaryRecord.geographicUnit", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `BeneficiaryRecord`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "BeneficiaryRecord.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ClaimSourceRelationship {
+  """
+  ✨ Implicit foreign key field based on `ClaimSourceRelationship`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID! @fdc_generated(from: "ClaimSourceRelationship.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ClaimSourceRelationship`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "ClaimSourceRelationship.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ClaimSourceRelationship`.`reviewedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  reviewedById: UUID @fdc_generated(from: "ClaimSourceRelationship.reviewedBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ClaimSourceRelationship`.`source`. It must match the value of `Source`.`id`. See `@ref` for how to customize it.
+  """
+  sourceId: UUID! @fdc_generated(from: "ClaimSourceRelationship.source", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ClaimSourceRelationship`.`supersededByRelationship`. It must match the value of `ClaimSourceRelationship`.`id`. See `@ref` for how to customize it.
+  """
+  supersededByRelationshipId: UUID @fdc_generated(from: "ClaimSourceRelationship.supersededByRelationship", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Correction {
+  """
+  ✨ Implicit foreign key field based on `Correction`.`approvedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  approvedById: UUID @fdc_generated(from: "Correction.approvedBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Correction`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID @fdc_generated(from: "Correction.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Correction`.`evidenceSource`. It must match the value of `Source`.`id`. See `@ref` for how to customize it.
+  """
+  evidenceSourceId: UUID @fdc_generated(from: "Correction.evidenceSource", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Correction`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "Correction.record", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Correction`.`requestedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  requestedById: UUID! @fdc_generated(from: "Correction.requestedBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Correction`.`reviewedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  reviewedById: UUID @fdc_generated(from: "Correction.reviewedBy", purpose: IMPLICIT_REF_FIELD)
+}
+extend type EvidenceClaim {
+  """
+  ✨ Implicit foreign key field based on `EvidenceClaim`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "EvidenceClaim.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `EvidenceClaim`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "EvidenceClaim.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type FinancialRecord {
+  """
+  ✨ Implicit foreign key field based on `FinancialRecord`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID! @fdc_generated(from: "FinancialRecord.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `FinancialRecord`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "FinancialRecord.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `FinancialRecord`.`geographicUnit`. It must match the value of `GeographicUnit`.`id`. See `@ref` for how to customize it.
+  """
+  geographicUnitId: UUID @fdc_generated(from: "FinancialRecord.geographicUnit", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `FinancialRecord`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "FinancialRecord.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type GeographicUnit {
+  """
+  ✨ Implicit foreign key field based on `GeographicUnit`.`parentGeographicUnit`. It must match the value of `GeographicUnit`.`id`. See `@ref` for how to customize it.
+  """
+  parentGeographicUnitId: UUID @fdc_generated(from: "GeographicUnit.parentGeographicUnit", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Indicator {
+  """
+  ✨ Implicit foreign key field based on `Indicator`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "Indicator.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Indicator`.`sector`. It must match the value of `Sector`.`id`. See `@ref` for how to customize it.
+  """
+  sectorId: UUID @fdc_generated(from: "Indicator.sector", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Indicator`.`sourceInstitution`. It must match the value of `Institution`.`id`. See `@ref` for how to customize it.
+  """
+  sourceInstitutionId: UUID @fdc_generated(from: "Indicator.sourceInstitution", purpose: IMPLICIT_REF_FIELD)
+}
+extend type IndicatorObservation {
+  """
+  ✨ Implicit foreign key field based on `IndicatorObservation`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID! @fdc_generated(from: "IndicatorObservation.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `IndicatorObservation`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "IndicatorObservation.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `IndicatorObservation`.`geographicUnit`. It must match the value of `GeographicUnit`.`id`. See `@ref` for how to customize it.
+  """
+  geographicUnitId: UUID @fdc_generated(from: "IndicatorObservation.geographicUnit", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `IndicatorObservation`.`indicator`. It must match the value of `Indicator`.`id`. See `@ref` for how to customize it.
+  """
+  indicatorId: UUID! @fdc_generated(from: "IndicatorObservation.indicator", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Institution {
+  """
+  ✨ Implicit foreign key field based on `Institution`.`parentInstitution`. It must match the value of `Institution`.`id`. See `@ref` for how to customize it.
+  """
+  parentInstitutionId: UUID @fdc_generated(from: "Institution.parentInstitution", purpose: IMPLICIT_REF_FIELD)
+}
+extend type PolicyDetail {
+  """
+  ✨ Implicit foreign key field based on `PolicyDetail`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "PolicyDetail.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ProgrammeDetail {
+  """
+  ✨ Implicit foreign key field based on `ProgrammeDetail`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "ProgrammeDetail.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ProjectDetail {
+  """
+  ✨ Implicit foreign key field based on `ProjectDetail`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "ProjectDetail.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Record {
+  """
+  ✨ Implicit foreign key field based on `Record`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "Record.createdBy", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RecordGeography {
+  """
+  ✨ Implicit foreign key field based on `RecordGeography`.`geographicUnit`. It must match the value of `GeographicUnit`.`id`. See `@ref` for how to customize it.
+  """
+  geographicUnitId: UUID! @fdc_generated(from: "RecordGeography.geographicUnit", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordGeography`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "RecordGeography.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RecordInstitution {
+  """
+  ✨ Implicit foreign key field based on `RecordInstitution`.`institution`. It must match the value of `Institution`.`id`. See `@ref` for how to customize it.
+  """
+  institutionId: UUID! @fdc_generated(from: "RecordInstitution.institution", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordInstitution`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "RecordInstitution.record", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RecordRelationship {
+  """
+  ✨ Implicit foreign key field based on `RecordRelationship`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "RecordRelationship.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordRelationship`.`fromRecord`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  fromRecordId: UUID! @fdc_generated(from: "RecordRelationship.fromRecord", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordRelationship`.`toRecord`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  toRecordId: UUID! @fdc_generated(from: "RecordRelationship.toRecord", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RecordSector {
+  """
+  ✨ Implicit foreign key field based on `RecordSector`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "RecordSector.record", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordSector`.`sector`. It must match the value of `Sector`.`id`. See `@ref` for how to customize it.
+  """
+  sectorId: UUID! @fdc_generated(from: "RecordSector.sector", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RecordVersion {
+  """
+  ✨ Implicit foreign key field based on `RecordVersion`.`changedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  changedById: UUID! @fdc_generated(from: "RecordVersion.changedBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordVersion`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "RecordVersion.record", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `RecordVersion`.`researchBatch`. It must match the value of `ResearchBatch`.`id`. See `@ref` for how to customize it.
+  """
+  researchBatchId: UUID @fdc_generated(from: "RecordVersion.researchBatch", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ResearchBatch {
+  """
+  ✨ Implicit foreign key field based on `ResearchBatch`.`approvedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  approvedById: UUID @fdc_generated(from: "ResearchBatch.approvedBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ResearchBatch`.`submittedBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  submittedById: UUID! @fdc_generated(from: "ResearchBatch.submittedBy", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ReviewDecision {
+  """
+  ✨ Implicit foreign key field based on `ReviewDecision`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID @fdc_generated(from: "ReviewDecision.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ReviewDecision`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "ReviewDecision.record", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ReviewDecision`.`reviewer`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  reviewerId: UUID! @fdc_generated(from: "ReviewDecision.reviewer", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Sector {
+  """
+  ✨ Implicit foreign key field based on `Sector`.`parentSector`. It must match the value of `Sector`.`id`. See `@ref` for how to customize it.
+  """
+  parentSectorId: UUID @fdc_generated(from: "Sector.parentSector", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Source {
+  """
+  ✨ Implicit foreign key field based on `Source`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "Source.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Source`.`publisherInstitution`. It must match the value of `Institution`.`id`. See `@ref` for how to customize it.
+  """
+  publisherInstitutionId: UUID @fdc_generated(from: "Source.publisherInstitution", purpose: IMPLICIT_REF_FIELD)
+}
+extend type SourceFile {
+  """
+  ✨ Implicit foreign key field based on `SourceFile`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "SourceFile.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `SourceFile`.`source`. It must match the value of `Source`.`id`. See `@ref` for how to customize it.
+  """
+  sourceId: UUID! @fdc_generated(from: "SourceFile.source", purpose: IMPLICIT_REF_FIELD)
+}
+extend type TimelineEvent {
+  """
+  ✨ Implicit foreign key field based on `TimelineEvent`.`claim`. It must match the value of `EvidenceClaim`.`id`. See `@ref` for how to customize it.
+  """
+  claimId: UUID @fdc_generated(from: "TimelineEvent.claim", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `TimelineEvent`.`createdBy`. It must match the value of `ActorProfile`.`id`. See `@ref` for how to customize it.
+  """
+  createdById: UUID! @fdc_generated(from: "TimelineEvent.createdBy", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `TimelineEvent`.`record`. It must match the value of `Record`.`id`. See `@ref` for how to customize it.
+  """
+  recordId: UUID! @fdc_generated(from: "TimelineEvent.record", purpose: IMPLICIT_REF_FIELD)
+}

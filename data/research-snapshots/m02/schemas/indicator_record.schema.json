@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Indicator Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "indicator_id",
+    "indicator_name",
+    "sector",
+    "unit",
+    "frequency",
+    "reporting_agency"
+  ],
+  "properties": {
+    "indicator_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "indicator_name": { "type": "string", "minLength": 5 },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
+    "subsector": { "type": "string" },
+    "unit": { "type": "string" },
+    "frequency": {
+      "type": "string",
+      "enum": ["monthly", "quarterly", "annual", "biennial", "ad_hoc"]
+    },
+    "reporting_agency": { "type": "string", "minLength": 2 },
+    "baseline_value": { "type": "string" },
+    "baseline_period": { "type": "string" },
+    "methodology_summary": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

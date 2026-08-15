@@ -1,0 +1,5 @@
+connectorId: "tat-staff"
+generate:
+  javascriptSdk:
+    outputDir: "../../backend/generated/sql-connect-staff"
+    package: "@tat/sql-connect-staff"

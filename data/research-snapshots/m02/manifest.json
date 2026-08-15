@@ -1,0 +1,166 @@
+{
+  "snapshotId": "m02",
+  "researchMission": "TAT-RM-02",
+  "researchBranch": "research/mission-02-pilot-achievements",
+  "researchCommit": "3284182",
+  "researchContractVersion": "1.1.2",
+  "canonicalVocabularyVersion": "1.1.2",
+  "createdAt": "2026-08-15T14:29:38.795Z",
+  "aggregateManifestHash": "c08a62fae06885c30fb527c4fd975f3a9de832b3aa864c1849ce505c23d8f3f6",
+  "fileCount": 19,
+  "totalRows": 276,
+  "files": [
+    {
+      "name": "achievement_record.csv",
+      "relativePath": "csv/achievement_record.csv",
+      "sha256": "a72547d9d6d0e86edb53d56db94be746037d121c152c6f18ed9d740b172033ce",
+      "sizeBytes": 24152,
+      "rowCount": 30,
+      "schemaReference": "schemas/achievement_record.schema.json"
+    },
+    {
+      "name": "beneficiary_record.csv",
+      "relativePath": "csv/beneficiary_record.csv",
+      "sha256": "688a221bf37d4333b5fe0ec1909768d23174de6fe0b8e676a863f8a8ea573303",
+      "sizeBytes": 2408,
+      "rowCount": 8,
+      "schemaReference": "schemas/beneficiary_record.schema.json"
+    },
+    {
+      "name": "claim_extraction.csv",
+      "relativePath": "csv/claim_extraction.csv",
+      "sha256": "9732fdd2d3f5fe11f4c14fa44b6f22e341f22ca10a5f1fcec255ce13830dde0f",
+      "sizeBytes": 10082,
+      "rowCount": 33,
+      "schemaReference": "schemas/claim_extraction.schema.json"
+    },
+    {
+      "name": "claim_source_relationship.csv",
+      "relativePath": "csv/claim_source_relationship.csv",
+      "sha256": "d82dcf6ffae3d1f8ee220e05cb106077f6a666603e3fae5cce2a5925224e1efd",
+      "sizeBytes": 8048,
+      "rowCount": 36,
+      "schemaReference": "schemas/claim_source_relationship.schema.json"
+    },
+    {
+      "name": "contradiction_log.csv",
+      "relativePath": "csv/contradiction_log.csv",
+      "sha256": "0ebc15bc50d72e5f15e1fe4bc493c29da914d9eb0b32047732883eb10258fb2f",
+      "sizeBytes": 1222,
+      "rowCount": 2,
+      "schemaReference": "schemas/contradiction_log.schema.json"
+    },
+    {
+      "name": "correction_record.csv",
+      "relativePath": "csv/correction_record.csv",
+      "sha256": "67a810197b98b1d5454ac15edd8a5dbbfb069af5c5125a30d002866c563d3da4",
+      "sizeBytes": 845,
+      "rowCount": 2,
+      "schemaReference": "schemas/correction_record.schema.json"
+    },
+    {
+      "name": "data_gap.csv",
+      "relativePath": "csv/data_gap.csv",
+      "sha256": "be5245316f473300b4031efddefa197810aead6df5ce78d536909ebe3858a671",
+      "sizeBytes": 1527,
+      "rowCount": 5,
+      "schemaReference": "schemas/data_gap.schema.json"
+    },
+    {
+      "name": "duplicate_review.csv",
+      "relativePath": "csv/duplicate_review.csv",
+      "sha256": "2b2b2b7057f7371c90276f317f7181b17a3435e2bc9b8d2dc9c996d5f73ae2f1",
+      "sizeBytes": 886,
+      "rowCount": 3,
+      "schemaReference": "schemas/duplicate_review.schema.json"
+    },
+    {
+      "name": "entity_discovery.csv",
+      "relativePath": "csv/entity_discovery.csv",
+      "sha256": "c9b4005e52a9d4a8a416a0ab21b886ba0ca9dc46fdfae948f8db868ce9eac004",
+      "sizeBytes": 1890,
+      "rowCount": 6,
+      "schemaReference": "schemas/entity_discovery.schema.json"
+    },
+    {
+      "name": "financial_record.csv",
+      "relativePath": "csv/financial_record.csv",
+      "sha256": "339e8603f74f019326b7d6aaeb98155241adfa8a2e6f33b4bc12c854bce5ef49",
+      "sizeBytes": 2188,
+      "rowCount": 8,
+      "schemaReference": "schemas/financial_record.schema.json"
+    },
+    {
+      "name": "freshness_review.csv",
+      "relativePath": "csv/freshness_review.csv",
+      "sha256": "d0f5fa75be06c65aa7ee21ba4ddf935ae97572c1e6deb9427c6419fedaab358e",
+      "sizeBytes": 3952,
+      "rowCount": 30,
+      "schemaReference": "schemas/freshness_review.schema.json"
+    },
+    {
+      "name": "indicator_observation.csv",
+      "relativePath": "csv/indicator_observation.csv",
+      "sha256": "32954e0f9755744ce550fb0584746d15d6aff6dc6b8a2f286b5aba7ae9131d66",
+      "sizeBytes": 1069,
+      "rowCount": 4,
+      "schemaReference": "schemas/indicator_observation.schema.json"
+    },
+    {
+      "name": "indicator_record.csv",
+      "relativePath": "csv/indicator_record.csv",
+      "sha256": "1b9af9e7859338d805aa6c6b2199d050f665dbef1ee708598c978df956808c6c",
+      "sizeBytes": 1075,
+      "rowCount": 3,
+      "schemaReference": "schemas/indicator_record.schema.json"
+    },
+    {
+      "name": "policy_record.csv",
+      "relativePath": "csv/policy_record.csv",
+      "sha256": "8491983a29dc736d2849657186fdfc350f791b3c56b560fc137cc4d9eb1467f1",
+      "sizeBytes": 4861,
+      "rowCount": 10,
+      "schemaReference": "schemas/policy_record.schema.json"
+    },
+    {
+      "name": "programme_record.csv",
+      "relativePath": "csv/programme_record.csv",
+      "sha256": "23bbd93753b8cfeb07a81fd39804b5848043cf47b521fadcafd38a82285a005c",
+      "sizeBytes": 2716,
+      "rowCount": 8,
+      "schemaReference": "schemas/programme_record.schema.json"
+    },
+    {
+      "name": "project_record.csv",
+      "relativePath": "csv/project_record.csv",
+      "sha256": "b46eae3328528a3b60cf9196669e0d08c7c1726b8d65c20414ba57484d91ed8d",
+      "sizeBytes": 3035,
+      "rowCount": 8,
+      "schemaReference": "schemas/project_record.schema.json"
+    },
+    {
+      "name": "publication_review.csv",
+      "relativePath": "csv/publication_review.csv",
+      "sha256": "64c8861d23a27ef9fd96e18140bf712ac3e2318676e5c0a5b113b99b5d5eef72",
+      "sizeBytes": 5498,
+      "rowCount": 30,
+      "schemaReference": "schemas/publication_review.schema.json"
+    },
+    {
+      "name": "source_capture.csv",
+      "relativePath": "csv/source_capture.csv",
+      "sha256": "a736de430d5d311328262c694b1822fd244cce4b39106c046ff8beda2ba3774f",
+      "sizeBytes": 14284,
+      "rowCount": 35,
+      "schemaReference": "schemas/source_capture.schema.json"
+    },
+    {
+      "name": "timeline_event.csv",
+      "relativePath": "csv/timeline_event.csv",
+      "sha256": "40b16c5f8e08031af36d986eecdc54069c3a252259e399275d263a4c6985f8b6",
+      "sizeBytes": 5007,
+      "rowCount": 15,
+      "schemaReference": "schemas/timeline_event.schema.json"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+review_id,record_id_1,record_id_2,match_confidence,algorithm_version,resolution_action,primary_record_id,reviewer_id,resolution_notes
+[DUP-2024-0001],[ACH-2024-0018],[ACH-2024-0019],0.88,v1.1,keep_both_distinct,[ACH-2024-0018],Lead Entity Resolver,Resolved as parent statutory policy [ACH-2024-0018] and child operational disbursement [ACH-2024-0019] rather than duplicate achievement
+[DUP-2024-0002],[ACH-2023-0004],[ACH-2023-0001],0.45,v1.1,keep_both_distinct,[ACH-2023-0004],Lead Entity Resolver,Confirmed as separate initiatives under power and energy sector (CNG transport initiative vs electricity market decentralization)
+[DUP-2024-0003],[ACH-2024-0013],[ACH-2024-0014],0.60,v1.1,keep_both_distinct,[ACH-2024-0013],Lead Entity Resolver,Confirmed as distinct geographic rail rehabilitation projects (Abuja Light Rail in FCT vs Port Harcourt-Aba Standard Gauge in Rivers/Abia)

@@ -1,0 +1,31 @@
+review_id,record_id,review_gate,review_decision,truth_rules_audit_pass,reviewed_by,review_date,notes
+[PUB-2023-0001],[ACH-2023-0001],gate_4_editorial_human_approval,approved,true,Lead Editorial Reviewer,2023-06-15,Assented legislation confirmed against Official Gazette No 98
+[PUB-2023-0002],[ACH-2023-0002],gate_4_editorial_human_approval,approved_with_qualification,true,Lead Macro Analyst,2023-06-20,Monetary circular verified; FX rate volatility disclaimers noted
+[PUB-2023-0003],[ACH-2023-0003],gate_4_editorial_human_approval,approved,true,Lead Fiscal Reviewer,2024-01-22,FIRS audited collections audited against NBS fiscal series
+[PUB-2023-0004],[ACH-2023-0004],gate_4_editorial_human_approval,approved,true,Lead Transport Reviewer,2023-10-10,Physical rollout of conversion centres and transit buses verified
+[PUB-2023-0005],[ACH-2023-0005],gate_4_editorial_human_approval,approved,true,Lead Legal Reviewer,2024-03-05,Executive Orders 40-42 confirmed against Official Gazette No 38
+[PUB-2023-0006],[ACH-2023-0006],gate_4_editorial_human_approval,approved,true,Lead Agriculture Reviewer,2024-04-20,Grain offload verified against Ministry distribution manifest
+[PUB-2023-0007],[ACH-2023-0007],gate_4_editorial_human_approval,approved,true,Lead Agriculture Reviewer,2023-12-01,Dry-season wheat acreage verified through AfDB NAGS-AP project data
+[PUB-2023-0008],[ACH-2023-0008],gate_4_editorial_human_approval,approved_with_qualification,true,Lead Fiscal Reviewer,2024-03-25,Cabinet sovereign credit approval verified; disbursement pending
+[PUB-2023-0009],[ACH-2023-0009],gate_4_editorial_human_approval,approved,true,Lead Tech Reviewer,2023-10-20,3MTT Phase 1 cohort training verified through NITDA logs
+[PUB-2023-0010],[ACH-2023-0010],gate_4_editorial_human_approval,approved,true,Lead Tech Reviewer,2024-05-18,National Broadband SPV approval verified from cabinet resolutions
+[PUB-2023-0011],[ACH-2023-0011],gate_4_editorial_human_approval,approved,true,Lead Governance Reviewer,2024-06-08,Statutory council inauguration verified from State House records
+[PUB-2024-0012],[ACH-2024-0012],gate_4_editorial_human_approval,approved,true,Lead Infrastructure Reviewer,2024-03-10,Lagos-Calabar Coastal Highway Section 1 civil works verified on-site
+[PUB-2024-0013],[ACH-2024-0013],gate_4_editorial_human_approval,approved,true,Lead Infrastructure Reviewer,2024-06-01,Abuja Light Rail commercial operations recommencement verified
+[PUB-2024-0014],[ACH-2024-0014],gate_4_editorial_human_approval,approved,true,Lead Infrastructure Reviewer,2024-05-05,Port Harcourt-Aba train operations verified from NRC schedules
+[PUB-2024-0015],[ACH-2024-0015],gate_4_editorial_human_approval,approved,true,Lead Infrastructure Reviewer,2024-05-28,Second Niger Bridge bypass dualization completion certificate verified
+[PUB-2024-0016],[ACH-2024-0016],gate_4_editorial_human_approval,approved,true,Lead Housing Reviewer,2024-02-15,Renewed Hope Cities Karsana construction progress verified
+[PUB-2024-0017],[ACH-2024-0017],gate_4_editorial_human_approval,approved,true,Lead Housing Reviewer,2024-04-22,FMBN digital portal and single-digit mortgage releases verified
+[PUB-2024-0018],[ACH-2024-0018],gate_4_editorial_human_approval,approved,true,Lead Legal Reviewer,2024-04-08,Student Loan Act 2024 verified against Official Gazette No 56
+[PUB-2024-0019],[ACH-2024-0019],gate_4_editorial_human_approval,approved,true,Lead Education Reviewer,2024-08-12,NELFUND N10B+ institutional tuition fee disbursements verified
+[PUB-2024-0020],[ACH-2024-0020],gate_4_editorial_human_approval,approved,true,Lead Education Reviewer,2024-06-20,UBEC matching grant releases of N50B verified against commission logs
+[PUB-2024-0021],[ACH-2024-0021],gate_4_editorial_human_approval,approved,true,Lead Health Reviewer,2024-07-02,Executive Order 041 pharmaceutical tariff waivers verified in gazette
+[PUB-2024-0022],[ACH-2024-0022],gate_4_editorial_human_approval,approved,true,Lead Health Reviewer,2024-05-20,Primary Health Care solarization verified from NPHCDA records
+[PUB-2024-0023],[ACH-2024-0023],gate_4_editorial_human_approval,approved,true,Lead Social Protection Reviewer,2024-07-28,PCGS N50000 nano grants to 1000000 beneficiaries verified via BOI
+[PUB-2024-0024],[ACH-2024-0024],gate_4_editorial_human_approval,approved,true,Lead Social Protection Reviewer,2024-08-08,CREDICORP consumer credit pilot disbursements verified
+[PUB-2024-0025],[ACH-2024-0025],gate_4_editorial_human_approval,approved,true,Lead Social Protection Reviewer,2024-05-08,National Social Register biometric cleaning verified via World Bank
+[PUB-2024-0026],[ACH-2024-0026],gate_4_editorial_human_approval,approved_with_qualification,true,Lead Youth Reviewer,2024-05-26,NYIF N110B recapitalization approved by FEC; disbursement ongoing
+[PUB-2024-0027],[ACH-2024-0027],gate_4_editorial_human_approval,approved,true,Lead Youth Reviewer,2024-07-15,Youth enterprise cluster enrollment verified via SMEDAN
+[PUB-2024-0028],[ACH-2024-0028],gate_4_editorial_human_approval,approved,true,Lead Legal Reviewer,2024-07-14,Supreme Court ruling SC/CV/343/2024 verified against law report
+[PUB-2024-0029],[ACH-2024-0029],gate_4_editorial_human_approval,approved,true,Lead Governance Reviewer,2024-04-08,IPPIS forensic audit savings verified from OHCSF report
+[PUB-2024-0030],[ACH-2024-0030],gate_4_editorial_human_approval,approved,true,Lead Foreign Affairs Reviewer,2024-07-18,Nigeria-UAE aviation and visa accord verified from joint communique

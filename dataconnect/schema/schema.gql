@@ -1,0 +1,378 @@
+# E01 SQL Connect compatibility schema. The PostgreSQL DDL in database/schema.sql
+# remains the executable local relational authority and adds checks, partial indexes,
+# views, and audit triggers beyond the connector schema language.
+
+type ActorProfile @table(name: "actor_profiles") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String @col(name: "external_id")
+  firebaseUid: String @col(name: "firebase_uid")
+  actorKind: String! @col(name: "actor_kind")
+  displayName: String! @col(name: "display_name")
+  email: String
+  status: String!
+  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(expr: "request.time")
+}
+
+type ActorRole @table(name: "actor_roles") {
+  id: UUID! @default(expr: "uuidV4()")
+  actor: ActorProfile!
+  roleCode: String! @col(name: "role_code")
+  scopeType: String! @col(name: "scope_type")
+  scopeKey: String! @col(name: "scope_key")
+  grantedBy: ActorProfile
+  grantedAt: Timestamp! @col(name: "granted_at") @default(expr: "request.time")
+  validUntil: Timestamp @col(name: "valid_until")
+  revokedAt: Timestamp @col(name: "revoked_at")
+}
+
+type Sector @table(name: "sectors") {
+  id: UUID! @default(expr: "uuidV4()")
+  code: String! @unique
+  label: String!
+  taxonomyLevel: String! @col(name: "taxonomy_level")
+  parentSector: Sector
+  description: String
+  publicOrder: Int @col(name: "public_order")
+  active: Boolean!
+  vocabularyVersion: String! @col(name: "vocabulary_version")
+}
+
+type Institution @table(name: "institutions") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String @col(name: "external_id")
+  slug: String! @unique
+  canonicalName: String! @col(name: "canonical_name")
+  shortName: String @col(name: "short_name")
+  institutionType: String! @col(name: "institution_type")
+  parentInstitution: Institution
+  officialUrl: String @col(name: "official_url")
+  active: Boolean!
+}
+
+type Record @table(name: "records") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  slug: String! @unique
+  recordType: String! @col(name: "record_type")
+  title: String!
+  shortTitle: String @col(name: "short_title")
+  summary: String!
+  body: String
+  implementationStatus: String! @col(name: "implementation_status")
+  workflowStatus: String! @col(name: "workflow_status")
+  publicationStatus: String! @col(name: "publication_status")
+  verificationStatus: String! @col(name: "verification_status")
+  evidenceProfile: String! @col(name: "evidence_profile")
+  riskLevel: String! @col(name: "risk_level")
+  isPublic: Boolean! @col(name: "is_public")
+  qualification: String
+  internalNotes: String @col(name: "internal_notes")
+  createdBy: ActorProfile!
+  currentRevision: Int! @col(name: "current_revision")
+  publishedAt: Timestamp @col(name: "published_at")
+  withdrawnAt: Timestamp @col(name: "withdrawn_at")
+  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(expr: "request.time")
+}
+
+type PolicyDetail @table(name: "policy_details", key: ["record"]) {
+  record: Record!
+  policyType: String! @col(name: "policy_type")
+  legalInstrument: String @col(name: "legal_instrument")
+  effectiveDate: Date @col(name: "effective_date")
+}
+
+type ProjectDetail @table(name: "project_details", key: ["record"]) {
+  record: Record!
+  projectType: String! @col(name: "project_type")
+  commencementDate: Date @col(name: "commencement_date")
+  expectedCompletionDate: Date @col(name: "expected_completion_date")
+  contractorName: String @col(name: "contractor_name")
+}
+
+type ProgrammeDetail @table(name: "programme_details", key: ["record"]) {
+  record: Record!
+  programmeType: String! @col(name: "programme_type")
+  targetBeneficiaryType: String @col(name: "target_beneficiary_type")
+  startDate: Date @col(name: "start_date")
+  endDate: Date @col(name: "end_date")
+}
+
+type AchievementProfile @table(name: "achievement_profiles", key: ["record"]) {
+  record: Record!
+  headlineOutcome: String @col(name: "headline_outcome")
+  dataValueNature: String! @col(name: "data_value_nature")
+  sourceOrigin: String! @col(name: "source_origin")
+}
+
+type RecordInstitution @table(name: "record_institutions") {
+  id: UUID! @default(expr: "uuidV4()")
+  record: Record!
+  institution: Institution!
+  roleCode: String! @col(name: "role_code")
+  isPrimary: Boolean! @col(name: "is_primary")
+}
+
+type RecordSector @table(name: "record_sectors") {
+  id: UUID! @default(expr: "uuidV4()")
+  record: Record!
+  sector: Sector!
+  roleCode: String! @col(name: "role_code")
+}
+
+type GeographicUnit @table(name: "geographic_units") {
+  id: UUID! @default(expr: "uuidV4()")
+  code: String! @unique
+  name: String!
+  geographyType: String! @col(name: "geography_type")
+  parentGeographicUnit: GeographicUnit
+  isoCode: String @col(name: "iso_code")
+  sensitivityClass: String! @col(name: "sensitivity_class")
+  active: Boolean!
+}
+
+type RecordGeography @table(name: "record_geographies") {
+  id: UUID! @default(expr: "uuidV4()")
+  record: Record!
+  geographicUnit: GeographicUnit!
+  coverageRole: String! @col(name: "coverage_role")
+  sensitivityClass: String! @col(name: "sensitivity_class")
+}
+
+type Source @table(name: "sources") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  title: String!
+  publisherInstitution: Institution
+  publisherName: String @col(name: "publisher_name")
+  sourceType: String! @col(name: "source_type")
+  sourceLevel: String! @col(name: "source_level")
+  originalUrl: String @col(name: "original_url")
+  archivalUrl: String @col(name: "archival_url")
+  documentNumber: String @col(name: "document_number")
+  publicationDate: Date @col(name: "publication_date")
+  publicationDatePrecision: String! @col(name: "publication_date_precision")
+  accessDate: Date! @col(name: "access_date")
+  sourceStatus: String! @col(name: "source_status")
+  checksumSha256: String @col(name: "checksum_sha256")
+  visibilityClass: String! @col(name: "visibility_class")
+  createdBy: ActorProfile!
+}
+
+type EvidenceClaim @table(name: "evidence_claims") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claimType: String! @col(name: "claim_type")
+  claimText: String! @col(name: "claim_text")
+  valueNumeric: Float @col(name: "value_numeric")
+  valueText: String @col(name: "value_text")
+  unitCode: String @col(name: "unit_code")
+  dateValue: Date @col(name: "date_value")
+  datePrecision: String! @col(name: "date_precision")
+  periodStart: Date @col(name: "period_start")
+  periodEnd: Date @col(name: "period_end")
+  reportingPeriodLabel: String @col(name: "reporting_period_label")
+  dataValueNature: String! @col(name: "data_value_nature")
+  sourceOrigin: String! @col(name: "source_origin")
+  verificationStatus: String! @col(name: "verification_status")
+  evidenceProfile: String! @col(name: "evidence_profile")
+  riskLevel: String! @col(name: "risk_level")
+  workflowStatus: String! @col(name: "workflow_status")
+  limitations: String
+  internalNotes: String @col(name: "internal_notes")
+  createdBy: ActorProfile!
+}
+
+type ClaimSourceRelationship @table(name: "claim_source_relationships") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  claim: EvidenceClaim!
+  source: Source!
+  sourceRole: String! @col(name: "source_role")
+  relationshipType: String! @col(name: "relationship_type")
+  evidenceLocation: String @col(name: "evidence_location")
+  evidenceSummary: String @col(name: "evidence_summary")
+  limitation: String
+  reviewStatus: String! @col(name: "review_status")
+  reviewedBy: ActorProfile
+  reviewedAt: Timestamp @col(name: "reviewed_at")
+  supersededByRelationship: ClaimSourceRelationship
+  createdBy: ActorProfile!
+}
+
+type FinancialRecord @table(name: "financial_records") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claim: EvidenceClaim!
+  geographicUnit: GeographicUnit
+  financialType: String! @col(name: "financial_type")
+  amount: Float!
+  currencyCode: String! @col(name: "currency_code")
+  reportingPeriodLabel: String! @col(name: "reporting_period_label")
+  periodStart: Date @col(name: "period_start")
+  periodEnd: Date @col(name: "period_end")
+  datePrecision: String! @col(name: "date_precision")
+  aggregationBasis: String! @col(name: "aggregation_basis")
+  nominalOrReal: String! @col(name: "nominal_or_real")
+  methodology: String
+  limitations: String
+  createdBy: ActorProfile!
+}
+
+type BeneficiaryRecord @table(name: "beneficiary_records") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claim: EvidenceClaim!
+  geographicUnit: GeographicUnit
+  beneficiaryType: String! @col(name: "beneficiary_type")
+  beneficiaryStage: String! @col(name: "beneficiary_stage")
+  countValue: Int! @col(name: "count_value")
+  unit: String!
+  countBasis: String! @col(name: "count_basis")
+  cumulative: Boolean!
+  reportingPeriodLabel: String! @col(name: "reporting_period_label")
+  periodStart: Date @col(name: "period_start")
+  periodEnd: Date @col(name: "period_end")
+  cohortKey: String @col(name: "cohort_key")
+  methodology: String
+  doubleCountingNotes: String @col(name: "double_counting_notes")
+  limitations: String
+  createdBy: ActorProfile!
+}
+
+type Indicator @table(name: "indicators") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  slug: String! @unique
+  name: String!
+  definition: String!
+  unit: String!
+  frequency: String!
+  methodology: String!
+  sector: Sector
+  sourceInstitution: Institution
+  active: Boolean!
+  createdBy: ActorProfile!
+}
+
+type IndicatorObservation @table(name: "indicator_observations") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  indicator: Indicator!
+  claim: EvidenceClaim!
+  geographicUnit: GeographicUnit
+  valueNumeric: Float @col(name: "value_numeric")
+  valueDisplay: String @col(name: "value_display")
+  reportingPeriodLabel: String! @col(name: "reporting_period_label")
+  periodStart: Date! @col(name: "period_start")
+  periodEnd: Date! @col(name: "period_end")
+  dataValueNature: String! @col(name: "data_value_nature")
+  sourceOrigin: String! @col(name: "source_origin")
+  verificationStatus: String! @col(name: "verification_status")
+  provisional: Boolean!
+  createdBy: ActorProfile!
+}
+
+type TimelineEvent @table(name: "timeline_events") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claim: EvidenceClaim
+  eventType: String! @col(name: "event_type")
+  title: String!
+  description: String
+  dateValue: Date @col(name: "date_value")
+  datePrecision: String! @col(name: "date_precision")
+  periodStart: Date @col(name: "period_start")
+  periodEnd: Date @col(name: "period_end")
+  reportingPeriodLabel: String @col(name: "reporting_period_label")
+  provisional: Boolean!
+  isPublic: Boolean! @col(name: "is_public")
+  createdBy: ActorProfile!
+}
+
+type Correction @table(name: "corrections") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claim: EvidenceClaim
+  correctionType: String! @col(name: "correction_type")
+  fieldPath: String! @col(name: "field_path")
+  originalValue: String @col(name: "original_value")
+  correctedValue: String @col(name: "corrected_value")
+  reason: String!
+  evidenceSource: Source
+  lifecycleStatus: String! @col(name: "lifecycle_status")
+  requestedBy: ActorProfile!
+  reviewedBy: ActorProfile
+  approvedBy: ActorProfile
+  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+}
+
+type ReviewDecision @table(name: "review_decisions") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  record: Record!
+  claim: EvidenceClaim
+  subjectScope: String! @col(name: "subject_scope")
+  recordRevision: Int! @col(name: "record_revision")
+  gateCode: String! @col(name: "gate_code")
+  decision: String!
+  reviewer: ActorProfile!
+  rationale: String!
+  riskLevel: String! @col(name: "risk_level")
+  decidedAt: Timestamp! @col(name: "decided_at") @default(expr: "request.time")
+}
+
+type RecordRelationship @table(name: "record_relationships") {
+  id: UUID! @default(expr: "uuidV4()")
+  fromRecord: Record!
+  toRecord: Record!
+  relationshipRole: String! @col(name: "relationship_role")
+  description: String
+  createdBy: ActorProfile!
+}
+
+type SourceFile @table(name: "source_files") {
+  id: UUID! @default(expr: "uuidV4()")
+  source: Source!
+  fileKind: String! @col(name: "file_kind")
+  storageUri: String! @col(name: "storage_uri")
+  originalFilename: String! @col(name: "original_filename")
+  mimeType: String! @col(name: "mime_type")
+  byteSize: Int @col(name: "byte_size")
+  checksumSha256: String! @col(name: "checksum_sha256")
+  visibilityClass: String! @col(name: "visibility_class")
+  createdBy: ActorProfile!
+}
+
+type ResearchBatch @table(name: "research_batches") {
+  id: UUID! @default(expr: "uuidV4()")
+  externalId: String! @col(name: "external_id") @unique
+  idempotencyKey: String! @col(name: "idempotency_key") @unique
+  packageChecksum: String! @col(name: "package_checksum") @unique
+  contractVersion: String! @col(name: "contract_version")
+  schemaVersion: String! @col(name: "schema_version")
+  taxonomyVersion: String! @col(name: "taxonomy_version")
+  mode: String!
+  status: String!
+  submittedBy: ActorProfile!
+  approvedBy: ActorProfile
+  planHash: String @col(name: "plan_hash")
+  startedAt: Timestamp! @col(name: "started_at") @default(expr: "request.time")
+  completedAt: Timestamp @col(name: "completed_at")
+}
+
+type RecordVersion @table(name: "record_versions") {
+  id: UUID! @default(expr: "uuidV4()")
+  record: Record!
+  versionNumber: Int! @col(name: "version_number")
+  changedBy: ActorProfile!
+  changeReason: String! @col(name: "change_reason")
+  researchBatch: ResearchBatch
+  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+}

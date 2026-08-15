@@ -1,0 +1,428 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tinubu Achievement Tracker — Canonical Vocabulary Registry v1.1.1",
+  "description": "SUPERSEDED historical vocabulary retained for audit history only. The sole active authority is canonical-vocabulary.v1.1.2.json.",
+  "schema_version": "1.1.1",
+  "authority_status": "SUPERSEDED",
+  "superseded_by": "canonical-vocabulary.v1.1.2.json",
+  "last_updated": "2026-08-15",
+  "governing_contract": "TAT_RESEARCH_CONTRACT_V1_1_1.md",
+  "public_navigation_groups": [
+    { "code": "economy", "label": "Economy & Macro Reforms", "description": "Macroeconomic policy, fiscal reforms, monetary stability, trade, industry, energy, and digital economy." },
+    { "code": "security", "label": "Security & National Stability", "description": "Defense, national security, counter-terrorism, border control, policing, and rule of law." },
+    { "code": "infrastructure", "label": "Infrastructure & Urban Delivery", "description": "Transport corridors, roads, bridges, rail, aviation, maritime ports, power grid, and housing." },
+    { "code": "social_services", "label": "Social Investment & Human Capital", "description": "Education, healthcare, student financial aid, consumer credit, social welfare, environment, and creative arts." },
+    { "code": "governance", "label": "Governance & Global Relations", "description": "Public service digitization, anti-corruption, civil service turnaround, judicial reforms, and foreign affairs." }
+  ],
+  "canonical_sectors": [
+    { "sector_id": "economy_fiscal_reforms", "public_label": "Economy and Fiscal Reforms", "parent_public_group": "economy", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "security_national_stability", "public_label": "Security and National Stability", "parent_public_group": "security", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "infrastructure_transportation", "public_label": "Infrastructure and Transportation", "parent_public_group": "infrastructure", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "agriculture_food_security", "public_label": "Agriculture and Food Security", "parent_public_group": "economy", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "education_human_capital", "public_label": "Education and Human Capital", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "healthcare_public_health", "public_label": "Healthcare and Public Health", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "social_protection_human_development", "public_label": "Social Protection and Human Development", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "youth_employment_skills", "public_label": "Youth, Employment and Skills", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "power_energy_natural_resources", "public_label": "Power, Energy and Natural Resources", "parent_public_group": "economy", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "digital_economy_science_innovation", "public_label": "Digital Economy, Science and Innovation", "parent_public_group": "economy", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "housing_urban_development", "public_label": "Housing and Urban Development", "parent_public_group": "infrastructure", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "environment_climate", "public_label": "Environment and Climate", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "governance_public_service", "public_label": "Governance and Public Service", "parent_public_group": "governance", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "foreign_affairs_international_cooperation", "public_label": "Foreign Affairs and International Cooperation", "parent_public_group": "governance", "hierarchy_level": "LEVEL_2_SECTOR", "active": true },
+    { "sector_id": "culture_tourism_creative_economy", "public_label": "Culture, Tourism, Media and Creative Economy", "parent_public_group": "social_services", "hierarchy_level": "LEVEL_2_SECTOR", "active": true }
+  ],
+  "sector_hierarchy_levels": [
+    { "code": "LEVEL_1_GROUP", "label": "Level 1: Public Navigation Group" },
+    { "code": "LEVEL_2_SECTOR", "label": "Level 2: Canonical Research Sector" },
+    { "code": "LEVEL_3_SUBSECTOR", "label": "Level 3: Configurable Subsector" }
+  ],
+  "record_types": [
+    { "code": "achievement", "label": "High-Impact Achievement" },
+    { "code": "policy", "label": "Policy Framework" },
+    { "code": "reform", "label": "Structural Reform" },
+    { "code": "executive_action", "label": "Executive Action" },
+    { "code": "legislation", "label": "Legislation / Statute" },
+    { "code": "regulation", "label": "Regulatory Instrument" },
+    { "code": "programme", "label": "Programme Framework" },
+    { "code": "intervention", "label": "Social Intervention" },
+    { "code": "physical_project", "label": "Physical Infrastructure Project" },
+    { "code": "institutional_reform", "label": "Institutional Reform" },
+    { "code": "reported_outcome", "label": "Reported Outcome" },
+    { "code": "timeline_event", "label": "Timeline Event" },
+    { "code": "milestone", "label": "Operational Milestone" },
+    { "code": "indicator", "label": "Macro / Sector Indicator" },
+    { "code": "indicator_observation", "label": "Indicator Observation" },
+    { "code": "source", "label": "Evidence Source" },
+    { "code": "correction_revision", "label": "Correction / Revision" },
+    { "code": "report", "label": "Research Report" },
+    { "code": "dataset", "label": "Public Dataset" },
+    { "code": "methodology", "label": "Research Methodology" }
+  ],
+  "policy_types": [
+    { "code": "national_policy", "label": "National Policy" },
+    { "code": "executive_order", "label": "Executive Order" },
+    { "code": "statutory_act", "label": "Statutory Act" },
+    { "code": "regulatory_framework", "label": "Regulatory Framework" },
+    { "code": "presidential_directive", "label": "Presidential Directive" },
+    { "code": "strategic_roadmap", "label": "Strategic Roadmap" }
+  ],
+  "project_types": [
+    { "code": "highway_road", "label": "Highway and Arterial Road" },
+    { "code": "bridge_tunnel", "label": "Bridge and Tunnel" },
+    { "code": "rail_system", "label": "Rail and Transit System" },
+    { "code": "port_maritime", "label": "Maritime Port and Harbor" },
+    { "code": "airport_aviation", "label": "Airport and Aviation Facility" },
+    { "code": "power_plant_grid", "label": "Power Generation and Transmission Grid" },
+    { "code": "housing_estate", "label": "Housing Development and Estate" },
+    { "code": "hospital_health_center", "label": "Hospital and Healthcare Facility" },
+    { "code": "school_educational_facility", "label": "Educational Facility and Campus" },
+    { "code": "water_dam_irrigation", "label": "Water, Dam, and Irrigation Asset" },
+    { "code": "digital_broadband", "label": "Digital Backbone and Broadband" },
+    { "code": "public_building", "label": "Public Civil Building" }
+  ],
+  "programme_types": [
+    { "code": "social_investment", "label": "Social Investment Programme" },
+    { "code": "financial_credit", "label": "Financial and Credit Programme" },
+    { "code": "youth_employment", "label": "Youth Employment and Skills Programme" },
+    { "code": "agricultural_intervention", "label": "Agricultural Support Intervention" },
+    { "code": "industrial_acceleration", "label": "Industrial and MSME Acceleration" },
+    { "code": "health_intervention", "label": "Public Health Intervention" },
+    { "code": "energy_access", "label": "Energy Access and Rural Electrification" },
+    { "code": "digital_transformation", "label": "Digital Transformation Scheme" }
+  ],
+  "implementation_statuses": [
+    { "code": "proposed", "label": "Proposed" },
+    { "code": "announced", "label": "Announced" },
+    { "code": "approved", "label": "Approved" },
+    { "code": "enacted", "label": "Enacted" },
+    { "code": "effective", "label": "In Force" },
+    { "code": "funded", "label": "Funded" },
+    { "code": "funding_released", "label": "Funding Released" },
+    { "code": "procurement", "label": "In Procurement" },
+    { "code": "implementation_planning", "label": "Planning Phase" },
+    { "code": "implementation_ongoing", "label": "Ongoing Execution" },
+    { "code": "partially_delivered", "label": "Partially Delivered" },
+    { "code": "completed", "label": "Completed" },
+    { "code": "operational", "label": "Operational" },
+    { "code": "outcome_reported", "label": "Outcome Reported" },
+    { "code": "independently_assessed", "label": "Independently Assessed" },
+    { "code": "suspended", "label": "Suspended" },
+    { "code": "superseded", "label": "Superseded" },
+    { "code": "repealed", "label": "Repealed" },
+    { "code": "under_review", "label": "Under Review" },
+    { "code": "archived", "label": "Archived" },
+    { "code": "withdrawn", "label": "Withdrawn" }
+  ],
+  "data_value_nature": [
+    { "code": "actual", "label": "Actual (Audited Historical)" },
+    { "code": "provisional", "label": "Provisional (Subject to Revision)" },
+    { "code": "estimated", "label": "Estimated (Statistical Approximation)" },
+    { "code": "projected", "label": "Projected (Forward Forecast)" },
+    { "code": "target", "label": "Target (Administrative Goal)" },
+    { "code": "calculated", "label": "Calculated (Derived from Baselines)" },
+    { "code": "modelled", "label": "Modelled (Econometric Simulation)" }
+  ],
+  "source_origin": [
+    { "code": "government_reported", "label": "Government Reported" },
+    { "code": "independently_reported", "label": "Independently Reported" },
+    { "code": "mixed", "label": "Mixed Origin" },
+    { "code": "unknown", "label": "Unknown Origin" }
+  ],
+  "verification_statuses": [
+    { "code": "source_confirmed", "label": "Source Confirmed" },
+    { "code": "cross_referenced", "label": "Cross Referenced" },
+    { "code": "independently_corroborated", "label": "Independently Corroborated" },
+    { "code": "under_review", "label": "Under Review" },
+    { "code": "unverified", "label": "Unverified" },
+    { "code": "disputed", "label": "Disputed" },
+    { "code": "corrected", "label": "Corrected" },
+    { "code": "withdrawn", "label": "Withdrawn" }
+  ],
+  "workflow_statuses": [
+    { "code": "draft", "label": "Draft" },
+    { "code": "research_review", "label": "Research Review" },
+    { "code": "evidence_review", "label": "Evidence Review" },
+    { "code": "editorial_review", "label": "Editorial Review" },
+    { "code": "human_approval", "label": "Human Lead Sign-Off" },
+    { "code": "ready_for_publication", "label": "Ready for Publication" },
+    { "code": "rejected", "label": "Rejected" },
+    { "code": "archived", "label": "Archived" }
+  ],
+  "publication_statuses": [
+    { "code": "unpublished", "label": "Unpublished" },
+    { "code": "under_review", "label": "Under Review" },
+    { "code": "publishable", "label": "Publishable" },
+    { "code": "publishable_with_qualification", "label": "Publishable with Qualification" },
+    { "code": "published", "label": "Published" },
+    { "code": "corrected", "label": "Corrected" },
+    { "code": "withdrawn", "label": "Withdrawn" },
+    { "code": "archived", "label": "Archived" }
+  ],
+  "source_levels": [
+    { "code": "LEVEL_1", "label": "Level 1: Primary Legal and Administrative Records" },
+    { "code": "LEVEL_2", "label": "Level 2: Official Statistical and Administrative Data" },
+    { "code": "LEVEL_3", "label": "Level 3: International & Independent Institutional Evidence" },
+    { "code": "LEVEL_4", "label": "Level 4: Credible Mainstream and Specialist Media" },
+    { "code": "LEVEL_5", "label": "Level 5: Official Statements and Contextual Material" },
+    { "code": "LEVEL_6", "label": "Level 6: Discovery Leads (INTERNAL ONLY)" }
+  ],
+  "source_roles": [
+    { "code": "primary", "label": "Primary Source" },
+    { "code": "official_statistical", "label": "Official Statistical Data" },
+    { "code": "direct_implementation", "label": "Direct Implementation Record" },
+    { "code": "independent_assessment", "label": "Independent Assessment" },
+    { "code": "corroborating", "label": "Corroborating Source" },
+    { "code": "supporting", "label": "Supporting Source" },
+    { "code": "contextual", "label": "Contextual Source" },
+    { "code": "contradictory", "label": "Contradictory Source" },
+    { "code": "replacement", "label": "Replacement Source" },
+    { "code": "archived", "label": "Archived Snapshot" },
+    { "code": "discovery_lead", "label": "Discovery Lead (Internal)" }
+  ],
+  "source_types": [
+    { "code": "gazette", "label": "Federal / State Gazette" },
+    { "code": "act_statute", "label": "Act of National Assembly" },
+    { "code": "executive_order", "label": "Executive Order" },
+    { "code": "court_ruling", "label": "Court Judgment / Ruling" },
+    { "code": "statistical_bulletin", "label": "Statistical Bulletin (NBS/CBN)" },
+    { "code": "economic_report", "label": "Official Economic Report" },
+    { "code": "debt_report", "label": "Debt Sustainability Report (DMO)" },
+    { "code": "multilateral_report", "label": "Multilateral Agency Report (WB/IMF/AfDB/UN)" },
+    { "code": "audit_report", "label": "Independent Audit Report (NEITI/AuGF)" },
+    { "code": "academic_study", "label": "Peer-Reviewed Academic Study" },
+    { "code": "investigative_report", "label": "Investigative Journalism Report" },
+    { "code": "mainstream_media", "label": "Mainstream Daily News" },
+    { "code": "specialist_press", "label": "Specialist / Trade Press" },
+    { "code": "state_house_release", "label": "State House Press Release" },
+    { "code": "ministerial_statement", "label": "Ministerial Statement / Briefing" },
+    { "code": "agency_portal", "label": "Official Agency Web Portal" },
+    { "code": "social_lead", "label": "Verified Social Lead (Discovery Only)" }
+  ],
+  "source_statuses": [
+    { "code": "active", "label": "Active (Reachable & Verified)" },
+    { "code": "archived", "label": "Archived Snapshot Available" },
+    { "code": "under_review", "label": "Under Evidentiary Review" },
+    { "code": "retracted", "label": "Retracted by Publisher" },
+    { "code": "dead_link", "label": "Unreachable Dead Link" }
+  ],
+  "claim_types": [
+    { "code": "legal_status", "label": "Legal Status / Enactment" },
+    { "code": "policy_action", "label": "Policy Action / Directive" },
+    { "code": "implementation_status", "label": "Implementation Status Stage" },
+    { "code": "project_status", "label": "Project Physical Progress" },
+    { "code": "financial_value", "label": "Financial Value / Metric" },
+    { "code": "beneficiary_value", "label": "Beneficiary Count / Stage" },
+    { "code": "statistical_indicator", "label": "Statistical Indicator Movement" },
+    { "code": "geographic_scope", "label": "Geographic Coverage / Site" },
+    { "code": "timeline_event", "label": "Timeline Milestone Event" },
+    { "code": "reported_outcome", "label": "Reported Outcome / Result" },
+    { "code": "institutional_responsibility", "label": "Institutional Responsibility" },
+    { "code": "context", "label": "Baseline / Contextual Background" }
+  ],
+  "claim_source_relationship_types": [
+    { "code": "supports", "label": "Supports Claim" },
+    { "code": "contradicts", "label": "Contradicts Claim" },
+    { "code": "replaces", "label": "Replaces Prior Evidence" },
+    { "code": "contextualises", "label": "Provides Context" },
+    { "code": "discovery_only", "label": "Discovery Trigger Only" }
+  ],
+  "evidence_profiles": [
+    { "code": "direct_physical_delivery", "label": "Direct Physical Delivery" },
+    { "code": "statutory_legal_enactment", "label": "Statutory / Legal Enactment" },
+    { "code": "verified_administrative_disbursement", "label": "Verified Administrative Disbursement" },
+    { "code": "statistical_indicator_movement", "label": "Statistical Indicator Movement" },
+    { "code": "official_policy_declaration", "label": "Official Policy Declaration" },
+    { "code": "third_party_independent_assessment", "label": "Third-Party Independent Assessment" },
+    { "code": "multilateral_partner_evaluation", "label": "Multilateral Partner Evaluation" },
+    { "code": "institutional_reform_milestone", "label": "Institutional Reform Milestone" }
+  ],
+  "financial_value_types": [
+    { "code": "budget_allocation", "label": "Budget Allocation (Appropriation Act)" },
+    { "code": "approved_funding", "label": "Approved Funding (FEC / Executive Sanction)" },
+    { "code": "funding_released", "label": "Funding Released (Cash Warrants)" },
+    { "code": "reported_expenditure", "label": "Reported Expenditure (Disbursements)" },
+    { "code": "contract_value", "label": "Contract Value (Commercial Award)" },
+    { "code": "programme_envelope", "label": "Programme Envelope (Multi-Year)" },
+    { "code": "public_investment", "label": "Public Capital Investment" },
+    { "code": "private_investment", "label": "Private Capital Mobilized / FDI" },
+    { "code": "revenue_generated", "label": "Revenue Generated (Tax / Customs / NNPCL)" },
+    { "code": "revenue_estimate", "label": "Revenue Estimate (Projected)" },
+    { "code": "savings_estimate", "label": "Savings Estimate (Fiscal Efficiency)" }
+  ],
+  "beneficiary_stages": [
+    { "code": "applicant", "label": "Applicant (Submitted Application)" },
+    { "code": "registered_participant", "label": "Registered Participant (On Portal/DB)" },
+    { "code": "eligible_applicant", "label": "Eligible Applicant (Formally Screened)" },
+    { "code": "approved_beneficiary", "label": "Approved Beneficiary (Sanctioned for Benefit)" },
+    { "code": "disbursement_recipient", "label": "Disbursement Recipient (Verified Payment)" },
+    { "code": "active_beneficiary", "label": "Active Beneficiary (Ongoing Service)" }
+  ],
+  "beneficiary_types": [
+    { "code": "individuals", "label": "Individuals / Citizens" },
+    { "code": "households", "label": "Households / Families" },
+    { "code": "farmers", "label": "Farmers / Agribusinesses" },
+    { "code": "students", "label": "Students / Trainees" },
+    { "code": "msmes", "label": "Micro, Small & Medium Enterprises" },
+    { "code": "enterprises", "label": "Commercial Enterprises" },
+    { "code": "communities", "label": "Communities / Localities" }
+  ],
+  "date_precisions": [
+    { "code": "exact_day", "label": "Exact Calendar Day (YYYY-MM-DD)" },
+    { "code": "month", "label": "Calendar Month (YYYY-MM)" },
+    { "code": "quarter", "label": "Calendar Quarter (YYYY-Q#)" },
+    { "code": "year", "label": "Calendar Year (YYYY)" },
+    { "code": "fiscal_year", "label": "Fiscal Year (FYYYYY or YYYY/YY)" },
+    { "code": "range", "label": "Date Range (Date/Date)" },
+    { "code": "unknown", "label": "Date Unknown / Unspecified" }
+  ],
+  "timeline_event_types": [
+    { "code": "announcement", "label": "Public Announcement" },
+    { "code": "approval", "label": "Statutory / FEC Approval" },
+    { "code": "enactment", "label": "Legislative Enactment" },
+    { "code": "effectiveness", "label": "Commencement / Legal In Force" },
+    { "code": "funding_approval", "label": "Funding Allocation / Approval" },
+    { "code": "funding_release", "label": "Treasury Release / Warrant" },
+    { "code": "procurement", "label": "Procurement / Contract Award" },
+    { "code": "commencement", "label": "Site Mobilization / Project Commencement" },
+    { "code": "partial_delivery", "label": "Section / Phase Handover" },
+    { "code": "completion", "label": "Physical Completion" },
+    { "code": "operation", "label": "Commissioning & Commercial Operations" },
+    { "code": "outcome_report", "label": "Empirical Outcome Report" },
+    { "code": "independent_assessment", "label": "Independent Audit / Assessment" },
+    { "code": "correction", "label": "Public Correction / Revision" }
+  ],
+  "geographic_scope_types": [
+    { "code": "national", "label": "National (Nationwide Impact)" },
+    { "code": "geopolitical_zone", "label": "Geopolitical Zone" },
+    { "code": "state", "label": "State (Single State)" },
+    { "code": "fct", "label": "Federal Capital Territory" },
+    { "code": "lga", "label": "Local Government Area" },
+    { "code": "city_town", "label": "City or Town" },
+    { "code": "project_site", "label": "Discrete Project Site" },
+    { "code": "corridor", "label": "Transport / Infrastructure Corridor" },
+    { "code": "multi_state", "label": "Multi-State Region" },
+    { "code": "coordinate", "label": "Geographic Coordinate (Point)" },
+    { "code": "geographic_boundary", "label": "Geographic Boundary (Polygon)" }
+  ],
+  "relationship_roles": [
+    { "code": "parent_initiative", "label": "Parent Initiative" },
+    { "code": "child_initiative", "label": "Child Initiative" },
+    { "code": "predecessor_policy", "label": "Predecessor Policy" },
+    { "code": "successor_policy", "label": "Successor Policy" },
+    { "code": "enabling_legislation", "label": "Enabling Legislation" },
+    { "code": "dependent_project", "label": "Dependent Project" },
+    { "code": "co_funded_programme", "label": "Co-Funded Programme" },
+    { "code": "thematic_cluster", "label": "Thematic Cluster Component" }
+  ],
+  "contradiction_severities": [
+    { "code": "critical", "label": "Critical (Major Factual Conflict)" },
+    { "code": "high", "label": "High (Substantial Metric Discrepancy)" },
+    { "code": "medium", "label": "Medium (Moderate Variance / Timing Gap)" },
+    { "code": "low", "label": "Low (Minor Discrepancy)" }
+  ],
+  "contradiction_resolution_statuses": [
+    { "code": "open", "label": "Open (Under Active Investigation)" },
+    { "code": "under_investigation", "label": "Under Investigation" },
+    { "code": "resolved_by_primary_evidence", "label": "Resolved by Primary Official Record" },
+    { "code": "resolved_by_conservative_figure", "label": "Resolved by Adopting Conservative Figure" },
+    { "code": "unresolved_retained_with_qualification", "label": "Unresolved (Published with Qualification)" },
+    { "code": "dismissed_as_erroneous", "label": "Dismissed as Erroneous Claim" }
+  ],
+  "correction_types": [
+    { "code": "factual_error", "label": "Factual Error Correction" },
+    { "code": "numerical_update", "label": "Numerical Metric Update" },
+    { "code": "status_correction", "label": "Implementation Status Adjustment" },
+    { "code": "date_refinement", "label": "Date Precision Refinement" },
+    { "code": "source_replacement", "label": "Source Citation Replacement" },
+    { "code": "retraction", "label": "Formal Retraction of Claim" },
+    { "code": "typographical", "label": "Typographical / Formatting Correction" }
+  ],
+  "correction_lifecycle_statuses": [
+    { "code": "proposed", "label": "Correction Proposed" },
+    { "code": "under_review", "label": "Correction Under Review" },
+    { "code": "approved", "label": "Correction Approved" },
+    { "code": "published", "label": "Correction Published" },
+    { "code": "rejected", "label": "Correction Rejected" }
+  ],
+  "freshness_statuses": [
+    { "code": "fresh", "label": "Fresh (Within Velocity Window)" },
+    { "code": "due_for_review", "label": "Due for Review" },
+    { "code": "stale", "label": "Stale (Exceeded Review Window)" },
+    { "code": "review_in_progress", "label": "Review in Progress" },
+    { "code": "historical_closed", "label": "Historical Closed (No Further Review Needed)" }
+  ],
+  "research_risk_levels": [
+    { "code": "low", "label": "Low Risk" },
+    { "code": "medium", "label": "Medium Risk" },
+    { "code": "high", "label": "High Risk" },
+    { "code": "critical", "label": "Critical Risk" }
+  ],
+  "review_gates": [
+    { "code": "gate_0_task_authorization", "label": "Gate 0: Task Authorization" },
+    { "code": "gate_1_source_claim_capture", "label": "Gate 1: Source & Claim Capture" },
+    { "code": "gate_2_resolution_evidence", "label": "Gate 2: Entity Resolution & Evidence" },
+    { "code": "gate_3_automated_data_readiness", "label": "Gate 3: Automated Data Readiness" },
+    { "code": "gate_4_editorial_human_approval", "label": "Gate 4: Editorial Governance & Human Sign-Off" },
+    { "code": "gate_5_publication_stewardship", "label": "Gate 5: Publication Projection & Stewardship" }
+  ],
+  "review_decisions": [
+    { "code": "approved", "label": "Approved" },
+    { "code": "approved_with_qualification", "label": "Approved with Qualification" },
+    { "code": "rejected", "label": "Rejected" },
+    { "code": "revision_requested", "label": "Revision Requested" },
+    { "code": "escalated_to_human_lead", "label": "Escalated to Human Lead" },
+    { "code": "quarantined", "label": "Quarantined" }
+  ],
+  "count_basis": [
+    { "code": "cumulative_to_date", "label": "Cumulative Total to Date" },
+    { "code": "period_specific", "label": "Period-Specific Net Count" },
+    { "code": "target_capacity", "label": "Target Administrative Capacity" },
+    { "code": "annual_average", "label": "Annualized Average" }
+  ],
+  "aggregation_basis": [
+    { "code": "period", "label": "Period Value (Discrete)" },
+    { "code": "cumulative", "label": "Cumulative Value (Sum to Date)" }
+  ],
+  "discovery_statuses": [
+    { "code": "proposed", "label": "Candidate Proposed" },
+    { "code": "under_review", "label": "Candidate Under Review" },
+    { "code": "approved", "label": "Candidate Approved for Extraction" },
+    { "code": "rejected", "label": "Candidate Rejected" }
+  ],
+  "gap_statuses": [
+    { "code": "open", "label": "Gap Open" },
+    { "code": "investigating", "label": "Gap Under Investigation" },
+    { "code": "resolved", "label": "Gap Resolved by Evidence" },
+    { "code": "blocked", "label": "Gap Blocked" }
+  ],
+  "gap_evidence_types": [
+    { "code": "statutory_instrument", "label": "Statutory Instrument / Act / Gazette" },
+    { "code": "funding_appropriation", "label": "National Budget Appropriation Line Item" },
+    { "code": "cash_release_warrant", "label": "Treasury Release Warrant / Cash Backing" },
+    { "code": "contract_award_notice", "label": "Formal Contract Award Notice / FEC Extract" },
+    { "code": "contractor_progress_certificate", "label": "Engineering Handover / Progress Certificate" },
+    { "code": "disbursement_audit_log", "label": "Disbursement Platform Payment Audit Log" },
+    { "code": "beneficiary_register", "label": "Audited Beneficiary Register / Rollout List" },
+    { "code": "statistical_time_series", "label": "Multi-Period Statistical Series (NBS/CBN)" },
+    { "code": "third_party_evaluation", "label": "Independent Third-Party Impact Evaluation" },
+    { "code": "independent_audit", "label": "Statutory Audit Report (AuGF / NEITI)" }
+  ],
+  "indicator_frequencies": [
+    { "code": "monthly", "label": "Monthly Publication" },
+    { "code": "quarterly", "label": "Quarterly Publication" },
+    { "code": "annual", "label": "Annual Publication" },
+    { "code": "biennial", "label": "Biennial Publication" },
+    { "code": "ad_hoc", "label": "Ad-Hoc / Periodic Survey" }
+  ],
+  "duplicate_resolution_actions": [
+    { "code": "merge", "label": "Merge Duplicate into Primary Record" },
+    { "code": "keep_both_distinct", "label": "Keep Both Records as Distinct Entities" },
+    { "code": "mark_as_alias", "label": "Record as Alias of Primary Entity" },
+    { "code": "archive_duplicate", "label": "Archive Duplicate Entity" },
+    { "code": "quarantine_for_investigation", "label": "Quarantine for Editorial Adjudication" }
+  ],
+  "nominal_or_real": [
+    { "code": "nominal", "label": "Nominal Currency Value" },
+    { "code": "real", "label": "Inflation-Adjusted Real Value" }
+  ]
+}

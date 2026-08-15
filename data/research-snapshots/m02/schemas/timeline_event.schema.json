@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Timeline Event Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "event_id",
+    "record_id",
+    "event_title",
+    "event_type",
+    "event_date",
+    "date_precision",
+    "sector",
+    "lead_actor",
+    "summary"
+  ],
+  "properties": {
+    "event_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "event_title": { "type": "string", "minLength": 5 },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "announcement", "approval", "enactment", "effectiveness",
+        "funding_approval", "funding_release", "procurement", "commencement",
+        "partial_delivery", "completion", "operation", "outcome_report",
+        "independent_assessment", "correction"
+      ]
+    },
+    "event_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
+    "lead_actor": { "type": "string", "minLength": 2 },
+    "evidence_source_id": { "type": "string" },
+    "summary": { "type": "string", "minLength": 10 },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Claim-Source Relationship Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "claim_id",
+    "source_id",
+    "source_role",
+    "relationship_type",
+    "evidence_location",
+    "evidence_summary",
+    "review_status"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "source_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "source_role": {
+      "type": "string",
+      "enum": [
+        "primary", "official_statistical", "direct_implementation",
+        "independent_assessment", "corroborating", "supporting", "contextual",
+        "contradictory", "replacement", "archived", "discovery_lead"
+      ]
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": ["supports", "contradicts", "replaces", "contextualises", "discovery_only"]
+    },
+    "evidence_location": { "type": "string", "minLength": 2 },
+    "evidence_summary": { "type": "string", "minLength": 5 },
+    "evidence_limitation": { "type": "string" },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "source_confirmed", "cross_referenced", "independently_corroborated",
+        "under_review", "unverified", "disputed", "corrected", "withdrawn"
+      ]
+    },
+    "superseded_by_relationship_id": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

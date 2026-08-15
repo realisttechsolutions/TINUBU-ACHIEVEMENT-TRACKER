@@ -1,0 +1,61 @@
+# Browser-safe operations only. Every result is constrained to explicit public state.
+query ListPublishedRecords($limit: Int = 25, $offset: Int = 0)
+@auth(level: PUBLIC, insecureReason: "Published tracker records are intentionally public.") {
+  records(
+    where: { _and: [{ isPublic: { eq: true } }, { publicationStatus: { in: ["published", "corrected"] } }] }
+    orderBy: [{ publishedAt: DESC }, { id: ASC }]
+    limit: $limit
+    offset: $offset
+  ) {
+    id
+    slug
+    recordType
+    title
+    shortTitle
+    summary
+    implementationStatus
+    verificationStatus
+    evidenceProfile
+    qualification
+    publishedAt
+  }
+}
+
+query GetPublishedRecord($id: UUID!)
+@auth(level: PUBLIC, insecureReason: "A published record detail is intentionally public.") {
+  records(
+    where: { _and: [{ id: { eq: $id } }, { isPublic: { eq: true } }, { publicationStatus: { in: ["published", "corrected"] } }] }
+    limit: 1
+  ) {
+    id
+    slug
+    recordType
+    title
+    shortTitle
+    summary
+    body
+    implementationStatus
+    publicationStatus
+    verificationStatus
+    evidenceProfile
+    qualification
+    publishedAt
+  }
+}
+
+query SearchPublishedRecords($term: String!, $limit: Int = 25)
+@auth(level: PUBLIC, insecureReason: "Search is limited to public result fields; adapter enforces publication predicate.") {
+  records(
+    where: { _and: [{ isPublic: { eq: true } }, { publicationStatus: { in: ["published", "corrected"] } }, { title: { contains: $term } }] }
+    limit: $limit
+  ) {
+    id
+    slug
+    recordType
+    title
+    summary
+    implementationStatus
+    verificationStatus
+    publishedAt
+  }
+}

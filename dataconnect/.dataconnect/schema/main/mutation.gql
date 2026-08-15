@@ -1,0 +1,2986 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `AchievementProfile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  achievementProfile_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: AchievementProfile_Data!
+  ): AchievementProfile_KeyOutput! @fdc_generated(from: "AchievementProfile", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ActorProfile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  actorProfile_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ActorProfile_Data!
+  ): ActorProfile_KeyOutput! @fdc_generated(from: "ActorProfile", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ActorRole` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  actorRole_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ActorRole_Data!
+  ): ActorRole_KeyOutput! @fdc_generated(from: "ActorRole", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `BeneficiaryRecord` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  beneficiaryRecord_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: BeneficiaryRecord_Data!
+  ): BeneficiaryRecord_KeyOutput! @fdc_generated(from: "BeneficiaryRecord", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ClaimSourceRelationship` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  claimSourceRelationship_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ClaimSourceRelationship_Data!
+  ): ClaimSourceRelationship_KeyOutput! @fdc_generated(from: "ClaimSourceRelationship", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Correction` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  correction_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Correction_Data!
+  ): Correction_KeyOutput! @fdc_generated(from: "Correction", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `EvidenceClaim` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  evidenceClaim_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: EvidenceClaim_Data!
+  ): EvidenceClaim_KeyOutput! @fdc_generated(from: "EvidenceClaim", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `FinancialRecord` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  financialRecord_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FinancialRecord_Data!
+  ): FinancialRecord_KeyOutput! @fdc_generated(from: "FinancialRecord", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `GeographicUnit` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  geographicUnit_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: GeographicUnit_Data!
+  ): GeographicUnit_KeyOutput! @fdc_generated(from: "GeographicUnit", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Indicator` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  indicator_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Indicator_Data!
+  ): Indicator_KeyOutput! @fdc_generated(from: "Indicator", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `IndicatorObservation` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  indicatorObservation_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: IndicatorObservation_Data!
+  ): IndicatorObservation_KeyOutput! @fdc_generated(from: "IndicatorObservation", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Institution` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  institution_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Institution_Data!
+  ): Institution_KeyOutput! @fdc_generated(from: "Institution", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `PolicyDetail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  policyDetail_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: PolicyDetail_Data!
+  ): PolicyDetail_KeyOutput! @fdc_generated(from: "PolicyDetail", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ProgrammeDetail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  programmeDetail_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ProgrammeDetail_Data!
+  ): ProgrammeDetail_KeyOutput! @fdc_generated(from: "ProgrammeDetail", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ProjectDetail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  projectDetail_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ProjectDetail_Data!
+  ): ProjectDetail_KeyOutput! @fdc_generated(from: "ProjectDetail", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Record` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  record_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Record_Data!
+  ): Record_KeyOutput! @fdc_generated(from: "Record", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RecordGeography` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordGeography_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RecordGeography_Data!
+  ): RecordGeography_KeyOutput! @fdc_generated(from: "RecordGeography", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RecordInstitution` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordInstitution_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RecordInstitution_Data!
+  ): RecordInstitution_KeyOutput! @fdc_generated(from: "RecordInstitution", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RecordRelationship` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordRelationship_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RecordRelationship_Data!
+  ): RecordRelationship_KeyOutput! @fdc_generated(from: "RecordRelationship", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RecordSector` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordSector_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RecordSector_Data!
+  ): RecordSector_KeyOutput! @fdc_generated(from: "RecordSector", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RecordVersion` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordVersion_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RecordVersion_Data!
+  ): RecordVersion_KeyOutput! @fdc_generated(from: "RecordVersion", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ResearchBatch` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  researchBatch_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ResearchBatch_Data!
+  ): ResearchBatch_KeyOutput! @fdc_generated(from: "ResearchBatch", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ReviewDecision` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reviewDecision_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ReviewDecision_Data!
+  ): ReviewDecision_KeyOutput! @fdc_generated(from: "ReviewDecision", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Sector` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  sector_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Sector_Data!
+  ): Sector_KeyOutput! @fdc_generated(from: "Sector", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Source` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  source_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Source_Data!
+  ): Source_KeyOutput! @fdc_generated(from: "Source", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `SourceFile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  sourceFile_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: SourceFile_Data!
+  ): SourceFile_KeyOutput! @fdc_generated(from: "SourceFile", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `TimelineEvent` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  timelineEvent_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: TimelineEvent_Data!
+  ): TimelineEvent_KeyOutput! @fdc_generated(from: "TimelineEvent", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `AchievementProfile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  achievementProfile_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [AchievementProfile_Data!]!
+  ): [AchievementProfile_KeyOutput!]! @fdc_generated(from: "AchievementProfile", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ActorProfile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  actorProfile_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ActorProfile_Data!]!
+  ): [ActorProfile_KeyOutput!]! @fdc_generated(from: "ActorProfile", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ActorRole` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  actorRole_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ActorRole_Data!]!
+  ): [ActorRole_KeyOutput!]! @fdc_generated(from: "ActorRole", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `BeneficiaryRecord` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  beneficiaryRecord_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [BeneficiaryRecord_Data!]!
+  ): [BeneficiaryRecord_KeyOutput!]! @fdc_generated(from: "BeneficiaryRecord", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ClaimSourceRelationship` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  claimSourceRelationship_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ClaimSourceRelationship_Data!]!
+  ): [ClaimSourceRelationship_KeyOutput!]! @fdc_generated(from: "ClaimSourceRelationship", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Correction` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  correction_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Correction_Data!]!
+  ): [Correction_KeyOutput!]! @fdc_generated(from: "Correction", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `EvidenceClaim` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  evidenceClaim_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [EvidenceClaim_Data!]!
+  ): [EvidenceClaim_KeyOutput!]! @fdc_generated(from: "EvidenceClaim", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `FinancialRecord` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  financialRecord_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FinancialRecord_Data!]!
+  ): [FinancialRecord_KeyOutput!]! @fdc_generated(from: "FinancialRecord", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `GeographicUnit` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  geographicUnit_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [GeographicUnit_Data!]!
+  ): [GeographicUnit_KeyOutput!]! @fdc_generated(from: "GeographicUnit", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Indicator` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  indicator_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Indicator_Data!]!
+  ): [Indicator_KeyOutput!]! @fdc_generated(from: "Indicator", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `IndicatorObservation` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  indicatorObservation_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [IndicatorObservation_Data!]!
+  ): [IndicatorObservation_KeyOutput!]! @fdc_generated(from: "IndicatorObservation", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Institution` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  institution_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Institution_Data!]!
+  ): [Institution_KeyOutput!]! @fdc_generated(from: "Institution", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `PolicyDetail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  policyDetail_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [PolicyDetail_Data!]!
+  ): [PolicyDetail_KeyOutput!]! @fdc_generated(from: "PolicyDetail", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ProgrammeDetail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  programmeDetail_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ProgrammeDetail_Data!]!
+  ): [ProgrammeDetail_KeyOutput!]! @fdc_generated(from: "ProgrammeDetail", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ProjectDetail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  projectDetail_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ProjectDetail_Data!]!
+  ): [ProjectDetail_KeyOutput!]! @fdc_generated(from: "ProjectDetail", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Record` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  record_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Record_Data!]!
+  ): [Record_KeyOutput!]! @fdc_generated(from: "Record", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RecordGeography` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordGeography_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RecordGeography_Data!]!
+  ): [RecordGeography_KeyOutput!]! @fdc_generated(from: "RecordGeography", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RecordInstitution` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordInstitution_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RecordInstitution_Data!]!
+  ): [RecordInstitution_KeyOutput!]! @fdc_generated(from: "RecordInstitution", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RecordRelationship` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordRelationship_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RecordRelationship_Data!]!
+  ): [RecordRelationship_KeyOutput!]! @fdc_generated(from: "RecordRelationship", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RecordSector` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordSector_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RecordSector_Data!]!
+  ): [RecordSector_KeyOutput!]! @fdc_generated(from: "RecordSector", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RecordVersion` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  recordVersion_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RecordVersion_Data!]!
+  ): [RecordVersion_KeyOutput!]! @fdc_generated(from: "RecordVersion", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ResearchBatch` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  researchBatch_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ResearchBatch_Data!]!
+  ): [ResearchBatch_KeyOutput!]! @fdc_generated(from: "ResearchBatch", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ReviewDecision` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reviewDecision_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ReviewDecision_Data!]!
+  ): [ReviewDecision_KeyOutput!]! @fdc_generated(from: "ReviewDecision", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Sector` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  sector_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Sector_Data!]!
+  ): [Sector_KeyOutput!]! @fdc_generated(from: "Sector", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Source` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  source_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Source_Data!]!
+  ): [Source_KeyOutput!]! @fdc_generated(from: "Source", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `SourceFile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  sourceFile_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [SourceFile_Data!]!
+  ): [SourceFile_KeyOutput!]! @fdc_generated(from: "SourceFile", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `TimelineEvent` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  timelineEvent_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [TimelineEvent_Data!]!
+  ): [TimelineEvent_KeyOutput!]! @fdc_generated(from: "TimelineEvent", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `AchievementProfile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AchievementProfile`.
+  """
+  achievementProfile_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: AchievementProfile_Data!
+  ): AchievementProfile_KeyOutput! @fdc_generated(from: "AchievementProfile", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ActorProfile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ActorProfile`.
+  """
+  actorProfile_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ActorProfile_Data!
+  ): ActorProfile_KeyOutput! @fdc_generated(from: "ActorProfile", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ActorRole` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ActorRole`.
+  """
+  actorRole_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ActorRole_Data!
+  ): ActorRole_KeyOutput! @fdc_generated(from: "ActorRole", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `BeneficiaryRecord` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BeneficiaryRecord`.
+  """
+  beneficiaryRecord_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: BeneficiaryRecord_Data!
+  ): BeneficiaryRecord_KeyOutput! @fdc_generated(from: "BeneficiaryRecord", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ClaimSourceRelationship` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ClaimSourceRelationship`.
+  """
+  claimSourceRelationship_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ClaimSourceRelationship_Data!
+  ): ClaimSourceRelationship_KeyOutput! @fdc_generated(from: "ClaimSourceRelationship", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Correction` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Correction`.
+  """
+  correction_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Correction_Data!
+  ): Correction_KeyOutput! @fdc_generated(from: "Correction", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `EvidenceClaim` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EvidenceClaim`.
+  """
+  evidenceClaim_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: EvidenceClaim_Data!
+  ): EvidenceClaim_KeyOutput! @fdc_generated(from: "EvidenceClaim", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `FinancialRecord` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FinancialRecord`.
+  """
+  financialRecord_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FinancialRecord_Data!
+  ): FinancialRecord_KeyOutput! @fdc_generated(from: "FinancialRecord", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `GeographicUnit` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `GeographicUnit`.
+  """
+  geographicUnit_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: GeographicUnit_Data!
+  ): GeographicUnit_KeyOutput! @fdc_generated(from: "GeographicUnit", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Indicator` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Indicator`.
+  """
+  indicator_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Indicator_Data!
+  ): Indicator_KeyOutput! @fdc_generated(from: "Indicator", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `IndicatorObservation` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IndicatorObservation`.
+  """
+  indicatorObservation_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: IndicatorObservation_Data!
+  ): IndicatorObservation_KeyOutput! @fdc_generated(from: "IndicatorObservation", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Institution` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Institution`.
+  """
+  institution_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Institution_Data!
+  ): Institution_KeyOutput! @fdc_generated(from: "Institution", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `PolicyDetail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PolicyDetail`.
+  """
+  policyDetail_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: PolicyDetail_Data!
+  ): PolicyDetail_KeyOutput! @fdc_generated(from: "PolicyDetail", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ProgrammeDetail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgrammeDetail`.
+  """
+  programmeDetail_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ProgrammeDetail_Data!
+  ): ProgrammeDetail_KeyOutput! @fdc_generated(from: "ProgrammeDetail", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ProjectDetail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProjectDetail`.
+  """
+  projectDetail_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ProjectDetail_Data!
+  ): ProjectDetail_KeyOutput! @fdc_generated(from: "ProjectDetail", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Record` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Record`.
+  """
+  record_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Record_Data!
+  ): Record_KeyOutput! @fdc_generated(from: "Record", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RecordGeography` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordGeography`.
+  """
+  recordGeography_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RecordGeography_Data!
+  ): RecordGeography_KeyOutput! @fdc_generated(from: "RecordGeography", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RecordInstitution` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordInstitution`.
+  """
+  recordInstitution_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RecordInstitution_Data!
+  ): RecordInstitution_KeyOutput! @fdc_generated(from: "RecordInstitution", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RecordRelationship` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordRelationship`.
+  """
+  recordRelationship_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RecordRelationship_Data!
+  ): RecordRelationship_KeyOutput! @fdc_generated(from: "RecordRelationship", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RecordSector` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordSector`.
+  """
+  recordSector_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RecordSector_Data!
+  ): RecordSector_KeyOutput! @fdc_generated(from: "RecordSector", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RecordVersion` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordVersion`.
+  """
+  recordVersion_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RecordVersion_Data!
+  ): RecordVersion_KeyOutput! @fdc_generated(from: "RecordVersion", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ResearchBatch` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ResearchBatch`.
+  """
+  researchBatch_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ResearchBatch_Data!
+  ): ResearchBatch_KeyOutput! @fdc_generated(from: "ResearchBatch", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ReviewDecision` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ReviewDecision`.
+  """
+  reviewDecision_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ReviewDecision_Data!
+  ): ReviewDecision_KeyOutput! @fdc_generated(from: "ReviewDecision", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Sector` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Sector`.
+  """
+  sector_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Sector_Data!
+  ): Sector_KeyOutput! @fdc_generated(from: "Sector", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Source` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Source`.
+  """
+  source_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Source_Data!
+  ): Source_KeyOutput! @fdc_generated(from: "Source", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `SourceFile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `SourceFile`.
+  """
+  sourceFile_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: SourceFile_Data!
+  ): SourceFile_KeyOutput! @fdc_generated(from: "SourceFile", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `TimelineEvent` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TimelineEvent`.
+  """
+  timelineEvent_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: TimelineEvent_Data!
+  ): TimelineEvent_KeyOutput! @fdc_generated(from: "TimelineEvent", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `AchievementProfile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AchievementProfile`.
+  """
+  achievementProfile_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [AchievementProfile_Data!]!
+  ): [AchievementProfile_KeyOutput!]! @fdc_generated(from: "AchievementProfile", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ActorProfile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ActorProfile`.
+  """
+  actorProfile_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ActorProfile_Data!]!
+  ): [ActorProfile_KeyOutput!]! @fdc_generated(from: "ActorProfile", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ActorRole` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ActorRole`.
+  """
+  actorRole_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ActorRole_Data!]!
+  ): [ActorRole_KeyOutput!]! @fdc_generated(from: "ActorRole", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `BeneficiaryRecord` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BeneficiaryRecord`.
+  """
+  beneficiaryRecord_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [BeneficiaryRecord_Data!]!
+  ): [BeneficiaryRecord_KeyOutput!]! @fdc_generated(from: "BeneficiaryRecord", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ClaimSourceRelationship` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ClaimSourceRelationship`.
+  """
+  claimSourceRelationship_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ClaimSourceRelationship_Data!]!
+  ): [ClaimSourceRelationship_KeyOutput!]! @fdc_generated(from: "ClaimSourceRelationship", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Correction` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Correction`.
+  """
+  correction_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Correction_Data!]!
+  ): [Correction_KeyOutput!]! @fdc_generated(from: "Correction", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `EvidenceClaim` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EvidenceClaim`.
+  """
+  evidenceClaim_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [EvidenceClaim_Data!]!
+  ): [EvidenceClaim_KeyOutput!]! @fdc_generated(from: "EvidenceClaim", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `FinancialRecord` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FinancialRecord`.
+  """
+  financialRecord_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FinancialRecord_Data!]!
+  ): [FinancialRecord_KeyOutput!]! @fdc_generated(from: "FinancialRecord", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `GeographicUnit` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `GeographicUnit`.
+  """
+  geographicUnit_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [GeographicUnit_Data!]!
+  ): [GeographicUnit_KeyOutput!]! @fdc_generated(from: "GeographicUnit", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Indicator` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Indicator`.
+  """
+  indicator_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Indicator_Data!]!
+  ): [Indicator_KeyOutput!]! @fdc_generated(from: "Indicator", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `IndicatorObservation` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IndicatorObservation`.
+  """
+  indicatorObservation_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [IndicatorObservation_Data!]!
+  ): [IndicatorObservation_KeyOutput!]! @fdc_generated(from: "IndicatorObservation", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Institution` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Institution`.
+  """
+  institution_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Institution_Data!]!
+  ): [Institution_KeyOutput!]! @fdc_generated(from: "Institution", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `PolicyDetail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PolicyDetail`.
+  """
+  policyDetail_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [PolicyDetail_Data!]!
+  ): [PolicyDetail_KeyOutput!]! @fdc_generated(from: "PolicyDetail", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ProgrammeDetail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgrammeDetail`.
+  """
+  programmeDetail_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ProgrammeDetail_Data!]!
+  ): [ProgrammeDetail_KeyOutput!]! @fdc_generated(from: "ProgrammeDetail", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ProjectDetail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProjectDetail`.
+  """
+  projectDetail_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ProjectDetail_Data!]!
+  ): [ProjectDetail_KeyOutput!]! @fdc_generated(from: "ProjectDetail", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Record` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Record`.
+  """
+  record_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Record_Data!]!
+  ): [Record_KeyOutput!]! @fdc_generated(from: "Record", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RecordGeography` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordGeography`.
+  """
+  recordGeography_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RecordGeography_Data!]!
+  ): [RecordGeography_KeyOutput!]! @fdc_generated(from: "RecordGeography", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RecordInstitution` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordInstitution`.
+  """
+  recordInstitution_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RecordInstitution_Data!]!
+  ): [RecordInstitution_KeyOutput!]! @fdc_generated(from: "RecordInstitution", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RecordRelationship` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordRelationship`.
+  """
+  recordRelationship_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RecordRelationship_Data!]!
+  ): [RecordRelationship_KeyOutput!]! @fdc_generated(from: "RecordRelationship", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RecordSector` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordSector`.
+  """
+  recordSector_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RecordSector_Data!]!
+  ): [RecordSector_KeyOutput!]! @fdc_generated(from: "RecordSector", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RecordVersion` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RecordVersion`.
+  """
+  recordVersion_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RecordVersion_Data!]!
+  ): [RecordVersion_KeyOutput!]! @fdc_generated(from: "RecordVersion", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ResearchBatch` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ResearchBatch`.
+  """
+  researchBatch_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ResearchBatch_Data!]!
+  ): [ResearchBatch_KeyOutput!]! @fdc_generated(from: "ResearchBatch", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ReviewDecision` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ReviewDecision`.
+  """
+  reviewDecision_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ReviewDecision_Data!]!
+  ): [ReviewDecision_KeyOutput!]! @fdc_generated(from: "ReviewDecision", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Sector` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Sector`.
+  """
+  sector_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Sector_Data!]!
+  ): [Sector_KeyOutput!]! @fdc_generated(from: "Sector", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Source` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Source`.
+  """
+  source_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Source_Data!]!
+  ): [Source_KeyOutput!]! @fdc_generated(from: "Source", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `SourceFile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `SourceFile`.
+  """
+  sourceFile_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [SourceFile_Data!]!
+  ): [SourceFile_KeyOutput!]! @fdc_generated(from: "SourceFile", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `TimelineEvent` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TimelineEvent`.
+  """
+  timelineEvent_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [TimelineEvent_Data!]!
+  ): [TimelineEvent_KeyOutput!]! @fdc_generated(from: "TimelineEvent", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `AchievementProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `AchievementProfile` or `null` if not found.
+  """
+  achievementProfile_update(
+    """
+    The key used to identify the object.
+    """
+    key: AchievementProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AchievementProfile_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: AchievementProfile_Data!
+  ): AchievementProfile_KeyOutput @fdc_generated(from: "AchievementProfile", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ActorProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ActorProfile` or `null` if not found.
+  """
+  actorProfile_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorProfile_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ActorProfile_Data!
+  ): ActorProfile_KeyOutput @fdc_generated(from: "ActorProfile", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ActorRole` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ActorRole` or `null` if not found.
+  """
+  actorRole_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorRole_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorRole_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ActorRole_Data!
+  ): ActorRole_KeyOutput @fdc_generated(from: "ActorRole", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `BeneficiaryRecord` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `BeneficiaryRecord` or `null` if not found.
+  """
+  beneficiaryRecord_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: BeneficiaryRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: BeneficiaryRecord_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: BeneficiaryRecord_Data!
+  ): BeneficiaryRecord_KeyOutput @fdc_generated(from: "BeneficiaryRecord", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ClaimSourceRelationship` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ClaimSourceRelationship` or `null` if not found.
+  """
+  claimSourceRelationship_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ClaimSourceRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ClaimSourceRelationship_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ClaimSourceRelationship_Data!
+  ): ClaimSourceRelationship_KeyOutput @fdc_generated(from: "ClaimSourceRelationship", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Correction` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Correction` or `null` if not found.
+  """
+  correction_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Correction_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Correction_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Correction_Data!
+  ): Correction_KeyOutput @fdc_generated(from: "Correction", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `EvidenceClaim` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `EvidenceClaim` or `null` if not found.
+  """
+  evidenceClaim_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: EvidenceClaim_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EvidenceClaim_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: EvidenceClaim_Data!
+  ): EvidenceClaim_KeyOutput @fdc_generated(from: "EvidenceClaim", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `FinancialRecord` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FinancialRecord` or `null` if not found.
+  """
+  financialRecord_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FinancialRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FinancialRecord_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FinancialRecord_Data!
+  ): FinancialRecord_KeyOutput @fdc_generated(from: "FinancialRecord", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `GeographicUnit` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `GeographicUnit` or `null` if not found.
+  """
+  geographicUnit_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: GeographicUnit_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GeographicUnit_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: GeographicUnit_Data!
+  ): GeographicUnit_KeyOutput @fdc_generated(from: "GeographicUnit", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Indicator` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Indicator` or `null` if not found.
+  """
+  indicator_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Indicator_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Indicator_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Indicator_Data!
+  ): Indicator_KeyOutput @fdc_generated(from: "Indicator", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `IndicatorObservation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `IndicatorObservation` or `null` if not found.
+  """
+  indicatorObservation_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: IndicatorObservation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IndicatorObservation_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: IndicatorObservation_Data!
+  ): IndicatorObservation_KeyOutput @fdc_generated(from: "IndicatorObservation", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Institution` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Institution` or `null` if not found.
+  """
+  institution_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Institution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Institution_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Institution_Data!
+  ): Institution_KeyOutput @fdc_generated(from: "Institution", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `PolicyDetail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `PolicyDetail` or `null` if not found.
+  """
+  policyDetail_update(
+    """
+    The key used to identify the object.
+    """
+    key: PolicyDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PolicyDetail_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: PolicyDetail_Data!
+  ): PolicyDetail_KeyOutput @fdc_generated(from: "PolicyDetail", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ProgrammeDetail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProgrammeDetail` or `null` if not found.
+  """
+  programmeDetail_update(
+    """
+    The key used to identify the object.
+    """
+    key: ProgrammeDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProgrammeDetail_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ProgrammeDetail_Data!
+  ): ProgrammeDetail_KeyOutput @fdc_generated(from: "ProgrammeDetail", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ProjectDetail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProjectDetail` or `null` if not found.
+  """
+  projectDetail_update(
+    """
+    The key used to identify the object.
+    """
+    key: ProjectDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProjectDetail_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ProjectDetail_Data!
+  ): ProjectDetail_KeyOutput @fdc_generated(from: "ProjectDetail", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Record` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Record` or `null` if not found.
+  """
+  record_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Record_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Record_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Record_Data!
+  ): Record_KeyOutput @fdc_generated(from: "Record", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RecordGeography` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordGeography` or `null` if not found.
+  """
+  recordGeography_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordGeography_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordGeography_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RecordGeography_Data!
+  ): RecordGeography_KeyOutput @fdc_generated(from: "RecordGeography", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RecordInstitution` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordInstitution` or `null` if not found.
+  """
+  recordInstitution_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordInstitution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordInstitution_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RecordInstitution_Data!
+  ): RecordInstitution_KeyOutput @fdc_generated(from: "RecordInstitution", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RecordRelationship` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordRelationship` or `null` if not found.
+  """
+  recordRelationship_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordRelationship_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RecordRelationship_Data!
+  ): RecordRelationship_KeyOutput @fdc_generated(from: "RecordRelationship", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RecordSector` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordSector` or `null` if not found.
+  """
+  recordSector_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordSector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordSector_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RecordSector_Data!
+  ): RecordSector_KeyOutput @fdc_generated(from: "RecordSector", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RecordVersion` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordVersion` or `null` if not found.
+  """
+  recordVersion_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordVersion_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordVersion_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RecordVersion_Data!
+  ): RecordVersion_KeyOutput @fdc_generated(from: "RecordVersion", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ResearchBatch` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ResearchBatch` or `null` if not found.
+  """
+  researchBatch_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ResearchBatch_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ResearchBatch_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ResearchBatch_Data!
+  ): ResearchBatch_KeyOutput @fdc_generated(from: "ResearchBatch", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ReviewDecision` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ReviewDecision` or `null` if not found.
+  """
+  reviewDecision_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReviewDecision_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReviewDecision_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ReviewDecision_Data!
+  ): ReviewDecision_KeyOutput @fdc_generated(from: "ReviewDecision", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Sector` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Sector` or `null` if not found.
+  """
+  sector_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Sector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Sector_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Sector_Data!
+  ): Sector_KeyOutput @fdc_generated(from: "Sector", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Source` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Source` or `null` if not found.
+  """
+  source_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Source_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Source_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Source_Data!
+  ): Source_KeyOutput @fdc_generated(from: "Source", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `SourceFile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `SourceFile` or `null` if not found.
+  """
+  sourceFile_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: SourceFile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SourceFile_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: SourceFile_Data!
+  ): SourceFile_KeyOutput @fdc_generated(from: "SourceFile", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `TimelineEvent` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `TimelineEvent` or `null` if not found.
+  """
+  timelineEvent_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: TimelineEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TimelineEvent_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: TimelineEvent_Data!
+  ): TimelineEvent_KeyOutput @fdc_generated(from: "TimelineEvent", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `AchievementProfile` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  achievementProfile_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: AchievementProfile_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: AchievementProfile_Data!
+  ): Int! @fdc_generated(from: "AchievementProfile", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ActorProfile` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  actorProfile_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ActorProfile_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ActorProfile_Data!
+  ): Int! @fdc_generated(from: "ActorProfile", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ActorRole` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  actorRole_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ActorRole_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ActorRole_Data!
+  ): Int! @fdc_generated(from: "ActorRole", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `BeneficiaryRecord` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  beneficiaryRecord_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: BeneficiaryRecord_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: BeneficiaryRecord_Data!
+  ): Int! @fdc_generated(from: "BeneficiaryRecord", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ClaimSourceRelationship` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  claimSourceRelationship_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ClaimSourceRelationship_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ClaimSourceRelationship_Data!
+  ): Int! @fdc_generated(from: "ClaimSourceRelationship", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Correction` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  correction_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Correction_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Correction_Data!
+  ): Int! @fdc_generated(from: "Correction", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `EvidenceClaim` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  evidenceClaim_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: EvidenceClaim_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: EvidenceClaim_Data!
+  ): Int! @fdc_generated(from: "EvidenceClaim", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `FinancialRecord` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  financialRecord_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FinancialRecord_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FinancialRecord_Data!
+  ): Int! @fdc_generated(from: "FinancialRecord", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `GeographicUnit` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  geographicUnit_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: GeographicUnit_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: GeographicUnit_Data!
+  ): Int! @fdc_generated(from: "GeographicUnit", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Indicator` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  indicator_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Indicator_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Indicator_Data!
+  ): Int! @fdc_generated(from: "Indicator", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `IndicatorObservation` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  indicatorObservation_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: IndicatorObservation_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: IndicatorObservation_Data!
+  ): Int! @fdc_generated(from: "IndicatorObservation", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Institution` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  institution_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Institution_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Institution_Data!
+  ): Int! @fdc_generated(from: "Institution", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `PolicyDetail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  policyDetail_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: PolicyDetail_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: PolicyDetail_Data!
+  ): Int! @fdc_generated(from: "PolicyDetail", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ProgrammeDetail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  programmeDetail_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ProgrammeDetail_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ProgrammeDetail_Data!
+  ): Int! @fdc_generated(from: "ProgrammeDetail", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ProjectDetail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  projectDetail_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ProjectDetail_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ProjectDetail_Data!
+  ): Int! @fdc_generated(from: "ProjectDetail", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Record` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  record_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Record_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Record_Data!
+  ): Int! @fdc_generated(from: "Record", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RecordGeography` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  recordGeography_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RecordGeography_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RecordGeography_Data!
+  ): Int! @fdc_generated(from: "RecordGeography", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RecordInstitution` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  recordInstitution_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RecordInstitution_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RecordInstitution_Data!
+  ): Int! @fdc_generated(from: "RecordInstitution", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RecordRelationship` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  recordRelationship_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RecordRelationship_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RecordRelationship_Data!
+  ): Int! @fdc_generated(from: "RecordRelationship", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RecordSector` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  recordSector_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RecordSector_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RecordSector_Data!
+  ): Int! @fdc_generated(from: "RecordSector", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RecordVersion` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  recordVersion_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RecordVersion_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RecordVersion_Data!
+  ): Int! @fdc_generated(from: "RecordVersion", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ResearchBatch` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  researchBatch_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ResearchBatch_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ResearchBatch_Data!
+  ): Int! @fdc_generated(from: "ResearchBatch", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ReviewDecision` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  reviewDecision_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ReviewDecision_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ReviewDecision_Data!
+  ): Int! @fdc_generated(from: "ReviewDecision", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Sector` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  sector_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Sector_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Sector_Data!
+  ): Int! @fdc_generated(from: "Sector", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Source` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  source_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Source_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Source_Data!
+  ): Int! @fdc_generated(from: "Source", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `SourceFile` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  sourceFile_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: SourceFile_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: SourceFile_Data!
+  ): Int! @fdc_generated(from: "SourceFile", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `TimelineEvent` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  timelineEvent_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: TimelineEvent_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: TimelineEvent_Data!
+  ): Int! @fdc_generated(from: "TimelineEvent", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `AchievementProfile` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  achievementProfile_delete(
+    """
+    The key used to identify the object.
+    """
+    key: AchievementProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AchievementProfile_FirstRow
+  ): AchievementProfile_KeyOutput @fdc_generated(from: "AchievementProfile", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ActorProfile` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  actorProfile_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorProfile_FirstRow
+  ): ActorProfile_KeyOutput @fdc_generated(from: "ActorProfile", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ActorRole` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  actorRole_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorRole_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorRole_FirstRow
+  ): ActorRole_KeyOutput @fdc_generated(from: "ActorRole", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `BeneficiaryRecord` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  beneficiaryRecord_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: BeneficiaryRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: BeneficiaryRecord_FirstRow
+  ): BeneficiaryRecord_KeyOutput @fdc_generated(from: "BeneficiaryRecord", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ClaimSourceRelationship` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  claimSourceRelationship_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ClaimSourceRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ClaimSourceRelationship_FirstRow
+  ): ClaimSourceRelationship_KeyOutput @fdc_generated(from: "ClaimSourceRelationship", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Correction` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  correction_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Correction_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Correction_FirstRow
+  ): Correction_KeyOutput @fdc_generated(from: "Correction", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `EvidenceClaim` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  evidenceClaim_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: EvidenceClaim_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EvidenceClaim_FirstRow
+  ): EvidenceClaim_KeyOutput @fdc_generated(from: "EvidenceClaim", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `FinancialRecord` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  financialRecord_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FinancialRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FinancialRecord_FirstRow
+  ): FinancialRecord_KeyOutput @fdc_generated(from: "FinancialRecord", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `GeographicUnit` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  geographicUnit_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: GeographicUnit_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GeographicUnit_FirstRow
+  ): GeographicUnit_KeyOutput @fdc_generated(from: "GeographicUnit", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Indicator` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  indicator_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Indicator_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Indicator_FirstRow
+  ): Indicator_KeyOutput @fdc_generated(from: "Indicator", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `IndicatorObservation` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  indicatorObservation_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: IndicatorObservation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IndicatorObservation_FirstRow
+  ): IndicatorObservation_KeyOutput @fdc_generated(from: "IndicatorObservation", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Institution` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  institution_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Institution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Institution_FirstRow
+  ): Institution_KeyOutput @fdc_generated(from: "Institution", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `PolicyDetail` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  policyDetail_delete(
+    """
+    The key used to identify the object.
+    """
+    key: PolicyDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PolicyDetail_FirstRow
+  ): PolicyDetail_KeyOutput @fdc_generated(from: "PolicyDetail", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ProgrammeDetail` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  programmeDetail_delete(
+    """
+    The key used to identify the object.
+    """
+    key: ProgrammeDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProgrammeDetail_FirstRow
+  ): ProgrammeDetail_KeyOutput @fdc_generated(from: "ProgrammeDetail", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ProjectDetail` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  projectDetail_delete(
+    """
+    The key used to identify the object.
+    """
+    key: ProjectDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProjectDetail_FirstRow
+  ): ProjectDetail_KeyOutput @fdc_generated(from: "ProjectDetail", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Record` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  record_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Record_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Record_FirstRow
+  ): Record_KeyOutput @fdc_generated(from: "Record", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RecordGeography` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  recordGeography_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordGeography_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordGeography_FirstRow
+  ): RecordGeography_KeyOutput @fdc_generated(from: "RecordGeography", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RecordInstitution` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  recordInstitution_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordInstitution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordInstitution_FirstRow
+  ): RecordInstitution_KeyOutput @fdc_generated(from: "RecordInstitution", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RecordRelationship` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  recordRelationship_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordRelationship_FirstRow
+  ): RecordRelationship_KeyOutput @fdc_generated(from: "RecordRelationship", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RecordSector` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  recordSector_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordSector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordSector_FirstRow
+  ): RecordSector_KeyOutput @fdc_generated(from: "RecordSector", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RecordVersion` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  recordVersion_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordVersion_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordVersion_FirstRow
+  ): RecordVersion_KeyOutput @fdc_generated(from: "RecordVersion", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ResearchBatch` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  researchBatch_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ResearchBatch_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ResearchBatch_FirstRow
+  ): ResearchBatch_KeyOutput @fdc_generated(from: "ResearchBatch", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ReviewDecision` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  reviewDecision_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReviewDecision_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReviewDecision_FirstRow
+  ): ReviewDecision_KeyOutput @fdc_generated(from: "ReviewDecision", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Sector` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  sector_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Sector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Sector_FirstRow
+  ): Sector_KeyOutput @fdc_generated(from: "Sector", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Source` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  source_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Source_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Source_FirstRow
+  ): Source_KeyOutput @fdc_generated(from: "Source", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `SourceFile` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  sourceFile_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: SourceFile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SourceFile_FirstRow
+  ): SourceFile_KeyOutput @fdc_generated(from: "SourceFile", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `TimelineEvent` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  timelineEvent_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: TimelineEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TimelineEvent_FirstRow
+  ): TimelineEvent_KeyOutput @fdc_generated(from: "TimelineEvent", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `AchievementProfile` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  achievementProfile_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: AchievementProfile_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "AchievementProfile", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ActorProfile` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  actorProfile_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ActorProfile_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ActorProfile", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ActorRole` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  actorRole_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ActorRole_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ActorRole", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `BeneficiaryRecord` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  beneficiaryRecord_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: BeneficiaryRecord_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "BeneficiaryRecord", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ClaimSourceRelationship` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  claimSourceRelationship_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ClaimSourceRelationship_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ClaimSourceRelationship", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Correction` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  correction_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Correction_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Correction", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `EvidenceClaim` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  evidenceClaim_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: EvidenceClaim_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `FinancialRecord` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  financialRecord_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FinancialRecord_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FinancialRecord", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `GeographicUnit` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  geographicUnit_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: GeographicUnit_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Indicator` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  indicator_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Indicator_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Indicator", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `IndicatorObservation` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  indicatorObservation_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: IndicatorObservation_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "IndicatorObservation", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Institution` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  institution_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Institution_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Institution", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `PolicyDetail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  policyDetail_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: PolicyDetail_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "PolicyDetail", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ProgrammeDetail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  programmeDetail_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ProgrammeDetail_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ProgrammeDetail", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ProjectDetail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  projectDetail_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ProjectDetail_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ProjectDetail", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Record` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  record_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Record_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Record", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RecordGeography` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  recordGeography_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RecordGeography_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RecordGeography", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RecordInstitution` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  recordInstitution_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RecordInstitution_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RecordInstitution", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RecordRelationship` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  recordRelationship_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RecordRelationship_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RecordRelationship", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RecordSector` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  recordSector_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RecordSector_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RecordSector", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RecordVersion` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  recordVersion_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RecordVersion_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RecordVersion", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ResearchBatch` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  researchBatch_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ResearchBatch_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ReviewDecision` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  reviewDecision_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ReviewDecision_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ReviewDecision", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Sector` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  sector_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Sector_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Sector", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Source` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  source_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Source_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Source", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `SourceFile` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  sourceFile_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: SourceFile_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `TimelineEvent` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  timelineEvent_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: TimelineEvent_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "TimelineEvent", purpose: DELETE_MULTIPLE)
+}

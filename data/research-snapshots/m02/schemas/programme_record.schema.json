@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Programme Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "programme_id",
+    "programme_title",
+    "programme_type",
+    "coordinating_agency",
+    "sector",
+    "status",
+    "launch_date",
+    "date_precision",
+    "target_beneficiary_type"
+  ],
+  "properties": {
+    "programme_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "programme_title": { "type": "string", "minLength": 5 },
+    "programme_type": {
+      "type": "string",
+      "enum": [
+        "social_investment", "financial_credit", "youth_employment",
+        "agricultural_intervention", "industrial_acceleration", "health_intervention",
+        "energy_access", "digital_transformation"
+      ]
+    },
+    "coordinating_agency": { "type": "string", "minLength": 2 },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
+    "subsector": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
+      ]
+    },
+    "launch_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "target_beneficiary_type": {
+      "type": "string",
+      "enum": ["individuals", "households", "farmers", "students", "msmes", "enterprises", "communities"]
+    },
+    "states_covered": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

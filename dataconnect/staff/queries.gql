@@ -1,0 +1,31 @@
+# E01 intentionally disables every internal connector operation until production
+# Firebase Authentication and server-side role enforcement are configured.
+query GetInternalReviewQueue($limit: Int = 25) @auth(level: NO_ACCESS) {
+  records(orderBy: [{ updatedAt: DESC }], limit: $limit) {
+    id
+    externalId
+    title
+    workflowStatus
+    publicationStatus
+    verificationStatus
+    riskLevel
+    internalNotes
+    currentRevision
+    updatedAt
+  }
+}
+
+query GetResearchBatch($id: UUID!) @auth(level: NO_ACCESS) {
+  researchBatch(id: $id) {
+    id
+    externalId
+    idempotencyKey
+    packageChecksum
+    contractVersion
+    mode
+    status
+    planHash
+    startedAt
+    completedAt
+  }
+}

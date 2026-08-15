@@ -1,9 +1,12 @@
 # Tinubu Achievement Tracker V2 (2026 Edition)
 ## Nigeria's Official Evidence-Backed Public Progress Platform
 
-[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.24-black?logo=next.js)](https://nextjs.org/)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15.5.21-black?logo=next.js)](https://nextjs.org/)
+[![React 18](https://img.shields.io/badge/React-18.3.1-blue?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Google Cloud](https://img.shields.io/badge/Google_Cloud-Firebase_App_Hosting-amber?logo=google-cloud)](https://firebase.google.com/docs/app-hosting)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791?logo=postgresql)](https://www.postgresql.org/)
+[![Firebase SQL Connect](https://img.shields.io/badge/Firebase-SQL_Connect-amber?logo=firebase)](https://firebase.google.com/docs/data-connect)
+[![Google Cloud](https://img.shields.io/badge/Google_Cloud-App_Hosting-amber?logo=google-cloud)](https://firebase.google.com/docs/app-hosting)
 [![License](https://img.shields.io/badge/License-Proprietary-green)]()
 
 The **Tinubu Achievement Tracker (TAT)** is Nigeria's authoritative, evidence-backed public progress platform tracking federal policy reforms, capital infrastructure projects, macroeconomic indicators, and institutional milestones for the administration of President Bola Ahmed Tinubu (2023–2026).
@@ -12,12 +15,14 @@ The **Tinubu Achievement Tracker (TAT)** is Nigeria's authoritative, evidence-ba
 
 ## 🏛️ Architecture Highlights
 
-- **Framework:** Next.js 15.5.21 (App Router) with full SSR / SSG / dynamic rendering
+- **Framework:** Next.js `15.5.21` (App Router) + React `18.3.1` (Frozen under ADR-003)
+- **Database Layer:** Google Cloud SQL for PostgreSQL 17 + Firebase Data Connect (SQL Connect)
+- **Local Database Engine:** `@electric-sql/pglite` executing in-process PostgreSQL 17 for development and automated testing
+- **Ingestion Pipeline:** Cryptographically verified, schema-validated, idempotent ingestion pipeline (`backend/ingestion/`)
 - **Styling & Design System:** Tailwind CSS + Radix UI primitives with Glassmorphism, accessible dark/light modes, and national sovereign color palettes
-- **Data Facade:** Universal Data Adapter (`src/adapters/dataAdapter.ts`) strictly conforming to Research Contract v1.1.2
-- **Deployment:** Google Cloud Run containerized SSR via **Firebase App Hosting** (`apphosting.yaml`)
+- **Repository Facade:** Clean repository abstraction layer (`src/data/repositories/`) querying certified relational SQL Connect views
 - **Evidentiary Standard:** 4-tier verification hierarchy linked to Federal Official Gazettes, Acts of the National Assembly, and NBS / CBN statutory data
-- **Internationalization:** Multi-lingual support (English, Hausa, Yoruba, Igbo)
+- **Deployment:** Google Cloud Run containerized SSR via **Firebase App Hosting** (`apphosting.yaml`)
 
 ---
 
@@ -29,8 +34,6 @@ The **Tinubu Achievement Tracker (TAT)** is Nigeria's authoritative, evidence-ba
 
 ### 2. Installation
 ```bash
-git clone https://github.com/realisttechsolutions/TINUBU-ACHIEVEMENT-TRACKER.git
-cd "TINUBU ACHIEVEMENTS TRACKER"
 npm install
 ```
 
@@ -39,63 +42,44 @@ npm install
 cp .env.example .env.local
 ```
 
-### 4. Development Server
+### 4. Database & Ingestion CLI
 ```bash
-npm run dev
+# Verify research snapshot integrity (SHA-256 manifest)
+node scripts/ingestion/verify-snapshot.mjs
+
+# Validate dataset schemas, vocabulary, and foreign keys
+node scripts/ingestion/validate-dataset.mjs
+
+# Execute local database schema and fixture tests
+node scripts/test-local-database.mjs
+
+# Ingest research snapshot into relational database
+node scripts/ingestion/import-m02.mjs
+
+# Rollback a specific batch
+node scripts/ingestion/rollback-batch.mjs [batch_id]
 ```
-Open [http://localhost:3000](http://localhost:3000) with your browser.
 
----
-
-## 🧪 Validation & Testing
-
+### 5. Test Suite & Verification
 ```bash
-# 1. Typecheck the entire codebase
-npm run typecheck
-
-# 2. Run unit and component test suites
+# Run Vitest test suite across frontend and database
 npm run test:run
 
-# 3. Validate Research Contract Schemas & Test Fixtures (v1.1.2)
-npm run validate:research
+# Run TypeScript typecheck
+npm run typecheck
 
-# 4. Compile optimized Next.js production build (82 pre-rendered pages)
+# Build production Next.js bundle
 npm run build
 ```
 
 ---
 
-## 📁 Project Structure
+## 📊 Canonical Database Schema
 
-```
-├── apphosting.yaml                   # Firebase App Hosting compute config
-├── next.config.mjs                   # Next.js config & 308 legacy redirects
-├── docs/                             # Architecture (ADR-001), Research v1.1.2 & QA reports
-├── src/
-│   ├── app/                          # Next.js App Router (Layouts, Pages, Sitemaps, Routes)
-│   ├── adapters/                     # Data Access Layer & Type Mappings
-│   ├── components/                   # UI Component Library (Achievements, Maps, Layouts)
-│   ├── contexts/                     # React Contexts (Language, Search, Themes)
-│   ├── data/                         # Local Seed Data conforming to Research Schemas
-│   ├── lib/                          # Universal Navigation Adapter & Utilities
-│   └── views/                        # Page-level interactive views
-```
-
----
-
-## 🛡️ Strategic Platform Mandate (ADR-001)
-
-The Tinubu Achievement Tracker uses the **Google Cloud / Firebase Enterprise Ecosystem**:
-- Next.js 15 App Router (v15.5.21 - Maintenance LTS Frozen) on **Firebase App Hosting** (Google Cloud Run)
-- **Firebase Firestore** & **Google Cloud Storage**
-- **Firebase Authentication** with Claims-based RBAC
-- **Google Cloud Vertex AI** (Gemini 1.5 Pro) for Grounded AI Search
-
-*Supabase is permanently excluded from the platform architecture.*
-
----
-
-## 📜 License & Governance
-
-Copyright © 2026 Realist Tech Solutions. All rights reserved.  
-Governed under the [Tinubu Achievement Tracker Project Constitution](docs/TAT_PROJECT_CONSTITUTION.md).
+The platform is backed by a 27-table relational database conforming to Research Contract v1.1.2:
+- **Taxonomy & Geometry:** `sectors`, `geographic_units`
+- **Institutions & RBAC:** `institutions`, `actor_profiles`, `actor_roles`
+- **Core Entities:** `records`, `achievement_profiles`, `policy_details`, `project_details`, `programme_details`, `record_sectors`, `record_geography`
+- **Evidence & Claims:** `sources`, `evidence_claims`, `claim_source_relationships`
+- **Structured Observations:** `financial_records`, `beneficiary_records`, `indicators`, `indicator_observations`, `timeline_events`
+- **Governance & Immutability:** `corrections`, `review_decisions`, `record_versions`, `research_batches`, `dataset_manifests`

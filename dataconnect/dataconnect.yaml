@@ -1,0 +1,14 @@
+specVersion: "v1"
+serviceId: "tat-e01-local"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "tat_e01_local"
+      cloudSql:
+        instanceId: "not-provisioned-e01"
+      schemaValidation: "STRICT"
+connectorDirs:
+  - "./public"
+  - "./staff"

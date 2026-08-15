@@ -1,0 +1,5 @@
+# Mutation shape proof only. NO_ACCESS prevents invocation in E01.
+mutation UpdateInternalWorkflow($id: UUID!, $workflowStatus: String!, $currentRevision: Int!)
+@auth(level: NO_ACCESS) {
+  record_update(id: $id, data: { workflowStatus: $workflowStatus, currentRevision: $currentRevision })
+}

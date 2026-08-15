@@ -1,0 +1,1413 @@
+extend type Query {
+  """
+  ✨ Look up a single `AchievementProfile` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  achievementProfile(
+    """
+    The key used to identify the object.
+    """
+    key: AchievementProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AchievementProfile_FirstRow
+  ): AchievementProfile @fdc_generated(from: "AchievementProfile", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ActorProfile` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  actorProfile(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorProfile_FirstRow
+  ): ActorProfile @fdc_generated(from: "ActorProfile", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ActorRole` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  actorRole(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ActorRole_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ActorRole_FirstRow
+  ): ActorRole @fdc_generated(from: "ActorRole", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `BeneficiaryRecord` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  beneficiaryRecord(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: BeneficiaryRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: BeneficiaryRecord_FirstRow
+  ): BeneficiaryRecord @fdc_generated(from: "BeneficiaryRecord", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ClaimSourceRelationship` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  claimSourceRelationship(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ClaimSourceRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ClaimSourceRelationship_FirstRow
+  ): ClaimSourceRelationship @fdc_generated(from: "ClaimSourceRelationship", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Correction` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  correction(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Correction_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Correction_FirstRow
+  ): Correction @fdc_generated(from: "Correction", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `EvidenceClaim` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  evidenceClaim(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: EvidenceClaim_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EvidenceClaim_FirstRow
+  ): EvidenceClaim @fdc_generated(from: "EvidenceClaim", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `FinancialRecord` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  financialRecord(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: FinancialRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FinancialRecord_FirstRow
+  ): FinancialRecord @fdc_generated(from: "FinancialRecord", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `GeographicUnit` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  geographicUnit(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: GeographicUnit_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GeographicUnit_FirstRow
+  ): GeographicUnit @fdc_generated(from: "GeographicUnit", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Indicator` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  indicator(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Indicator_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Indicator_FirstRow
+  ): Indicator @fdc_generated(from: "Indicator", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `IndicatorObservation` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  indicatorObservation(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: IndicatorObservation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IndicatorObservation_FirstRow
+  ): IndicatorObservation @fdc_generated(from: "IndicatorObservation", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Institution` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  institution(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Institution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Institution_FirstRow
+  ): Institution @fdc_generated(from: "Institution", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `PolicyDetail` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  policyDetail(
+    """
+    The key used to identify the object.
+    """
+    key: PolicyDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PolicyDetail_FirstRow
+  ): PolicyDetail @fdc_generated(from: "PolicyDetail", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ProgrammeDetail` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  programmeDetail(
+    """
+    The key used to identify the object.
+    """
+    key: ProgrammeDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProgrammeDetail_FirstRow
+  ): ProgrammeDetail @fdc_generated(from: "ProgrammeDetail", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ProjectDetail` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  projectDetail(
+    """
+    The key used to identify the object.
+    """
+    key: ProjectDetail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProjectDetail_FirstRow
+  ): ProjectDetail @fdc_generated(from: "ProjectDetail", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Record` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  record(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Record_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Record_FirstRow
+  ): Record @fdc_generated(from: "Record", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RecordGeography` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  recordGeography(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordGeography_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordGeography_FirstRow
+  ): RecordGeography @fdc_generated(from: "RecordGeography", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RecordInstitution` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  recordInstitution(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordInstitution_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordInstitution_FirstRow
+  ): RecordInstitution @fdc_generated(from: "RecordInstitution", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RecordRelationship` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  recordRelationship(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordRelationship_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordRelationship_FirstRow
+  ): RecordRelationship @fdc_generated(from: "RecordRelationship", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RecordSector` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  recordSector(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordSector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordSector_FirstRow
+  ): RecordSector @fdc_generated(from: "RecordSector", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RecordVersion` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  recordVersion(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RecordVersion_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RecordVersion_FirstRow
+  ): RecordVersion @fdc_generated(from: "RecordVersion", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ResearchBatch` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  researchBatch(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ResearchBatch_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ResearchBatch_FirstRow
+  ): ResearchBatch @fdc_generated(from: "ResearchBatch", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ReviewDecision` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  reviewDecision(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReviewDecision_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReviewDecision_FirstRow
+  ): ReviewDecision @fdc_generated(from: "ReviewDecision", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Sector` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  sector(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Sector_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Sector_FirstRow
+  ): Sector @fdc_generated(from: "Sector", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Source` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  source(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Source_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Source_FirstRow
+  ): Source @fdc_generated(from: "Source", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `SourceFile` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  sourceFile(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: SourceFile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SourceFile_FirstRow
+  ): SourceFile @fdc_generated(from: "SourceFile", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `TimelineEvent` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  timelineEvent(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: TimelineEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TimelineEvent_FirstRow
+  ): TimelineEvent @fdc_generated(from: "TimelineEvent", purpose: QUERY_SINGLE)
+  """
+  ✨ List `AchievementProfile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  achievementProfiles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AchievementProfile_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AchievementProfile_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AchievementProfile_Having
+  ): [AchievementProfile!]! @fdc_generated(from: "AchievementProfile", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ActorProfile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  actorProfiles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ActorProfile_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ActorProfile_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ActorProfile_Having
+  ): [ActorProfile!]! @fdc_generated(from: "ActorProfile", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ActorRole` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  actorRoles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ActorRole_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ActorRole_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ActorRole_Having
+  ): [ActorRole!]! @fdc_generated(from: "ActorRole", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `BeneficiaryRecord` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  beneficiaryRecords(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: BeneficiaryRecord_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [BeneficiaryRecord_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: BeneficiaryRecord_Having
+  ): [BeneficiaryRecord!]! @fdc_generated(from: "BeneficiaryRecord", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ClaimSourceRelationship` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  claimSourceRelationships(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ClaimSourceRelationship_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ClaimSourceRelationship_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ClaimSourceRelationship_Having
+  ): [ClaimSourceRelationship!]! @fdc_generated(from: "ClaimSourceRelationship", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Correction` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  corrections(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Correction_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Correction_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Correction_Having
+  ): [Correction!]! @fdc_generated(from: "Correction", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `EvidenceClaim` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  evidenceClaims(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: EvidenceClaim_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [EvidenceClaim_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: EvidenceClaim_Having
+  ): [EvidenceClaim!]! @fdc_generated(from: "EvidenceClaim", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `FinancialRecord` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  financialRecords(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FinancialRecord_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FinancialRecord_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FinancialRecord_Having
+  ): [FinancialRecord!]! @fdc_generated(from: "FinancialRecord", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `GeographicUnit` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  geographicUnits(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GeographicUnit_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GeographicUnit_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GeographicUnit_Having
+  ): [GeographicUnit!]! @fdc_generated(from: "GeographicUnit", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Indicator` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  indicators(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Indicator_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Indicator_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Indicator_Having
+  ): [Indicator!]! @fdc_generated(from: "Indicator", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `IndicatorObservation` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  indicatorObservations(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: IndicatorObservation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [IndicatorObservation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: IndicatorObservation_Having
+  ): [IndicatorObservation!]! @fdc_generated(from: "IndicatorObservation", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Institution` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  institutions(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Institution_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Institution_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Institution_Having
+  ): [Institution!]! @fdc_generated(from: "Institution", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `PolicyDetail` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  policyDetails(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: PolicyDetail_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [PolicyDetail_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: PolicyDetail_Having
+  ): [PolicyDetail!]! @fdc_generated(from: "PolicyDetail", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ProgrammeDetail` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  programmeDetails(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ProgrammeDetail_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ProgrammeDetail_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ProgrammeDetail_Having
+  ): [ProgrammeDetail!]! @fdc_generated(from: "ProgrammeDetail", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ProjectDetail` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  projectDetails(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ProjectDetail_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ProjectDetail_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ProjectDetail_Having
+  ): [ProjectDetail!]! @fdc_generated(from: "ProjectDetail", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Record` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  records(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Record_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Record_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Record_Having
+  ): [Record!]! @fdc_generated(from: "Record", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RecordGeography` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  recordGeographies(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RecordGeography_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RecordGeography_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RecordGeography_Having
+  ): [RecordGeography!]! @fdc_generated(from: "RecordGeography", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RecordInstitution` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  recordInstitutions(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RecordInstitution_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RecordInstitution_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RecordInstitution_Having
+  ): [RecordInstitution!]! @fdc_generated(from: "RecordInstitution", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RecordRelationship` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  recordRelationships(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RecordRelationship_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RecordRelationship_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RecordRelationship_Having
+  ): [RecordRelationship!]! @fdc_generated(from: "RecordRelationship", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RecordSector` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  recordSectors(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RecordSector_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RecordSector_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RecordSector_Having
+  ): [RecordSector!]! @fdc_generated(from: "RecordSector", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RecordVersion` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  recordVersions(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RecordVersion_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RecordVersion_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RecordVersion_Having
+  ): [RecordVersion!]! @fdc_generated(from: "RecordVersion", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ResearchBatch` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  researchBatches(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ResearchBatch_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ResearchBatch_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ResearchBatch_Having
+  ): [ResearchBatch!]! @fdc_generated(from: "ResearchBatch", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ReviewDecision` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  reviewDecisions(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ReviewDecision_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ReviewDecision_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ReviewDecision_Having
+  ): [ReviewDecision!]! @fdc_generated(from: "ReviewDecision", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Sector` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  sectors(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Sector_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Sector_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Sector_Having
+  ): [Sector!]! @fdc_generated(from: "Sector", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Source` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  sources(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Source_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Source_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Source_Having
+  ): [Source!]! @fdc_generated(from: "Source", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `SourceFile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  sourceFiles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: SourceFile_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [SourceFile_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: SourceFile_Having
+  ): [SourceFile!]! @fdc_generated(from: "SourceFile", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `TimelineEvent` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  timelineEvents(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TimelineEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TimelineEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TimelineEvent_Having
+  ): [TimelineEvent!]! @fdc_generated(from: "TimelineEvent", purpose: QUERY_MULTIPLE)
+}

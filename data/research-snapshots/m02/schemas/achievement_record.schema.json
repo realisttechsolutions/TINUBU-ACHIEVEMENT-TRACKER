@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Achievement Record Research Template Schema v1.1.1",
+  "type": "object",
+  "required": [
+    "achievement_id",
+    "title",
+    "summary",
+    "public_navigation_group",
+    "sector",
+    "status",
+    "evidence_profile",
+    "data_value_nature",
+    "source_origin",
+    "verification_status",
+    "publication_status",
+    "date",
+    "date_precision"
+  ],
+  "properties": {
+    "achievement_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "title": { "type": "string", "minLength": 5 },
+    "summary": { "type": "string", "minLength": 10 },
+    "public_navigation_group": {
+      "type": "string",
+      "enum": ["economy", "security", "infrastructure", "social_services", "governance"]
+    },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "economy_fiscal_reforms",
+        "security_national_stability",
+        "infrastructure_transportation",
+        "agriculture_food_security",
+        "education_human_capital",
+        "healthcare_public_health",
+        "social_protection_human_development",
+        "youth_employment_skills",
+        "power_energy_natural_resources",
+        "digital_economy_science_innovation",
+        "housing_urban_development",
+        "environment_climate",
+        "governance_public_service",
+        "foreign_affairs_international_cooperation",
+        "culture_tourism_creative_economy"
+      ]
+    },
+    "subsector": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
+      ]
+    },
+    "evidence_profile": {
+      "type": "string",
+      "enum": [
+        "direct_physical_delivery", "statutory_legal_enactment", "verified_administrative_disbursement",
+        "statistical_indicator_movement", "official_policy_declaration", "third_party_independent_assessment",
+        "multilateral_partner_evaluation", "institutional_reform_milestone"
+      ]
+    },
+    "data_value_nature": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "target", "calculated", "modelled"]
+    },
+    "source_origin": {
+      "type": "string",
+      "enum": ["government_reported", "independently_reported", "mixed", "unknown"]
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "source_confirmed", "cross_referenced", "independently_corroborated",
+        "under_review", "unverified", "disputed", "corrected", "withdrawn"
+      ]
+    },
+    "publication_status": {
+      "type": "string",
+      "enum": [
+        "unpublished", "under_review", "publishable", "publishable_with_qualification",
+        "published", "corrected", "withdrawn", "archived"
+      ]
+    },
+    "responsible_institutions": { "type": "string" },
+    "geographic_scope": {
+      "type": "string",
+      "enum": [
+        "national", "geopolitical_zone", "state", "fct", "lga", "city_town",
+        "project_site", "corridor", "multi_state", "coordinate", "geographic_boundary"
+      ]
+    },
+    "states_covered": { "type": "string" },
+    "date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "reported_outcomes": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

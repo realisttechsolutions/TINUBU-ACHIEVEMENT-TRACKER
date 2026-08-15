@@ -1,0 +1,31 @@
+review_id,record_id,last_verified_date,stale_threshold_days,freshness_status,next_review_due,assigned_reviewer,notes
+[FRE-2023-0001],[ACH-2023-0001],2024-08-10,90,fresh,2024-11-10,Lead Legal Reviewer,Statutory status verified
+[FRE-2023-0002],[ACH-2023-0002],2024-08-10,30,fresh,2024-09-10,Lead Macro Analyst,Monthly FX series monitoring
+[FRE-2023-0003],[ACH-2023-0003],2024-08-10,90,fresh,2024-11-10,Lead Fiscal Reviewer,Quarterly tax revenue verification
+[FRE-2023-0004],[ACH-2023-0004],2024-08-10,60,fresh,2024-10-10,Lead Transport Reviewer,CNG bus conversion log verification
+[FRE-2023-0005],[ACH-2023-0005],2024-08-10,90,fresh,2024-11-10,Lead Energy Reviewer,Oil and gas upstream investment monitoring
+[FRE-2023-0006],[ACH-2023-0006],2024-08-10,90,fresh,2024-11-10,Lead Agriculture Reviewer,Strategic grain reserve audit
+[FRE-2023-0007],[ACH-2023-0007],2024-08-10,90,fresh,2024-11-10,Lead Agriculture Reviewer,Dry-season wheat harvest yield monitoring
+[FRE-2023-0008],[ACH-2023-0008],2024-08-10,60,fresh,2024-10-10,Lead Fiscal Reviewer,Bilateral loan drawdown monitoring
+[FRE-2023-0009],[ACH-2023-0009],2024-08-10,60,fresh,2024-10-10,Lead Tech Reviewer,3MTT Cohort 2 rollout monitoring
+[FRE-2023-0010],[ACH-2023-0010],2024-08-10,90,fresh,2024-11-10,Lead Tech Reviewer,Fiber optic SPV operational setup
+[FRE-2023-0011],[ACH-2023-0011],2024-08-10,90,fresh,2024-11-10,Lead Governance Reviewer,Startup council meetings and fund disbursement
+[FRE-2024-0012],[ACH-2024-0012],2024-08-10,30,fresh,2024-09-10,Lead Infrastructure Reviewer,Coastal highway civil construction monitoring
+[FRE-2024-0013],[ACH-2024-0013],2024-08-10,60,fresh,2024-10-10,Lead Infrastructure Reviewer,Abuja Light Rail ridership metrics
+[FRE-2024-0014],[ACH-2024-0014],2024-08-10,60,fresh,2024-10-10,Lead Infrastructure Reviewer,Port Harcourt - Aba scheduled train monitoring
+[FRE-2024-0015],[ACH-2024-0015],2024-08-10,90,fresh,2024-11-10,Lead Infrastructure Reviewer,Second Niger Bridge bypass traffic audit
+[FRE-2024-0016],[ACH-2024-0016],2024-08-10,60,fresh,2024-10-10,Lead Housing Reviewer,Renewed Hope Cities construction inspection
+[FRE-2024-0017],[ACH-2024-0017],2024-08-10,60,fresh,2024-10-10,Lead Housing Reviewer,FMBN digital loan disbursement audit
+[FRE-2024-0018],[ACH-2024-0018],2024-08-10,90,fresh,2024-11-10,Lead Legal Reviewer,Student loan statutory framework verification
+[FRE-2024-0019],[ACH-2024-0019],2024-08-10,30,fresh,2024-09-10,Lead Education Reviewer,NELFUND ongoing university fee disbursement audit
+[FRE-2024-0020],[ACH-2024-0020],2024-08-10,90,fresh,2024-11-10,Lead Education Reviewer,UBEC state matching grant utilization
+[FRE-2024-0021],[ACH-2024-0021],2024-08-10,90,fresh,2024-11-10,Lead Health Reviewer,Pharma zero-tariff implementation monitoring
+[FRE-2024-0022],[ACH-2024-0022],2024-08-10,60,fresh,2024-10-10,Lead Health Reviewer,Primary health care facility solarization
+[FRE-2024-0023],[ACH-2024-0023],2024-08-10,30,fresh,2024-09-10,Lead Social Protection Reviewer,PCGS 1M nano grant payment audit
+[FRE-2024-0024],[ACH-2024-0024],2024-08-10,30,fresh,2024-09-10,Lead Social Protection Reviewer,CREDICORP loan portfolio performance
+[FRE-2024-0025],[ACH-2024-0025],2024-08-10,60,fresh,2024-10-10,Lead Social Protection Reviewer,Social safety net digital transfer verification
+[FRE-2024-0026],[ACH-2024-0026],2024-08-10,60,fresh,2024-10-10,Lead Youth Reviewer,NYIF fund operationalization monitoring
+[FRE-2024-0027],[ACH-2024-0027],2024-08-10,60,fresh,2024-10-10,Lead Youth Reviewer,Youth enterprise clusters progress review
+[FRE-2024-0028],[ACH-2024-0028],2024-08-10,90,fresh,2024-11-10,Lead Legal Reviewer,LGA direct allocation enforcement monitoring
+[FRE-2024-0029],[ACH-2024-0029],2024-08-10,90,fresh,2024-11-10,Lead Governance Reviewer,Civil service payroll savings monitoring
+[FRE-2024-0030],[ACH-2024-0030],2024-08-10,60,fresh,2024-10-10,Lead Foreign Affairs Reviewer,Bilateral aviation and visa compliance audit

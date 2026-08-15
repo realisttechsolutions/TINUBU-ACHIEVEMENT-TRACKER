@@ -1,0 +1,5 @@
+id,indicator_id,claim_id,observed_value,period,period_start,period_end,date_precision,data_value_nature,source_origin,verification_status,publication_status,source_institution,notes
+[INO-2023-0001],[IND-2023-0001],[CLM-2023-0004],33.28,2023-12-31,2023-12-01,2023-12-31,exact_day,actual,government_reported,source_confirmed,published,Central Bank of Nigeria,Gross external reserves at end-2023
+[INO-2024-0002],[IND-2023-0001],[CLM-2023-0004],38.52,2024-06-30,2024-06-01,2024-06-30,exact_day,actual,government_reported,source_confirmed,published,Central Bank of Nigeria,Gross external reserves balance at end-June 2024
+[INO-2023-0003],[IND-2023-0002],[CLM-2023-0005],12.36,2023,2023-01-01,2023-12-31,year,actual,government_reported,source_confirmed,published,Federal Inland Revenue Service,Annual FIRS non-oil collection 2023
+[INO-2024-0004],[IND-2024-0003],[CLM-2023-0005],6.52,2024-Q1,2024-01-01,2024-03-31,quarter,actual,government_reported,source_confirmed,published,National Bureau of Statistics,NBS trade surplus in Q1 2024 driven by non-oil and crude exports
