@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ShieldCheck, FileCheck, CheckCircle2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -83,7 +83,7 @@ export const MethodologyTrustSection: React.FC = () => {
             <strong className="text-gov-navy dark:text-white">Note:</strong> Referencing an institution or statistical dataset does not imply formal commercial partnership or endorsement.
           </span>
           <Link to="/data-sources" className="font-bold text-gov-navy hover:underline shrink-0">
-            Methodology Standards →
+            Methodology Standards â†’
           </Link>
         </div>
       </div>

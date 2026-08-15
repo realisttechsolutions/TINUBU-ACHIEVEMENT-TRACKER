@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ArrowRight, TrendingUp, ShieldCheck, Building2, HeartPulse } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import { SectorItemConfig } from "@/data/home/homepage.config";

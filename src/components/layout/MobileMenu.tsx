@@ -1,8 +1,10 @@
+﻿'use client';
+
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, TrendingUp, Shield, BarChart, Building2, HeartPulse, Database, ChevronRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/navigation";
 import { useState, useEffect } from "react";
 
 const MobileMenu = () => {

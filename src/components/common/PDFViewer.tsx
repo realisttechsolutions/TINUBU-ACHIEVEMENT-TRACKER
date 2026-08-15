@@ -1,3 +1,5 @@
+﻿'use client';
+
 
 import React, { useState } from 'react';
 import { File, Download, Maximize2, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';

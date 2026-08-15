@@ -1,8 +1,8 @@
-
+﻿
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import { Link } from "@/lib/navigation";
 import ScrollReveal from '@/components/ui/scroll-reveal';
 import SectionHeader from '@/components/common/SectionHeader';
 import { energyMetrics } from '@/data/statistics';

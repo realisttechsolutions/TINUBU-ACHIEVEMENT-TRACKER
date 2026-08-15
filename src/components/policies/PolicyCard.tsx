@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ChevronRight, Scale, Building2, Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { PolicyRecord } from "@/types/policy.types";

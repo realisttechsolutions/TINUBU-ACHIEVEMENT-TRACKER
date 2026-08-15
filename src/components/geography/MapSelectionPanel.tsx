@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ChevronRight, Info, Compass } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

@@ -1,5 +1,7 @@
+﻿'use client';
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/navigation";
 import { List, Search, ChevronRight } from "lucide-react";
 import { StateRecord, GeopoliticalZone } from "@/types/geography.types";
 import { getStateImpactSummary } from "@/services/geographyService";

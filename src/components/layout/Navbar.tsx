@@ -1,6 +1,8 @@
+﻿'use client';
+
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import { Search, Bell, ChevronDown, Download } from "lucide-react";
 import MobileMenu from "./MobileMenu";

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ChevronRight, Share2 } from "lucide-react";
 
 interface StateBreadcrumbsProps {

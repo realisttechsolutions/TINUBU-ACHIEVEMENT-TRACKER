@@ -39,7 +39,7 @@ export const AchievementFacts: React.FC<AchievementFactsProps> = ({ achievement 
           <span className="text-gov-slate uppercase font-bold text-[10px] block">Reporting Date</span>
           <span className="font-bold text-gov-navy dark:text-white flex items-center gap-1.5">
             <Calendar className="h-3.5 w-3.5 text-gov-emerald" />
-            {achievement.dateAdded}
+            {achievement.verificationDate || achievement.completionOrCurrentDate || achievement.startDate || "2024"}
           </span>
         </div>
       </CardContent>

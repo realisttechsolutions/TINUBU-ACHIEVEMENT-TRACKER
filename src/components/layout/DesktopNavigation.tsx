@@ -1,5 +1,7 @@
+﻿'use client';
+
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/navigation";
 import { 
   ChevronDown, 
   Award, 
@@ -108,7 +110,7 @@ export const DesktopNavigation: React.FC = () => {
                 onClick={() => setOpenMenu(null)}
                 className="text-xs font-semibold text-gov-emerald hover:underline"
               >
-                View Sectors Directory →
+                View Sectors Directory â†’
               </Link>
             </div>
 

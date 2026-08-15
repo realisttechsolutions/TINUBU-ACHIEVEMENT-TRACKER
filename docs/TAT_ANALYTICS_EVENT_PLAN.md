@@ -1,26 +1,22 @@
-# Analytics Event Plan — Tinubu Achievement Tracker V2
+# TAT Analytics Event Plan
+## Google Analytics 4 & Next.js App Router Interaction Telemetry
 
-This document defines the semantic event taxonomy for tracking user engagement across the public homepage and platform features without compromising user privacy.
+**Status:** APPROVED  
+**Standard:** Google Analytics 4 (GA4) / Google Tag Manager  
 
 ---
 
-## 1. Homepage Event Taxonomy
+## 1. Core Event Tracking Matrix
 
-| Event Name | Trigger Context | Payload Metadata |
+| Event Name | Trigger | Custom Parameters |
 | :--- | :--- | :--- |
-| `homepage_hero_primary_click` | User clicks "Explore Achievements" in Hero | `{ destination: "/dashboard" }` |
-| `homepage_hero_secondary_click` | User clicks "View Executive Dashboard" in Hero | `{ destination: "/dashboard" }` |
-| `homepage_metric_evidence_click` | User clicks evidence link on a headline Metric Card | `{ metric_id: string, source_name: string }` |
-| `homepage_achievement_click` | User clicks on a Featured Achievement card | `{ achievement_id: string, sector: string }` |
-| `homepage_sector_click` | User clicks a Sector Explorer card | `{ sector_id: string, path: string }` |
-| `homepage_impact_zone_click` | User interacts with a Geopolitical Zone summary | `{ zone_name: string }` |
-| `homepage_timeline_event_click` | User views or clicks a Timeline event | `{ event_id: string, sector: string }` |
-| `homepage_data_story_chart_hover` | User inspects a Time-Series trend chart | `{ chart_type: "gdp" \| "fdi" }` |
-| `homepage_methodology_click` | User clicks "Explore Data & Methodology" | `{ destination: "/data-sources" }` |
-| `homepage_reports_cta_click` | User clicks "Browse Reports & Downloads" | `{ destination: "/downloads" }` |
-
----
-
-## 2. Privacy & Compliance Rules
-- Zero Personally Identifiable Information (PII) is captured or transmitted.
-- Tracking hooks rely on anonymous custom events dispatched on `window` for third-party analytics adapters.
+| `page_view` | Next.js App Router route transition | `page_path`, `page_title`, `page_location` |
+| `achievement_view` | User opens `/achievements/[slug]` or drawer | `achievement_id`, `sector_id`, `publication_status` |
+| `policy_view` | User opens `/policies/[slug]` | `policy_id`, `legal_authority`, `sector_id` |
+| `state_select` | User clicks state on Nigeria Vector Map | `state_code`, `state_name`, `geo_zone` |
+| `filter_applied` | User filters achievements/policies/sectors | `filter_type`, `filter_value`, `result_count` |
+| `search_query` | User executes search via SearchModal | `search_term`, `result_count`, `search_category` |
+| `evidence_drawer_open` | User clicks "Verify Evidence" on achievement | `achievement_id`, `source_count`, `gazette_ref` |
+| `data_export` | User downloads CSV/JSON/PDF data | `export_format`, `dataset_name`, `item_count` |
+| `language_change` | User switches language selector | `previous_language`, `selected_language` |
+| `correction_submitted` | User submits a public correction request | `entity_type`, `entity_id`, `has_evidence_attachment` |

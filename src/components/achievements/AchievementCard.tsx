@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ArrowRight, MapPin, Building2, Calendar, ShieldCheck, CheckCircle2, DollarSign, Users } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import DataClassificationBadge from "../common/DataClassificationBadge";

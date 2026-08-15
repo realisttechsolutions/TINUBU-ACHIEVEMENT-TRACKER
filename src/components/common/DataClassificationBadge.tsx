@@ -1,10 +1,15 @@
+'use client';
+
 import React from "react";
 import { CheckCircle2, ShieldCheck, HelpCircle, AlertCircle, FileText, Database, Sparkles } from "lucide-react";
 import { DataValueNature, SourceOrigin, VerificationStatus } from "@/adapters/types";
 
+export type DataClassification = string;
+
 interface DataClassificationBadgeProps {
   type?: 'valueNature' | 'sourceOrigin' | 'verificationStatus' | 'evidenceProfile';
-  value: string;
+  value?: string;
+  classification?: string;
   className?: string;
   size?: 'sm' | 'md';
 }
@@ -12,59 +17,60 @@ interface DataClassificationBadgeProps {
 export const DataClassificationBadge: React.FC<DataClassificationBadgeProps> = ({
   type = 'verificationStatus',
   value,
+  classification,
   className = "",
   size = 'md'
 }) => {
+  const resolvedValue = value || classification || 'VERIFIED';
   const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[10px] gap-1' : 'px-2.5 py-1 text-xs gap-1.5';
 
   if (type === 'valueNature') {
-    const isActual = value === 'actual';
     return (
-      <span className={`inline-flex items-center rounded border ${isActual ? 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold' : 'bg-amber-50 text-amber-800 border-amber-200'} ${sizeClasses} ${className}`}>
-        <span className={`h-1.5 w-1.5 rounded-full ${isActual ? 'bg-emerald-600' : 'bg-amber-500'}`} />
-        <span className="capitalize">{value.replace(/_/g, ' ')}</span>
+      <span className={`inline-flex items-center rounded-full font-medium border bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/20 ${sizeClasses} ${className}`}>
+        <Sparkles className="w-3 h-3" />
+        <span>{resolvedValue}</span>
       </span>
     );
   }
 
   if (type === 'sourceOrigin') {
     return (
-      <span className={`inline-flex items-center rounded border bg-blue-50 text-blue-800 border-blue-200 ${sizeClasses} ${className}`}>
-        <Database className="h-3 w-3 text-blue-600" />
-        <span className="capitalize">{value.replace(/_/g, ' ')}</span>
+      <span className={`inline-flex items-center rounded-full font-medium border bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20 ${sizeClasses} ${className}`}>
+        <Database className="w-3 h-3" />
+        <span>{resolvedValue}</span>
       </span>
     );
   }
 
   if (type === 'evidenceProfile') {
     return (
-      <span className={`inline-flex items-center rounded border bg-purple-50 text-purple-800 border-purple-200 font-medium ${sizeClasses} ${className}`}>
-        <FileText className="h-3 w-3 text-purple-600" />
-        <span className="capitalize">{value.replace(/_/g, ' ')}</span>
+      <span className={`inline-flex items-center rounded-full font-medium border bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20 ${sizeClasses} ${className}`}>
+        <FileText className="w-3 h-3" />
+        <span>{resolvedValue}</span>
       </span>
     );
   }
 
-  // Verification Status
-  const isConfirmed = value === 'source_confirmed' || value === 'independently_corroborated';
-  const isDisputed = value === 'disputed' || value === 'corrected';
+  // Verification status default
+  const isVerified = String(resolvedValue).toUpperCase().includes('VERIF') || String(resolvedValue).toUpperCase().includes('PRIMARY');
+  const isPending = String(resolvedValue).toUpperCase().includes('PEND') || String(resolvedValue).toUpperCase().includes('QUALIF');
 
   return (
-    <span className={`inline-flex items-center rounded border ${
-      isConfirmed 
-        ? 'bg-gov-navy/10 text-gov-navy border-gov-navy/20 dark:bg-white/10 dark:text-white font-bold'
-        : isDisputed
-        ? 'bg-rose-50 text-rose-800 border-rose-200 font-semibold'
-        : 'bg-amber-50 text-amber-800 border-amber-200'
+    <span className={`inline-flex items-center rounded-full font-medium border ${
+      isVerified
+        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20'
+        : isPending
+        ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20'
+        : 'bg-muted text-muted-foreground border-border'
     } ${sizeClasses} ${className}`}>
-      {isConfirmed ? (
-        <ShieldCheck className="h-3.5 w-3.5 text-gov-emerald" />
-      ) : isDisputed ? (
-        <AlertCircle className="h-3.5 w-3.5 text-rose-600" />
+      {isVerified ? (
+        <ShieldCheck className="w-3 h-3 text-emerald-600" />
+      ) : isPending ? (
+        <AlertCircle className="w-3 h-3 text-amber-600" />
       ) : (
-        <HelpCircle className="h-3.5 w-3.5 text-amber-600" />
+        <HelpCircle className="w-3 h-3" />
       )}
-      <span className="capitalize">{value.replace(/_/g, ' ')}</span>
+      <span>{resolvedValue}</span>
     </span>
   );
 };

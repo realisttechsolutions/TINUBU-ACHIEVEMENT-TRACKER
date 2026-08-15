@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { ShieldCheck, Database, FileText, Globe, CheckCircle2, ArrowRight, BookOpen, AlertTriangle } from "lucide-react";
 
 export const EvidenceDataStory: React.FC = () => {
@@ -108,7 +108,7 @@ export const EvidenceDataStory: React.FC = () => {
             to="/data-sources"
             className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors shrink-0 border border-white/20"
           >
-            Read Methodology →
+            Read Methodology â†’
           </Link>
         </div>
       </div>

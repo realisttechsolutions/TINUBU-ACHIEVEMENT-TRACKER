@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { TrendingUp, GraduationCap, Building2, Landmark, ArrowRight, ShieldCheck } from "lucide-react";
 import { dataAdapter } from "@/adapters/dataAdapter";
 

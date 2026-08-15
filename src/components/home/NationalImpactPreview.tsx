@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { Compass, MapPin, ArrowRight, Layers, Building2 } from "lucide-react";
 import NigeriaMapSvg from "@/components/geography/NigeriaMapSvg";
 import { DEMO_NIGERIA_STATES } from "@/adapters/canonicalData";
@@ -48,7 +48,7 @@ export const NationalImpactPreview: React.FC = () => {
                 </span>
               </div>
               <span className="text-[11px] text-gray-400">
-                6 Zones • 774 Local Government Areas
+                6 Zones â€¢ 774 Local Government Areas
               </span>
             </div>
 
@@ -109,7 +109,7 @@ export const NationalImpactPreview: React.FC = () => {
               to="/states"
               className="block text-center w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-gray-300 hover:text-white transition-colors border border-white/10"
             >
-              View Directory of All 36 States & FCT →
+              View Directory of All 36 States & FCT â†’
             </Link>
           </div>
         </div>

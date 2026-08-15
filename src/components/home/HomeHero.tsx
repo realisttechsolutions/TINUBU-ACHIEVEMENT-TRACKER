@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ShieldCheck, Database, Compass, Award, TrendingUp, Sparkles } from "lucide-react";
 import { dataAdapter } from "@/adapters/dataAdapter";
@@ -20,7 +20,7 @@ export const HomeHero: React.FC = () => {
             {/* Historic Window Eyebrow Pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
               <ShieldCheck className="h-4 w-4 text-gov-emerald" />
-              <span>Official Progress Record • 29 May 2023 — August 2026</span>
+              <span>Official Progress Record â€¢ 29 May 2023 â€” August 2026</span>
             </div>
 
             {/* Main Headline (H1) */}
@@ -114,7 +114,7 @@ export const HomeHero: React.FC = () => {
                   </span>
                 </div>
                 <span className="text-[11px] font-mono text-gray-400">
-                  May 2023 — Aug 2026
+                  May 2023 â€” Aug 2026
                 </span>
               </div>
 
@@ -165,7 +165,7 @@ export const HomeHero: React.FC = () => {
                 to="/achievements"
                 className="block text-center w-full py-2.5 rounded-xl bg-gov-canvas/10 hover:bg-gov-canvas/20 text-xs font-bold text-gov-gold transition-colors"
               >
-                Browse All Documented Achievements →
+                Browse All Documented Achievements â†’
               </Link>
             </div>
           </div>

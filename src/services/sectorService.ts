@@ -18,7 +18,17 @@ export const getDevelopingSectors = (): SectorRecord[] => {
 };
 
 export const getSectorBySlug = (slug: string): SectorRecord | undefined => {
-  return sectorsData.find((s) => s.slug.toLowerCase() === slug.toLowerCase());
+  if (!slug) return undefined;
+  const normalized = slug.toLowerCase();
+  return sectorsData.find((s) => 
+    s.slug.toLowerCase() === normalized || 
+    ((s as any).id && String((s as any).id).toLowerCase() === normalized) ||
+    (normalized === 'economy' && s.slug === 'economy-fiscal-reforms') ||
+    (normalized === 'security' && s.slug === 'security-national-stability') ||
+    (normalized === 'infrastructure' && s.slug === 'infrastructure-transportation') ||
+    (normalized === 'social-services' && s.slug === 'social-protection-human-development') ||
+    (normalized === 'governance' && s.slug === 'governance-public-service')
+  );
 };
 
 export const getSectorAchievements = (sectorSlug: string): AchievementRecord[] => {
@@ -31,13 +41,4 @@ export const getSectorAchievements = (sectorSlug: string): AchievementRecord[] =
       achievement.sector.toLowerCase() === filterCategory.toLowerCase() &&
       achievement.publicationStatus === "publishable"
   );
-};
-
-export const getRelatedSectors = (sectorSlug: string): SectorRecord[] => {
-  const sector = getSectorBySlug(sectorSlug);
-  if (!sector || !sector.relatedSectorSlugs) return [];
-
-  return sector.relatedSectorSlugs
-    .map((slug) => getSectorBySlug(slug))
-    .filter((s): s is SectorRecord => s !== undefined);
 };

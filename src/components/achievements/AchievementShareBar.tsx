@@ -1,3 +1,5 @@
+﻿'use client';
+
 import React, { useState } from "react";
 import { Share2, Copy, Check, Twitter, Linkedin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";

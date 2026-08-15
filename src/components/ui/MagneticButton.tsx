@@ -1,3 +1,5 @@
+﻿'use client';
+
 import React, { useRef, useEffect, ReactNode } from "react";
 import { magneticEffect } from "@/lib/animations";
 import { cn } from "@/lib/utils";

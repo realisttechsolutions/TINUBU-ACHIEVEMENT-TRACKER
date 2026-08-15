@@ -1,3 +1,5 @@
+﻿'use client';
+
 
 import React, { useState } from "react";
 import { ExternalLink, Clock, ChevronDown, ChevronUp } from "lucide-react";

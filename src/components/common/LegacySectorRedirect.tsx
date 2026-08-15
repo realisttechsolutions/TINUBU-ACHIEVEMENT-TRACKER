@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+﻿import React from "react";
+import { Navigate } from "@/lib/navigation";
 
 interface LegacySectorRedirectProps {
   targetSlug: string;

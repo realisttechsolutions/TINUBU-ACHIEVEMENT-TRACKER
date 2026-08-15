@@ -3,7 +3,7 @@ import { PolicyStatus } from "@/types/policy.types";
 import { Badge } from "@/components/ui/badge";
 
 interface PolicyStatusBadgeProps {
-  status: PolicyStatus;
+  status: PolicyStatus | string;
 }
 
 export const PolicyStatusBadge: React.FC<PolicyStatusBadgeProps> = ({ status }) => {

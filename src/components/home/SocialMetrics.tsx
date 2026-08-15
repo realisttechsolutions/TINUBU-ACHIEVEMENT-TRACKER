@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -6,7 +6,7 @@ import ScrollReveal from '@/components/ui/scroll-reveal';
 import SectionHeader from '@/components/common/SectionHeader';
 import { BarChart3, BookOpen, Heart, TrendingUp } from 'lucide-react';
 import { educationStats, healthcareStats } from '@/data/statistics';
-import { Link } from 'react-router-dom';
+import { Link } from "@/lib/navigation";
 
 const SocialMetrics = () => {
   const socialMetrics = [

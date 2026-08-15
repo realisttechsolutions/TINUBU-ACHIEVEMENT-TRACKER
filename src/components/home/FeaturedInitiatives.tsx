@@ -1,10 +1,10 @@
-
+﻿
 import React from 'react';
 import { BarChartIcon, ChevronRight, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import ScrollReveal from '@/components/ui/scroll-reveal';
 import SectionHeader from '@/components/common/SectionHeader';
-import { Link } from 'react-router-dom';
+import { Link } from "@/lib/navigation";
 import { featuredInitiatives } from '@/data/statistics';
 
 const FeaturedInitiatives = () => {

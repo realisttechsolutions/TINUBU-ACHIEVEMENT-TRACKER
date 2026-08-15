@@ -1,3 +1,9 @@
+# Next.js build output
+.next/
+out/
+tsconfig.tsbuildinfo
+next-env.d.ts
+
 # Logs
 logs
 *.log
@@ -7,9 +13,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
 dist
 dist-ssr
+
+# Environment local files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.local
 
 # Editor directories and files

@@ -4,22 +4,25 @@ import { getStateByCode } from "@/services/geographyService";
 import { GeopoliticalZone } from "@/types/geography.types";
 
 interface NigeriaMapSvgProps {
-  selectedStateCode: string | null;
-  hoveredStateCode: string | null;
-  activeZone: string;
-  onStateHover: (code: string | null) => void;
-  onStateSelect: (code: string) => void;
-  getZoneColor: (zone: GeopoliticalZone) => string;
+  selectedStateCode?: string | null;
+  hoveredStateCode?: string | null;
+  activeState?: string | null;
+  activeZone?: string;
+  onStateHover?: (code: string | null) => void;
+  onStateSelect?: (code: string) => void;
+  getZoneColor?: (zone: GeopoliticalZone) => string;
 }
 
 export const NigeriaMapSvg: React.FC<NigeriaMapSvgProps> = ({
-  selectedStateCode,
-  hoveredStateCode,
-  activeZone,
-  onStateHover,
-  onStateSelect,
-  getZoneColor,
+  selectedStateCode = null,
+  hoveredStateCode = null,
+  activeState = null,
+  activeZone = "all",
+  onStateHover = () => {},
+  onStateSelect = () => {},
+  getZoneColor = () => "#006B3F",
 }) => {
+  const activeCode = selectedStateCode || activeState || null;
   return (
     <svg
       viewBox={NIGERIA_MAP_VIEWBOX}

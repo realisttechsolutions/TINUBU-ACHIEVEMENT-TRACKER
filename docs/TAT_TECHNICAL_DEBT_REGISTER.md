@@ -1,28 +1,26 @@
-# Technical Debt Register — Tinubu Achievement Tracker V2
+# TAT Technical Debt Register
+## Architectural Backlog & Resolution Tracking
 
-This document records resolved technical debt items and tracks remaining architectural, responsive, accessibility, or translation gaps.
+**Status:** ACTIVE  
+**Last Updated:** 2026-08-15  
 
 ---
 
-## ✅ Resolved Technical Debt (Missions 01 & 02)
+## 1. Resolved Debt Items (Mission 09)
 
-| ID | Category | Item Description | Status | Resolution / Component |
+| ID | Category | Description | Status | Resolution |
 | :--- | :--- | :--- | :--- | :--- |
-| **TD-01** | Branding | Inconsistent logo naming ("TPW", "RHT", "Renewed Hope Tracker") causing wordmark wrapping on mobile | **RESOLVED** | Unified to `BrandLockup.tsx` ("Tinubu Achievement Tracker" / `TAT` emblem) |
-| **TD-02** | Design Tokens | Unrestricted purple gradients (`#7E69AB`) and bright blue (`#2E3192`) violating Presidential tone | **RESOLVED** | Mapped design tokens in `tailwind.config.ts` (`gov-navy`, `gov-emerald`, `gov-gold`, `gov-canvas`) |
-| **TD-03** | Layout / UI | Floating language switcher pill in bottom-left corner overlapping main page content | **RESOLVED** | Removed floating pill; embedded `LanguageSelector` into `HeaderActions` and `MobileNavigationDrawer` |
-| **TD-04** | Header | Non-functional notification bell icon and standalone global share button creating visual clutter | **RESOLVED** | Removed from `GlobalHeader.tsx`; header focused on core search, language, theme, & reports action |
-| **TD-05** | Accessibility | Missing skip navigation link for keyboard users to bypass header | **RESOLVED** | Created `SkipNavigation.tsx` targeting `<main id="main-content">` |
-| **TD-06** | Navigation | Unstructured top-level navigation links overflowing on tablet landscape (1024px–1279px) | **RESOLVED** | Created `DesktopNavigation.tsx` with grouped dropdowns (*Overview*, *Sectors*, *Evidence*) |
-| **TD-07** | RTL | Missing text direction support for Arabic (`ar`) language | **RESOLVED** | `LanguageContext.tsx` automatically sets `document.documentElement.dir = 'rtl'` for Arabic |
-| **TD-08** | Achievements | Disconnected achievement cards lacking searchable database or individual detail pages | **RESOLVED** | Created `/achievements` catalogue (`AchievementsCatalogue.tsx`) and `/achievements/:slug` detail pages (`AchievementDetail.tsx`) |
+| **DEBT-001** | Architecture | SPA client-side routing with zero server-side SEO pre-rendering. | **RESOLVED (M09)** | Migrated to Next.js 14 App Router; 82 SSG pages pre-rendered with dynamic OpenGraph metadata. |
+| **DEBT-002** | Routing | Legacy Vite routes (`/economic-reforms`, etc.) had no HTTP 308 permanent redirect headers. | **RESOLVED (M09)** | Implemented HTTP 308 permanent redirects in `next.config.mjs`. |
+| **DEBT-003** | Test Suite | Vitest tests coupled to React Router memory context. | **RESOLVED (M09)** | Universal navigation adapter (`src/lib/navigation.tsx`) bridging Next.js and test runners seamlessly. |
+| **DEBT-004** | Hosting | Static SPA build not configured for containerized Google Cloud serverless hosting. | **RESOLVED (M09)** | Configured `apphosting.yaml` for Firebase App Hosting on Google Cloud Run. |
 
 ---
 
-## 📌 Deferred / Remaining Technical Debt (For Future Missions)
+## 2. Active Debt Items (Scheduled for Missions 10–13)
 
-| ID | Category | Item Description | Mission Target |
-| :--- | :--- | :--- | :--- |
-| **TD-08** | Page Content | Individual sector pages (`EconomicReforms`, `SecurityProgress`, `Infrastructure`, `SocialServices`) contain page-level `<Navbar />` or redundant container margins | **Mission 03** (Homepage & Sector Transformation) |
-| **TD-09** | Translations | Some deep data labels in Hausa (`ha`), Igbo (`ig`), and Yoruba (`yo`) fallback to English defaults | **Mission 05** (Content & Localization Polish) |
-| **TD-10** | Dynamic CMS | Application data is statically compiled inside `src/data/*.ts` without dynamic backend endpoint | **Mission 06** (Data & CMS Integration) |
+| ID | Category | Description | Target Milestone | Plan |
+| :--- | :--- | :--- | :--- | :--- |
+| **DEBT-005** | Data Layer | Static seed data in `src/data/` needs live sync with Firestore production collections. | **Mission 10 & 12** | Implement Firestore client/admin SDK queries in `dataAdapter.ts`. |
+| **DEBT-006** | Auth | Mock admin/editor role checks need Firebase Auth custom claims integration. | **Mission 11** | Implement Firebase Auth + Google Identity Platform RBAC. |
+| **DEBT-007** | Search | Client-side search filtering should be augmented with Vertex AI vector search. | **Mission 13 & 16** | Connect "Ask the Tracker" to Gemini 1.5 Pro + Firestore vector index. |

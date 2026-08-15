@@ -1,5 +1,7 @@
+﻿'use client';
+
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/navigation";
 import { 
   Search, 
   X, 
@@ -245,7 +247,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
 
               <div className="pt-3 border-t border-gov-border/60">
                 <div className="text-[11px] text-gov-slate">
-                  <span className="font-bold text-gov-navy dark:text-white">Tip:</span> Use arrow keys <kbd className="px-1 border rounded text-[10px]">↑</kbd> <kbd className="px-1 border rounded text-[10px]">↓</kbd> to navigate and <kbd className="px-1 border rounded text-[10px]">ENTER</kbd> to open.
+                  <span className="font-bold text-gov-navy dark:text-white">Tip:</span> Use arrow keys <kbd className="px-1 border rounded text-[10px]">â†‘</kbd> <kbd className="px-1 border rounded text-[10px]">â†“</kbd> to navigate and <kbd className="px-1 border rounded text-[10px]">ENTER</kbd> to open.
                 </div>
               </div>
             </div>
@@ -256,7 +258,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
         <div className="p-3 bg-gov-canvas dark:bg-gov-darkSurface border-t border-gov-border flex items-center justify-between text-[11px] text-gov-slate">
           <span className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-gov-emerald" />
-            <span>Official 2023 — 2026 Public Intelligence Index</span>
+            <span>Official 2023 â€” 2026 Public Intelligence Index</span>
           </span>
           <span className="flex items-center gap-1">
             <CornerDownLeft className="h-3 w-3" /> Select

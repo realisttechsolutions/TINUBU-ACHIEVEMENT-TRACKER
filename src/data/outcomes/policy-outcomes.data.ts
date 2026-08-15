@@ -15,7 +15,6 @@ export const policyOutcomesData: PolicyOutcomeRecord[] = [
   {
     id: "poc-002",
     policySlug: "fuel-subsidy-termination-directive",
-    policySlug: "fuel-subsidy-termination-directive",
     metricName: "Annual Fiscal Savings",
     value: "4.2 Trillion",
     unit: "NGN",

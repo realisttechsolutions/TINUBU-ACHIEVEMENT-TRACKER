@@ -1,6 +1,8 @@
+﻿'use client';
+
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/navigation";
 import { Facebook, Twitter, Instagram, Mail, ArrowUpRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -164,7 +166,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} {t('footer.copyright')}</p>
+          <p>Â© {new Date().getFullYear()} {t('footer.copyright')}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/data-sources" className="hover:text-brand-purple transition-colors">{t('footer.privacyPolicy')}</Link>
             <Link to="/data-sources" className="hover:text-brand-purple transition-colors">{t('footer.termsOfService')}</Link>

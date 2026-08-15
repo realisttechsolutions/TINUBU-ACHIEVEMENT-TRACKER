@@ -1,6 +1,7 @@
+'use client';
 import React from "react";
 import { Search, Download, Globe } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ThemeToggle from "../ui/ThemeToggle";
@@ -24,7 +25,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({ onOpenSearch }) =>
         <Search className="h-4 w-4 text-gov-navy" />
         <span className="hidden md:inline">Search...</span>
         <kbd className="hidden lg:inline-block text-[10px] font-mono bg-white px-1.5 py-0.5 rounded border border-gov-border text-gov-slate">
-          ⌘K
+          âŒ˜K
         </kbd>
       </button>
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { Award, ArrowRight, Sparkles } from "lucide-react";
 import AchievementCard from "@/components/achievements/AchievementCard";
 import { dataAdapter } from "@/adapters/dataAdapter";

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+﻿import React from "react";
+import { Link } from "@/lib/navigation";
 import { Database, Download, FileSpreadsheet, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { dataAdapter } from "@/adapters/dataAdapter";
@@ -83,7 +83,7 @@ export const ReportsResearchCTA: React.FC = () => {
                         {ds.title}
                       </div>
                       <div className="text-[11px] text-gray-400">
-                        {ds.recordCount} Records • {ds.periodCovered}
+                        {ds.recordCount} Records â€¢ {ds.periodCovered}
                       </div>
                     </div>
 

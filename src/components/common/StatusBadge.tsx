@@ -1,3 +1,4 @@
+export type AchievementStatus = string;
 import React from "react";
 import { 
   Megaphone, 
