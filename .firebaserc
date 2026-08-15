@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "demo-tat-e01"
-  }
+    "default": "demo-tat-e01",
+    "staging": "tinubu-achievement-stg"
+  },
+  "targets": {},
+  "etags": {}
 }

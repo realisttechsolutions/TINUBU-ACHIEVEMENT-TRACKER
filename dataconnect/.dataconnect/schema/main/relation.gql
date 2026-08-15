@@ -8,23 +8,50 @@ extend type AchievementProfile {
   """
   _count: Int! @fdc_generated(from: "AchievementProfile.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `AchievementProfile` table where the `dataValueNature` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `AchievementProfile` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  dataValueNature_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "AchievementProfile.dataValueNature", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "AchievementProfile.createdAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `AchievementProfile` table where the `headlineOutcome` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `AchievementProfile` table where the `displayPriority` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  headlineOutcome_count(
+  displayPriority_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "AchievementProfile.headlineOutcome", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "AchievementProfile.displayPriority", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `AchievementProfile` table where the `featuredAssetUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  featuredAssetUrl_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "AchievementProfile.featuredAssetUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `AchievementProfile` table where the `publicImpactNarrative` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicImpactNarrative_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "AchievementProfile.publicImpactNarrative", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `AchievementProfile` table where the `publicQualification` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicQualification_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "AchievementProfile.publicQualification", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `AchievementProfile` table where the `recordId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -35,14 +62,56 @@ extend type AchievementProfile {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "AchievementProfile.recordId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `AchievementProfile` table where the `sourceOrigin` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `AchievementProfile` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  sourceOrigin_count(
+  updatedAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "AchievementProfile.sourceOrigin", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "AchievementProfile.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `displayPriority` field in the `AchievementProfile` table.
+  """
+  displayPriority_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "AchievementProfile.displayPriority", purpose: QUERY_SUM)
+  """
+  ✨ Average the `displayPriority` field in the `AchievementProfile` table.
+  """
+  displayPriority_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "AchievementProfile.displayPriority", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `createdAt` field in the `AchievementProfile` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "AchievementProfile.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `displayPriority` field in the `AchievementProfile` table.
+  """
+  displayPriority_min: Int @fdc_generated(from: "AchievementProfile.displayPriority", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `AchievementProfile` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "AchievementProfile.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `AchievementProfile` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "AchievementProfile.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `displayPriority` field in the `AchievementProfile` table.
+  """
+  displayPriority_max: Int @fdc_generated(from: "AchievementProfile.displayPriority", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `AchievementProfile` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "AchievementProfile.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -254,9 +323,9 @@ extend type ActorProfile {
     having: Correction_Having
   ): [Correction!]! @fdc_generated(from: "Correction.approvedBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
-  ✨ List `Correction` objects in a one-to-many relationship (where `Correction`.`requestedBy` is this object).
+  ✨ List `Correction` objects in a one-to-many relationship (where `Correction`.`createdBy` is this object).
   """
-  corrections_on_requestedBy(
+  corrections_on_createdBy(
     """
     Filter condition to narrow down the query results.
     """
@@ -286,7 +355,7 @@ extend type ActorProfile {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: Correction_Having
-  ): [Correction!]! @fdc_generated(from: "Correction.requestedBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [Correction!]! @fdc_generated(from: "Correction.createdBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Correction` objects in a one-to-many relationship (where `Correction`.`reviewedBy` is this object).
   """
@@ -696,9 +765,9 @@ extend type ActorProfile {
     having: Source_Having
   ): [Source!]! @fdc_generated(from: "Source.createdBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
-  ✨ List `SourceFile` objects in a one-to-many relationship (where `SourceFile`.`createdBy` is this object).
+  ✨ List `SourceFile` objects in a one-to-many relationship (where `SourceFile`.`capturedBy` is this object).
   """
-  sourceFiles_on_createdBy(
+  sourceFiles_on_capturedBy(
     """
     Filter condition to narrow down the query results.
     """
@@ -728,7 +797,7 @@ extend type ActorProfile {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: SourceFile_Having
-  ): [SourceFile!]! @fdc_generated(from: "SourceFile.createdBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [SourceFile!]! @fdc_generated(from: "SourceFile.capturedBy", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `TimelineEvent` objects in a one-to-many relationship (where `TimelineEvent`.`createdBy` is this object).
   """
@@ -919,6 +988,15 @@ extend type ActorRole {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ActorRole.id", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ActorRole` table where the `revocationReason` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  revocationReason_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ActorRole.revocationReason", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ActorRole` table where the `revokedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   revokedAt_count(
@@ -955,6 +1033,15 @@ extend type ActorRole {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ActorRole.scopeType", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ActorRole` table where the `validFrom` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validFrom_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ActorRole.validFrom", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ActorRole` table where the `validUntil` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   validUntil_count(
@@ -972,6 +1059,10 @@ extend type ActorRole {
   """
   revokedAt_min: Timestamp @fdc_generated(from: "ActorRole.revokedAt", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `validFrom` field in the `ActorRole` table.
+  """
+  validFrom_min: Timestamp @fdc_generated(from: "ActorRole.validFrom", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `validUntil` field in the `ActorRole` table.
   """
   validUntil_min: Timestamp @fdc_generated(from: "ActorRole.validUntil", purpose: QUERY_MIN)
@@ -983,6 +1074,10 @@ extend type ActorRole {
   ✨ Maximum of the `revokedAt` field in the `ActorRole` table.
   """
   revokedAt_max: Timestamp @fdc_generated(from: "ActorRole.revokedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validFrom` field in the `ActorRole` table.
+  """
+  validFrom_max: Timestamp @fdc_generated(from: "ActorRole.validFrom", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `validUntil` field in the `ActorRole` table.
   """
@@ -1055,6 +1150,15 @@ extend type BeneficiaryRecord {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `BeneficiaryRecord` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "BeneficiaryRecord.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `BeneficiaryRecord` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1173,6 +1277,15 @@ extend type BeneficiaryRecord {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "BeneficiaryRecord.unit", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `BeneficiaryRecord` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "BeneficiaryRecord.updatedAt", purpose: QUERY_COUNT)
+  """
   ✨ Sum the `countValue` field in the `BeneficiaryRecord` table.
   """
   countValue_sum(
@@ -1180,7 +1293,7 @@ extend type BeneficiaryRecord {
     Set to true to sum the distinct values.
     """
     distinct: Boolean = false
-  ): Int @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_SUM)
+  ): Int64 @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_SUM)
   """
   ✨ Average the `countValue` field in the `BeneficiaryRecord` table.
   """
@@ -1193,7 +1306,11 @@ extend type BeneficiaryRecord {
   """
   ✨ Minimum of the `countValue` field in the `BeneficiaryRecord` table.
   """
-  countValue_min: Int @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_MIN)
+  countValue_min: Int64 @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `BeneficiaryRecord` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "BeneficiaryRecord.createdAt", purpose: QUERY_MIN)
   """
   ✨ Minimum of the `periodEnd` field in the `BeneficiaryRecord` table.
   """
@@ -1203,9 +1320,17 @@ extend type BeneficiaryRecord {
   """
   periodStart_min: Date @fdc_generated(from: "BeneficiaryRecord.periodStart", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `BeneficiaryRecord` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "BeneficiaryRecord.updatedAt", purpose: QUERY_MIN)
+  """
   ✨ Maximum of the `countValue` field in the `BeneficiaryRecord` table.
   """
-  countValue_max: Int @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_MAX)
+  countValue_max: Int64 @fdc_generated(from: "BeneficiaryRecord.countValue", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `BeneficiaryRecord` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "BeneficiaryRecord.createdAt", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `periodEnd` field in the `BeneficiaryRecord` table.
   """
@@ -1215,15 +1340,19 @@ extend type BeneficiaryRecord {
   """
   periodStart_max: Date @fdc_generated(from: "BeneficiaryRecord.periodStart", purpose: QUERY_MAX)
   """
+  ✨ Maximum of the `updatedAt` field in the `BeneficiaryRecord` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "BeneficiaryRecord.updatedAt", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "BeneficiaryRecord.id", purpose: ENTITY_ID)
 }
 extend type ClaimSourceRelationship {
   """
-  ✨ List `ClaimSourceRelationship` objects in a one-to-many relationship (where `ClaimSourceRelationship`.`supersededByRelationship` is this object).
+  ✨ List `ClaimSourceRelationship` objects in a one-to-many relationship (where `ClaimSourceRelationship`.`supersedesRelationship` is this object).
   """
-  claimSourceRelationships_on_supersededByRelationship(
+  claimSourceRelationships_on_supersedesRelationship(
     """
     Filter condition to narrow down the query results.
     """
@@ -1253,7 +1382,41 @@ extend type ClaimSourceRelationship {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: ClaimSourceRelationship_Having
-  ): [ClaimSourceRelationship!]! @fdc_generated(from: "ClaimSourceRelationship.supersededByRelationship", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [ClaimSourceRelationship!]! @fdc_generated(from: "ClaimSourceRelationship.supersedesRelationship", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `ReviewDecision` objects in a one-to-many relationship (where `ReviewDecision`.`relationship` is this object).
+  """
+  reviewDecisions_on_relationship(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ReviewDecision_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ReviewDecision_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ReviewDecision_Having
+  ): [ReviewDecision!]! @fdc_generated(from: "ReviewDecision.relationship", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -1271,6 +1434,15 @@ extend type ClaimSourceRelationship {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ClaimSourceRelationship.claimId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ClaimSourceRelationship` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ClaimSourceRelationship.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ClaimSourceRelationship` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1380,22 +1552,47 @@ extend type ClaimSourceRelationship {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ClaimSourceRelationship.sourceRole", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ClaimSourceRelationship` table where the `supersededByRelationshipId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ClaimSourceRelationship` table where the `supersedesRelationshipId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  supersededByRelationshipId_count(
+  supersedesRelationshipId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ClaimSourceRelationship.supersededByRelationshipId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ClaimSourceRelationship.supersedesRelationshipId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ClaimSourceRelationship` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ClaimSourceRelationship.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `ClaimSourceRelationship` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "ClaimSourceRelationship.createdAt", purpose: QUERY_MIN)
   """
   ✨ Minimum of the `reviewedAt` field in the `ClaimSourceRelationship` table.
   """
   reviewedAt_min: Timestamp @fdc_generated(from: "ClaimSourceRelationship.reviewedAt", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `ClaimSourceRelationship` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "ClaimSourceRelationship.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `ClaimSourceRelationship` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "ClaimSourceRelationship.createdAt", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `reviewedAt` field in the `ClaimSourceRelationship` table.
   """
   reviewedAt_max: Timestamp @fdc_generated(from: "ClaimSourceRelationship.reviewedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `ClaimSourceRelationship` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "ClaimSourceRelationship.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -1410,6 +1607,15 @@ extend type Correction {
   ✨ Count the number of rows in the `Correction` table.
   """
   _count: Int! @fdc_generated(from: "Correction.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Correction` table where the `approvedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  approvedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Correction.approvedAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Correction` table where the `approvedById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1429,14 +1635,14 @@ extend type Correction {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.claimId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Correction` table where the `correctedValue` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Correction` table where the `correctedState` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  correctedValue_count(
+  correctedState_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Correction.correctedValue", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Correction.correctedState", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Correction` table where the `correctionType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1456,14 +1662,23 @@ extend type Correction {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.createdAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Correction` table where the `evidenceSourceId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Correction` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  evidenceSourceId_count(
+  createdById_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Correction.evidenceSourceId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Correction.createdById", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Correction` table where the `effectiveAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  effectiveAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Correction.effectiveAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Correction` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1473,15 +1688,6 @@ extend type Correction {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.externalId", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `Correction` table where the `fieldPath` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  fieldPath_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Correction.fieldPath", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Correction` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1501,14 +1707,23 @@ extend type Correction {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.lifecycleStatus", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Correction` table where the `originalValue` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Correction` table where the `originalState` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  originalValue_count(
+  originalState_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Correction.originalValue", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Correction.originalState", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Correction` table where the `publicNotice` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicNotice_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Correction.publicNotice", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Correction` table where the `reason` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1528,15 +1743,6 @@ extend type Correction {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.recordId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Correction` table where the `requestedById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  requestedById_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Correction.requestedById", purpose: QUERY_COUNT)
-  """
   ✨ Count the number of rows in the `Correction` table where the `reviewedById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   reviewedById_count(
@@ -1546,13 +1752,54 @@ extend type Correction {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Correction.reviewedById", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Correction` table where the `sourceId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sourceId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Correction.sourceId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `approvedAt` field in the `Correction` table.
+  """
+  approvedAt_min: Timestamp @fdc_generated(from: "Correction.approvedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `correctedState` field in the `Correction` table.
+  """
+  correctedState_min: Any @fdc_generated(from: "Correction.correctedState", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `createdAt` field in the `Correction` table.
   """
   createdAt_min: Timestamp @fdc_generated(from: "Correction.createdAt", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `effectiveAt` field in the `Correction` table.
+  """
+  effectiveAt_min: Timestamp @fdc_generated(from: "Correction.effectiveAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `originalState` field in the `Correction` table.
+  """
+  originalState_min: Any @fdc_generated(from: "Correction.originalState", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `approvedAt` field in the `Correction` table.
+  """
+  approvedAt_max: Timestamp @fdc_generated(from: "Correction.approvedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `correctedState` field in the `Correction` table.
+  """
+  correctedState_max: Any @fdc_generated(from: "Correction.correctedState", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `createdAt` field in the `Correction` table.
   """
   createdAt_max: Timestamp @fdc_generated(from: "Correction.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `effectiveAt` field in the `Correction` table.
+  """
+  effectiveAt_max: Timestamp @fdc_generated(from: "Correction.effectiveAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `originalState` field in the `Correction` table.
+  """
+  originalState_max: Any @fdc_generated(from: "Correction.originalState", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -1824,6 +2071,15 @@ extend type EvidenceClaim {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.claimType", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.createdAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   createdById_count(
@@ -1832,6 +2088,24 @@ extend type EvidenceClaim {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.createdById", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `currencyCode` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  currencyCode_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.currencyCode", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `currentRevision` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  currentRevision_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.currentRevision", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `dataValueNature` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1878,6 +2152,15 @@ extend type EvidenceClaim {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.externalId", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `geographicUnitId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  geographicUnitId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.geographicUnitId", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
@@ -1913,6 +2196,15 @@ extend type EvidenceClaim {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.periodEnd", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `periodIsProvisional` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  periodIsProvisional_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.periodIsProvisional", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `periodStart` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1968,6 +2260,15 @@ extend type EvidenceClaim {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.unitCode", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.updatedAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `valueNumeric` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   valueNumeric_count(
@@ -1995,6 +2296,15 @@ extend type EvidenceClaim {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.verificationStatus", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `EvidenceClaim` table where the `withdrawnAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  withdrawnAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EvidenceClaim.withdrawnAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `EvidenceClaim` table where the `workflowStatus` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   workflowStatus_count(
@@ -2003,6 +2313,15 @@ extend type EvidenceClaim {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "EvidenceClaim.workflowStatus", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `currentRevision` field in the `EvidenceClaim` table.
+  """
+  currentRevision_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "EvidenceClaim.currentRevision", purpose: QUERY_SUM)
   """
   ✨ Sum the `valueNumeric` field in the `EvidenceClaim` table.
   """
@@ -2013,6 +2332,15 @@ extend type EvidenceClaim {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "EvidenceClaim.valueNumeric", purpose: QUERY_SUM)
   """
+  ✨ Average the `currentRevision` field in the `EvidenceClaim` table.
+  """
+  currentRevision_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "EvidenceClaim.currentRevision", purpose: QUERY_AVG)
+  """
   ✨ Average the `valueNumeric` field in the `EvidenceClaim` table.
   """
   valueNumeric_avg(
@@ -2021,6 +2349,14 @@ extend type EvidenceClaim {
     """
     distinct: Boolean = false
   ): Float @fdc_generated(from: "EvidenceClaim.valueNumeric", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `createdAt` field in the `EvidenceClaim` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "EvidenceClaim.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `currentRevision` field in the `EvidenceClaim` table.
+  """
+  currentRevision_min: Int @fdc_generated(from: "EvidenceClaim.currentRevision", purpose: QUERY_MIN)
   """
   ✨ Minimum of the `dateValue` field in the `EvidenceClaim` table.
   """
@@ -2034,9 +2370,25 @@ extend type EvidenceClaim {
   """
   periodStart_min: Date @fdc_generated(from: "EvidenceClaim.periodStart", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `EvidenceClaim` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "EvidenceClaim.updatedAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `valueNumeric` field in the `EvidenceClaim` table.
   """
   valueNumeric_min: Float @fdc_generated(from: "EvidenceClaim.valueNumeric", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `withdrawnAt` field in the `EvidenceClaim` table.
+  """
+  withdrawnAt_min: Timestamp @fdc_generated(from: "EvidenceClaim.withdrawnAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `EvidenceClaim` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "EvidenceClaim.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `currentRevision` field in the `EvidenceClaim` table.
+  """
+  currentRevision_max: Int @fdc_generated(from: "EvidenceClaim.currentRevision", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `dateValue` field in the `EvidenceClaim` table.
   """
@@ -2050,9 +2402,17 @@ extend type EvidenceClaim {
   """
   periodStart_max: Date @fdc_generated(from: "EvidenceClaim.periodStart", purpose: QUERY_MAX)
   """
+  ✨ Maximum of the `updatedAt` field in the `EvidenceClaim` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "EvidenceClaim.updatedAt", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `valueNumeric` field in the `EvidenceClaim` table.
   """
   valueNumeric_max: Float @fdc_generated(from: "EvidenceClaim.valueNumeric", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `withdrawnAt` field in the `EvidenceClaim` table.
+  """
+  withdrawnAt_max: Timestamp @fdc_generated(from: "EvidenceClaim.withdrawnAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -2094,6 +2454,15 @@ extend type FinancialRecord {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "FinancialRecord.claimId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `FinancialRecord` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FinancialRecord.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `FinancialRecord` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -2221,6 +2590,15 @@ extend type FinancialRecord {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "FinancialRecord.reportingPeriodLabel", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `FinancialRecord` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FinancialRecord.updatedAt", purpose: QUERY_COUNT)
+  """
   ✨ Sum the `amount` field in the `FinancialRecord` table.
   """
   amount_sum(
@@ -2243,6 +2621,10 @@ extend type FinancialRecord {
   """
   amount_min: Float @fdc_generated(from: "FinancialRecord.amount", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `createdAt` field in the `FinancialRecord` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "FinancialRecord.createdAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `periodEnd` field in the `FinancialRecord` table.
   """
   periodEnd_min: Date @fdc_generated(from: "FinancialRecord.periodEnd", purpose: QUERY_MIN)
@@ -2251,9 +2633,17 @@ extend type FinancialRecord {
   """
   periodStart_min: Date @fdc_generated(from: "FinancialRecord.periodStart", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `FinancialRecord` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "FinancialRecord.updatedAt", purpose: QUERY_MIN)
+  """
   ✨ Maximum of the `amount` field in the `FinancialRecord` table.
   """
   amount_max: Float @fdc_generated(from: "FinancialRecord.amount", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `FinancialRecord` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "FinancialRecord.createdAt", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `periodEnd` field in the `FinancialRecord` table.
   """
@@ -2262,6 +2652,10 @@ extend type FinancialRecord {
   ✨ Maximum of the `periodStart` field in the `FinancialRecord` table.
   """
   periodStart_max: Date @fdc_generated(from: "FinancialRecord.periodStart", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `FinancialRecord` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "FinancialRecord.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -2302,6 +2696,40 @@ extend type GeographicUnit {
     """
     having: BeneficiaryRecord_Having
   ): [BeneficiaryRecord!]! @fdc_generated(from: "BeneficiaryRecord.geographicUnit", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `EvidenceClaim` objects in a one-to-many relationship (where `EvidenceClaim`.`geographicUnit` is this object).
+  """
+  evidenceClaims_on_geographicUnit(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: EvidenceClaim_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [EvidenceClaim_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: EvidenceClaim_Having
+  ): [EvidenceClaim!]! @fdc_generated(from: "EvidenceClaim.geographicUnit", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `FinancialRecord` objects in a one-to-many relationship (where `FinancialRecord`.`geographicUnit` is this object).
   """
@@ -2456,6 +2884,15 @@ extend type GeographicUnit {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "GeographicUnit.active", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `GeographicUnit` table where the `boundaryGeojson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  boundaryGeojson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit.boundaryGeojson", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `GeographicUnit` table where the `code` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   code_count(
@@ -2464,6 +2901,24 @@ extend type GeographicUnit {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "GeographicUnit.code", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GeographicUnit` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GeographicUnit` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  externalId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit.externalId", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `GeographicUnit` table where the `geographyType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -2483,14 +2938,23 @@ extend type GeographicUnit {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "GeographicUnit.id", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `GeographicUnit` table where the `isoCode` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `GeographicUnit` table where the `latitude` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  isoCode_count(
+  latitude_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "GeographicUnit.isoCode", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "GeographicUnit.latitude", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GeographicUnit` table where the `longitude` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  longitude_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit.longitude", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `GeographicUnit` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -2518,6 +2982,91 @@ extend type GeographicUnit {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "GeographicUnit.sensitivityClass", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GeographicUnit` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GeographicUnit.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `latitude` field in the `GeographicUnit` table.
+  """
+  latitude_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "GeographicUnit.latitude", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `longitude` field in the `GeographicUnit` table.
+  """
+  longitude_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "GeographicUnit.longitude", purpose: QUERY_SUM)
+  """
+  ✨ Average the `latitude` field in the `GeographicUnit` table.
+  """
+  latitude_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "GeographicUnit.latitude", purpose: QUERY_AVG)
+  """
+  ✨ Average the `longitude` field in the `GeographicUnit` table.
+  """
+  longitude_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "GeographicUnit.longitude", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `boundaryGeojson` field in the `GeographicUnit` table.
+  """
+  boundaryGeojson_min: Any @fdc_generated(from: "GeographicUnit.boundaryGeojson", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `GeographicUnit` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "GeographicUnit.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `latitude` field in the `GeographicUnit` table.
+  """
+  latitude_min: Float @fdc_generated(from: "GeographicUnit.latitude", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `longitude` field in the `GeographicUnit` table.
+  """
+  longitude_min: Float @fdc_generated(from: "GeographicUnit.longitude", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `GeographicUnit` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "GeographicUnit.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `boundaryGeojson` field in the `GeographicUnit` table.
+  """
+  boundaryGeojson_max: Any @fdc_generated(from: "GeographicUnit.boundaryGeojson", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `GeographicUnit` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "GeographicUnit.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `latitude` field in the `GeographicUnit` table.
+  """
+  latitude_max: Float @fdc_generated(from: "GeographicUnit.latitude", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `longitude` field in the `GeographicUnit` table.
+  """
+  longitude_max: Float @fdc_generated(from: "GeographicUnit.longitude", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `GeographicUnit` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "GeographicUnit.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -2575,6 +3124,24 @@ extend type Indicator {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Indicator.active", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Indicator` table where the `causalAttributionProhibited` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  causalAttributionProhibited_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Indicator.causalAttributionProhibited", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Indicator` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Indicator.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Indicator` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -2675,6 +3242,31 @@ extend type Indicator {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Indicator.unit", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Indicator` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Indicator.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Indicator` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Indicator.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Indicator` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Indicator.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Indicator` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Indicator.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Indicator` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Indicator.updatedAt", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "Indicator.id", purpose: ENTITY_ID)
@@ -2697,6 +3289,15 @@ extend type IndicatorObservation {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "IndicatorObservation.claimId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `IndicatorObservation` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "IndicatorObservation.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `IndicatorObservation` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -2788,6 +3389,15 @@ extend type IndicatorObservation {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "IndicatorObservation.reportingPeriodLabel", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `IndicatorObservation` table where the `revision` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  revision_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "IndicatorObservation.revision", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `IndicatorObservation` table where the `sourceOrigin` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   sourceOrigin_count(
@@ -2824,6 +3434,15 @@ extend type IndicatorObservation {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "IndicatorObservation.verificationStatus", purpose: QUERY_COUNT)
   """
+  ✨ Sum the `revision` field in the `IndicatorObservation` table.
+  """
+  revision_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "IndicatorObservation.revision", purpose: QUERY_SUM)
+  """
   ✨ Sum the `valueNumeric` field in the `IndicatorObservation` table.
   """
   valueNumeric_sum(
@@ -2832,6 +3451,15 @@ extend type IndicatorObservation {
     """
     distinct: Boolean = false
   ): Float @fdc_generated(from: "IndicatorObservation.valueNumeric", purpose: QUERY_SUM)
+  """
+  ✨ Average the `revision` field in the `IndicatorObservation` table.
+  """
+  revision_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "IndicatorObservation.revision", purpose: QUERY_AVG)
   """
   ✨ Average the `valueNumeric` field in the `IndicatorObservation` table.
   """
@@ -2842,6 +3470,10 @@ extend type IndicatorObservation {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "IndicatorObservation.valueNumeric", purpose: QUERY_AVG)
   """
+  ✨ Minimum of the `createdAt` field in the `IndicatorObservation` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "IndicatorObservation.createdAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `periodEnd` field in the `IndicatorObservation` table.
   """
   periodEnd_min: Date @fdc_generated(from: "IndicatorObservation.periodEnd", purpose: QUERY_MIN)
@@ -2850,9 +3482,17 @@ extend type IndicatorObservation {
   """
   periodStart_min: Date @fdc_generated(from: "IndicatorObservation.periodStart", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `revision` field in the `IndicatorObservation` table.
+  """
+  revision_min: Int @fdc_generated(from: "IndicatorObservation.revision", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `valueNumeric` field in the `IndicatorObservation` table.
   """
   valueNumeric_min: Float @fdc_generated(from: "IndicatorObservation.valueNumeric", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `IndicatorObservation` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "IndicatorObservation.createdAt", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `periodEnd` field in the `IndicatorObservation` table.
   """
@@ -2861,6 +3501,10 @@ extend type IndicatorObservation {
   ✨ Maximum of the `periodStart` field in the `IndicatorObservation` table.
   """
   periodStart_max: Date @fdc_generated(from: "IndicatorObservation.periodStart", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `revision` field in the `IndicatorObservation` table.
+  """
+  revision_max: Int @fdc_generated(from: "IndicatorObservation.revision", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `valueNumeric` field in the `IndicatorObservation` table.
   """
@@ -3025,6 +3669,15 @@ extend type Institution {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Institution.active", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Institution` table where the `aliases` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  aliases_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Institution.aliases", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Institution` table where the `canonicalName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   canonicalName_count(
@@ -3033,6 +3686,15 @@ extend type Institution {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Institution.canonicalName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Institution` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Institution.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Institution` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -3097,6 +3759,39 @@ extend type Institution {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Institution.slug", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Institution` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Institution.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `aliases` field in the `Institution` table.
+  """
+  aliases_min: Any @fdc_generated(from: "Institution.aliases", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `Institution` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Institution.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Institution` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Institution.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `aliases` field in the `Institution` table.
+  """
+  aliases_max: Any @fdc_generated(from: "Institution.aliases", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `Institution` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Institution.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Institution` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Institution.updatedAt", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "Institution.id", purpose: ENTITY_ID)
@@ -3111,23 +3806,32 @@ extend type PolicyDetail {
   """
   _count: Int! @fdc_generated(from: "PolicyDetail.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `PolicyDetail` table where the `effectiveDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `PolicyDetail` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  effectiveDate_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PolicyDetail.effectiveDate", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "PolicyDetail.createdAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `PolicyDetail` table where the `legalInstrument` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `PolicyDetail` table where the `effectScope` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  legalInstrument_count(
+  effectScope_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "PolicyDetail.legalInstrument", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "PolicyDetail.effectScope", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PolicyDetail` table where the `legalAuthority` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  legalAuthority_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PolicyDetail.legalAuthority", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `PolicyDetail` table where the `policyType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -3147,13 +3851,39 @@ extend type PolicyDetail {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "PolicyDetail.recordId", purpose: QUERY_COUNT)
   """
-  ✨ Minimum of the `effectiveDate` field in the `PolicyDetail` table.
+  ✨ Count the number of rows in the `PolicyDetail` table where the `referenceNumber` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  effectiveDate_min: Date @fdc_generated(from: "PolicyDetail.effectiveDate", purpose: QUERY_MIN)
+  referenceNumber_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PolicyDetail.referenceNumber", purpose: QUERY_COUNT)
   """
-  ✨ Maximum of the `effectiveDate` field in the `PolicyDetail` table.
+  ✨ Count the number of rows in the `PolicyDetail` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  effectiveDate_max: Date @fdc_generated(from: "PolicyDetail.effectiveDate", purpose: QUERY_MAX)
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PolicyDetail.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `PolicyDetail` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "PolicyDetail.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `PolicyDetail` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "PolicyDetail.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `PolicyDetail` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "PolicyDetail.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `PolicyDetail` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "PolicyDetail.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -3169,14 +3899,32 @@ extend type ProgrammeDetail {
   """
   _count: Int! @fdc_generated(from: "ProgrammeDetail.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProgrammeDetail` table where the `endDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProgrammeDetail` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  endDate_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProgrammeDetail.endDate", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProgrammeDetail.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ProgrammeDetail` table where the `disbursementModel` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  disbursementModel_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProgrammeDetail.disbursementModel", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ProgrammeDetail` table where the `enrolmentModel` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  enrolmentModel_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProgrammeDetail.enrolmentModel", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ProgrammeDetail` table where the `programmeType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -3196,39 +3944,39 @@ extend type ProgrammeDetail {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ProgrammeDetail.recordId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProgrammeDetail` table where the `startDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProgrammeDetail` table where the `targetGroupNarrative` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  startDate_count(
+  targetGroupNarrative_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProgrammeDetail.startDate", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProgrammeDetail.targetGroupNarrative", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProgrammeDetail` table where the `targetBeneficiaryType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProgrammeDetail` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  targetBeneficiaryType_count(
+  updatedAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProgrammeDetail.targetBeneficiaryType", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProgrammeDetail.updatedAt", purpose: QUERY_COUNT)
   """
-  ✨ Minimum of the `endDate` field in the `ProgrammeDetail` table.
+  ✨ Minimum of the `createdAt` field in the `ProgrammeDetail` table.
   """
-  endDate_min: Date @fdc_generated(from: "ProgrammeDetail.endDate", purpose: QUERY_MIN)
+  createdAt_min: Timestamp @fdc_generated(from: "ProgrammeDetail.createdAt", purpose: QUERY_MIN)
   """
-  ✨ Minimum of the `startDate` field in the `ProgrammeDetail` table.
+  ✨ Minimum of the `updatedAt` field in the `ProgrammeDetail` table.
   """
-  startDate_min: Date @fdc_generated(from: "ProgrammeDetail.startDate", purpose: QUERY_MIN)
+  updatedAt_min: Timestamp @fdc_generated(from: "ProgrammeDetail.updatedAt", purpose: QUERY_MIN)
   """
-  ✨ Maximum of the `endDate` field in the `ProgrammeDetail` table.
+  ✨ Maximum of the `createdAt` field in the `ProgrammeDetail` table.
   """
-  endDate_max: Date @fdc_generated(from: "ProgrammeDetail.endDate", purpose: QUERY_MAX)
+  createdAt_max: Timestamp @fdc_generated(from: "ProgrammeDetail.createdAt", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `startDate` field in the `ProgrammeDetail` table.
+  ✨ Maximum of the `updatedAt` field in the `ProgrammeDetail` table.
   """
-  startDate_max: Date @fdc_generated(from: "ProgrammeDetail.startDate", purpose: QUERY_MAX)
+  updatedAt_max: Timestamp @fdc_generated(from: "ProgrammeDetail.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -3244,32 +3992,50 @@ extend type ProjectDetail {
   """
   _count: Int! @fdc_generated(from: "ProjectDetail.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProjectDetail` table where the `commencementDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProjectDetail` table where the `contractReference` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  commencementDate_count(
+  contractReference_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProjectDetail.commencementDate", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProjectDetail.contractReference", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProjectDetail` table where the `contractorName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProjectDetail` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  contractorName_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProjectDetail.contractorName", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProjectDetail.createdAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `ProjectDetail` table where the `expectedCompletionDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `ProjectDetail` table where the `locationNarrative` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  expectedCompletionDate_count(
+  locationNarrative_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "ProjectDetail.expectedCompletionDate", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "ProjectDetail.locationNarrative", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ProjectDetail` table where the `progressPercentage` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  progressPercentage_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProjectDetail.progressPercentage", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ProjectDetail` table where the `projectReference` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  projectReference_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProjectDetail.projectReference", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ProjectDetail` table where the `projectType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -3289,21 +4055,56 @@ extend type ProjectDetail {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ProjectDetail.recordId", purpose: QUERY_COUNT)
   """
-  ✨ Minimum of the `commencementDate` field in the `ProjectDetail` table.
+  ✨ Count the number of rows in the `ProjectDetail` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  commencementDate_min: Date @fdc_generated(from: "ProjectDetail.commencementDate", purpose: QUERY_MIN)
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ProjectDetail.updatedAt", purpose: QUERY_COUNT)
   """
-  ✨ Minimum of the `expectedCompletionDate` field in the `ProjectDetail` table.
+  ✨ Sum the `progressPercentage` field in the `ProjectDetail` table.
   """
-  expectedCompletionDate_min: Date @fdc_generated(from: "ProjectDetail.expectedCompletionDate", purpose: QUERY_MIN)
+  progressPercentage_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "ProjectDetail.progressPercentage", purpose: QUERY_SUM)
   """
-  ✨ Maximum of the `commencementDate` field in the `ProjectDetail` table.
+  ✨ Average the `progressPercentage` field in the `ProjectDetail` table.
   """
-  commencementDate_max: Date @fdc_generated(from: "ProjectDetail.commencementDate", purpose: QUERY_MAX)
+  progressPercentage_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "ProjectDetail.progressPercentage", purpose: QUERY_AVG)
   """
-  ✨ Maximum of the `expectedCompletionDate` field in the `ProjectDetail` table.
+  ✨ Minimum of the `createdAt` field in the `ProjectDetail` table.
   """
-  expectedCompletionDate_max: Date @fdc_generated(from: "ProjectDetail.expectedCompletionDate", purpose: QUERY_MAX)
+  createdAt_min: Timestamp @fdc_generated(from: "ProjectDetail.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `progressPercentage` field in the `ProjectDetail` table.
+  """
+  progressPercentage_min: Float @fdc_generated(from: "ProjectDetail.progressPercentage", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `ProjectDetail` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "ProjectDetail.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `ProjectDetail` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "ProjectDetail.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `progressPercentage` field in the `ProjectDetail` table.
+  """
+  progressPercentage_max: Float @fdc_generated(from: "ProjectDetail.progressPercentage", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `ProjectDetail` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "ProjectDetail.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -4022,6 +4823,15 @@ extend type RecordGeography {
   """
   _count: Int! @fdc_generated(from: "RecordGeography.", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RecordGeography` table where the `confidence` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  confidence_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordGeography.confidence", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `RecordGeography` table where the `coverageRole` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   coverageRole_count(
@@ -4030,6 +4840,15 @@ extend type RecordGeography {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordGeography.coverageRole", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `RecordGeography` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordGeography.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordGeography` table where the `geographicUnitId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4040,14 +4859,14 @@ extend type RecordGeography {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordGeography.geographicUnitId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `RecordGeography` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `RecordGeography` table where the `qualification` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  id_count(
+  qualification_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "RecordGeography.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "RecordGeography.qualification", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordGeography` table where the `recordId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4067,9 +4886,43 @@ extend type RecordGeography {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordGeography.sensitivityClass", purpose: QUERY_COUNT)
   """
+  ✨ Sum the `confidence` field in the `RecordGeography` table.
+  """
+  confidence_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "RecordGeography.confidence", purpose: QUERY_SUM)
+  """
+  ✨ Average the `confidence` field in the `RecordGeography` table.
+  """
+  confidence_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "RecordGeography.confidence", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `confidence` field in the `RecordGeography` table.
+  """
+  confidence_min: Float @fdc_generated(from: "RecordGeography.confidence", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `RecordGeography` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "RecordGeography.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `confidence` field in the `RecordGeography` table.
+  """
+  confidence_max: Float @fdc_generated(from: "RecordGeography.confidence", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `RecordGeography` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "RecordGeography.createdAt", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "RecordGeography.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "RecordGeography.recordId,geographicUnitId,coverageRole", purpose: ENTITY_ID)
 }
 extend type RecordInstitution {
   """
@@ -4081,14 +4934,14 @@ extend type RecordInstitution {
   """
   _count: Int! @fdc_generated(from: "RecordInstitution.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `RecordInstitution` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `RecordInstitution` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  id_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "RecordInstitution.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "RecordInstitution.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordInstitution` table where the `institutionId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4098,15 +4951,6 @@ extend type RecordInstitution {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordInstitution.institutionId", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `RecordInstitution` table where the `isPrimary` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  isPrimary_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "RecordInstitution.isPrimary", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordInstitution` table where the `recordId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4126,9 +4970,51 @@ extend type RecordInstitution {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordInstitution.roleCode", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RecordInstitution` table where the `validFrom` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validFrom_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordInstitution.validFrom", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `RecordInstitution` table where the `validUntil` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validUntil_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordInstitution.validUntil", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `RecordInstitution` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "RecordInstitution.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `validFrom` field in the `RecordInstitution` table.
+  """
+  validFrom_min: Date @fdc_generated(from: "RecordInstitution.validFrom", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `validUntil` field in the `RecordInstitution` table.
+  """
+  validUntil_min: Date @fdc_generated(from: "RecordInstitution.validUntil", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `RecordInstitution` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "RecordInstitution.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validFrom` field in the `RecordInstitution` table.
+  """
+  validFrom_max: Date @fdc_generated(from: "RecordInstitution.validFrom", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validUntil` field in the `RecordInstitution` table.
+  """
+  validUntil_max: Date @fdc_generated(from: "RecordInstitution.validUntil", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "RecordInstitution.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "RecordInstitution.recordId,institutionId,roleCode", purpose: ENTITY_ID)
 }
 extend type RecordRelationship {
   """
@@ -4140,6 +5026,15 @@ extend type RecordRelationship {
   """
   _count: Int! @fdc_generated(from: "RecordRelationship.", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RecordRelationship` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordRelationship.createdAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `RecordRelationship` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   createdById_count(
@@ -4149,14 +5044,14 @@ extend type RecordRelationship {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordRelationship.createdById", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `RecordRelationship` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `RecordRelationship` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  description_count(
+  externalId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "RecordRelationship.description", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "RecordRelationship.externalId", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordRelationship` table where the `fromRecordId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4194,6 +5089,48 @@ extend type RecordRelationship {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordRelationship.toRecordId", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RecordRelationship` table where the `validFrom` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validFrom_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordRelationship.validFrom", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `RecordRelationship` table where the `validUntil` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validUntil_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordRelationship.validUntil", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `RecordRelationship` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "RecordRelationship.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `validFrom` field in the `RecordRelationship` table.
+  """
+  validFrom_min: Date @fdc_generated(from: "RecordRelationship.validFrom", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `validUntil` field in the `RecordRelationship` table.
+  """
+  validUntil_min: Date @fdc_generated(from: "RecordRelationship.validUntil", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `RecordRelationship` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "RecordRelationship.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validFrom` field in the `RecordRelationship` table.
+  """
+  validFrom_max: Date @fdc_generated(from: "RecordRelationship.validFrom", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validUntil` field in the `RecordRelationship` table.
+  """
+  validUntil_max: Date @fdc_generated(from: "RecordRelationship.validUntil", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "RecordRelationship.id", purpose: ENTITY_ID)
@@ -4208,14 +5145,14 @@ extend type RecordSector {
   """
   _count: Int! @fdc_generated(from: "RecordSector.", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `RecordSector` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `RecordSector` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  id_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "RecordSector.id", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "RecordSector.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordSector` table where the `recordId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4244,9 +5181,17 @@ extend type RecordSector {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordSector.sectorId", purpose: QUERY_COUNT)
   """
+  ✨ Minimum of the `createdAt` field in the `RecordSector` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "RecordSector.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `RecordSector` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "RecordSector.createdAt", purpose: QUERY_MAX)
+  """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "RecordSector.id", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "RecordSector.recordId,sectorId,roleCode", purpose: ENTITY_ID)
 }
 extend type RecordVersion {
   """
@@ -4285,6 +5230,15 @@ extend type RecordVersion {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordVersion.createdAt", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RecordVersion` table where the `diffJson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  diffJson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordVersion.diffJson", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `RecordVersion` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
@@ -4311,6 +5265,15 @@ extend type RecordVersion {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RecordVersion.researchBatchId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `RecordVersion` table where the `snapshotJson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  snapshotJson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RecordVersion.snapshotJson", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `RecordVersion` table where the `versionNumber` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4343,6 +5306,14 @@ extend type RecordVersion {
   """
   createdAt_min: Timestamp @fdc_generated(from: "RecordVersion.createdAt", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `diffJson` field in the `RecordVersion` table.
+  """
+  diffJson_min: Any @fdc_generated(from: "RecordVersion.diffJson", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `snapshotJson` field in the `RecordVersion` table.
+  """
+  snapshotJson_min: Any @fdc_generated(from: "RecordVersion.snapshotJson", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `versionNumber` field in the `RecordVersion` table.
   """
   versionNumber_min: Int @fdc_generated(from: "RecordVersion.versionNumber", purpose: QUERY_MIN)
@@ -4350,6 +5321,14 @@ extend type RecordVersion {
   ✨ Maximum of the `createdAt` field in the `RecordVersion` table.
   """
   createdAt_max: Timestamp @fdc_generated(from: "RecordVersion.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `diffJson` field in the `RecordVersion` table.
+  """
+  diffJson_max: Any @fdc_generated(from: "RecordVersion.diffJson", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `snapshotJson` field in the `RecordVersion` table.
+  """
+  snapshotJson_max: Any @fdc_generated(from: "RecordVersion.snapshotJson", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `versionNumber` field in the `RecordVersion` table.
   """
@@ -4430,6 +5409,24 @@ extend type ResearchBatch {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ResearchBatch.contractVersion", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `duplicateReport` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  duplicateReport_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.duplicateReport", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ResearchBatch` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   externalId_count(
@@ -4456,6 +5453,24 @@ extend type ResearchBatch {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ResearchBatch.idempotencyKey", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `importSummary` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  importSummary_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.importSummary", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `manifestJson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  manifestJson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.manifestJson", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ResearchBatch` table where the `mode` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4529,21 +5544,87 @@ extend type ResearchBatch {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ResearchBatch.taxonomyVersion", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `unresolvedFkReport` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  unresolvedFkReport_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.unresolvedFkReport", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ResearchBatch` table where the `validationReport` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  validationReport_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ResearchBatch.validationReport", purpose: QUERY_COUNT)
+  """
   ✨ Minimum of the `completedAt` field in the `ResearchBatch` table.
   """
   completedAt_min: Timestamp @fdc_generated(from: "ResearchBatch.completedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `ResearchBatch` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "ResearchBatch.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `duplicateReport` field in the `ResearchBatch` table.
+  """
+  duplicateReport_min: Any @fdc_generated(from: "ResearchBatch.duplicateReport", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `importSummary` field in the `ResearchBatch` table.
+  """
+  importSummary_min: Any @fdc_generated(from: "ResearchBatch.importSummary", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `manifestJson` field in the `ResearchBatch` table.
+  """
+  manifestJson_min: Any @fdc_generated(from: "ResearchBatch.manifestJson", purpose: QUERY_MIN)
   """
   ✨ Minimum of the `startedAt` field in the `ResearchBatch` table.
   """
   startedAt_min: Timestamp @fdc_generated(from: "ResearchBatch.startedAt", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `unresolvedFkReport` field in the `ResearchBatch` table.
+  """
+  unresolvedFkReport_min: Any @fdc_generated(from: "ResearchBatch.unresolvedFkReport", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `validationReport` field in the `ResearchBatch` table.
+  """
+  validationReport_min: Any @fdc_generated(from: "ResearchBatch.validationReport", purpose: QUERY_MIN)
+  """
   ✨ Maximum of the `completedAt` field in the `ResearchBatch` table.
   """
   completedAt_max: Timestamp @fdc_generated(from: "ResearchBatch.completedAt", purpose: QUERY_MAX)
   """
+  ✨ Maximum of the `createdAt` field in the `ResearchBatch` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "ResearchBatch.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `duplicateReport` field in the `ResearchBatch` table.
+  """
+  duplicateReport_max: Any @fdc_generated(from: "ResearchBatch.duplicateReport", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `importSummary` field in the `ResearchBatch` table.
+  """
+  importSummary_max: Any @fdc_generated(from: "ResearchBatch.importSummary", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `manifestJson` field in the `ResearchBatch` table.
+  """
+  manifestJson_max: Any @fdc_generated(from: "ResearchBatch.manifestJson", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `startedAt` field in the `ResearchBatch` table.
   """
   startedAt_max: Timestamp @fdc_generated(from: "ResearchBatch.startedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `unresolvedFkReport` field in the `ResearchBatch` table.
+  """
+  unresolvedFkReport_max: Any @fdc_generated(from: "ResearchBatch.unresolvedFkReport", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `validationReport` field in the `ResearchBatch` table.
+  """
+  validationReport_max: Any @fdc_generated(from: "ResearchBatch.validationReport", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -4567,6 +5648,15 @@ extend type ReviewDecision {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ReviewDecision.claimId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ReviewDecision` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReviewDecision.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ReviewDecision` table where the `decidedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -4640,6 +5730,15 @@ extend type ReviewDecision {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ReviewDecision.recordRevision", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ReviewDecision` table where the `relationshipId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  relationshipId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReviewDecision.relationshipId", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ReviewDecision` table where the `reviewerId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   reviewerId_count(
@@ -4685,6 +5784,10 @@ extend type ReviewDecision {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "ReviewDecision.recordRevision", purpose: QUERY_AVG)
   """
+  ✨ Minimum of the `createdAt` field in the `ReviewDecision` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "ReviewDecision.createdAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `decidedAt` field in the `ReviewDecision` table.
   """
   decidedAt_min: Timestamp @fdc_generated(from: "ReviewDecision.decidedAt", purpose: QUERY_MIN)
@@ -4692,6 +5795,10 @@ extend type ReviewDecision {
   ✨ Minimum of the `recordRevision` field in the `ReviewDecision` table.
   """
   recordRevision_min: Int @fdc_generated(from: "ReviewDecision.recordRevision", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `ReviewDecision` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "ReviewDecision.createdAt", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `decidedAt` field in the `ReviewDecision` table.
   """
@@ -4835,6 +5942,15 @@ extend type Sector {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Sector.code", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Sector` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Sector.createdAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Sector` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   description_count(
@@ -4889,6 +6005,15 @@ extend type Sector {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Sector.taxonomyLevel", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Sector` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Sector.updatedAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Sector` table where the `vocabularyVersion` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   vocabularyVersion_count(
@@ -4916,13 +6041,29 @@ extend type Sector {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "Sector.publicOrder", purpose: QUERY_AVG)
   """
+  ✨ Minimum of the `createdAt` field in the `Sector` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Sector.createdAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `publicOrder` field in the `Sector` table.
   """
   publicOrder_min: Int @fdc_generated(from: "Sector.publicOrder", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `Sector` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Sector.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Sector` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Sector.createdAt", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `publicOrder` field in the `Sector` table.
   """
   publicOrder_max: Int @fdc_generated(from: "Sector.publicOrder", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Sector` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Sector.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -4964,9 +6105,9 @@ extend type Source {
     having: ClaimSourceRelationship_Having
   ): [ClaimSourceRelationship!]! @fdc_generated(from: "ClaimSourceRelationship.source", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
-  ✨ List `Correction` objects in a one-to-many relationship (where `Correction`.`evidenceSource` is this object).
+  ✨ List `Correction` objects in a one-to-many relationship (where `Correction`.`source` is this object).
   """
-  corrections_on_evidenceSource(
+  corrections_on_source(
     """
     Filter condition to narrow down the query results.
     """
@@ -4996,7 +6137,7 @@ extend type Source {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: Correction_Having
-  ): [Correction!]! @fdc_generated(from: "Correction.evidenceSource", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [Correction!]! @fdc_generated(from: "Correction.source", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `SourceFile` objects in a one-to-many relationship (where `SourceFile`.`source` is this object).
   """
@@ -5058,14 +6199,14 @@ extend type Source {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.archivalUrl", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Source` table where the `checksumSha256` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Source` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  checksumSha256_count(
+  createdAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Source.checksumSha256", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Source.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Source` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5103,6 +6244,24 @@ extend type Source {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.id", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Source` table where the `languageCode` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  languageCode_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.languageCode", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Source` table where the `metadata` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  metadata_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.metadata", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Source` table where the `originalUrl` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   originalUrl_count(
@@ -5111,6 +6270,15 @@ extend type Source {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.originalUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Source` table where the `publicationDateLabel` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicationDateLabel_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.publicationDateLabel", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Source` table where the `publicationDatePrecision` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5130,6 +6298,24 @@ extend type Source {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.publicationDate", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Source` table where the `publicationPeriodEnd` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicationPeriodEnd_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.publicationPeriodEnd", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Source` table where the `publicationPeriodStart` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publicationPeriodStart_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.publicationPeriodStart", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Source` table where the `publisherInstitutionId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   publisherInstitutionId_count(
@@ -5147,6 +6333,15 @@ extend type Source {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.publisherName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Source` table where the `sha256` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sha256_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.sha256", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Source` table where the `sourceLevel` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5184,6 +6379,15 @@ extend type Source {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Source.title", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Source` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Source.updatedAt", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Source` table where the `visibilityClass` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   visibilityClass_count(
@@ -5197,23 +6401,97 @@ extend type Source {
   """
   accessDate_min: Date @fdc_generated(from: "Source.accessDate", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `createdAt` field in the `Source` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Source.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `metadata` field in the `Source` table.
+  """
+  metadata_min: Any @fdc_generated(from: "Source.metadata", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `publicationDate` field in the `Source` table.
   """
   publicationDate_min: Date @fdc_generated(from: "Source.publicationDate", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `publicationPeriodEnd` field in the `Source` table.
+  """
+  publicationPeriodEnd_min: Date @fdc_generated(from: "Source.publicationPeriodEnd", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `publicationPeriodStart` field in the `Source` table.
+  """
+  publicationPeriodStart_min: Date @fdc_generated(from: "Source.publicationPeriodStart", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Source` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Source.updatedAt", purpose: QUERY_MIN)
   """
   ✨ Maximum of the `accessDate` field in the `Source` table.
   """
   accessDate_max: Date @fdc_generated(from: "Source.accessDate", purpose: QUERY_MAX)
   """
+  ✨ Maximum of the `createdAt` field in the `Source` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Source.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `metadata` field in the `Source` table.
+  """
+  metadata_max: Any @fdc_generated(from: "Source.metadata", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `publicationDate` field in the `Source` table.
   """
   publicationDate_max: Date @fdc_generated(from: "Source.publicationDate", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `publicationPeriodEnd` field in the `Source` table.
+  """
+  publicationPeriodEnd_max: Date @fdc_generated(from: "Source.publicationPeriodEnd", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `publicationPeriodStart` field in the `Source` table.
+  """
+  publicationPeriodStart_max: Date @fdc_generated(from: "Source.publicationPeriodStart", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Source` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Source.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "Source.id", purpose: ENTITY_ID)
 }
 extend type SourceFile {
+  """
+  ✨ List `SourceFile` objects in a one-to-many relationship (where `SourceFile`.`supersedesFile` is this object).
+  """
+  sourceFiles_on_supersedesFile(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: SourceFile_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [SourceFile_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: SourceFile_Having
+  ): [SourceFile!]! @fdc_generated(from: "SourceFile.supersedesFile", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -5222,6 +6500,15 @@ extend type SourceFile {
   ✨ Count the number of rows in the `SourceFile` table.
   """
   _count: Int! @fdc_generated(from: "SourceFile.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `bucketName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  bucketName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.bucketName", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `SourceFile` table where the `byteSize` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5232,23 +6519,68 @@ extend type SourceFile {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `SourceFile` table where the `checksumSha256` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `SourceFile` table where the `capturedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  checksumSha256_count(
+  capturedAt_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "SourceFile.checksumSha256", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "SourceFile.capturedAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `SourceFile` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `SourceFile` table where the `capturedById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  createdById_count(
+  capturedById_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "SourceFile.createdById", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "SourceFile.capturedById", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `contentType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  contentType_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.contentType", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `copyrightStatus` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  copyrightStatus_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.copyrightStatus", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `deletedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  deletedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.deletedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `deletionReason` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  deletionReason_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.deletionReason", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `externalId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  externalId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.externalId", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `SourceFile` table where the `fileKind` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5268,23 +6600,59 @@ extend type SourceFile {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "SourceFile.id", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `SourceFile` table where the `mimeType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `SourceFile` table where the `legalHold` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  mimeType_count(
+  legalHold_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "SourceFile.mimeType", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "SourceFile.legalHold", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `SourceFile` table where the `originalFilename` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `SourceFile` table where the `objectGeneration` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  originalFilename_count(
+  objectGeneration_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "SourceFile.originalFilename", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "SourceFile.objectGeneration", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `objectPath` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  objectPath_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.objectPath", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `publishedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  publishedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.publishedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `retentionClass` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  retentionClass_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.retentionClass", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `SourceFile` table where the `sha256` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sha256_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "SourceFile.sha256", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `SourceFile` table where the `sourceId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5295,14 +6663,14 @@ extend type SourceFile {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "SourceFile.sourceId", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `SourceFile` table where the `storageUri` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `SourceFile` table where the `supersedesFileId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  storageUri_count(
+  supersedesFileId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "SourceFile.storageUri", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "SourceFile.supersedesFileId", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `SourceFile` table where the `visibilityClass` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5320,7 +6688,7 @@ extend type SourceFile {
     Set to true to sum the distinct values.
     """
     distinct: Boolean = false
-  ): Int @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_SUM)
+  ): Int64 @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_SUM)
   """
   ✨ Average the `byteSize` field in the `SourceFile` table.
   """
@@ -5333,11 +6701,35 @@ extend type SourceFile {
   """
   ✨ Minimum of the `byteSize` field in the `SourceFile` table.
   """
-  byteSize_min: Int @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_MIN)
+  byteSize_min: Int64 @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `capturedAt` field in the `SourceFile` table.
+  """
+  capturedAt_min: Timestamp @fdc_generated(from: "SourceFile.capturedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `deletedAt` field in the `SourceFile` table.
+  """
+  deletedAt_min: Timestamp @fdc_generated(from: "SourceFile.deletedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `publishedAt` field in the `SourceFile` table.
+  """
+  publishedAt_min: Timestamp @fdc_generated(from: "SourceFile.publishedAt", purpose: QUERY_MIN)
   """
   ✨ Maximum of the `byteSize` field in the `SourceFile` table.
   """
-  byteSize_max: Int @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_MAX)
+  byteSize_max: Int64 @fdc_generated(from: "SourceFile.byteSize", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `capturedAt` field in the `SourceFile` table.
+  """
+  capturedAt_max: Timestamp @fdc_generated(from: "SourceFile.capturedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `deletedAt` field in the `SourceFile` table.
+  """
+  deletedAt_max: Timestamp @fdc_generated(from: "SourceFile.deletedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `publishedAt` field in the `SourceFile` table.
+  """
+  publishedAt_max: Timestamp @fdc_generated(from: "SourceFile.publishedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -5361,6 +6753,15 @@ extend type TimelineEvent {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "TimelineEvent.claimId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TimelineEvent` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TimelineEvent.createdAt", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `TimelineEvent` table where the `createdById` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -5488,6 +6889,19 @@ extend type TimelineEvent {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "TimelineEvent.title", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `TimelineEvent` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TimelineEvent.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `TimelineEvent` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "TimelineEvent.createdAt", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `dateValue` field in the `TimelineEvent` table.
   """
   dateValue_min: Date @fdc_generated(from: "TimelineEvent.dateValue", purpose: QUERY_MIN)
@@ -5500,6 +6914,14 @@ extend type TimelineEvent {
   """
   periodStart_min: Date @fdc_generated(from: "TimelineEvent.periodStart", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `updatedAt` field in the `TimelineEvent` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "TimelineEvent.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `TimelineEvent` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "TimelineEvent.createdAt", purpose: QUERY_MAX)
+  """
   ✨ Maximum of the `dateValue` field in the `TimelineEvent` table.
   """
   dateValue_max: Date @fdc_generated(from: "TimelineEvent.dateValue", purpose: QUERY_MAX)
@@ -5511,6 +6933,10 @@ extend type TimelineEvent {
   ✨ Maximum of the `periodStart` field in the `TimelineEvent` table.
   """
   periodStart_max: Date @fdc_generated(from: "TimelineEvent.periodStart", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `TimelineEvent` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "TimelineEvent.updatedAt", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """

@@ -25,9 +25,16 @@ try {
   const tableCount = await db.query("SELECT count(*)::int AS count FROM pg_tables WHERE schemaname = 'public'");
   assert.equal(tableCount.rows[0].count, 27, 'exactly 27 public base tables must exist');
 
+  const recordSectorColumns = await db.query(`SELECT column_name FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'record_sectors' ORDER BY ordinal_position`);
+  assert.ok(!recordSectorColumns.rows.some((row) => row.column_name === 'id'), 'record_sectors must not have a synthetic id');
+  const recordSectorPrimaryKey = await db.query(`SELECT pg_get_constraintdef(oid) AS definition
+    FROM pg_constraint WHERE conrelid = 'public.record_sectors'::regclass AND contype = 'p'`);
+  assert.equal(recordSectorPrimaryKey.rows[0].definition, 'PRIMARY KEY (record_id, sector_id, role_code)');
+
   await expectDatabaseError(
-    () => db.query(`INSERT INTO record_sectors (id, record_id, sector_id, role_code)
-      VALUES ('ffffffff-ffff-4fff-8fff-fffffffffff1','ffffffff-ffff-4fff-8fff-fffffffffff2','ffffffff-ffff-4fff-8fff-fffffffffff3','primary')`),
+    () => db.query(`INSERT INTO record_sectors (record_id, sector_id, role_code)
+      VALUES ('ffffffff-ffff-4fff-8fff-fffffffffff2','ffffffff-ffff-4fff-8fff-fffffffffff3','primary')`),
     'foreign keys must reject nonexistent records and sectors',
   );
   await expectDatabaseError(

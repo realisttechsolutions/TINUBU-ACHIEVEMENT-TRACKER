@@ -12,7 +12,12 @@
         "test:ui": "vitest --ui",
         "test:run": "node ./node_modules/vitest/vitest.mjs run",
         "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
-        "validate:research": "node scripts/validate-research-foundation.mjs"
+        "validate:research": "node scripts/validate-research-foundation.mjs",
+        "db:test": "node scripts/test-local-database.mjs",
+        "db:proofs": "node scripts/run-local-query-proofs.mjs",
+        "db:ingestion:proof": "node scripts/ingestion/import-m02.mjs --dry-run",
+        "sqlconnect:sdk:generate": "node ./node_modules/firebase-tools/lib/bin/firebase.js dataconnect:sdk:generate --project staging",
+        "sqlconnect:audit": "node ./node_modules/firebase-tools/lib/bin/firebase.js emulators:exec --only dataconnect --project staging \"node scripts/audit-sqlconnect-parity.mjs\""
     },
     "dependencies": {
         "@gsap/react": "^2.1.2",

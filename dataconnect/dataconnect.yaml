@@ -1,14 +1,16 @@
 specVersion: "v1"
-serviceId: "tat-e01-local"
+serviceId: "tat-staging"
 location: "us-central1"
 schema:
   source: "./schema"
   datasource:
     postgresql:
-      database: "tat_e01_local"
+      database: "tat_staging"
       cloudSql:
-        instanceId: "not-provisioned-e01"
-      schemaValidation: "STRICT"
+        instanceId: "tat-db-staging"
+      # Canonical DDL adds checks, partial/GIN indexes, triggers, append-only
+      # guards, and public views that SQL Connect cannot fully represent.
+      schemaValidation: "COMPATIBLE"
 connectorDirs:
   - "./public"
   - "./staff"

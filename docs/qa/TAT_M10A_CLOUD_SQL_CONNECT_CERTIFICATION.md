@@ -10,7 +10,13 @@
 | **Public Connector** | Data Connect Public | Read-only GraphQL queries (`@auth(level: PUBLIC)`) | Public Facing |
 | **Staff Connector** | Data Connect Staff | Privileged mutations & queries (`@auth(level: USER)`) | Administrative |
 
-## 2. Deployment Protocol
+## 2. Certification status
+
+**BLOCKED — do not deploy from a fresh SQL Connect-generated database.**
+
+The 2026-08-15 reconciliation proved that the `tat-staging` service and Cloud SQL link do not exist and that fresh compiler DDL would replace 53 canonical `ON DELETE RESTRICT` actions with `CASCADE` or `SET NULL`. The staging database must first be created and loaded from the authoritative `database/schema.sql` under a separately authorized infrastructure mission. See `docs/engineering/TAT_M10A_SQL_CONNECT_SCHEMA_RECONCILIATION.md`.
+
+## 3. Future deployment protocol after the blocker is closed
 
 ```bash
 # 1. Login to Firebase CLI
@@ -19,9 +25,11 @@ firebase login
 # 2. Select Staging Project
 firebase use <staging-project-id>
 
-# 3. Deploy SQL Connect Services & Schema
-firebase deploy --only dataconnect
+# 3. Confirm that canonical DDL is already present and that the diff is safe
+firebase dataconnect:sql:diff --service tat-staging --location us-central1 --project staging
 
-# 4. Execute M02 Research Import
-node scripts/ingestion/import-m02.mjs
+# 4. Only after an empty/approved compatible diff, deploy without --force
+firebase deploy --only dataconnect --project staging
 ```
+
+Research ingestion remains a separate, explicitly approved operation and is not part of the schema deployment command sequence.

@@ -1,57 +1,68 @@
-# E01 SQL Connect compatibility schema. The PostgreSQL DDL in database/schema.sql
-# remains the executable local relational authority and adds checks, partial indexes,
-# views, and audit triggers beyond the connector schema language.
+# Mission 10A SQL Connect application schema.
+# database/schema.sql is the authoritative physical model. Explicit FK scalar
+# fields preserve canonical column names; relation fields bind through @ref.
 
 type ActorProfile @table(name: "actor_profiles") {
-  id: UUID! @default(expr: "uuidV4()")
-  externalId: String @col(name: "external_id")
-  firebaseUid: String @col(name: "firebase_uid")
+  id: UUID!
+  externalId: String @col(name: "external_id") @unique
+  firebaseUid: String @col(name: "firebase_uid") @unique
   actorKind: String! @col(name: "actor_kind")
   displayName: String! @col(name: "display_name")
   email: String
-  status: String!
-  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
-  updatedAt: Timestamp! @col(name: "updated_at") @default(expr: "request.time")
+  status: String! @default(value: "active")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type ActorRole @table(name: "actor_roles") {
-  id: UUID! @default(expr: "uuidV4()")
-  actor: ActorProfile!
+  id: UUID!
+  actorId: UUID! @col(name: "actor_id")
+  actor: ActorProfile! @ref(fields: ["actorId"])
   roleCode: String! @col(name: "role_code")
-  scopeType: String! @col(name: "scope_type")
-  scopeKey: String! @col(name: "scope_key")
-  grantedBy: ActorProfile
-  grantedAt: Timestamp! @col(name: "granted_at") @default(expr: "request.time")
+  scopeType: String! @col(name: "scope_type") @default(value: "global")
+  scopeKey: String! @col(name: "scope_key") @default(value: "*")
+  grantedById: UUID @col(name: "granted_by")
+  grantedBy: ActorProfile @ref(fields: ["grantedById"])
+  grantedAt: Timestamp! @col(name: "granted_at") @default(sql: "CURRENT_TIMESTAMP")
+  validFrom: Timestamp! @col(name: "valid_from") @default(sql: "CURRENT_TIMESTAMP")
   validUntil: Timestamp @col(name: "valid_until")
   revokedAt: Timestamp @col(name: "revoked_at")
+  revocationReason: String @col(name: "revocation_reason")
 }
 
 type Sector @table(name: "sectors") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   code: String! @unique
   label: String!
   taxonomyLevel: String! @col(name: "taxonomy_level")
-  parentSector: Sector
+  parentSectorId: UUID @col(name: "parent_sector_id")
+  parentSector: Sector @ref(fields: ["parentSectorId"])
   description: String
   publicOrder: Int @col(name: "public_order")
-  active: Boolean!
-  vocabularyVersion: String! @col(name: "vocabulary_version")
+  active: Boolean! @default(value: true)
+  vocabularyVersion: String! @col(name: "vocabulary_version") @default(value: "1.1.2")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type Institution @table(name: "institutions") {
-  id: UUID! @default(expr: "uuidV4()")
-  externalId: String @col(name: "external_id")
+  id: UUID!
+  externalId: String @col(name: "external_id") @unique
   slug: String! @unique
   canonicalName: String! @col(name: "canonical_name")
   shortName: String @col(name: "short_name")
+  aliases: Any! @col(dataType: "jsonb") @default(sql: "'[]'::jsonb")
   institutionType: String! @col(name: "institution_type")
-  parentInstitution: Institution
+  parentInstitutionId: UUID @col(name: "parent_institution_id")
+  parentInstitution: Institution @ref(fields: ["parentInstitutionId"])
   officialUrl: String @col(name: "official_url")
-  active: Boolean!
+  active: Boolean! @default(value: true)
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type Record @table(name: "records") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
   slug: String! @unique
   recordType: String! @col(name: "record_type")
@@ -60,91 +71,126 @@ type Record @table(name: "records") {
   summary: String!
   body: String
   implementationStatus: String! @col(name: "implementation_status")
-  workflowStatus: String! @col(name: "workflow_status")
-  publicationStatus: String! @col(name: "publication_status")
-  verificationStatus: String! @col(name: "verification_status")
+  workflowStatus: String! @col(name: "workflow_status") @default(value: "draft")
+  publicationStatus: String! @col(name: "publication_status") @default(value: "unpublished")
+  verificationStatus: String! @col(name: "verification_status") @default(value: "under_review")
   evidenceProfile: String! @col(name: "evidence_profile")
-  riskLevel: String! @col(name: "risk_level")
-  isPublic: Boolean! @col(name: "is_public")
+  riskLevel: String! @col(name: "risk_level") @default(value: "low")
+  isPublic: Boolean! @col(name: "is_public") @default(value: false)
   qualification: String
   internalNotes: String @col(name: "internal_notes")
-  createdBy: ActorProfile!
-  currentRevision: Int! @col(name: "current_revision")
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  currentRevision: Int! @col(name: "current_revision") @default(value: 1)
   publishedAt: Timestamp @col(name: "published_at")
   withdrawnAt: Timestamp @col(name: "withdrawn_at")
-  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
-  updatedAt: Timestamp! @col(name: "updated_at") @default(expr: "request.time")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type PolicyDetail @table(name: "policy_details", key: ["record"]) {
-  record: Record!
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
   policyType: String! @col(name: "policy_type")
-  legalInstrument: String @col(name: "legal_instrument")
-  effectiveDate: Date @col(name: "effective_date")
+  legalAuthority: String @col(name: "legal_authority")
+  referenceNumber: String @col(name: "reference_number")
+  effectScope: String @col(name: "effect_scope")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type ProjectDetail @table(name: "project_details", key: ["record"]) {
-  record: Record!
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
   projectType: String! @col(name: "project_type")
-  commencementDate: Date @col(name: "commencement_date")
-  expectedCompletionDate: Date @col(name: "expected_completion_date")
-  contractorName: String @col(name: "contractor_name")
+  progressPercentage: Float @col(name: "progress_percentage", dataType: "numeric(5,2)")
+  contractReference: String @col(name: "contract_reference")
+  projectReference: String @col(name: "project_reference")
+  locationNarrative: String @col(name: "location_narrative")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type ProgrammeDetail @table(name: "programme_details", key: ["record"]) {
-  record: Record!
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
   programmeType: String! @col(name: "programme_type")
-  targetBeneficiaryType: String @col(name: "target_beneficiary_type")
-  startDate: Date @col(name: "start_date")
-  endDate: Date @col(name: "end_date")
+  targetGroupNarrative: String @col(name: "target_group_narrative")
+  enrolmentModel: String @col(name: "enrolment_model")
+  disbursementModel: String @col(name: "disbursement_model")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type AchievementProfile @table(name: "achievement_profiles", key: ["record"]) {
-  record: Record!
-  headlineOutcome: String @col(name: "headline_outcome")
-  dataValueNature: String! @col(name: "data_value_nature")
-  sourceOrigin: String! @col(name: "source_origin")
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  publicImpactNarrative: String! @col(name: "public_impact_narrative")
+  publicQualification: String @col(name: "public_qualification")
+  featuredAssetUrl: String @col(name: "featured_asset_url")
+  displayPriority: Int! @col(name: "display_priority") @default(value: 0)
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type RecordInstitution @table(name: "record_institutions") {
-  id: UUID! @default(expr: "uuidV4()")
-  record: Record!
-  institution: Institution!
+type RecordInstitution
+  @table(name: "record_institutions", key: ["record", "institution", "roleCode"]) {
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  institutionId: UUID! @col(name: "institution_id")
+  institution: Institution! @ref(fields: ["institutionId"])
   roleCode: String! @col(name: "role_code")
-  isPrimary: Boolean! @col(name: "is_primary")
+  validFrom: Date @col(name: "valid_from")
+  validUntil: Date @col(name: "valid_until")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type RecordSector @table(name: "record_sectors") {
-  id: UUID! @default(expr: "uuidV4()")
-  record: Record!
-  sector: Sector!
+type RecordSector
+  @table(name: "record_sectors", key: ["record", "sector", "roleCode"]) {
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  sectorId: UUID! @col(name: "sector_id")
+  sector: Sector! @ref(fields: ["sectorId"])
   roleCode: String! @col(name: "role_code")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type GeographicUnit @table(name: "geographic_units") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
+  externalId: String @col(name: "external_id") @unique
   code: String! @unique
   name: String!
   geographyType: String! @col(name: "geography_type")
-  parentGeographicUnit: GeographicUnit
-  isoCode: String @col(name: "iso_code")
-  sensitivityClass: String! @col(name: "sensitivity_class")
-  active: Boolean!
+  parentGeographicUnitId: UUID @col(name: "parent_geographic_unit_id")
+  parentGeographicUnit: GeographicUnit @ref(fields: ["parentGeographicUnitId"])
+  latitude: Float @col(dataType: "numeric(9,6)")
+  longitude: Float @col(dataType: "numeric(9,6)")
+  boundaryGeojson: Any @col(name: "boundary_geojson", dataType: "jsonb")
+  sensitivityClass: String! @col(name: "sensitivity_class") @default(value: "public")
+  active: Boolean! @default(value: true)
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type RecordGeography @table(name: "record_geographies") {
-  id: UUID! @default(expr: "uuidV4()")
-  record: Record!
-  geographicUnit: GeographicUnit!
+type RecordGeography
+  @table(name: "record_geographies", key: ["record", "geographicUnit", "coverageRole"]) {
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  geographicUnitId: UUID! @col(name: "geographic_unit_id")
+  geographicUnit: GeographicUnit! @ref(fields: ["geographicUnitId"])
   coverageRole: String! @col(name: "coverage_role")
-  sensitivityClass: String! @col(name: "sensitivity_class")
+  confidence: Float @col(dataType: "numeric(4,3)")
+  qualification: String
+  sensitivityClass: String! @col(name: "sensitivity_class") @default(value: "public")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type Source @table(name: "sources") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
   title: String!
-  publisherInstitution: Institution
+  publisherInstitutionId: UUID @col(name: "publisher_institution_id")
+  publisherInstitution: Institution @ref(fields: ["publisherInstitutionId"])
   publisherName: String @col(name: "publisher_name")
   sourceType: String! @col(name: "source_type")
   sourceLevel: String! @col(name: "source_level")
@@ -152,100 +198,144 @@ type Source @table(name: "sources") {
   archivalUrl: String @col(name: "archival_url")
   documentNumber: String @col(name: "document_number")
   publicationDate: Date @col(name: "publication_date")
-  publicationDatePrecision: String! @col(name: "publication_date_precision")
+  publicationDatePrecision: String! @col(name: "publication_date_precision") @default(value: "unknown")
+  publicationPeriodStart: Date @col(name: "publication_period_start")
+  publicationPeriodEnd: Date @col(name: "publication_period_end")
+  publicationDateLabel: String @col(name: "publication_date_label")
   accessDate: Date! @col(name: "access_date")
   sourceStatus: String! @col(name: "source_status")
-  checksumSha256: String @col(name: "checksum_sha256")
-  visibilityClass: String! @col(name: "visibility_class")
-  createdBy: ActorProfile!
+  sha256: String
+  languageCode: String! @col(name: "language_code") @default(value: "en")
+  visibilityClass: String! @col(name: "visibility_class") @default(value: "internal")
+  metadata: Any! @col(dataType: "jsonb") @default(sql: "'{}'::jsonb")
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type EvidenceClaim @table(name: "evidence_claims") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
   claimType: String! @col(name: "claim_type")
   claimText: String! @col(name: "claim_text")
-  valueNumeric: Float @col(name: "value_numeric")
+  valueNumeric: Float @col(name: "value_numeric", dataType: "numeric(30,8)")
   valueText: String @col(name: "value_text")
   unitCode: String @col(name: "unit_code")
+  currencyCode: String @col(name: "currency_code", dataType: "char(3)")
   dateValue: Date @col(name: "date_value")
-  datePrecision: String! @col(name: "date_precision")
+  datePrecision: String! @col(name: "date_precision") @default(value: "unknown")
   periodStart: Date @col(name: "period_start")
   periodEnd: Date @col(name: "period_end")
   reportingPeriodLabel: String @col(name: "reporting_period_label")
+  periodIsProvisional: Boolean! @col(name: "period_is_provisional") @default(value: false)
+  geographicUnitId: UUID @col(name: "geographic_unit_id")
+  geographicUnit: GeographicUnit @ref(fields: ["geographicUnitId"])
   dataValueNature: String! @col(name: "data_value_nature")
   sourceOrigin: String! @col(name: "source_origin")
   verificationStatus: String! @col(name: "verification_status")
   evidenceProfile: String! @col(name: "evidence_profile")
   riskLevel: String! @col(name: "risk_level")
-  workflowStatus: String! @col(name: "workflow_status")
+  workflowStatus: String! @col(name: "workflow_status") @default(value: "draft")
   limitations: String
   internalNotes: String @col(name: "internal_notes")
-  createdBy: ActorProfile!
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  currentRevision: Int! @col(name: "current_revision") @default(value: 1)
+  withdrawnAt: Timestamp @col(name: "withdrawn_at")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type ClaimSourceRelationship @table(name: "claim_source_relationships") {
-  id: UUID! @default(expr: "uuidV4()")
+type ClaimSourceRelationship
+  @table(name: "claim_source_relationships")
+  @unique(fields: ["claimId", "sourceId", "sourceRole", "relationshipType", "evidenceLocation"]) {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  claim: EvidenceClaim!
-  source: Source!
+  claimId: UUID! @col(name: "claim_id")
+  claim: EvidenceClaim! @ref(fields: ["claimId"])
+  sourceId: UUID! @col(name: "source_id")
+  source: Source! @ref(fields: ["sourceId"])
   sourceRole: String! @col(name: "source_role")
   relationshipType: String! @col(name: "relationship_type")
-  evidenceLocation: String @col(name: "evidence_location")
-  evidenceSummary: String @col(name: "evidence_summary")
+  evidenceLocation: String! @col(name: "evidence_location")
+  evidenceSummary: String! @col(name: "evidence_summary")
   limitation: String
-  reviewStatus: String! @col(name: "review_status")
-  reviewedBy: ActorProfile
+  reviewStatus: String! @col(name: "review_status") @default(value: "draft")
+  reviewedById: UUID @col(name: "reviewed_by")
+  reviewedBy: ActorProfile @ref(fields: ["reviewedById"])
   reviewedAt: Timestamp @col(name: "reviewed_at")
-  supersededByRelationship: ClaimSourceRelationship
-  createdBy: ActorProfile!
+  supersedesRelationshipId: UUID @col(name: "supersedes_relationship_id")
+  supersedesRelationship: ClaimSourceRelationship @ref(fields: ["supersedesRelationshipId"])
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type FinancialRecord @table(name: "financial_records") {
-  id: UUID! @default(expr: "uuidV4()")
+type FinancialRecord
+  @table(name: "financial_records")
+  @unique(fields: ["recordId", "claimId", "financialType", "currencyCode", "periodStart", "periodEnd", "aggregationBasis"]) {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
-  claim: EvidenceClaim!
-  geographicUnit: GeographicUnit
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  claimId: UUID! @col(name: "claim_id")
+  claim: EvidenceClaim! @ref(fields: ["claimId"])
+  geographicUnitId: UUID @col(name: "geographic_unit_id")
+  geographicUnit: GeographicUnit @ref(fields: ["geographicUnitId"])
   financialType: String! @col(name: "financial_type")
-  amount: Float!
-  currencyCode: String! @col(name: "currency_code")
+  amount: Float! @col(dataType: "numeric(24,4)")
+  currencyCode: String! @col(name: "currency_code", dataType: "char(3)")
   reportingPeriodLabel: String! @col(name: "reporting_period_label")
-  periodStart: Date @col(name: "period_start")
-  periodEnd: Date @col(name: "period_end")
+  periodStart: Date! @col(name: "period_start")
+  periodEnd: Date! @col(name: "period_end")
   datePrecision: String! @col(name: "date_precision")
   aggregationBasis: String! @col(name: "aggregation_basis")
   nominalOrReal: String! @col(name: "nominal_or_real")
   methodology: String
   limitations: String
-  createdBy: ActorProfile!
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type BeneficiaryRecord @table(name: "beneficiary_records") {
-  id: UUID! @default(expr: "uuidV4()")
+type BeneficiaryRecord
+  @table(name: "beneficiary_records")
+  @unique(fields: ["recordId", "beneficiaryStage", "beneficiaryType", "periodStart", "periodEnd", "geographicUnitId", "cohortKey"]) {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
-  claim: EvidenceClaim!
-  geographicUnit: GeographicUnit
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  claimId: UUID! @col(name: "claim_id")
+  claim: EvidenceClaim! @ref(fields: ["claimId"])
+  geographicUnitId: UUID @col(name: "geographic_unit_id")
+  geographicUnit: GeographicUnit @ref(fields: ["geographicUnitId"])
   beneficiaryType: String! @col(name: "beneficiary_type")
   beneficiaryStage: String! @col(name: "beneficiary_stage")
-  countValue: Int! @col(name: "count_value")
+  countValue: Int64! @col(name: "count_value", dataType: "bigint")
   unit: String!
   countBasis: String! @col(name: "count_basis")
   cumulative: Boolean!
   reportingPeriodLabel: String! @col(name: "reporting_period_label")
-  periodStart: Date @col(name: "period_start")
-  periodEnd: Date @col(name: "period_end")
-  cohortKey: String @col(name: "cohort_key")
+  periodStart: Date! @col(name: "period_start")
+  periodEnd: Date! @col(name: "period_end")
+  cohortKey: String! @col(name: "cohort_key")
   methodology: String
   doubleCountingNotes: String @col(name: "double_counting_notes")
   limitations: String
-  createdBy: ActorProfile!
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type Indicator @table(name: "indicators") {
-  id: UUID! @default(expr: "uuidV4()")
+type Indicator
+  @table(name: "indicators") {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
   slug: String! @unique
   name: String!
@@ -253,35 +343,51 @@ type Indicator @table(name: "indicators") {
   unit: String!
   frequency: String!
   methodology: String!
-  sector: Sector
-  sourceInstitution: Institution
-  active: Boolean!
-  createdBy: ActorProfile!
+  sectorId: UUID @col(name: "sector_id")
+  sector: Sector @ref(fields: ["sectorId"])
+  sourceInstitutionId: UUID @col(name: "source_institution_id")
+  sourceInstitution: Institution @ref(fields: ["sourceInstitutionId"])
+  causalAttributionProhibited: Boolean! @col(name: "causal_attribution_prohibited") @default(value: true)
+  active: Boolean! @default(value: true)
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type IndicatorObservation @table(name: "indicator_observations") {
-  id: UUID! @default(expr: "uuidV4()")
+type IndicatorObservation
+  @table(name: "indicator_observations")
+  @unique(fields: ["indicatorId", "periodStart", "periodEnd", "geographicUnitId", "dataValueNature", "revision"]) {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  indicator: Indicator!
-  claim: EvidenceClaim!
-  geographicUnit: GeographicUnit
-  valueNumeric: Float @col(name: "value_numeric")
-  valueDisplay: String @col(name: "value_display")
+  indicatorId: UUID! @col(name: "indicator_id")
+  indicator: Indicator! @ref(fields: ["indicatorId"])
+  claimId: UUID! @col(name: "claim_id")
+  claim: EvidenceClaim! @ref(fields: ["claimId"])
+  geographicUnitId: UUID @col(name: "geographic_unit_id")
+  geographicUnit: GeographicUnit @ref(fields: ["geographicUnitId"])
+  valueNumeric: Float @col(name: "value_numeric", dataType: "numeric(30,8)")
+  valueDisplay: String! @col(name: "value_display")
   reportingPeriodLabel: String! @col(name: "reporting_period_label")
   periodStart: Date! @col(name: "period_start")
   periodEnd: Date! @col(name: "period_end")
   dataValueNature: String! @col(name: "data_value_nature")
   sourceOrigin: String! @col(name: "source_origin")
   verificationStatus: String! @col(name: "verification_status")
-  provisional: Boolean!
-  createdBy: ActorProfile!
+  provisional: Boolean! @default(value: false)
+  revision: Int! @default(value: 1)
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type TimelineEvent @table(name: "timeline_events") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
-  claim: EvidenceClaim
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  claimId: UUID @col(name: "claim_id")
+  claim: EvidenceClaim @ref(fields: ["claimId"])
   eventType: String! @col(name: "event_type")
   title: String!
   description: String
@@ -290,68 +396,127 @@ type TimelineEvent @table(name: "timeline_events") {
   periodStart: Date @col(name: "period_start")
   periodEnd: Date @col(name: "period_end")
   reportingPeriodLabel: String @col(name: "reporting_period_label")
-  provisional: Boolean!
-  isPublic: Boolean! @col(name: "is_public")
-  createdBy: ActorProfile!
+  provisional: Boolean! @default(value: false)
+  isPublic: Boolean! @col(name: "is_public") @default(value: false)
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @col(name: "updated_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type Correction @table(name: "corrections") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
-  claim: EvidenceClaim
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  claimId: UUID @col(name: "claim_id")
+  claim: EvidenceClaim @ref(fields: ["claimId"])
+  sourceId: UUID @col(name: "source_id")
+  source: Source @ref(fields: ["sourceId"])
   correctionType: String! @col(name: "correction_type")
-  fieldPath: String! @col(name: "field_path")
-  originalValue: String @col(name: "original_value")
-  correctedValue: String @col(name: "corrected_value")
+  originalState: Any! @col(name: "original_state", dataType: "jsonb")
+  correctedState: Any! @col(name: "corrected_state", dataType: "jsonb")
   reason: String!
-  evidenceSource: Source
   lifecycleStatus: String! @col(name: "lifecycle_status")
-  requestedBy: ActorProfile!
-  reviewedBy: ActorProfile
-  approvedBy: ActorProfile
-  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+  reviewedById: UUID @col(name: "reviewed_by")
+  reviewedBy: ActorProfile @ref(fields: ["reviewedById"])
+  approvedById: UUID @col(name: "approved_by")
+  approvedBy: ActorProfile @ref(fields: ["approvedById"])
+  approvedAt: Timestamp @col(name: "approved_at")
+  effectiveAt: Timestamp @col(name: "effective_at")
+  publicNotice: String @col(name: "public_notice")
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type ReviewDecision @table(name: "review_decisions") {
-  id: UUID! @default(expr: "uuidV4()")
+type ReviewDecision
+  @table(name: "review_decisions")
+  @unique(fields: ["recordId", "recordRevision", "gateCode", "reviewerId"]) {
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
-  record: Record!
-  claim: EvidenceClaim
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  claimId: UUID @col(name: "claim_id")
+  claim: EvidenceClaim @ref(fields: ["claimId"])
+  relationshipId: UUID @col(name: "relationship_id")
+  relationship: ClaimSourceRelationship @ref(fields: ["relationshipId"])
   subjectScope: String! @col(name: "subject_scope")
   recordRevision: Int! @col(name: "record_revision")
   gateCode: String! @col(name: "gate_code")
   decision: String!
-  reviewer: ActorProfile!
+  reviewerId: UUID! @col(name: "reviewer_id")
+  reviewer: ActorProfile! @ref(fields: ["reviewerId"])
   rationale: String!
   riskLevel: String! @col(name: "risk_level")
-  decidedAt: Timestamp! @col(name: "decided_at") @default(expr: "request.time")
+  decidedAt: Timestamp! @col(name: "decided_at") @default(sql: "CURRENT_TIMESTAMP")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type RecordRelationship @table(name: "record_relationships") {
-  id: UUID! @default(expr: "uuidV4()")
-  fromRecord: Record!
-  toRecord: Record!
+type RecordRelationship
+  @table(name: "record_relationships")
+  @unique(fields: ["fromRecordId", "toRecordId", "relationshipRole"]) {
+  id: UUID!
+  externalId: String! @col(name: "external_id") @unique
+  fromRecordId: UUID! @col(name: "from_record_id")
+  fromRecord: Record! @ref(fields: ["fromRecordId"])
+  toRecordId: UUID! @col(name: "to_record_id")
+  toRecord: Record! @ref(fields: ["toRecordId"])
   relationshipRole: String! @col(name: "relationship_role")
-  description: String
-  createdBy: ActorProfile!
+  validFrom: Date @col(name: "valid_from")
+  validUntil: Date @col(name: "valid_until")
+  createdById: UUID! @col(name: "created_by")
+  createdBy: ActorProfile! @ref(fields: ["createdById"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
-type SourceFile @table(name: "source_files") {
-  id: UUID! @default(expr: "uuidV4()")
-  source: Source!
-  fileKind: String! @col(name: "file_kind")
-  storageUri: String! @col(name: "storage_uri")
-  originalFilename: String! @col(name: "original_filename")
-  mimeType: String! @col(name: "mime_type")
-  byteSize: Int @col(name: "byte_size")
-  checksumSha256: String! @col(name: "checksum_sha256")
+type SourceFile
+  @table(name: "source_files")
+  @unique(fields: ["bucketName", "objectPath", "objectGeneration"]) {
+  id: UUID!
+  externalId: String! @col(name: "external_id") @unique
+  sourceId: UUID! @col(name: "source_id")
+  source: Source! @ref(fields: ["sourceId"])
+  bucketName: String! @col(name: "bucket_name")
+  objectPath: String! @col(name: "object_path")
+  objectGeneration: String! @col(name: "object_generation")
   visibilityClass: String! @col(name: "visibility_class")
-  createdBy: ActorProfile!
+  fileKind: String! @col(name: "file_kind")
+  contentType: String! @col(name: "content_type")
+  byteSize: Int64! @col(name: "byte_size", dataType: "bigint")
+  sha256: String!
+  copyrightStatus: String! @col(name: "copyright_status")
+  retentionClass: String! @col(name: "retention_class")
+  legalHold: Boolean! @col(name: "legal_hold") @default(value: false)
+  capturedAt: Timestamp! @col(name: "captured_at")
+  capturedById: UUID! @col(name: "captured_by")
+  capturedBy: ActorProfile! @ref(fields: ["capturedById"])
+  publishedAt: Timestamp @col(name: "published_at")
+  supersedesFileId: UUID @col(name: "supersedes_file_id")
+  supersedesFile: SourceFile @ref(fields: ["supersedesFileId"])
+  deletedAt: Timestamp @col(name: "deleted_at")
+  deletionReason: String @col(name: "deletion_reason")
+}
+
+type RecordVersion
+  @table(name: "record_versions")
+  @unique(fields: ["recordId", "versionNumber"]) {
+  id: UUID!
+  recordId: UUID! @col(name: "record_id")
+  record: Record! @ref(fields: ["recordId"])
+  versionNumber: Int! @col(name: "version_number")
+  changedById: UUID! @col(name: "changed_by")
+  changedBy: ActorProfile! @ref(fields: ["changedById"])
+  changeReason: String! @col(name: "change_reason")
+  snapshotJson: Any! @col(name: "snapshot_json", dataType: "jsonb")
+  diffJson: Any! @col(name: "diff_json", dataType: "jsonb")
+  researchBatchId: UUID @col(name: "research_batch_id")
+  researchBatch: ResearchBatch @ref(fields: ["researchBatchId"])
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }
 
 type ResearchBatch @table(name: "research_batches") {
-  id: UUID! @default(expr: "uuidV4()")
+  id: UUID!
   externalId: String! @col(name: "external_id") @unique
   idempotencyKey: String! @col(name: "idempotency_key") @unique
   packageChecksum: String! @col(name: "package_checksum") @unique
@@ -360,19 +525,17 @@ type ResearchBatch @table(name: "research_batches") {
   taxonomyVersion: String! @col(name: "taxonomy_version")
   mode: String!
   status: String!
-  submittedBy: ActorProfile!
-  approvedBy: ActorProfile
+  submittedById: UUID! @col(name: "submitted_by")
+  submittedBy: ActorProfile! @ref(fields: ["submittedById"])
+  approvedById: UUID @col(name: "approved_by")
+  approvedBy: ActorProfile @ref(fields: ["approvedById"])
   planHash: String @col(name: "plan_hash")
-  startedAt: Timestamp! @col(name: "started_at") @default(expr: "request.time")
+  manifestJson: Any! @col(name: "manifest_json", dataType: "jsonb")
+  validationReport: Any! @col(name: "validation_report", dataType: "jsonb") @default(sql: "'{}'::jsonb")
+  unresolvedFkReport: Any! @col(name: "unresolved_fk_report", dataType: "jsonb") @default(sql: "'[]'::jsonb")
+  duplicateReport: Any! @col(name: "duplicate_report", dataType: "jsonb") @default(sql: "'[]'::jsonb")
+  importSummary: Any! @col(name: "import_summary", dataType: "jsonb") @default(sql: "'{}'::jsonb")
+  startedAt: Timestamp! @col(name: "started_at") @default(sql: "CURRENT_TIMESTAMP")
   completedAt: Timestamp @col(name: "completed_at")
-}
-
-type RecordVersion @table(name: "record_versions") {
-  id: UUID! @default(expr: "uuidV4()")
-  record: Record!
-  versionNumber: Int! @col(name: "version_number")
-  changedBy: ActorProfile!
-  changeReason: String! @col(name: "change_reason")
-  researchBatch: ResearchBatch
-  createdAt: Timestamp! @col(name: "created_at") @default(expr: "request.time")
+  createdAt: Timestamp! @col(name: "created_at") @default(sql: "CURRENT_TIMESTAMP")
 }

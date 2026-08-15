@@ -1340,11 +1340,6 @@ extend type Mutation {
   """
   recordGeography_update(
     """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
     The key used to identify the object.
     """
     key: RecordGeography_Key
@@ -1363,11 +1358,6 @@ extend type Mutation {
   ✨ Update a single `RecordInstitution` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordInstitution` or `null` if not found.
   """
   recordInstitution_update(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """
@@ -1411,11 +1401,6 @@ extend type Mutation {
   ✨ Update a single `RecordSector` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RecordSector` or `null` if not found.
   """
   recordSector_update(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """
@@ -2401,11 +2386,6 @@ extend type Mutation {
   """
   recordGeography_delete(
     """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
     The key used to identify the object.
     """
     key: RecordGeography_Key
@@ -2419,11 +2399,6 @@ extend type Mutation {
   ✨ Delete a single `RecordInstitution` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   recordInstitution_delete(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """
@@ -2457,11 +2432,6 @@ extend type Mutation {
   ✨ Delete a single `RecordSector` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   recordSector_delete(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """

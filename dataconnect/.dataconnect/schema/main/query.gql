@@ -288,11 +288,6 @@ extend type Query {
   """
   recordGeography(
     """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
     The key used to identify the object.
     """
     key: RecordGeography_Key
@@ -306,11 +301,6 @@ extend type Query {
   ✨ Look up a single `RecordInstitution` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   recordInstitution(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """
@@ -344,11 +334,6 @@ extend type Query {
   ✨ Look up a single `RecordSector` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   recordSector(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
     """
     The key used to identify the object.
     """
