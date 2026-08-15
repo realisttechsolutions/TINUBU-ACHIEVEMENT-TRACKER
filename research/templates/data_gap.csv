@@ -1,2 +1,2 @@
-gap_id,sector_slug,subsector,topic_summary,missing_entity_type,priority,expected_source_agency,target_completion_date,notes
-[EXAMPLE-ONLY-GAP-001],economy,taxation,State level tax harmonization statistics,indicator,high,Federal Inland Revenue Service (FIRS),2024-Q3,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Identified data gap for future research mission focus."
+gap_id,entity_or_initiative,sector,missing_evidence_type,responsible_mda,priority,status,target_resolution_date,notes
+[EXAMPLE-ONLY-GAP-001],"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Consumer Credit Scheme Disbursement Logs",social_protection_human_development,disbursement_audit_log,CREDICORP,high,investigating,2024-06-30,Non-production example for data gap validation

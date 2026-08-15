@@ -1,59 +1,53 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_observation.schema.json",
-  "title": "Indicator Observation Schema v1.1",
-  "description": "Validation schema for specific dated indicator metric observations.",
+  "title": "Indicator Observation Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "observation_id",
+    "id",
     "indicator_id",
-    "reporting_period",
-    "numeric_value",
-    "display_value",
-    "unit",
-    "data_classification",
-    "source_id"
+    "claim_id",
+    "observed_value",
+    "period",
+    "data_value_nature",
+    "source_origin",
+    "verification_status",
+    "publication_status"
   ],
   "properties": {
-    "observation_id": { "type": "string", "minLength": 3 },
-    "indicator_id": { "type": "string" },
-    "claim_id": { "type": "string" },
-    "reporting_period": { "type": "string" },
-    "numeric_value": { "type": ["number", "string"] },
-    "display_value": { "type": "string" },
-    "unit": { "type": "string" },
-    "data_classification": {
+    "id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "indicator_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "observed_value": { "type": "string" },
+    "period": { "type": "string" },
+    "period_start": { "type": "string" },
+    "period_end": { "type": "string" },
+    "date_precision": {
       "type": "string",
-      "enum": [
-        "actual",
-        "provisional",
-        "estimated",
-        "projected",
-        "target",
-        "government_target",
-        "calculated",
-        "modelled",
-        "government_reported",
-        "independently_reported",
-        "under_review",
-        "corrected",
-        "withdrawn"
-      ]
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
     },
-    "source_id": { "type": "string" },
+    "data_value_nature": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "target", "calculated", "modelled"]
+    },
+    "source_origin": {
+      "type": "string",
+      "enum": ["government_reported", "independently_reported", "mixed", "unknown"]
+    },
     "verification_status": {
       "type": "string",
       "enum": [
-        "source_confirmed",
-        "cross_referenced",
-        "independently_corroborated",
-        "under_review",
-        "unverified",
-        "disputed",
-        "corrected",
-        "withdrawn"
+        "source_confirmed", "cross_referenced", "independently_corroborated",
+        "under_review", "unverified", "disputed", "corrected", "withdrawn"
       ]
     },
+    "publication_status": {
+      "type": "string",
+      "enum": [
+        "unpublished", "under_review", "publishable", "publishable_with_qualification",
+        "published", "corrected", "withdrawn", "archived"
+      ]
+    },
+    "source_institution": { "type": "string" },
     "notes": { "type": "string" }
   },
   "additionalProperties": false

@@ -1,2 +1,2 @@
-correction_id,record_id,claim_id,correction_type,field_name,previous_value,new_value,correction_reason,source_url,revised_by,correction_date,notes
-[EXAMPLE-ONLY-COR-001],[DEMO-NON-PROD-001],[EXAMPLE-ONLY-CLM-001],scope_correction,beneficiaries_or_scope,National,National / 9 Maritime States,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Updated geographic scope to specify 9 coastal states.",https://works.gov.ng,editor-01@tat.gov.ng,2024-04-01,Revision audit log entry
+correction_id,record_id,claim_id,correction_type,previous_value,corrected_value,reason,source_id,status,revised_by,revision_date,notes
+[EXAMPLE-ONLY-COR-001],[EXAMPLE-ONLY-ACH-001],[EXAMPLE-ONLY-CLM-001],numerical_update,80,100,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Updated bus delivery count following publication of comprehensive Q2 delivery report",[EXAMPLE-ONLY-SRC-001],published,Lead Data Steward,2024-04-15,Non-production example for correction record validation

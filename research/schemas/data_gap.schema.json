@@ -1,26 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/data_gap.schema.json",
-  "title": "Data Gap Schema v1.1",
-  "description": "Validation schema for tracking research data gaps and missing information priorities in Tinubu Achievement Tracker v1.1.",
+  "title": "Data Gap Research Template Schema v1.1.1",
   "type": "object",
   "required": [
     "gap_id",
-    "sector_slug",
-    "topic_summary",
-    "priority"
+    "entity_or_initiative",
+    "sector",
+    "missing_evidence_type",
+    "responsible_mda",
+    "priority",
+    "status"
   ],
   "properties": {
-    "gap_id": { "type": "string" },
-    "sector_slug": {
+    "gap_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "entity_or_initiative": { "type": "string", "minLength": 5 },
+    "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -38,12 +34,24 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "subsector": { "type": "string" },
-    "topic_summary": { "type": "string" },
-    "missing_entity_type": { "type": "string" },
-    "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
-    "expected_source_agency": { "type": "string" },
-    "target_completion_date": { "type": "string" },
+    "missing_evidence_type": {
+      "type": "string",
+      "enum": [
+        "statutory_instrument", "funding_appropriation", "cash_release_warrant",
+        "contract_award_notice", "contractor_progress_certificate", "disbursement_audit_log",
+        "beneficiary_register", "statistical_time_series", "third_party_evaluation", "independent_audit"
+      ]
+    },
+    "responsible_mda": { "type": "string", "minLength": 2 },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "investigating", "resolved", "blocked"]
+    },
+    "target_resolution_date": { "type": "string" },
     "notes": { "type": "string" }
   },
   "additionalProperties": false

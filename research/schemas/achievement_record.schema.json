@@ -1,54 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/achievement_record.schema.json",
-  "title": "Achievement Record Research Schema v1.1",
-  "description": "Canonical schema for achievement records in Tinubu Achievement Tracker v1.1",
+  "title": "Achievement Record Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "id",
-    "slug",
+    "achievement_id",
     "title",
-    "achievement_type",
-    "sector",
     "summary",
-    "full_description",
-    "impact_outcome",
-    "beneficiaries_or_scope",
+    "public_navigation_group",
+    "sector",
     "status",
-    "classification",
+    "evidence_profile",
+    "data_value_nature",
+    "source_origin",
+    "verification_status",
     "publication_status",
-    "lead_ministry_or_agency",
-    "verification_date"
+    "date",
+    "date_precision"
   ],
   "properties": {
-    "id": { "type": "string", "minLength": 3 },
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "title": { "type": "string", "minLength": 5, "maxLength": 250 },
-    "short_title": { "type": "string", "maxLength": 80 },
-    "achievement_type": {
+    "achievement_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "title": { "type": "string", "minLength": 5 },
+    "summary": { "type": "string", "minLength": 10 },
+    "public_navigation_group": {
       "type": "string",
-      "enum": [
-        "physical_project",
-        "policy_reform",
-        "programme_intervention",
-        "institutional_improvement",
-        "reported_outcome",
-        "physical-project",
-        "policy-reform",
-        "programme-intervention",
-        "institutional-improvement",
-        "reported-outcome"
-      ]
+      "enum": ["economy", "security", "infrastructure", "social_services", "governance"]
     },
     "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -66,69 +45,63 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "summary": { "type": "string", "minLength": 10, "maxLength": 400 },
-    "full_description": { "type": "string", "minLength": 20 },
-    "impact_outcome": { "type": "string", "minLength": 5 },
-    "beneficiaries_or_scope": { "type": "string" },
+    "subsector": { "type": "string" },
     "status": {
       "type": "string",
       "enum": [
-        "proposed",
-        "announced",
-        "approved",
-        "enacted",
-        "effective",
-        "funded",
-        "funding_released",
-        "procurement",
-        "implementation_planning",
-        "implementation_ongoing",
-        "partially_delivered",
-        "completed",
-        "operational",
-        "outcome_reported",
-        "independently_assessed",
-        "suspended",
-        "superseded",
-        "repealed",
-        "under_review",
-        "archived",
-        "withdrawn"
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
       ]
     },
-    "classification": {
+    "evidence_profile": {
       "type": "string",
       "enum": [
-        "actual",
-        "provisional",
-        "estimated",
-        "projected",
-        "target",
-        "government_target",
-        "calculated",
-        "modelled",
-        "government_reported",
-        "independently_reported",
-        "under_review",
-        "corrected",
-        "withdrawn"
+        "direct_physical_delivery", "statutory_legal_enactment", "verified_administrative_disbursement",
+        "statistical_indicator_movement", "official_policy_declaration", "third_party_independent_assessment",
+        "multilateral_partner_evaluation", "institutional_reform_milestone"
+      ]
+    },
+    "data_value_nature": {
+      "type": "string",
+      "enum": ["actual", "provisional", "estimated", "projected", "target", "calculated", "modelled"]
+    },
+    "source_origin": {
+      "type": "string",
+      "enum": ["government_reported", "independently_reported", "mixed", "unknown"]
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "source_confirmed", "cross_referenced", "independently_corroborated",
+        "under_review", "unverified", "disputed", "corrected", "withdrawn"
       ]
     },
     "publication_status": {
       "type": "string",
-      "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]
+      "enum": [
+        "unpublished", "under_review", "publishable", "publishable_with_qualification",
+        "published", "corrected", "withdrawn", "archived"
+      ]
     },
-    "lead_ministry_or_agency": { "type": "string" },
-    "geopolitical_zone": { "type": "string" },
+    "responsible_institutions": { "type": "string" },
+    "geographic_scope": {
+      "type": "string",
+      "enum": [
+        "national", "geopolitical_zone", "state", "fct", "lga", "city_town",
+        "project_site", "corridor", "multi_state", "coordinate", "geographic_boundary"
+      ]
+    },
     "states_covered": { "type": "string" },
-    "start_date": { "type": "string" },
-    "completion_or_current_date": { "type": "string" },
-    "verification_date": { "type": "string" },
-    "featured_image": { "type": "string" },
-    "related_achievement_slugs": { "type": "string" },
-    "internal_notes": { "type": "string" },
-    "researcher_id": { "type": "string" },
-    "evidence_raw_url": { "type": "string" }
+    "date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "reported_outcomes": { "type": "string" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

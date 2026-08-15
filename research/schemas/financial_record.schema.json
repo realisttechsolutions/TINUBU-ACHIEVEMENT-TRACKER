@@ -1,8 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/financial_record.schema.json",
-  "title": "Financial Record Schema v1.1",
-  "description": "Validation schema separating statutory allocation, approval, released funding, actual expenditure, contract values, private capital, and revenues.",
+  "title": "Financial Record Research Template Schema v1.1.1",
   "type": "object",
   "required": [
     "id",
@@ -15,37 +13,26 @@
     "aggregation_basis"
   ],
   "properties": {
-    "id": { "type": "string" },
-    "record_id": { "type": "string" },
-    "claim_id": { "type": "string" },
+    "id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "claim_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
     "financial_type": {
       "type": "string",
       "enum": [
-        "budget_allocation",
-        "approved_funding",
-        "funding_released",
-        "reported_expenditure",
-        "contract_value",
-        "programme_envelope",
-        "public_investment",
-        "private_investment",
-        "revenue_generated",
-        "revenue_estimate",
-        "savings_estimate"
+        "budget_allocation", "approved_funding", "funding_released", "reported_expenditure",
+        "contract_value", "programme_envelope", "public_investment", "private_investment",
+        "revenue_generated", "revenue_estimate", "savings_estimate"
       ]
     },
-    "amount": { "type": ["number", "string"] },
-    "currency": { "type": "string", "default": "NGN" },
+    "amount": { "type": "string", "pattern": "^\\d+(?:\\.\\d{1,4})?$" },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
     "reporting_period": { "type": "string" },
-    "date_value": { "type": "string" },
+    "period_start": { "type": "string" },
+    "period_end": { "type": "string" },
     "date_precision": {
       "type": "string",
       "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
     },
-    "period_start": { "type": "string" },
-    "period_end": { "type": "string" },
-    "geographic_scope": { "type": "string" },
-    "geographic_unit_id": { "type": "string" },
     "aggregation_basis": {
       "type": "string",
       "enum": ["period", "cumulative"]
@@ -54,11 +41,8 @@
       "type": "string",
       "enum": ["nominal", "real"]
     },
-    "methodology": { "type": "string" },
-    "limitation": { "type": "string" },
-    "source_url": { "type": "string" },
-    "internal_notes": { "type": "string" },
-    "example_marker": { "type": "string" }
+    "source_institution": { "type": "string" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

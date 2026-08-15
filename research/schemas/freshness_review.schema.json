@@ -1,40 +1,28 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/freshness_review.schema.json",
-  "title": "Freshness Review Schema v1.1",
-  "description": "Validation schema for tracking velocity-based data freshness thresholds and scheduled review status.",
+  "title": "Freshness Review Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "freshness_id",
+    "review_id",
     "record_id",
-    "velocity_class",
     "last_verified_date",
     "stale_threshold_days",
-    "freshness_status"
+    "freshness_status",
+    "next_review_due",
+    "assigned_reviewer"
   ],
   "properties": {
-    "freshness_id": { "type": "string" },
-    "record_id": { "type": "string" },
-    "velocity_class": { "type": "string", "enum": ["high_velocity", "medium_velocity", "low_velocity", "event_driven"] },
-    "last_verified_date": { "type": "string" },
-    "stale_threshold_days": { "type": ["number", "string"] },
+    "review_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "last_verified_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "stale_threshold_days": { "type": "string" },
     "freshness_status": {
       "type": "string",
-      "enum": [
-        "fresh",
-        "due_for_review",
-        "overdue",
-        "stale",
-        "archived",
-        "current",
-        "review_due",
-        "under_review",
-        "superseded"
-      ]
+      "enum": ["fresh", "due_for_review", "stale", "review_in_progress", "historical_closed"]
     },
-    "assigned_reviewer": { "type": "string" },
-    "next_review_date": { "type": "string" },
-    "action_taken": { "type": "string" }
+    "next_review_due": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "assigned_reviewer": { "type": "string", "minLength": 2 },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

@@ -1,29 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/duplicate_review.schema.json",
-  "title": "Duplicate Review Schema v1.1",
-  "description": "Validation schema for duplicate detection, algorithm adjudication, and alias tracking.",
+  "title": "Duplicate Review Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "duplicate_id",
+    "review_id",
     "record_id_1",
-    "title_1",
     "record_id_2",
-    "title_2",
     "match_confidence",
-    "resolution_action"
+    "algorithm_version",
+    "resolution_action",
+    "primary_record_id",
+    "reviewer_id"
   ],
   "properties": {
-    "duplicate_id": { "type": "string" },
-    "record_id_1": { "type": "string" },
-    "title_1": { "type": "string" },
-    "record_id_2": { "type": "string" },
-    "title_2": { "type": "string" },
-    "match_confidence": { "type": ["number", "string"] },
+    "review_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id_1": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id_2": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "match_confidence": { "type": "string" },
     "algorithm_version": { "type": "string" },
-    "resolution_action": { "type": "string", "enum": ["merge", "separate", "alias_only", "under_review", "flagged"] },
-    "merged_canonical_id": { "type": "string" },
-    "notes": { "type": "string" }
+    "resolution_action": {
+      "type": "string",
+      "enum": [
+        "merge", "keep_both_distinct", "mark_as_alias",
+        "archive_duplicate", "quarantine_for_investigation"
+      ]
+    },
+    "primary_record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "reviewer_id": { "type": "string", "minLength": 2 },
+    "resolution_notes": { "type": "string" }
   },
   "additionalProperties": false
 }

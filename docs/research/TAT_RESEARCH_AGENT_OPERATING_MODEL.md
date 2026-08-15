@@ -1,8 +1,8 @@
-# Tinubu Achievement Tracker — Human & AI Operating Model (v1.1)
+# Tinubu Achievement Tracker — Human & AI Operating Model & Escalation Policy (v1.1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.1  
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
+**Governing Contract:** Research Contract v1.1.1  
 
 ---
 
@@ -28,35 +28,46 @@
 | 6. VERIFICATION AGENT:         Cross-checks claims against multi-tier independent evidence.       |
 | 7. RECONCILIATION AGENT:       Adjudicates contradictions, duplicate candidates, and aliases.     |
 | 8. SCHEMA / QA AGENT:          Executes automated AJV Draft-07 validation and dry-run checks.     |
-| 9. EDITORIAL AGENT:            Audits compliance with the 13 Truth Rules and drafting standards.  |
+| 9. EDITORIAL AGENT:            Audits compliance with the 18 Truth Safeguards and drafting tone.  |
 | 10. HUMAN REVIEWER / LEAD:     Mandatory human approval for publication and high-risk claims.     |
-| 11. DATA PUBLISHER:            Executes privileged transactional ingestion via Admin SDK.         |
+| 11. DATA PUBLISHER:            Executes privileged transactional ingestion to database.           |
 +───────────────────────────────────────────────────────────────────────────────────────────────────+
 ```
 
 ---
 
-## 3. Mandatory Human Approval Triggers
+## 3. Governed Human-Review Escalation Policy
 
-Automated agent sign-off is **strictly prohibited** for:
-1. **Critical & High Risk Claims:** Any claim designated as High or Critical risk in Gate 0.
-2. **Major Financial Values:** Any financial allocation, contract, or expenditure exceeding **₦100 Billion** (or $100 Million USD).
-3. **Major Beneficiary Totals:** Any beneficiary count exceeding **500,000 individuals or MSMEs**.
-4. **Security & Strategic Assets:** Military operations, counter-terrorism metrics, defense procurements, and strategic geospatial coordinates.
-5. **Unresolved Contradictions:** Any claim with competing official figures logged in `contradiction_log.csv`.
-6. **Legally Sensitive Matters:** Constitutional matters, court rulings, or active litigations.
-7. **Politically Sensitive Causal Claims:** Direct causal assertions attributing macroeconomic shifts solely to executive action.
+### 3.1 Primary Qualitative Escalation Triggers
+Human Lead Reviewer sign-off is mandatory whenever a research task or claim meets any of the following qualitative criteria:
+1. **Research Risk Tier:** Any task or claim rated **High** or **Critical** in Gate 0.
+2. **Defense & Strategic Security:** Military operations, counter-terrorism metrics, intelligence procurement, or tactical infrastructure coordinates.
+3. **Factual Uncertainty & Contradictions:** Unresolved competing figures or conflicting official reports recorded in `contradiction_log.csv`.
+4. **Legal & Reputational Exposure:** Active litigations, constitutional questions, disputed statutory mandates, or ministerial retractions.
+5. **Contextual Materiality:** Broad macroeconomic causal claims attributing national trends solely to executive policy.
+6. **Exceptional Public Significance:** Ground-breaking national structural reforms (e.g. FX market unification, fuel subsidy removal, state electricity devolution).
+
+### 3.2 Configurable Quantitative Escalation Floors
+To ensure automated safety across high-volume pipelines, the platform maintains quantitative escalation floors:
+- **Major Financial Values:** Any single financial allocation, contract award, or reported expenditure exceeding **₦100 Billion** (or $100 Million USD).
+- **Major Beneficiary Totals:** Any single beneficiary count exceeding **500,000 individuals, households, or MSMEs**.
+
+#### Governance Controls for Quantitative Floors:
+- **Policy Owner:** Data Governance Directorate.
+- **Review Cadence:** Semi-annually (aligned with national budget cycles and inflation adjustments).
+- **Subordination Rule:** Smaller financial or beneficiary figures **must not bypass human review** if they meet any qualitative escalation trigger above.
+- **Override Authority:** Only the Lead Editor in consultation with the Editorial Board may adjust threshold parameters.
 
 ---
 
-## 4. Mapping to Authorization Roles
+## 4. Implementation-Neutral Access Control Matrix
 
-| Operating Role | Database / Auth Role | Client Access Level | Ingestion Privilege |
-|---|---|---|---|
-| Public Reader | `public` | Read-only to published connector queries | None |
-| Researcher / Extraction Agent | `researcher` | Draft and stage permissions | Staging only via batch manifest |
-| Verification / QA Agent | `verifier` | Read internal drafts + submit reviews | Validation execution |
-| Editor / Editorial Agent | `editor` | Editorial review + pass/fail decisions | Review decision staging |
-| Human Lead Reviewer | `lead_editor` | Final publication approval authority | Sign-off token issuance |
-| Compliance Officer | `compliance_officer` | Full audit, redaction, retraction logs | Audit & correction commit |
-| System Administrator / Publisher | `admin` | Full database management (Admin SDK) | Transactional production commit |
+| Operating Role | Functional Access Level | Data Ingestion Privilege |
+|---|---|---|
+| Public Reader | Read-only access to published public queries | None |
+| Researcher / Extraction Agent | Draft, extract, and stage batch data | Staging queue only |
+| Verification / QA Agent | Read internal drafts, execute validation | Validation execution |
+| Editor / Editorial Agent | Editorial review and truth audits | Review decision staging |
+| Human Lead Reviewer | Publication approval authority | Approval token issuance |
+| Compliance Officer | Full audit, redaction, retraction logs | Audit & correction commit |
+| System Administrator / Publisher | Database administration and ingestion runner | Transactional production commit |

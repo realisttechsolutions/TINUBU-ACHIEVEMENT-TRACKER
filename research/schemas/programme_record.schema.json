@@ -1,47 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/programme_record.schema.json",
-  "title": "Programme Intervention Record Schema v1.1",
-  "description": "Validation schema for non-physical social interventions, credit facilities, and sectoral support programmes.",
+  "title": "Programme Record Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "id",
-    "slug",
-    "title",
+    "programme_id",
+    "programme_title",
     "programme_type",
-    "sector_slug",
-    "lead_agency",
+    "coordinating_agency",
+    "sector",
     "status",
-    "summary"
+    "launch_date",
+    "date_precision",
+    "target_beneficiary_type"
   ],
   "properties": {
-    "id": { "type": "string", "minLength": 3 },
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "title": { "type": "string", "minLength": 5 },
+    "programme_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "programme_title": { "type": "string", "minLength": 5 },
     "programme_type": {
       "type": "string",
       "enum": [
-        "social_intervention",
-        "credit_guarantee",
-        "cash_transfer",
-        "skills_training",
-        "agricultural_input",
-        "student_loan",
-        "msme_grant",
-        "healthcare_subsidy",
-        "programme-intervention",
-        "other"
+        "social_investment", "financial_credit", "youth_employment",
+        "agricultural_intervention", "industrial_acceleration", "health_intervention",
+        "energy_access", "digital_transformation"
       ]
     },
-    "sector_slug": {
+    "coordinating_agency": { "type": "string", "minLength": 2 },
+    "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -59,39 +45,28 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "lead_agency": { "type": "string" },
+    "subsector": { "type": "string" },
     "status": {
       "type": "string",
       "enum": [
-        "proposed",
-        "announced",
-        "approved",
-        "enacted",
-        "effective",
-        "funded",
-        "funding_released",
-        "procurement",
-        "implementation_planning",
-        "implementation_ongoing",
-        "partially_delivered",
-        "completed",
-        "operational",
-        "outcome_reported",
-        "independently_assessed",
-        "suspended",
-        "superseded",
-        "repealed",
-        "under_review",
-        "archived",
-        "withdrawn"
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
       ]
     },
-    "target_beneficiary_group": { "type": "string" },
-    "financial_envelope": { "type": "string" },
-    "summary": { "type": "string" },
-    "full_description": { "type": "string" },
-    "source_url": { "type": "string" },
-    "internal_notes": { "type": "string" }
+    "launch_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "target_beneficiary_type": {
+      "type": "string",
+      "enum": ["individuals", "households", "farmers", "students", "msmes", "enterprises", "communities"]
+    },
+    "states_covered": { "type": "string" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

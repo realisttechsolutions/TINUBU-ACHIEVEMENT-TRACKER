@@ -1,21 +1,21 @@
-# Tinubu Achievement Tracker — Status & Classification Standard (v1.1)
+# Tinubu Achievement Tracker — Status & Classification Standard (v1.1.1)
 
-**Standard Version:** 1.1  
+**Standard Version:** 1.1.1  
 **Effective Date:** 2026-08-15  
-**Governing Contract:** Research Contract v1.1  
-**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.json`  
+**Governing Contract:** Research Contract v1.1.1  
+**Controlled Vocabulary:** `research/schemas/canonical-vocabulary.v1.1.1.json`  
 
 ---
 
 ## 1. Separation of Classification Dimensions
 
-Research Contract v1.1 strictly separates classification into **four independent namespaces**. A single overloaded classification field is strictly prohibited:
+Research Contract v1.1.1 strictly separates classification into **four independent namespaces**. Overloading multiple classification concepts into a single field is strictly prohibited:
 
 ```text
 +───────────────────────────────────────────────────────────────────────────────────────────────────+
 |                                4 SEPARATED CLASSIFICATION DIMENSIONS                              |
 +────────────────────────────────────────┬──────────────────────────────────────────────────────────+
-| Dimension                              | Controlled Codes                                         |
+| Dimension                              | Controlled Canonical Codes                               |
 +────────────────────────────────────────┼──────────────────────────────────────────────────────────+
 | 1. DATA VALUE NATURE                   | actual, provisional, estimated, projected, target,       |
 |                                        | calculated, modelled                                     |
@@ -27,9 +27,13 @@ Research Contract v1.1 strictly separates classification into **four independent
 |                                        | independently_corroborated, under_review, unverified,    |
 |                                        | disputed, corrected, withdrawn                           |
 +────────────────────────────────────────┼──────────────────────────────────────────────────────────+
-| 4. WORKFLOW & PUBLICATION LIFECYCLE    | draft, research_review, editorial_review,                |
-|                                        | publishable, publishable_with_qualification,             |
+| 4A. INTERNAL WORKFLOW STATUS           | draft, research_review, evidence_review,                 |
+|                                        | editorial_review, human_approval, ready_for_publication, |
 |                                        | rejected, archived                                       |
++────────────────────────────────────────┼──────────────────────────────────────────────────────────+
+| 4B. EXTERNAL PUBLICATION STATUS        | unpublished, under_review, publishable,                  |
+|                                        | publishable_with_qualification, published, corrected,    |
+|                                        | withdrawn, archived                                      |
 +────────────────────────────────────────┴──────────────────────────────────────────────────────────+
 ```
 
@@ -81,11 +85,3 @@ FORBIDDEN TRANSITIONS (DATA INTEGRITY VIOLATIONS):
 ❌ funded ──> operational         (Bypasses cash release, procurement, and construction)
 ❌ proposed ──> funded           (Bypasses executive approval and legislative appropriation)
 ```
-
----
-
-## 4. Public Display Guidelines
-
-- Public UI cards display human-friendly badge variants mapped via strongly-typed adapters.
-- In-progress achievements (`implementation_ongoing`, `partially_delivered`) must clearly show progress indicators and percentage metrics where available.
-- Published records must never claim a higher status than supported by the latest verified evidence.

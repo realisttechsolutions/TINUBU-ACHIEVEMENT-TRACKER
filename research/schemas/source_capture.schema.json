@@ -1,61 +1,50 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/source_capture.schema.json",
-  "title": "Source Capture Research Schema v1.1",
-  "description": "Validation schema for primary legal, statutory, official statistical, media, and institutional source capture records.",
+  "title": "Source Capture Research Template Schema v1.1.1",
   "type": "object",
   "required": [
     "source_id",
     "source_title",
     "institution",
+    "source_level",
     "source_type",
     "publication_date",
+    "publication_date_precision",
     "url",
-    "source_status"
+    "access_date"
   ],
   "properties": {
-    "source_id": { "type": "string", "minLength": 3 },
-    "source_title": { "type": "string", "minLength": 3 },
-    "institution": { "type": "string" },
+    "source_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "source_title": { "type": "string", "minLength": 5 },
+    "institution": { "type": "string", "minLength": 2 },
     "source_level": {
       "type": "string",
-      "enum": ["LEVEL_1", "LEVEL_2", "LEVEL_3", "LEVEL_4", "LEVEL_5", "LEVEL_6", "1", "2", "3", "4", "5", "6"]
+      "enum": ["LEVEL_1", "LEVEL_2", "LEVEL_3", "LEVEL_4", "LEVEL_5", "LEVEL_6"]
     },
     "source_type": {
       "type": "string",
       "enum": [
-        "gazette",
-        "act",
-        "executive_order",
-        "statutory_report",
-        "bulletin",
-        "international_report",
-        "media_article",
-        "speech",
-        "press_release",
-        "discovery_lead",
-        "procurement_notice",
-        "court_ruling",
-        "bilateral_agreement",
-        "portal_record",
-        "other"
+        "gazette", "act_statute", "executive_order", "court_ruling",
+        "statistical_bulletin", "economic_report", "debt_report", "multilateral_report",
+        "audit_report", "academic_study", "investigative_report", "mainstream_media",
+        "specialist_press", "state_house_release", "ministerial_statement", "agency_portal", "social_lead"
       ]
     },
     "publication_date": { "type": "string" },
     "publication_date_precision": {
       "type": "string",
-      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown", "exact-day"]
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
     },
     "url": { "type": "string", "format": "uri" },
-    "access_date": { "type": "string" },
+    "access_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "archive_url": { "type": "string" },
     "document_number": { "type": "string" },
     "author": { "type": "string" },
     "publisher": { "type": "string" },
-    "language": { "type": "string", "default": "en" },
+    "language": { "type": "string", "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$" },
     "source_status": {
       "type": "string",
-      "enum": ["active", "archived", "unverified", "deprecated"]
+      "enum": ["active", "archived", "under_review", "retracted", "dead_link"]
     },
     "notes": { "type": "string" }
   },

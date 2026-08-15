@@ -1,58 +1,34 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/entity_discovery.schema.json",
-  "title": "Entity Discovery Research Schema v1.1",
-  "description": "Validation schema for initial entity discovery leads prior to structured claim extraction.",
+  "title": "Entity Discovery Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "candidate_record_type",
+    "candidate_id",
     "candidate_title",
+    "record_type",
     "sector",
-    "institution",
-    "discovery_source"
+    "lead_mda",
+    "discovery_source_url",
+    "source_level",
+    "date_observed",
+    "status"
   ],
   "properties": {
-    "candidate_record_type": {
+    "candidate_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "candidate_title": { "type": "string", "minLength": 5 },
+    "record_type": {
       "type": "string",
       "enum": [
-        "achievement",
-        "policy",
-        "reform",
-        "executive_action",
-        "legislation",
-        "regulation",
-        "programme",
-        "intervention",
-        "physical_project",
-        "institutional_reform",
-        "reported_outcome",
-        "timeline_event",
-        "milestone",
-        "indicator",
-        "indicator_observation",
-        "source",
-        "correction_revision",
-        "report",
-        "dataset",
-        "methodology",
-        "physical-project",
-        "policy-reform",
-        "programme-intervention",
-        "institutional-improvement",
-        "reported-outcome"
+        "achievement", "policy", "reform", "executive_action", "legislation",
+        "regulation", "programme", "intervention", "physical_project",
+        "institutional_reform", "reported_outcome", "timeline_event", "milestone",
+        "indicator", "indicator_observation", "source", "correction_revision",
+        "report", "dataset", "methodology"
       ]
     },
-    "candidate_title": { "type": "string", "minLength": 3 },
-    "aliases": { "type": "string" },
     "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -70,12 +46,18 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "subsector": { "type": "string" },
-    "institution": { "type": "string" },
-    "geography": { "type": "string" },
-    "possible_existing_record": { "type": "string" },
-    "discovery_source": { "type": "string" },
-    "initial_notes": { "type": "string" }
+    "lead_mda": { "type": "string", "minLength": 2 },
+    "discovery_source_url": { "type": "string", "format": "uri" },
+    "source_level": {
+      "type": "string",
+      "enum": ["LEVEL_1", "LEVEL_2", "LEVEL_3", "LEVEL_4", "LEVEL_5", "LEVEL_6"]
+    },
+    "date_observed": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "under_review", "approved", "rejected"]
+    },
+    "reviewer_notes": { "type": "string" }
   },
   "additionalProperties": false
 }

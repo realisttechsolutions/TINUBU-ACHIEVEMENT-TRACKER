@@ -1,31 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/indicator_record.schema.json",
-  "title": "Indicator Definition Schema v1.1",
-  "description": "Validation schema for performance metric and indicator definitions in Tinubu Achievement Tracker v1.1.",
+  "title": "Indicator Record Research Template Schema v1.1.1",
   "type": "object",
   "required": [
     "indicator_id",
-    "slug",
-    "name",
-    "sector_slug",
+    "indicator_name",
+    "sector",
     "unit",
-    "source_agency",
-    "data_classification"
+    "frequency",
+    "reporting_agency"
   ],
   "properties": {
-    "indicator_id": { "type": "string", "minLength": 3 },
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "name": { "type": "string", "minLength": 3 },
-    "sector_slug": {
+    "indicator_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "indicator_name": { "type": "string", "minLength": 5 },
+    "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -45,31 +35,15 @@
     },
     "subsector": { "type": "string" },
     "unit": { "type": "string" },
-    "baseline_value": { "type": "string" },
-    "baseline_date": { "type": "string" },
-    "target_value": { "type": "string" },
-    "target_date": { "type": "string" },
-    "calculation_methodology": { "type": "string" },
-    "source_agency": { "type": "string" },
-    "data_classification": {
+    "frequency": {
       "type": "string",
-      "enum": [
-        "actual",
-        "provisional",
-        "estimated",
-        "projected",
-        "target",
-        "government_target",
-        "calculated",
-        "modelled",
-        "government_reported",
-        "independently_reported",
-        "under_review",
-        "corrected",
-        "withdrawn"
-      ]
+      "enum": ["monthly", "quarterly", "annual", "biennial", "ad_hoc"]
     },
-    "internal_notes": { "type": "string" }
+    "reporting_agency": { "type": "string", "minLength": 2 },
+    "baseline_value": { "type": "string" },
+    "baseline_period": { "type": "string" },
+    "methodology_summary": { "type": "string" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

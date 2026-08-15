@@ -1,41 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/publication_review.schema.json",
-  "title": "Publication Review Schema v1.1",
-  "description": "Validation schema for quality gate sign-off, distinct reviewer separation, and 13 Truth Rules compliance audit.",
+  "title": "Publication Review Research Template Schema v1.1.1",
   "type": "object",
   "required": [
     "review_id",
     "record_id",
-    "editor_id",
-    "publication_decision",
+    "review_gate",
+    "review_decision",
     "truth_rules_audit_pass",
-    "approved_date"
+    "reviewed_by",
+    "review_date"
   ],
   "properties": {
-    "review_id": { "type": "string" },
-    "record_id": { "type": "string" },
-    "editor_id": { "type": "string" },
+    "review_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
     "review_gate": {
       "type": "string",
       "enum": [
-        "gate_0_task_authorization",
-        "gate_1_source_claim_capture",
-        "gate_2_resolution_evidence",
-        "gate_3_automated_data_readiness",
-        "gate_4_editorial_human_approval",
-        "gate_5_publication_stewardship",
-        "editorial_review"
+        "gate_0_task_authorization", "gate_1_source_claim_capture", "gate_2_resolution_evidence",
+        "gate_3_automated_data_readiness", "gate_4_editorial_human_approval", "gate_5_publication_stewardship"
       ]
     },
-    "publication_decision": {
+    "review_decision": {
       "type": "string",
-      "enum": ["draft", "under_review", "publishable", "publishable_with_qualification", "rejected", "archived"]
+      "enum": [
+        "approved", "approved_with_qualification", "rejected",
+        "revision_requested", "escalated_to_human_lead", "quarantined"
+      ]
     },
-    "qualification_notes": { "type": "string" },
-    "truth_rules_audit_pass": { "type": ["boolean", "string"] },
-    "approved_date": { "type": "string" },
-    "internal_notes": { "type": "string" }
+    "truth_rules_audit_pass": {
+      "type": "string",
+      "enum": ["true", "false"]
+    },
+    "reviewed_by": { "type": "string", "minLength": 2 },
+    "review_date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

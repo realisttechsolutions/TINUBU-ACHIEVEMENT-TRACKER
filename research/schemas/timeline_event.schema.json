@@ -1,64 +1,39 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/timeline_event.schema.json",
-  "title": "Timeline Event Schema v1.1",
-  "description": "Validation schema for dated timeline events, statutory steps, procurement, and implementation milestones.",
+  "title": "Timeline Event Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "id",
-    "slug",
-    "date",
-    "year",
-    "quarter",
-    "title",
-    "stage",
-    "category",
-    "sector_slug",
+    "event_id",
+    "record_id",
+    "event_title",
+    "event_type",
+    "event_date",
+    "date_precision",
+    "sector",
+    "lead_actor",
     "summary"
   ],
   "properties": {
-    "id": { "type": "string" },
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "date": { "type": "string" },
-    "date_precision": {
-      "type": "string",
-      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown", "exact-day"]
-    },
-    "year": { "type": ["number", "string"] },
-    "quarter": { "type": "string", "enum": ["Q1", "Q2", "Q3", "Q4"] },
-    "title": { "type": "string" },
-    "stage": {
+    "event_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "record_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "event_title": { "type": "string", "minLength": 5 },
+    "event_type": {
       "type": "string",
       "enum": [
-        "announcement",
-        "approval",
-        "enactment",
-        "funding",
-        "funding_release",
-        "procurement",
-        "commencement",
-        "partial_delivery",
-        "completion",
-        "operation",
-        "outcome_reporting",
-        "independent_assessment",
-        "correction",
-        "appropriation",
-        "implementation",
-        "operational",
-        "impact"
+        "announcement", "approval", "enactment", "effectiveness",
+        "funding_approval", "funding_release", "procurement", "commencement",
+        "partial_delivery", "completion", "operation", "outcome_report",
+        "independent_assessment", "correction"
       ]
     },
-    "category": { "type": "string" },
-    "sector_slug": {
+    "event_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -76,12 +51,10 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "summary": { "type": "string" },
-    "details": { "type": "string" },
-    "lead_agency": { "type": "string" },
-    "geopolitical_zone": { "type": "string" },
-    "primary_source_url": { "type": "string" },
-    "internal_notes": { "type": "string" }
+    "lead_actor": { "type": "string", "minLength": 2 },
+    "evidence_source_id": { "type": "string" },
+    "summary": { "type": "string", "minLength": 10 },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }

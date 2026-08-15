@@ -1,2 +1,2 @@
-observation_id,indicator_id,claim_id,reporting_period,numeric_value,display_value,unit,data_classification,source_id,verification_status,notes
-[EXAMPLE-ONLY-OBS-001],[EXAMPLE-ONLY-IND-001],[EXAMPLE-ONLY-CLM-001],2024-Q2,3.37,"$3.37 Billion",USD Billion,actual,[EXAMPLE-ONLY-SRC-001],source_confirmed,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Q2 2024 empirical observation value."
+id,indicator_id,claim_id,observed_value,period,period_start,period_end,date_precision,data_value_nature,source_origin,verification_status,publication_status,source_institution,notes
+[EXAMPLE-ONLY-INO-001],[EXAMPLE-ONLY-IND-001],[EXAMPLE-ONLY-CLM-001],37.05,2024-Q2,2024-04-01,2024-06-30,quarter,actual,government_reported,source_confirmed,published,Central Bank of Nigeria,"[EXAMPLE ONLY - NOT A PRODUCTION RECORD] Non-production indicator observation example"

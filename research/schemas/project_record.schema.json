@@ -1,52 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://tinubuachievements.gov.ng/research/schemas/project_record.schema.json",
-  "title": "Physical Project Record Schema v1.1",
-  "description": "Validation schema for capital physical infrastructure projects.",
+  "title": "Project Record Research Template Schema v1.1.1",
   "type": "object",
   "required": [
-    "id",
-    "slug",
-    "title",
+    "project_id",
+    "project_title",
     "project_type",
-    "sector_slug",
-    "lead_agency",
+    "executing_agency",
+    "sector",
     "status",
-    "summary"
+    "start_date",
+    "date_precision"
   ],
   "properties": {
-    "id": { "type": "string", "minLength": 3 },
-    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-    "title": { "type": "string", "minLength": 5 },
+    "project_id": { "type": "string", "pattern": "^\\[[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\\]$" },
+    "project_title": { "type": "string", "minLength": 5 },
     "project_type": {
       "type": "string",
       "enum": [
-        "road_highway",
-        "bridge",
-        "rail",
-        "aviation_airport",
-        "maritime_port",
-        "power_generation",
-        "transmission_grid",
-        "housing_estate",
-        "water_dam",
-        "hospital_facility",
-        "school_campus",
-        "digital_infrastructure",
-        "physical_project",
-        "physical-project",
-        "other"
+        "highway_road", "bridge_tunnel", "rail_system", "port_maritime",
+        "airport_aviation", "power_plant_grid", "housing_estate", "hospital_health_center",
+        "school_educational_facility", "water_dam_irrigation", "digital_broadband", "public_building"
       ]
     },
-    "sector_slug": {
+    "executing_agency": { "type": "string", "minLength": 2 },
+    "sector": {
       "type": "string",
       "enum": [
-        "economy",
-        "security",
-        "infrastructure",
-        "social_services",
-        "social-services",
-        "governance",
         "economy_fiscal_reforms",
         "security_national_stability",
         "infrastructure_transportation",
@@ -64,41 +44,27 @@
         "culture_tourism_creative_economy"
       ]
     },
-    "lead_agency": { "type": "string" },
-    "location_scope": { "type": "string" },
+    "subsector": { "type": "string" },
     "status": {
       "type": "string",
       "enum": [
-        "proposed",
-        "announced",
-        "approved",
-        "enacted",
-        "effective",
-        "funded",
-        "funding_released",
-        "procurement",
-        "implementation_planning",
-        "implementation_ongoing",
-        "partially_delivered",
-        "completed",
-        "operational",
-        "outcome_reported",
-        "independently_assessed",
-        "suspended",
-        "superseded",
-        "repealed",
-        "under_review",
-        "archived",
-        "withdrawn"
+        "proposed", "announced", "approved", "enacted", "effective",
+        "funded", "funding_released", "procurement", "implementation_planning",
+        "implementation_ongoing", "partially_delivered", "completed", "operational",
+        "outcome_reported", "independently_assessed", "suspended", "superseded",
+        "repealed", "under_review", "archived", "withdrawn"
       ]
     },
-    "progress_percentage": { "type": ["number", "string"] },
-    "budget_or_value": { "type": "string" },
     "states_covered": { "type": "string" },
-    "summary": { "type": "string" },
-    "full_description": { "type": "string" },
-    "source_url": { "type": "string" },
-    "internal_notes": { "type": "string" }
+    "start_date": { "type": "string" },
+    "completion_or_current_date": { "type": "string" },
+    "date_precision": {
+      "type": "string",
+      "enum": ["exact_day", "month", "quarter", "year", "fiscal_year", "range", "unknown"]
+    },
+    "progress_percentage": { "type": "string" },
+    "contractor": { "type": "string" },
+    "notes": { "type": "string" }
   },
   "additionalProperties": false
 }
