@@ -35,10 +35,7 @@ export const Downloads: React.FC = () => {
 
   const handleDownloadCsv = (ds: any) => {
     dataAdapter.exportToCsv(
-      [
-        { dataset: ds.title, period: ds.periodCovered, status: "Official Public Dataset Slice", timestamp: "2026-08-15" },
-        { record_id: "DEMO-01", sample: "Contract v1.1.2 Verified Data", status: "Published" }
-      ],
+      dataAdapter.getPublicDownloadData(),
       `${ds.title.toLowerCase().replace(/[^a-z0-9]/g, '_')}_dataset`
     );
   };
@@ -51,7 +48,7 @@ export const Downloads: React.FC = () => {
         recordCount: ds.recordCount,
         lastUpdated: ds.lastUpdated,
         governingContract: "TAT_RESEARCH_CONTRACT_V1_1_2",
-        data: []
+        data: dataAdapter.getPublicDownloadData()
       },
       `${ds.title.toLowerCase().replace(/[^a-z0-9]/g, '_')}_dataset`
     );

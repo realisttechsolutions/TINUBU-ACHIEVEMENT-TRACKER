@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import StateDetail from '@/views/StateDetail';
 import Loading from '../../loading';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const states = dataAdapter.getStates();
+  const states = (await getPublicDataSnapshot())?.states ?? dataAdapter.getStates();
   return states.map((s) => ({
     slug: s.slug,
   }));
@@ -18,7 +19,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const state = dataAdapter.getStateBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const state = (await getPublicDataSnapshot())?.states.find((record) => record.slug === slug)
+    ?? dataAdapter.getStateBySlug(slug);
   if (!state) {
     return {
       title: 'State Not Found | Tinubu Achievement Tracker',
@@ -45,7 +48,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StateDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  const state = dataAdapter.getStateBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const state = (await getPublicDataSnapshot())?.states.find((record) => record.slug === slug)
+    ?? dataAdapter.getStateBySlug(slug);
   if (!state) {
     notFound();
   }

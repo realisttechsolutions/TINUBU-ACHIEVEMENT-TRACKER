@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import PolicyDetail from '@/views/PolicyDetail';
 import Loading from '../../loading';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const policies = dataAdapter.getPolicies();
+  const policies = (await getPublicDataSnapshot())?.policies ?? dataAdapter.getPolicies();
   return policies.map((p) => ({
     slug: p.slug,
   }));
@@ -18,7 +19,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const policy = dataAdapter.getPolicyBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const policy = (await getPublicDataSnapshot())?.policies.find((record) => record.slug === slug)
+    ?? dataAdapter.getPolicyBySlug(slug);
   if (!policy) {
     return {
       title: 'Policy Not Found | Tinubu Achievement Tracker',
@@ -45,7 +48,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PolicyDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  const policy = dataAdapter.getPolicyBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const policy = (await getPublicDataSnapshot())?.policies.find((record) => record.slug === slug)
+    ?? dataAdapter.getPolicyBySlug(slug);
   if (!policy) {
     notFound();
   }

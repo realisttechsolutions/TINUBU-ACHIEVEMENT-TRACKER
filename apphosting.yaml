@@ -3,14 +3,54 @@
 
 runConfig:
   minInstances: 0
-  maxInstances: 10
-  concurrency: 80
+  maxInstances: 4
+  concurrency: 40
   cpu: 1
   memoryMiB: 1024
 
 env:
   - variable: NEXT_PUBLIC_APP_ENV
-    value: production
+    value: staging
     availability:
       - BUILD
+      - RUNTIME
+  - variable: TAT_DATA_SOURCE
+    value: cloud-sql
+    availability:
+      - RUNTIME
+  - variable: INSTANCE_CONNECTION_NAME
+    value: tinubu-achievement-stg:us-central1:tat-db-staging
+    availability:
+      - RUNTIME
+  - variable: DB_NAME
+    value: tat_staging
+    availability:
+      - RUNTIME
+  - variable: IAM_DB_USER
+    value: firebase-app-hosting-compute@tinubu-achievement-stg.iam
+    availability:
+      - RUNTIME
+  - variable: ALLOWED_CLOUD_SQL_PROJECT
+    value: tinubu-achievement-stg
+    availability:
+      - RUNTIME
+  - variable: DB_IP_TYPE
+    value: PUBLIC
+    availability:
+      - RUNTIME
+  - variable: DB_POOL_MAX
+    value: '4'
+    availability:
+      - RUNTIME
+  - variable: DB_IDLE_TIMEOUT_MS
+    value: '10000'
+    availability:
+      - RUNTIME
+  - variable: DB_CONNECTION_TIMEOUT_MS
+    value: '10000'
+    availability:
+      - RUNTIME
+  - variable: DB_STATEMENT_TIMEOUT_MS
+    value: '15000'
+    availability:
       - RUNTIME

@@ -170,9 +170,48 @@ function mapPolicyType(type) {
   return 'national_policy';
 }
 
+const stateCodes = new Map(Object.entries({
+  'abia': 'NG-AB', 'adamawa': 'NG-AD', 'akwa ibom': 'NG-AK', 'anambra': 'NG-AN',
+  'bauchi': 'NG-BA', 'bayelsa': 'NG-BY', 'benue': 'NG-BE', 'borno': 'NG-BO',
+  'cross river': 'NG-CR', 'delta': 'NG-DE', 'ebonyi': 'NG-EB', 'edo': 'NG-ED',
+  'ekiti': 'NG-EK', 'enugu': 'NG-EN', 'gombe': 'NG-GO', 'imo': 'NG-IM',
+  'jigawa': 'NG-JI', 'kaduna': 'NG-KD', 'kano': 'NG-KN', 'katsina': 'NG-KT',
+  'kebbi': 'NG-KB', 'kogi': 'NG-KO', 'kwara': 'NG-KW', 'lagos': 'NG-LA',
+  'nasarawa': 'NG-NA', 'niger': 'NG-NI', 'ogun': 'NG-OG', 'ondo': 'NG-ON',
+  'osun': 'NG-OS', 'oyo': 'NG-OY', 'plateau': 'NG-PL', 'rivers': 'NG-RI',
+  'sokoto': 'NG-SO', 'taraba': 'NG-TA', 'yobe': 'NG-YO', 'zamfara': 'NG-ZA',
+  'fct': 'NG-FC', 'abuja': 'NG-FC', 'abuja fct': 'NG-FC',
+}));
+
+const fixedGeographyIds = new Map(Object.entries({
+  'NGA': '30000000-0000-4000-8000-000000000001',
+  'NG-FC': '31000000-0000-4000-8000-000000000001',
+  'NG-LA': '31000000-0000-4000-8000-000000000002',
+  'NG-KN': '31000000-0000-4000-8000-000000000003',
+  'NG-RI': '31000000-0000-4000-8000-000000000004',
+}));
+
+function pipeValues(value) {
+  return String(value || '').split('|').map((part) => part.trim()).filter(Boolean);
+}
+
+function geographyCode(value) {
+  const normalized = String(value || '').toLowerCase().replace(/\s+state$/, '').trim();
+  if (['national', 'nigeria', 'all 36 states', 'all 36 states + fct', 'all 774 lgas', 'multi_state', 'multi-state'].includes(normalized)) return 'NGA';
+  const code = stateCodes.get(normalized);
+  if (!code) throw new Error(`M02 geography is not in the canonical state mapping: ${value}`);
+  return code;
+}
+
 export function transformM02Package(datasetObjects, systemActorId = '00000000-0000-4000-8000-000000000001') {
   const transformed = {
+    institutions: [],
+    geographicUnits: [],
     records: [],
+    recordInstitutions: [],
+    recordSectors: [],
+    recordGeographies: [],
+    recordRelationships: [],
     policyDetails: [],
     projectDetails: [],
     programmeDetails: [],
@@ -195,6 +234,68 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
     claims: new Map(),
     indicators: new Map(),
     relationships: new Map(),
+  };
+
+  const institutionIds = new Map();
+  const geographyCodes = new Set();
+  const relationshipKeys = new Set();
+
+  const ensureInstitution = (name) => {
+    const canonicalName = String(name || '').trim();
+    if (!canonicalName) return null;
+    if (institutionIds.has(canonicalName)) return institutionIds.get(canonicalName);
+    const id = externalIdToUuid(`M02-INSTITUTION:${canonicalName}`);
+    institutionIds.set(canonicalName, id);
+    transformed.institutions.push({
+      id,
+      external_id: `M02-INST-${slugify(canonicalName)}`,
+      slug: slugify(canonicalName),
+      canonical_name: canonicalName,
+      short_name: null,
+      institution_type: 'public_institution',
+    });
+    return id;
+  };
+
+  const ensureGeography = (code, originalName) => {
+    if (geographyCodes.has(code)) return;
+    geographyCodes.add(code);
+    const isNational = code === 'NGA';
+    const isFct = code === 'NG-FC';
+    const cleanName = isNational ? 'Nigeria' : isFct ? 'Federal Capital Territory' : `${String(originalName).replace(/\s+State$/i, '').trim()} State`;
+    transformed.geographicUnits.push({
+      id: fixedGeographyIds.get(code) || externalIdToUuid(`M02-GEOGRAPHY:${code}`),
+      code,
+      name: cleanName,
+      geography_type: isNational ? 'national' : isFct ? 'fct' : 'state',
+      parent_geographic_unit_id: isNational ? null : fixedGeographyIds.get('NGA'),
+    });
+  };
+
+  const addDimensions = ({ recordId, sector, institutions, states = 'National' }) => {
+    transformed.recordSectors.push({ record_id: recordId, sector_code: sector, role_code: 'primary' });
+    for (const name of pipeValues(institutions)) {
+      const institutionId = ensureInstitution(name);
+      const key = `${recordId}|${institutionId}|lead`;
+      if (!relationshipKeys.has(key)) {
+        relationshipKeys.add(key);
+        transformed.recordInstitutions.push({ record_id: recordId, institution_id: institutionId, role_code: 'lead' });
+      }
+    }
+    const locations = pipeValues(states);
+    const effectiveLocations = locations.length ? locations : ['National'];
+    const resolved = effectiveLocations.map((name) => ({ name, code: geographyCode(name) }));
+    const publicLocations = resolved.some(({ code }) => code === 'NGA')
+      ? [{ name: 'National', code: 'NGA' }]
+      : resolved;
+    for (const { name, code } of publicLocations) {
+      ensureGeography(code, name);
+      const key = `${recordId}|${code}|covered`;
+      if (!relationshipKeys.has(key)) {
+        relationshipKeys.add(key);
+        transformed.recordGeographies.push({ record_id: recordId, geography_code: code, coverage_role: 'covered' });
+      }
+    }
   };
 
   // 1. Transform Achievements -> records + achievement_profiles
@@ -238,6 +339,12 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       featured_asset_url: null,
       display_priority: 10,
     });
+    addDimensions({
+      recordId: uuid,
+      sector: ach.sector,
+      institutions: ach.responsible_institutions,
+      states: ach.states_covered || ach.geographic_scope,
+    });
   });
 
   // 2. Transform Policies -> records + policy_details
@@ -280,6 +387,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       reference_number: pol.gazette_reference || pol.policy_id,
       effect_scope: 'national',
     });
+    addDimensions({ recordId: uuid, sector: pol.sector, institutions: pol.lead_mda, states: 'National' });
   });
 
   // 3. Transform Projects -> records + project_details
@@ -318,11 +426,12 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
     transformed.projectDetails.push({
       record_id: uuid,
       project_type: mapProjectType(prj.project_type),
-      progress_percentage: prj.progress_percentage ? parseFloat(prj.progress_percentage) : 100.0,
+      progress_percentage: prj.progress_percentage || '100.0',
       contract_reference: prj.contractor || null,
       project_reference: prj.project_id,
       location_narrative: prj.states_covered || 'Nigeria',
     });
+    addDimensions({ recordId: uuid, sector: prj.sector, institutions: prj.executing_agency, states: prj.states_covered });
   });
 
   // 4. Transform Programmes -> records + programme_details
@@ -365,6 +474,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       enrolment_model: 'Direct registration',
       disbursement_model: 'Direct transfer',
     });
+    addDimensions({ recordId: uuid, sector: prog.sector, institutions: prog.coordinating_agency, states: prog.states_covered });
   });
 
   // 5. Transform Sources -> sources
@@ -376,12 +486,13 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
 
     const level = src.source_level.startsWith('LEVEL_') ? src.source_level : `LEVEL_${src.source_level.replace(/[^0-9]/g, '')}`;
 
+    const publisherName = src.publisher || src.institution || 'Federal Ministry';
     transformed.sources.push({
       id: uuid,
       external_id: extId,
       title: src.source_title,
-      publisher_institution_id: null,
-      publisher_name: src.publisher || src.institution || 'Federal Ministry',
+      publisher_institution_id: ensureInstitution(publisherName),
+      publisher_name: publisherName,
       source_type: mapSourceType(src.source_type),
       source_level: level,
       original_url: src.url && src.url.startsWith('http') ? src.url : null,
@@ -411,7 +522,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       record_id: recordUuid,
       claim_type: clm.claim_type || 'implementation_status',
       claim_text: clm.claim_text,
-      value_numeric: clm.numeric_value ? parseFloat(clm.numeric_value) : null,
+      value_numeric: clm.numeric_value || null,
       value_text: clm.numeric_value ? `${clm.numeric_value} ${clm.unit || ''}`.trim() : null,
       unit_code: clm.unit || null,
       date_value: clm.date_value || null,
@@ -475,7 +586,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       claim_id: claimUuid,
       geographic_unit_id: null,
       financial_type: fin.financial_type,
-      amount: parseFloat(fin.amount),
+      amount: fin.amount,
       currency_code: fin.currency || 'NGN',
       reporting_period_label: fin.reporting_period || '2024',
       period_start: start,
@@ -508,7 +619,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       geographic_unit_id: null,
       beneficiary_type: mapBeneficiaryType(ben.beneficiary_type),
       beneficiary_stage: ben.beneficiary_stage,
-      count_value: parseInt(ben.count_value, 10),
+      count_value: ben.count_value,
       unit: 'individuals',
       count_basis: countBasis,
       cumulative: isCumulative,
@@ -541,8 +652,8 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       unit: ind.unit || 'index',
       frequency: ind.frequency || 'quarterly',
       methodology: ind.methodology_summary || ind.indicator_name,
-      sector_id: null,
-      source_institution_id: null,
+      sector_code: ind.sector,
+      source_institution_id: ensureInstitution(ind.reporting_agency),
       active: true,
       created_by: systemActorId,
     });
@@ -562,7 +673,7 @@ export function transformM02Package(datasetObjects, systemActorId = '00000000-00
       indicator_id: indicatorUuid,
       claim_id: claimUuid,
       geographic_unit_id: null,
-      value_numeric: obs.observed_value ? parseFloat(obs.observed_value) : null,
+      value_numeric: obs.observed_value || null,
       value_display: obs.observed_value,
       reporting_period_label: obs.period || '2024-Q2',
       period_start: obs.period_start || '2024-01-01',

@@ -31,7 +31,8 @@ export type GeopoliticalZone =
 export interface FinancialMetricViewModel {
   financialType: string;
   financialTypeLabel: string;
-  amount: number;
+  /** Exact PostgreSQL numeric(24,4) text; never coerce to a JS number. */
+  amount: string;
   currency: string;
   formattedAmount: string;
   reportingPeriod: string;

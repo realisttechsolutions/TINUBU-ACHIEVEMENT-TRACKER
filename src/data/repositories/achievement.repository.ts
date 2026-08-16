@@ -1,4 +1,4 @@
-import { getDatabaseConnection } from '@/lib/firebase/sql-connect/server';
+import { getDatabaseConnection } from '@/server/db/pool';
 import { CanonicalRecord, PublicEvidenceClaim, PublicFinancialRecord, PublicBeneficiaryRecord } from './types';
 
 export class AchievementRepository {

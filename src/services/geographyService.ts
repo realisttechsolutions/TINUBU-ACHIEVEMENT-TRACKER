@@ -2,6 +2,7 @@ import { StateRecord, ZoneRecord, StateImpactSummary, GeopoliticalZone } from "@
 import { statesData, geopoliticalZones } from "@/data/geography/states.data";
 import { achievementsData } from "@/data/achievements/achievements.data";
 import { AchievementRecord } from "@/types/achievement";
+import { dataAdapter } from '@/adapters/dataAdapter';
 
 export const getAllStates = (): StateRecord[] => {
   return statesData;
@@ -65,8 +66,7 @@ export const getStateImpactSummary = (stateSlug: string): StateImpactSummary | u
   const state = getStateBySlug(stateSlug);
   if (!state) return undefined;
 
-  const achievements = getStateAchievements(stateSlug);
-  const stateNameLower = state.shortName.toLowerCase();
+  const achievements = dataAdapter.getAchievements({ state: state.shortName });
 
   let stateSpecificCount = 0;
   let multiStateCount = 0;
@@ -76,13 +76,11 @@ export const getStateImpactSummary = (stateSlug: string): StateImpactSummary | u
   const leadMinistriesSet = new Set<string>();
 
   achievements.forEach((ach) => {
-    activeSectorsSet.add(ach.sector);
-    leadMinistriesSet.add(ach.leadMinistryOrAgency);
+    activeSectorsSet.add(ach.sectorName);
+    leadMinistriesSet.add(ach.leadMda);
 
     const isNational =
-      ach.beneficiariesOrScope?.toLowerCase().includes("national") ||
-      ach.beneficiariesOrScope?.toLowerCase().includes("36 states") ||
-      ach.geopoliticalZone?.toLowerCase() === "national";
+      ach.statesCovered.some((covered) => covered.toLowerCase() === 'national' || covered.toLowerCase().includes('36 states'));
 
     if (isNational) {
       nationalCount++;

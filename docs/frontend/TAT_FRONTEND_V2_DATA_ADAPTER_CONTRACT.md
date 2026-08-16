@@ -60,7 +60,7 @@ export interface AchievementViewModel {
   financialMetrics?: {
     type: string;
     typeLabel: string;
-    amount: number;
+    amount: string; // exact PostgreSQL numeric(24,4) text
     currency: string;
     formattedAmount: string;
     period: string;

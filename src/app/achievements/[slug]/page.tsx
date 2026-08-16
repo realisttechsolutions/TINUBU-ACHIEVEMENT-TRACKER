@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import AchievementDetail from '@/views/AchievementDetail';
 import Loading from '../../loading';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const achievements = dataAdapter.getAchievements();
+  const achievements = (await getPublicDataSnapshot())?.achievements ?? dataAdapter.getAchievements();
   return achievements.map((ach) => ({
     slug: ach.slug,
   }));
@@ -18,7 +19,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const achievement = dataAdapter.getAchievementBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const achievement = (await getPublicDataSnapshot())?.achievements.find((record) => record.slug === slug)
+    ?? dataAdapter.getAchievementBySlug(slug);
   if (!achievement) {
     return {
       title: 'Achievement Not Found | Tinubu Achievement Tracker',
@@ -51,7 +54,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AchievementDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  const achievement = dataAdapter.getAchievementBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const achievement = (await getPublicDataSnapshot())?.achievements.find((record) => record.slug === slug)
+    ?? dataAdapter.getAchievementBySlug(slug);
   if (!achievement) {
     notFound();
   }

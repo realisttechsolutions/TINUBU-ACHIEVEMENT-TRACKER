@@ -46,7 +46,7 @@ export interface PublicFinancialRecord {
   id: string;
   record_id: string;
   financial_type: string;
-  amount: number;
+  amount_exact: string;
   currency_code: string;
   reporting_period_label: string;
   period_start: string;

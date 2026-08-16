@@ -10,11 +10,14 @@ import { Toaster as Sonner } from '@/components/ui/sonner';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import AppShell from '@/components/layout/AppShell';
 import Loading from './loading';
+import { hydrateDataAdapter } from '@/adapters/dataAdapter';
+import type { PublicDataSnapshot } from '@/adapters/runtimeData';
 
 // Import i18n instance on client
 import '@/i18n/i18n';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, publicData = null }: { children: React.ReactNode; publicData?: PublicDataSnapshot | null }) {
+  hydrateDataAdapter(publicData);
   const [queryClient] = useState(
     () =>
       new QueryClient({

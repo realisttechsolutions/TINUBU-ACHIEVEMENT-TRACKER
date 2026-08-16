@@ -27,6 +27,22 @@ import {
   DEMO_NIGERIA_STATES,
   DEMO_DATASETS
 } from "./canonicalData";
+import type { PublicDataSnapshot } from './runtimeData';
+
+let runtimeData: PublicDataSnapshot | null = null;
+
+export function hydrateDataAdapter(snapshot: PublicDataSnapshot | null) {
+  runtimeData = snapshot;
+}
+
+const achievements = () => runtimeData?.achievements ?? DEMO_ACHIEVEMENTS;
+const sectors = () => runtimeData?.sectors ?? CANONICAL_SECTORS;
+const projects = () => runtimeData?.projects ?? DEMO_PROJECTS;
+const policies = () => runtimeData?.policies ?? DEMO_POLICIES;
+const programmes = () => runtimeData?.programmes ?? DEMO_PROGRAMMES;
+const timelineEvents = () => runtimeData?.timelineEvents ?? DEMO_TIMELINE_EVENTS;
+const states = () => runtimeData?.states ?? DEMO_NIGERIA_STATES;
+const datasets = () => runtimeData?.datasets ?? DEMO_DATASETS;
 
 export interface AchievementFilterOptions {
   searchQuery?: string;
@@ -55,15 +71,15 @@ export const dataAdapter = {
   },
 
   getSectors(groupId?: PublicNavigationGroupId | 'all'): SectorViewModel[] {
-    if (!groupId || groupId === 'all') return CANONICAL_SECTORS;
-    return CANONICAL_SECTORS.filter(s => s.parentPublicGroup === groupId);
+    if (!groupId || groupId === 'all') return sectors();
+    return sectors().filter(s => s.parentPublicGroup === groupId);
   },
 
   getSectorBySlug(slug: string): SectorViewModel | undefined {
     if (!slug) return undefined;
     const lower = slug.toLowerCase();
     const clean = lower.replace(/[-_]/g, '');
-    return CANONICAL_SECTORS.find(s => {
+    return sectors().find(s => {
       const sId = s.id.toLowerCase();
       const sSlug = s.slug.toLowerCase();
       const sClean = sId.replace(/[-_]/g, '');
@@ -82,7 +98,7 @@ export const dataAdapter = {
 
   // Achievements
   getAchievements(filters?: AchievementFilterOptions): AchievementViewModel[] {
-    let results = [...DEMO_ACHIEVEMENTS];
+    let results = [...achievements()];
 
     if (filters) {
       if (filters.searchQuery && filters.searchQuery.trim() !== '') {
@@ -146,46 +162,46 @@ export const dataAdapter = {
   },
 
   getAchievementBySlug(slug: string): AchievementViewModel | undefined {
-    return DEMO_ACHIEVEMENTS.find(a => a.slug === slug || a.id === slug);
+    return achievements().find(a => a.slug === slug || a.id === slug);
   },
 
   getFeaturedAchievements(): AchievementViewModel[] {
-    return DEMO_ACHIEVEMENTS.filter(a => a.featured);
+    return achievements().filter(a => a.featured);
   },
 
   // Projects
   getProjects(sectorId?: string): ProjectViewModel[] {
-    if (!sectorId || sectorId === 'all') return DEMO_PROJECTS;
-    return DEMO_PROJECTS.filter(p => p.sectorId === sectorId);
+    if (!sectorId || sectorId === 'all') return projects();
+    return projects().filter(p => p.sectorId === sectorId);
   },
 
   getProjectBySlug(slug: string): ProjectViewModel | undefined {
-    return DEMO_PROJECTS.find(p => p.slug === slug || p.id === slug);
+    return projects().find(p => p.slug === slug || p.id === slug);
   },
 
   // Policies
   getPolicies(sectorId?: string): PolicyViewModel[] {
-    if (!sectorId || sectorId === 'all') return DEMO_POLICIES;
-    return DEMO_POLICIES.filter(p => p.sectorId === sectorId);
+    if (!sectorId || sectorId === 'all') return policies();
+    return policies().filter(p => p.sectorId === sectorId);
   },
 
   getPolicyBySlug(slug: string): PolicyViewModel | undefined {
-    return DEMO_POLICIES.find(p => p.slug === slug || p.id === slug);
+    return policies().find(p => p.slug === slug || p.id === slug);
   },
 
   // Programmes
   getProgrammes(sectorId?: string): ProgrammeViewModel[] {
-    if (!sectorId || sectorId === 'all') return DEMO_PROGRAMMES;
-    return DEMO_PROGRAMMES.filter(p => p.sectorId === sectorId);
+    if (!sectorId || sectorId === 'all') return programmes();
+    return programmes().filter(p => p.sectorId === sectorId);
   },
 
   getProgrammeBySlug(slug: string): ProgrammeViewModel | undefined {
-    return DEMO_PROGRAMMES.find(p => p.slug === slug || p.id === slug);
+    return programmes().find(p => p.slug === slug || p.id === slug);
   },
 
   // Timeline Events
   getTimelineEvents(filters?: TimelineFilterOptions): TimelineEventViewModel[] {
-    let events = [...DEMO_TIMELINE_EVENTS];
+    let events = [...timelineEvents()];
 
     if (filters) {
       if (filters.year && filters.year !== 'all') {
@@ -209,13 +225,13 @@ export const dataAdapter = {
 
   // States & Geography
   getStates(): StateProfileViewModel[] {
-    return DEMO_NIGERIA_STATES;
+    return states();
   },
 
   getStateBySlug(slug: string): StateProfileViewModel | undefined {
     if (!slug) return undefined;
     const lower = slug.toLowerCase().replace(/[-_\s]/g, '');
-    return DEMO_NIGERIA_STATES.find(s => {
+    return states().find(s => {
       const sName = s.name.toLowerCase().replace(/[-_\s]/g, '');
       const sSlug = s.slug.toLowerCase().replace(/[-_\s]/g, '');
       const sCode = s.code.toLowerCase().replace(/[-_\s]/g, '');
@@ -225,11 +241,26 @@ export const dataAdapter = {
 
   // Datasets
   getDatasets(): DatasetResourceViewModel[] {
-    return DEMO_DATASETS;
+    return datasets();
+  },
+
+  getPublicDownloadData(): Record<string, string | null>[] {
+    if (runtimeData) return runtimeData.publicDownload;
+    return achievements().map((record) => ({
+      slug: record.slug,
+      record_type: record.recordType,
+      title: record.title,
+      summary: record.summary,
+      status: record.status,
+      verification_status: record.verificationStatus,
+      sector: record.sectorId,
+      published_at: record.date,
+    }));
   },
 
   // Macro Counters for Hero & Dashboard
   getMacroCounters() {
+    if (runtimeData) return runtimeData.macroCounters;
     return {
       timeframe: "29 May 2023 — August 2026",
       verifiedAchievements: DEMO_ACHIEVEMENTS.length,
@@ -250,7 +281,7 @@ export const dataAdapter = {
     const results: GlobalSearchResultItem[] = [];
 
     // Search Achievements
-    for (const a of DEMO_ACHIEVEMENTS) {
+    for (const a of achievements()) {
       if (a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q) || a.sectorName.toLowerCase().includes(q)) {
         results.push({
           id: a.id,
@@ -265,7 +296,7 @@ export const dataAdapter = {
     }
 
     // Search Projects
-    for (const p of DEMO_PROJECTS) {
+    for (const p of projects()) {
       if (p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q) || p.contractor?.toLowerCase().includes(q)) {
         results.push({
           id: p.id,
@@ -280,7 +311,7 @@ export const dataAdapter = {
     }
 
     // Search Policies
-    for (const pol of DEMO_POLICIES) {
+    for (const pol of policies()) {
       if (pol.title.toLowerCase().includes(q) || pol.summary.toLowerCase().includes(q)) {
         results.push({
           id: pol.id,
@@ -295,7 +326,7 @@ export const dataAdapter = {
     }
 
     // Search Sectors
-    for (const sec of CANONICAL_SECTORS) {
+    for (const sec of sectors()) {
       if (sec.name.toLowerCase().includes(q) || sec.summary.toLowerCase().includes(q) || sec.keyObjectives.some(k => k.toLowerCase().includes(q))) {
         results.push({
           id: sec.id,
@@ -310,7 +341,7 @@ export const dataAdapter = {
     }
 
     // Search States
-    for (const st of DEMO_NIGERIA_STATES) {
+    for (const st of states()) {
       if (st.name.toLowerCase().includes(q) || st.capital.toLowerCase().includes(q) || st.geopoliticalZone.toLowerCase().includes(q)) {
         results.push({
           id: st.slug,

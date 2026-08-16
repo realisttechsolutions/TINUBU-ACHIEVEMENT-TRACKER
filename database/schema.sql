@@ -871,8 +871,112 @@ SELECT
   r.evidence_profile,
   r.qualification,
   r.published_at,
-  r.updated_at
+  r.updated_at,
+  COALESCE(ap.public_impact_narrative, r.summary) AS public_description,
+  ap.public_qualification,
+  COALESCE(ap.display_priority, 0) AS display_priority,
+  jsonb_strip_nulls(jsonb_build_object(
+    'policyType', pd.policy_type,
+    'legalAuthority', pd.legal_authority,
+    'referenceNumber', pd.reference_number,
+    'effectScope', pd.effect_scope,
+    'projectType', prd.project_type,
+    'progressPercentage', prd.progress_percentage,
+    'contractReference', prd.contract_reference,
+    'projectReference', prd.project_reference,
+    'locationNarrative', prd.location_narrative,
+    'programmeType', pgd.programme_type,
+    'targetGroupNarrative', pgd.target_group_narrative,
+    'enrolmentModel', pgd.enrolment_model,
+    'disbursementModel', pgd.disbursement_model
+  )) AS type_details,
+  COALESCE((
+    SELECT jsonb_agg(jsonb_build_object(
+      'id', s.id,
+      'code', s.code,
+      'label', s.label,
+      'role', rs.role_code,
+      'publicGroupCode', parent.code,
+      'publicGroupLabel', parent.label
+    ) ORDER BY rs.role_code, s.code)
+    FROM record_sectors rs
+    JOIN sectors s ON s.id = rs.sector_id
+    JOIN sectors parent ON parent.id = s.parent_sector_id
+    WHERE rs.record_id = r.id
+  ), '[]'::jsonb) AS sectors,
+  COALESCE((
+    SELECT jsonb_agg(jsonb_build_object(
+      'id', i.id,
+      'name', i.canonical_name,
+      'shortName', i.short_name,
+      'role', ri.role_code
+    ) ORDER BY ri.role_code, i.canonical_name)
+    FROM record_institutions ri
+    JOIN institutions i ON i.id = ri.institution_id
+    WHERE ri.record_id = r.id
+  ), '[]'::jsonb) AS institutions,
+  COALESCE((
+    SELECT jsonb_agg(jsonb_build_object(
+      'id', g.id,
+      'code', g.code,
+      'name', g.name,
+      'type', g.geography_type,
+      'role', rg.coverage_role
+    ) ORDER BY g.name)
+    FROM record_geographies rg
+    JOIN geographic_units g ON g.id = rg.geographic_unit_id
+    WHERE rg.record_id = r.id
+      AND rg.sensitivity_class = 'public'
+      AND g.sensitivity_class = 'public'
+  ), '[]'::jsonb) AS geographies,
+  COALESCE((
+    SELECT jsonb_agg(jsonb_build_object(
+      'id', t.id,
+      'eventType', t.event_type,
+      'title', t.title,
+      'description', t.description,
+      'dateValue', t.date_value,
+      'datePrecision', t.date_precision,
+      'periodStart', t.period_start,
+      'periodEnd', t.period_end,
+      'reportingPeriodLabel', t.reporting_period_label,
+      'provisional', t.provisional
+    ) ORDER BY COALESCE(t.date_value, t.period_start), t.id)
+    FROM timeline_events t
+    WHERE t.record_id = r.id AND t.is_public = true
+  ), '[]'::jsonb) AS timeline,
+  COALESCE((
+    SELECT jsonb_agg(jsonb_build_object(
+      'id', o.id,
+      'indicatorId', i.id,
+      'slug', i.slug,
+      'name', i.name,
+      'definition', i.definition,
+      'unit', i.unit,
+      'frequency', i.frequency,
+      'methodology', i.methodology,
+      'valueExact', o.value_numeric::text,
+      'valueDisplay', o.value_display,
+      'reportingPeriodLabel', o.reporting_period_label,
+      'periodStart', o.period_start,
+      'periodEnd', o.period_end,
+      'dataValueNature', o.data_value_nature,
+      'sourceOrigin', o.source_origin,
+      'verificationStatus', o.verification_status,
+      'provisional', o.provisional
+    ) ORDER BY i.name, o.period_start, o.id)
+    FROM indicator_observations o
+    JOIN indicators i ON i.id = o.indicator_id AND i.active = true
+    JOIN evidence_claims c ON c.id = o.claim_id
+    WHERE c.record_id = r.id
+      AND c.workflow_status = 'ready_for_publication'
+      AND c.verification_status NOT IN ('unverified', 'withdrawn')
+  ), '[]'::jsonb) AS indicators
 FROM records r
+LEFT JOIN achievement_profiles ap ON ap.record_id = r.id
+LEFT JOIN policy_details pd ON pd.record_id = r.id
+LEFT JOIN project_details prd ON prd.record_id = r.id
+LEFT JOIN programme_details pgd ON pgd.record_id = r.id
 WHERE r.is_public = true
   AND r.publication_status IN ('published', 'corrected');
 

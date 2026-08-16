@@ -494,7 +494,7 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
       {
         financialType: "funding_released",
         financialTypeLabel: "Funding Released",
-        amount: 50000000000,
+        amount: "50000000000.0000",
         currency: "NGN",
         formattedAmount: "₦50.00 Billion",
         reportingPeriod: "2024-Q3",
@@ -597,7 +597,7 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
       {
         financialType: "approved_funding",
         financialTypeLabel: "Approved Funding",
-        amount: 1060000000000,
+        amount: "1060000000000.0000",
         currency: "NGN",
         formattedAmount: "₦1.06 Trillion",
         reportingPeriod: "2024-Q1",
@@ -662,7 +662,7 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
       {
         financialType: "revenue_generated",
         financialTypeLabel: "Cleared Backlog",
-        amount: 7000000000,
+        amount: "7000000000.0000",
         currency: "USD",
         formattedAmount: "$7.00 Billion",
         reportingPeriod: "2024-Q1",
@@ -844,7 +844,7 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
       {
         financialType: "approved_funding",
         financialTypeLabel: "Approved Seed Capital",
-        amount: 100000000000,
+        amount: "100000000000.0000",
         currency: "NGN",
         formattedAmount: "₦100.00 Billion",
         reportingPeriod: "2024-Q2",

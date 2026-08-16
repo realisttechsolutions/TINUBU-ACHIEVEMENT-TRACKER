@@ -52,7 +52,13 @@ export async function executeM02Ingestion(db, options = {}) {
   const { transformed } = transformM02Package(validationResult.datasetObjects, systemActorId);
 
   report.counts = {
+    institutions: transformed.institutions.length,
+    geographicUnits: transformed.geographicUnits.length,
     records: transformed.records.length,
+    recordInstitutions: transformed.recordInstitutions.length,
+    recordSectors: transformed.recordSectors.length,
+    recordGeographies: transformed.recordGeographies.length,
+    recordRelationships: transformed.recordRelationships.length,
     achievements: transformed.achievementProfiles.length,
     policies: transformed.policyDetails.length,
     projects: transformed.projectDetails.length,
@@ -126,6 +132,38 @@ export async function executeM02Ingestion(db, options = {}) {
         JSON.stringify(report.counts),
       ]
     );
+
+    // Insert deterministic public institutions referenced by the trusted package.
+    for (const institution of transformed.institutions) {
+      await db.query(
+        `INSERT INTO institutions (
+          id, external_id, slug, canonical_name, short_name, institution_type
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (external_id) DO UPDATE SET
+          slug = EXCLUDED.slug,
+          canonical_name = EXCLUDED.canonical_name,
+          short_name = EXCLUDED.short_name,
+          institution_type = EXCLUDED.institution_type,
+          updated_at = CURRENT_TIMESTAMP`,
+        [institution.id, institution.external_id, institution.slug, institution.canonical_name, institution.short_name, institution.institution_type]
+      );
+    }
+
+    // Insert only package-referenced public geography identities. Existing seed IDs are retained.
+    for (const geography of transformed.geographicUnits) {
+      await db.query(
+        `INSERT INTO geographic_units (
+          id, code, name, geography_type, parent_geographic_unit_id, sensitivity_class
+        ) VALUES ($1, $2, $3, $4, $5, 'public')
+        ON CONFLICT (id) DO UPDATE SET
+          code = EXCLUDED.code,
+          name = EXCLUDED.name,
+          geography_type = EXCLUDED.geography_type,
+          sensitivity_class = 'public',
+          updated_at = CURRENT_TIMESTAMP`,
+        [geography.id, geography.code, geography.name, geography.geography_type, geography.parent_geographic_unit_id]
+      );
+    }
 
     // Insert Records
     for (const r of transformed.records) {
@@ -207,6 +245,34 @@ export async function executeM02Ingestion(db, options = {}) {
           programme_type = EXCLUDED.programme_type,
           target_group_narrative = EXCLUDED.target_group_narrative`,
         [pg.record_id, pg.programme_type, pg.target_group_narrative, pg.enrolment_model, pg.disbursement_model]
+      );
+    }
+
+    for (const relation of transformed.recordSectors) {
+      await db.query(
+        `INSERT INTO record_sectors (record_id, sector_id, role_code)
+         SELECT $1, id, $3 FROM sectors WHERE code = $2
+         ON CONFLICT (record_id, sector_id, role_code) DO NOTHING`,
+        [relation.record_id, relation.sector_code, relation.role_code]
+      );
+    }
+
+    for (const relation of transformed.recordInstitutions) {
+      await db.query(
+        `INSERT INTO record_institutions (record_id, institution_id, role_code)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (record_id, institution_id, role_code) DO NOTHING`,
+        [relation.record_id, relation.institution_id, relation.role_code]
+      );
+    }
+
+    for (const relation of transformed.recordGeographies) {
+      await db.query(
+        `INSERT INTO record_geographies (
+          record_id, geographic_unit_id, coverage_role, sensitivity_class
+        ) SELECT $1, id, $3, 'public' FROM geographic_units WHERE code = $2
+        ON CONFLICT (record_id, geographic_unit_id, coverage_role) DO NOTHING`,
+        [relation.record_id, relation.geography_code, relation.coverage_role]
       );
     }
 
@@ -296,12 +362,13 @@ export async function executeM02Ingestion(db, options = {}) {
       await db.query(
         `INSERT INTO indicators (
           id, external_id, slug, name, definition, unit, frequency, methodology, sector_id, source_institution_id, active, created_by
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,
+          (SELECT id FROM sectors WHERE code = $9), $10, $11, $12)
         ON CONFLICT (external_id) DO UPDATE SET
           name = EXCLUDED.name,
           definition = EXCLUDED.definition,
           methodology = EXCLUDED.methodology`,
-        [ind.id, ind.external_id, ind.slug, ind.name, ind.definition, ind.unit, ind.frequency, ind.methodology, ind.sector_id, ind.source_institution_id, ind.active, ind.created_by]
+        [ind.id, ind.external_id, ind.slug, ind.name, ind.definition, ind.unit, ind.frequency, ind.methodology, ind.sector_code, ind.source_institution_id, ind.active, ind.created_by]
       );
     }
 

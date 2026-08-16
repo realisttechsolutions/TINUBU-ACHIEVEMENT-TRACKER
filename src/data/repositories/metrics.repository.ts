@@ -1,4 +1,4 @@
-import { getDatabaseConnection } from '@/lib/firebase/sql-connect/server';
+import { getDatabaseConnection } from '@/server/db/pool';
 
 export interface IndicatorMetric {
   id: string;
@@ -17,30 +17,24 @@ export interface IndicatorMetric {
 export class MetricsRepository {
   static async getIndicators(): Promise<IndicatorMetric[]> {
     const db = await getDatabaseConnection();
-    const indRes = await db.query(
-      `SELECT id, slug, name, definition, unit, frequency FROM indicators WHERE active = true`
+    const result = await db.query(
+      `SELECT
+        indicator->>'indicatorId' AS id,
+        indicator->>'slug' AS slug,
+        indicator->>'name' AS name,
+        indicator->>'definition' AS definition,
+        indicator->>'unit' AS unit,
+        indicator->>'frequency' AS frequency,
+        jsonb_agg(jsonb_build_object(
+          'period', indicator->>'reportingPeriodLabel',
+          'value', indicator->>'valueDisplay',
+          'valueNumeric', indicator->>'valueExact'
+        ) ORDER BY indicator->>'periodStart') AS observations
+       FROM public_record_catalog record
+       CROSS JOIN LATERAL jsonb_array_elements(record.indicators) indicator
+       GROUP BY 1, 2, 3, 4, 5, 6
+       ORDER BY name`
     );
-
-    const metrics: IndicatorMetric[] = [];
-    for (const ind of indRes.rows) {
-      const obsRes = await db.query(
-        `SELECT reporting_period_label as period, value_display as value, value_numeric as "valueNumeric"
-         FROM indicator_observations
-         WHERE indicator_id = $1
-         ORDER BY period_start ASC`,
-        [ind.id]
-      );
-      metrics.push({
-        id: ind.id,
-        slug: ind.slug,
-        name: ind.name,
-        definition: ind.definition,
-        unit: ind.unit,
-        frequency: ind.frequency,
-        observations: obsRes.rows,
-      });
-    }
-
-    return metrics;
+    return result.rows as unknown as IndicatorMetric[];
   }
 }

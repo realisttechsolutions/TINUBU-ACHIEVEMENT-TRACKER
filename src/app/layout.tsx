@@ -1,7 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import React from 'react';
 import Providers from './providers';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 import '@/index.css';
+
+// Runtime rendering is required so App Hosting can hydrate the public adapter
+// from Cloud SQL instead of freezing synthetic build-time data into HTML.
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinubutracker.ng'),
@@ -71,16 +76,16 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#081B2E' },
     { media: '(prefers-color-scheme: dark)', color: '#071522' },
   ],
-  width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const publicData = await getPublicDataSnapshot();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -102,7 +107,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <Providers>{children}</Providers>
+        <Providers publicData={publicData}>{children}</Providers>
       </body>
     </html>
   );

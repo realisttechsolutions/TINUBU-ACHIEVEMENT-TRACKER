@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import SectorDetail from '@/views/SectorDetail';
 import Loading from '../../loading';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const sectors = dataAdapter.getSectors();
+  const sectors = (await getPublicDataSnapshot())?.sectors ?? dataAdapter.getSectors();
   return sectors.map((s) => ({
     slug: s.slug,
   }));
@@ -18,7 +19,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const sector = dataAdapter.getSectorBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const sector = (await getPublicDataSnapshot())?.sectors.find((record) => record.slug === slug)
+    ?? dataAdapter.getSectorBySlug(slug);
   if (!sector) {
     return {
       title: 'Sector Not Found | Tinubu Achievement Tracker',
@@ -45,7 +48,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SectorDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  const sector = dataAdapter.getSectorBySlug(resolvedParams?.slug || '');
+  const slug = resolvedParams?.slug || '';
+  const sector = (await getPublicDataSnapshot())?.sectors.find((record) => record.slug === slug)
+    ?? dataAdapter.getSectorBySlug(slug);
   if (!sector) {
     notFound();
   }

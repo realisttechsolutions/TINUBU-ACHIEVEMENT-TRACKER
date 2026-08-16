@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { dataAdapter } from '@/adapters/dataAdapter';
+import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://tinubutracker.ng';
   const now = new Date();
 
@@ -30,7 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dynamic Achievement Pages
-  const achievements = dataAdapter.getAchievements();
+  const snapshot = await getPublicDataSnapshot();
+  const achievements = snapshot?.achievements ?? dataAdapter.getAchievements();
   const achievementRoutes: MetadataRoute.Sitemap = achievements.map((ach) => ({
     url: `${baseUrl}/achievements/${ach.slug}`,
     lastModified: new Date(ach.date || now),
@@ -39,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dynamic Sector Pages
-  const sectors = dataAdapter.getSectors();
+  const sectors = snapshot?.sectors ?? dataAdapter.getSectors();
   const sectorRoutes: MetadataRoute.Sitemap = sectors.map((s) => ({
     url: `${baseUrl}/sectors/${s.slug}`,
     lastModified: now,
@@ -48,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dynamic State Pages
-  const states = dataAdapter.getStates();
+  const states = snapshot?.states ?? dataAdapter.getStates();
   const stateRoutes: MetadataRoute.Sitemap = states.map((st) => ({
     url: `${baseUrl}/states/${st.slug}`,
     lastModified: now,
@@ -57,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Dynamic Policy Pages
-  const policies = dataAdapter.getPolicies();
+  const policies = snapshot?.policies ?? dataAdapter.getPolicies();
   const policyRoutes: MetadataRoute.Sitemap = policies.map((p) => ({
     url: `${baseUrl}/policies/${p.slug}`,
     lastModified: new Date(p.effectiveDate || p.approvalDate || now),
