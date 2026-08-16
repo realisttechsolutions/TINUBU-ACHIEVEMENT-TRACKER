@@ -47,12 +47,16 @@ export async function createFirebaseIamDatabase({
       allowExitOnIdle: true,
     });
     const client = await pool.connect();
+    let queryQueue = Promise.resolve();
     return {
       username: username.user,
       async query(text, values = []) {
-        return client.query(text, values);
+        const result = queryQueue.then(() => client.query(text, values));
+        queryQueue = result.then(() => undefined, () => undefined);
+        return result;
       },
       async close() {
+        await queryQueue;
         client.release();
         await pool.end();
         connector.close();
@@ -102,12 +106,16 @@ export async function createFirebasePasswordDatabase({
       allowExitOnIdle: true,
     });
     const client = await pool.connect();
+    let queryQueue = Promise.resolve();
     return {
       username: user,
       async query(text, values = []) {
-        return client.query(text, values);
+        const result = queryQueue.then(() => client.query(text, values));
+        queryQueue = result.then(() => undefined, () => undefined);
+        return result;
       },
       async close() {
+        await queryQueue;
         client.release();
         await pool.end();
         connector.close();

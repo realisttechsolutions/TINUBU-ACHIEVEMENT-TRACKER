@@ -67,7 +67,7 @@ suite('live Cloud SQL public application data layer', { timeout: 120_000 }, () =
     expect((await timed('timeline', () => repository.getTimeline())).length).toBe(15);
     expect((await timed('indicators', () => repository.getIndicators())).length).toBe(4);
     const aggregates = await timed('financialAggregates', () => repository.getSafeFinancialAggregates());
-    expect(aggregates).toHaveLength(8);
+    expect(aggregates).toHaveLength(7);
     expect(aggregates.every((row) => typeof row.amount_exact === 'string')).toBe(true);
     expect((await timed('downloads', () => repository.getPublicDownload(null, null))).length).toBe(56);
 

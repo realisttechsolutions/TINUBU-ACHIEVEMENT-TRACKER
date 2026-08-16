@@ -20,6 +20,7 @@ const INGESTION_SERVICE_ACCOUNT = `${INGESTION_SERVICE_ACCOUNT_ID}@${PROJECT}.ia
 const PUBLIC_DB_USER = PUBLIC_SERVICE_ACCOUNT.replace('.gserviceaccount.com', '');
 const INGESTION_DB_USER = INGESTION_SERVICE_ACCOUNT.replace('.gserviceaccount.com', '');
 const apply = process.argv.includes('--apply');
+const cleanupOperator = process.argv.includes('--cleanup-operator');
 
 const headers = { 'x-goog-user-project': PROJECT };
 const iam = new Client({ urlPrefix: 'https://iam.googleapis.com', apiVersion: 'v1', auth: true });
@@ -126,14 +127,19 @@ async function ensureProjectRoles() {
   const policy = policyResponse.body;
   policy.bindings ??= [];
   let changed = false;
-  for (const role of ['roles/cloudsql.client', 'roles/cloudsql.instanceUser']) {
+  const requiredBindings = new Map([
+    ['roles/cloudsql.client', [PUBLIC_SERVICE_ACCOUNT, INGESTION_SERVICE_ACCOUNT]],
+    ['roles/cloudsql.instanceUser', [PUBLIC_SERVICE_ACCOUNT, INGESTION_SERVICE_ACCOUNT]],
+    ['roles/firebaseapphosting.computeRunner', [PUBLIC_SERVICE_ACCOUNT]],
+  ]);
+  for (const [role, emails] of requiredBindings) {
     let binding = policy.bindings.find((candidate) => candidate.role === role && !candidate.condition);
     if (!binding) {
       binding = { role, members: [] };
       policy.bindings.push(binding);
       changed = true;
     }
-    for (const email of [PUBLIC_SERVICE_ACCOUNT, INGESTION_SERVICE_ACCOUNT]) {
+    for (const email of emails) {
       const member = `serviceAccount:${email}`;
       if (!binding.members.includes(member)) {
         binding.members.push(member);
@@ -148,6 +154,38 @@ async function ensureProjectRoles() {
   return changed;
 }
 
+async function auditCloudIdentities() {
+  const policy = (await resourceManager.post(`/projects/${PROJECT}:getIamPolicy`, {}, { headers })).body;
+  const hasBinding = (role, email) => (policy.bindings ?? []).some(
+    (binding) => binding.role === role && !binding.condition
+      && (binding.members ?? []).includes(`serviceAccount:${email}`),
+  );
+  const [publicKeys, ingestionKeys] = await Promise.all([
+    iam.get(`/projects/${PROJECT}/serviceAccounts/${encodeURIComponent(PUBLIC_SERVICE_ACCOUNT)}/keys`, {
+      headers, queryParams: { keyTypes: 'USER_MANAGED' },
+    }),
+    iam.get(`/projects/${PROJECT}/serviceAccounts/${encodeURIComponent(INGESTION_SERVICE_ACCOUNT)}/keys`, {
+      headers, queryParams: { keyTypes: 'USER_MANAGED' },
+    }),
+  ]);
+  const result = {
+    publicCloudSqlClient: hasBinding('roles/cloudsql.client', PUBLIC_SERVICE_ACCOUNT),
+    publicCloudSqlInstanceUser: hasBinding('roles/cloudsql.instanceUser', PUBLIC_SERVICE_ACCOUNT),
+    publicAppHostingComputeRunner: hasBinding('roles/firebaseapphosting.computeRunner', PUBLIC_SERVICE_ACCOUNT),
+    ingestionCloudSqlClient: hasBinding('roles/cloudsql.client', INGESTION_SERVICE_ACCOUNT),
+    ingestionCloudSqlInstanceUser: hasBinding('roles/cloudsql.instanceUser', INGESTION_SERVICE_ACCOUNT),
+    publicUserManagedKeys: (publicKeys.body.keys ?? []).length,
+    ingestionUserManagedKeys: (ingestionKeys.body.keys ?? []).length,
+  };
+  if (!result.publicCloudSqlClient || !result.publicCloudSqlInstanceUser
+    || !result.publicAppHostingComputeRunner || !result.ingestionCloudSqlClient
+    || !result.ingestionCloudSqlInstanceUser || result.publicUserManagedKeys !== 0
+    || result.ingestionUserManagedKeys !== 0) {
+    throw new Error(`Cloud identity audit failed: ${JSON.stringify(result)}`);
+  }
+  return result;
+}
+
 async function ensureIamDatabaseUser(username) {
   const users = await cloudSqlAdmin.listUsers(PROJECT, INSTANCE);
   if (users.some((user) => user.name === username && user.type === 'CLOUD_IAM_SERVICE_ACCOUNT')) return false;
@@ -160,6 +198,14 @@ function publicCatalogReplacement(schemaSql) {
   const end = schemaSql.indexOf('CREATE VIEW public_claim_evidence AS');
   if (start < 0 || end < 0 || end <= start) throw new Error('Canonical public view boundary could not be extracted.');
   return schemaSql.slice(start, end).trim().replace('CREATE VIEW', 'CREATE OR REPLACE VIEW');
+}
+
+function seedWithoutTransactionWrapper(seedSql) {
+  const lines = seedSql.split(/\r?\n/);
+  if (!lines.some((line) => line.trim() === 'BEGIN;') || !lines.some((line) => line.trim() === 'COMMIT;')) {
+    throw new Error('Canonical reference seed transaction wrapper was not found.');
+  }
+  return lines.filter((line) => !['BEGIN;', 'COMMIT;'].includes(line.trim())).join('\n');
 }
 
 function privilegeSql(schemaSql, operator) {
@@ -227,14 +273,39 @@ async function audit(database) {
 }
 
 await authenticate();
-if (!apply) {
+if (!apply && !cleanupOperator) {
   console.log(JSON.stringify({
     mode: 'dry-run', project: PROJECT, instance: INSTANCE, database: DATABASE,
     serviceAccounts: [PUBLIC_SERVICE_ACCOUNT, INGESTION_SERVICE_ACCOUNT],
-    iamRoles: ['roles/cloudsql.client', 'roles/cloudsql.instanceUser'],
+    iamRoles: ['roles/cloudsql.client', 'roles/cloudsql.instanceUser', 'roles/firebaseapphosting.computeRunner'],
     databaseRoles: ['tat_public_reader', 'tat_ingestion_writer'],
     persistentCredentialsOrKeysCreated: false,
   }, null, 2));
+  process.exit(0);
+}
+
+if (cleanupOperator) {
+  const operatorDatabase = await createFirebaseIamDatabase();
+  const operator = operatorDatabase.username;
+  await operatorDatabase.close();
+  const cleanupResult = await withTemporaryAdminDatabase(async (database) => {
+    await database.query(`REVOKE tat_public_reader, tat_ingestion_writer FROM ${quoteIdentifier(operator)}`);
+    const membership = await database.query(`
+      SELECT
+        pg_has_role($1, 'tat_public_reader', 'MEMBER') AS public_member,
+        pg_has_role($1, 'tat_ingestion_writer', 'MEMBER') AS writer_member`, [operator]);
+    if (membership.rows[0].public_member || membership.rows[0].writer_member) {
+      throw new Error('Operator staging-role cleanup did not remove both temporary memberships.');
+    }
+    return { operatorMembershipsRemoved: true, privileges: await audit(database) };
+  });
+  console.log(JSON.stringify({
+    ...cleanupResult,
+    cloudIdentities: await auditCloudIdentities(),
+    temporaryAdminCredential: 'rotated and discarded in process memory',
+    persistentCredentialsOrKeysCreated: false,
+  }, null, 2));
+  console.log('M10C OPERATOR ROLE CLEANUP: PASS');
   process.exit(0);
 }
 
@@ -252,8 +323,10 @@ const operator = operatorDatabase.username;
 await operatorDatabase.close();
 const result = await withTemporaryAdminDatabase(async (database) => {
   const schemaSql = await readFile(new URL('../../database/schema.sql', import.meta.url), 'utf8');
+  const seedSql = await readFile(new URL('../../database/seeds/canonical-reference.sql', import.meta.url), 'utf8');
   await database.query('BEGIN');
   try {
+    await database.query(seedWithoutTransactionWrapper(seedSql));
     await database.query(privilegeSql(schemaSql, operator));
     await database.query('COMMIT');
   } catch (error) {
@@ -261,10 +334,11 @@ const result = await withTemporaryAdminDatabase(async (database) => {
     throw error;
   }
   const privileges = await audit(database);
-  return { changes, privileges };
+  return { changes, canonicalReferenceSeedApplied: true, privileges };
 });
 console.log(JSON.stringify({
   ...result,
+  cloudIdentities: await auditCloudIdentities(),
   runtimeAndIngestionAuthentication: 'IAM',
   temporaryAdminCredential: 'rotated and discarded in process memory',
   persistentCredentialsOrKeysCreated: false,
