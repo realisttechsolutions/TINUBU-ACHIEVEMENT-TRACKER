@@ -8,6 +8,7 @@ import { dataAdapter } from "@/adapters/dataAdapter";
 import { Building2, MapPin, Calendar, HardHat, FileSpreadsheet, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CANONICAL_SECTORS } from "@/adapters/canonicalData";
+import { Link } from "@/lib/navigation";
 
 export const ProjectsCatalogue: React.FC = () => {
   const [selectedSector, setSelectedSector] = useState("all");
@@ -52,7 +53,7 @@ export const ProjectsCatalogue: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <Building2 className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Physical Capital Infrastructure â€¢ 2023 â€” 2026</span>
+                  <span>Physical Capital Infrastructure • 2023 — 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -162,9 +163,12 @@ export const ProjectsCatalogue: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-gov-border/60 flex items-center justify-between text-[11px] text-gov-slate">
+                <div className="pt-3 border-t border-gov-border/60 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-gov-slate">
                   <span>MDA: <strong className="text-gov-navy dark:text-white">{proj.executingAgency}</strong></span>
                   <span>States: {proj.statesCovered.slice(0, 2).join(', ')}</span>
+                  <Link to={`/projects/${proj.slug}`} className="ml-auto inline-flex items-center gap-1 font-bold text-gov-emerald hover:underline">
+                    View project record <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
               </div>
             ))}

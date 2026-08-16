@@ -447,7 +447,7 @@ const SecurityProgress = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
                 <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">
-                  <div className="font-bold text-xl mb-2">â‚¦480 Billion</div>
+                  <div className="font-bold text-xl mb-2">₦480 Billion</div>
                   <p className="opacity-90">Security funding for FY 2024</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl">

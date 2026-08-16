@@ -108,7 +108,7 @@ export const StateDetail: React.FC = () => {
                 <div className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal flex flex-wrap items-center gap-2">
                   <span>State Capital:</span>
                   <span className="text-white font-bold">{state.capital}</span>
-                  <span>â€¢ State Code:</span>
+                  <span>• State Code:</span>
                   <span className="text-gov-gold font-bold">{state.code}</span>
                 </div>
               </div>

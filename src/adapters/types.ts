@@ -269,7 +269,7 @@ export interface GlobalSearchResultItem {
   id: string;
   title: string;
   subtitle: string;
-  category: 'Achievements' | 'Projects' | 'Policies' | 'Sectors' | 'States' | 'Timeline' | 'Sources';
+  category: 'Achievements' | 'Projects' | 'Policies' | 'Programmes' | 'Sectors' | 'States' | 'Timeline' | 'Sources';
   url: string;
   badgeText?: string;
   badgeVariant?: 'emerald' | 'gold' | 'navy' | 'slate';

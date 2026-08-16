@@ -83,7 +83,7 @@ export const MethodologyTrustSection: React.FC = () => {
             <strong className="text-gov-navy dark:text-white">Note:</strong> Referencing an institution or statistical dataset does not imply formal commercial partnership or endorsement.
           </span>
           <Link to="/data-sources" className="font-bold text-gov-navy hover:underline shrink-0">
-            Methodology Standards â†’
+            Methodology Standards →
           </Link>
         </div>
       </div>

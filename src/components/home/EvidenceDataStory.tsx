@@ -108,7 +108,7 @@ export const EvidenceDataStory: React.FC = () => {
             to="/data-sources"
             className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors shrink-0 border border-white/20"
           >
-            Read Methodology â†’
+            Read Methodology →
           </Link>
         </div>
       </div>

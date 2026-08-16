@@ -63,7 +63,7 @@ export const SectorsCatalogue: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <Layers className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>15 Canonical Sectors â€¢ 5 Public Navigation Groups</span>
+                  <span>15 Canonical Sectors • 5 Public Navigation Groups</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -169,7 +169,7 @@ export const SectorsCatalogue: React.FC = () => {
 
                 <div className="pt-3 border-t border-gov-border/60 flex items-center justify-between">
                   <div className="text-[11px] text-gov-slate">
-                    {sector.projectCount} Projects â€¢ {sector.policyCount} Policies
+                    {sector.projectCount} Projects • {sector.policyCount} Policies
                   </div>
 
                   <Link

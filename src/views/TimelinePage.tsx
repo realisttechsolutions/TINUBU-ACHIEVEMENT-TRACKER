@@ -62,7 +62,7 @@ export const TimelinePage: React.FC = () => {
     <>
       <PageHead
         title="Policy & Reform Implementation Timeline | Tinubu Achievement Tracker"
-        description="Chronological event stream tracking policy decisions, legislative enactments, project contracts, and verified delivery outcomes (29 May 2023 â€“ August 2026)."
+        description="Chronological event stream tracking policy decisions, legislative enactments, project contracts, and verified delivery outcomes (29 May 2023 – August 2026)."
         keywords="Nigeria timeline, Tinubu administration milestones, policy history Nigeria, Electricity Act 2023, NELFUND timeline"
       />
 
@@ -74,7 +74,7 @@ export const TimelinePage: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <Clock className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Chronological Velocity â€¢ 29 May 2023 â€” August 2026</span>
+                  <span>Chronological Velocity • 29 May 2023 — August 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -103,7 +103,7 @@ export const TimelinePage: React.FC = () => {
           {/* 6-Stage Policy Implementation Methodology Banner */}
           <div className="p-4 rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border flex items-center justify-between text-xs font-bold text-gov-navy dark:text-white">
             <span>6-Stage Policy Implementation Methodology</span>
-            <span className="text-gov-emerald">May 2023 â€” August 2026</span>
+            <span className="text-gov-emerald">May 2023 — August 2026</span>
           </div>
 
           {/* Year Scrubber Pills */}

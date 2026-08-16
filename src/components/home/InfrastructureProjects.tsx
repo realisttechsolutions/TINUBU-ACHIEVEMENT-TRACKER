@@ -14,7 +14,7 @@ const InfrastructureProjects = () => {
       progress: 32,
       description: "A 700km coastal highway connecting Lagos to Calabar",
       location: "Lagos, Cross River",
-      value: "â‚¦6.5T",
+      value: "₦6.5T",
       completion: "2027",
       image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?q=80&w=2940&auto=format&fit=crop"
     },
@@ -23,7 +23,7 @@ const InfrastructureProjects = () => {
       progress: 95,
       description: "Connecting Asaba and Onitsha across River Niger",
       location: "Delta, Anambra",
-      value: "â‚¦336B",
+      value: "₦336B",
       completion: "2024",
       image: "https://images.unsplash.com/photo-1545421536-78e2aba6d614?q=80&w=2787&auto=format&fit=crop"
     },
@@ -32,7 +32,7 @@ const InfrastructureProjects = () => {
       progress: 67,
       description: "614km natural gas pipeline from South to North Nigeria",
       location: "Multiple States",
-      value: "â‚¦2.8T",
+      value: "₦2.8T",
       completion: "2025",
       image: "https://images.unsplash.com/photo-1471513671800-b09c87e1497c?q=80&w=2940&auto=format&fit=crop"
     },
@@ -41,7 +41,7 @@ const InfrastructureProjects = () => {
       progress: 15,
       description: "3,050MW hydroelectric power plant in Taraba State",
       location: "Taraba",
-      value: "â‚¦5.8T",
+      value: "₦5.8T",
       completion: "2030",
       image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2940&auto=format&fit=crop"
     }

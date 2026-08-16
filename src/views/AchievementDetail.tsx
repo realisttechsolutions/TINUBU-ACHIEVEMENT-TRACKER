@@ -247,7 +247,7 @@ export const AchievementDetail: React.FC = () => {
                       <span>{fin.financialTypeLabel}</span>
                     </span>
                     <span className="text-[10px] bg-gov-canvas dark:bg-white/10 px-2 py-0.5 rounded font-mono">
-                      {fin.nominalOrReal} â€¢ {fin.reportingPeriod}
+                      {fin.nominalOrReal} • {fin.reportingPeriod}
                     </span>
                   </div>
 
@@ -352,15 +352,15 @@ export const AchievementDetail: React.FC = () => {
                               <span className="font-bold text-gov-navy dark:text-white">{src.title}</span>
                             </div>
                             <div className="text-[11px] text-gov-slate">
-                              Publisher: <strong>{src.publisher}</strong> â€¢ Role: {src.sourceRoleLabel}
+                              Publisher: <strong>{src.publisher}</strong> • Role: {src.sourceRoleLabel}
                               {src.evidenceLocation && (
                                 <span className="text-gov-emerald font-semibold ml-1">
-                                  â€¢ Locator: {src.evidenceLocation}
+                                  • Locator: {src.evidenceLocation}
                                 </span>
                               )}
                               {src.documentNumber && (
                                 <span className="text-gov-gold font-mono ml-1">
-                                  â€¢ Doc: {src.documentNumber}
+                                  • Doc: {src.documentNumber}
                                 </span>
                               )}
                             </div>

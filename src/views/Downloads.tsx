@@ -69,7 +69,7 @@ export const Downloads: React.FC = () => {
             <div className="relative z-10 space-y-2 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                 <Download className="h-3.5 w-3.5 text-gov-emerald" />
-                <span>Open Data Repository â€¢ Machine-Readable Exports</span>
+                <span>Open Data Repository • Machine-Readable Exports</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -172,7 +172,7 @@ export const Downloads: React.FC = () => {
                   </div>
 
                   <span className="text-[10px] font-mono text-gov-slate uppercase">
-                    UTF-8 â€¢ RFC-4180
+                    UTF-8 • RFC-4180
                   </span>
                 </div>
               </div>

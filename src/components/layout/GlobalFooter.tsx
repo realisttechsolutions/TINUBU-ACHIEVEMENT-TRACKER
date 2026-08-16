@@ -16,7 +16,7 @@ export const GlobalFooter: React.FC = () => {
           <div className="lg:col-span-4 space-y-4">
             <BrandLockup />
             <p className="text-xs text-gray-300 leading-relaxed pt-2">
-              An evidence-driven national progress platform documenting, explaining, and visualising the verified achievements, capital infrastructure projects, structural reforms, and measurable public outcomes of President Bola Ahmed Tinubu's administration (29 May 2023 â€” August 2026).
+              An evidence-driven national progress platform documenting, explaining, and visualising the verified achievements, capital infrastructure projects, structural reforms, and measurable public outcomes of President Bola Ahmed Tinubu's administration (29 May 2023 — August 2026).
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 border border-gov-gold/40 text-xs text-gov-gold font-bold">
               <ShieldCheck className="h-4 w-4 shrink-0 text-gov-emerald" />
@@ -81,7 +81,7 @@ export const GlobalFooter: React.FC = () => {
               ))}
               <li className="pt-1">
                 <Link to="/sectors" className="text-gov-emerald font-bold hover:underline">
-                  View All 15 Canonical Sectors â†’
+                  View All 15 Canonical Sectors →
                 </Link>
               </li>
             </ul>
@@ -132,17 +132,17 @@ export const GlobalFooter: React.FC = () => {
         {/* Bottom Bar: Copyright & Standards */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gov-slate">
           <div>
-            Â© {currentYear} Tinubu Achievement Tracker (TAT) â€¢ Renewed Hope Progress Intelligence
+            © {currentYear} Tinubu Achievement Tracker (TAT) • Renewed Hope Progress Intelligence
           </div>
           <div className="flex items-center gap-4 text-gray-400">
             <Link to="/data-sources" className="hover:text-white transition-colors">
               Methodology & Sources
             </Link>
-            <span>â€¢</span>
+            <span>•</span>
             <Link to="/downloads" className="hover:text-white transition-colors">
               Public Datasets
             </Link>
-            <span>â€¢</span>
+            <span>•</span>
             <span>Version 2.0 (2026 Edition)</span>
           </div>
         </div>

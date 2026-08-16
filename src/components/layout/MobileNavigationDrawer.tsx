@@ -80,7 +80,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               <Search className="h-4 w-4 text-gov-gold" />
               <span>Search achievements, sectors, states...</span>
             </span>
-            <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">âŒ˜K</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">⌘K</kbd>
           </button>
         </div>
 
@@ -290,7 +290,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         {/* Footer in Drawer */}
         <div className="p-4 border-t border-gov-border bg-gov-canvas dark:bg-gov-darkSurface flex items-center justify-between">
           <div className="text-[11px] text-gov-slate">
-            <span>Mandate: 2023 â€” 2026</span>
+            <span>Mandate: 2023 — 2026</span>
           </div>
           <ThemeToggle />
         </div>

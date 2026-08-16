@@ -67,11 +67,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  const projects = snapshot?.projects ?? dataAdapter.getProjects();
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${baseUrl}/projects/${project.slug}`,
+    lastModified: new Date(project.completionOrCurrentDate || project.startDate || now),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  const programmes = snapshot?.programmes ?? dataAdapter.getProgrammes();
+  const programmeRoutes: MetadataRoute.Sitemap = programmes.map((programme) => ({
+    url: `${baseUrl}/programmes/${programme.slug}`,
+    lastModified: new Date(programme.launchDate || now),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
   return [
     ...staticRoutes,
     ...achievementRoutes,
     ...sectorRoutes,
     ...stateRoutes,
     ...policyRoutes,
+    ...projectRoutes,
+    ...programmeRoutes,
   ];
 }

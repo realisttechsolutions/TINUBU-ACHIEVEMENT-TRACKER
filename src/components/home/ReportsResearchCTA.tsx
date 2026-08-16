@@ -83,7 +83,7 @@ export const ReportsResearchCTA: React.FC = () => {
                         {ds.title}
                       </div>
                       <div className="text-[11px] text-gray-400">
-                        {ds.recordCount} Records â€¢ {ds.periodCovered}
+                        {ds.recordCount} Records • {ds.periodCovered}
                       </div>
                     </div>
 

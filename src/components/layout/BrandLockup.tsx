@@ -16,7 +16,7 @@ export const BrandLockup: React.FC<BrandLockupProps> = ({
     <Link
       to="/"
       onClick={onClick}
-      className={`inline-flex items-center gap-2.5 group transition-opacity duration-200 hover:opacity-95 ${className}`}
+      className={`inline-flex min-w-0 items-center gap-2.5 group transition-opacity duration-200 hover:opacity-95 ${className}`}
       aria-label="Tinubu Achievement Tracker - Return to homepage"
     >
       {/* Emblem Badge */}

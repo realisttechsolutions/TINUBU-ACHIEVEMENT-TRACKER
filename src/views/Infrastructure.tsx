@@ -22,7 +22,7 @@ import { Link } from "@/lib/navigation";
 import MetricCard from "@/components/dashboard/MetricCard";
 
 const infrastructureStats = [
-  { value: "â‚¦20T+", label: "Infrastructure Fund Size" },
+  { value: "₦20T+", label: "Infrastructure Fund Size" },
   { value: "247", label: "Active Projects" },
   { value: "32", label: "States Covered" }
 ];
@@ -33,7 +33,7 @@ const sectorData = [
     icon: Building2,
     description: "Federal highways, expressways, and municipal road networks being constructed and rehabilitated across Nigeria.",
     projects: 87,
-    budget: "â‚¦6.2 trillion",
+    budget: "₦6.2 trillion",
     completion: 42,
     keyProjects: [
       "Lagos-Calabar Coastal Highway - 700km",
@@ -47,7 +47,7 @@ const sectorData = [
     icon: Plug,
     description: "Generation, transmission, and distribution projects to boost Nigeria's power capacity and reliability.",
     projects: 63,
-    budget: "â‚¦4.8 trillion", 
+    budget: "₦4.8 trillion",
     completion: 38,
     keyProjects: [
       "Zungeru Hydroelectric Power Project - 700MW",
@@ -61,7 +61,7 @@ const sectorData = [
     icon: Train,
     description: "Modern railway lines to connect Nigeria's major economic centers and facilitate movement of goods and people.",
     projects: 28,
-    budget: "â‚¦3.9 trillion",
+    budget: "₦3.9 trillion",
     completion: 44,
     keyProjects: [
       "Lagos-Ibadan Standard Gauge Railway",
@@ -75,7 +75,7 @@ const sectorData = [
     icon: Wifi,
     description: "National broadband and telecommunications infrastructure to boost digital inclusion and tech innovation.",
     projects: 24,
-    budget: "â‚¦1.2 trillion",
+    budget: "₦1.2 trillion",
     completion: 36,
     keyProjects: [
       "National Fiber Optic Network Expansion",
@@ -89,7 +89,7 @@ const sectorData = [
     icon: Anchor,
     description: "Port expansion, dredging, and modernization projects to boost Nigeria's import-export capacity.",
     projects: 19,
-    budget: "â‚¦2.8 trillion",
+    budget: "₦2.8 trillion",
     completion: 28,
     keyProjects: [
       "Lekki Deep Sea Port Development",
@@ -103,7 +103,7 @@ const sectorData = [
     icon: Droplet,
     description: "Dams, water treatment plants, and irrigation projects to improve water supply and agricultural productivity.",
     projects: 26,
-    budget: "â‚¦1.4 trillion",
+    budget: "₦1.4 trillion",
     completion: 32,
     keyProjects: [
       "Completion of Kashimbila Multipurpose Dam",
@@ -119,7 +119,7 @@ const timelineEvents = [
     year: 2023,
     quarter: "Q3",
     event: "Launch of Renewed Hope Infrastructure Fund",
-    details: "Establishment of â‚¦20 trillion fund for critical infrastructure"
+    details: "Establishment of ₦20 trillion fund for critical infrastructure"
   },
   {
     year: 2023,

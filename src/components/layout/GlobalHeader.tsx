@@ -14,9 +14,9 @@ export const GlobalHeader: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-gov-darkSurface/95 backdrop-blur-md border-b border-gov-border h-16 md:h-20 transition-all duration-200">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-4">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-3 xl:gap-2">
         {/* Left: Brand Identity */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex min-w-0 items-center gap-3">
           {/* Mobile Menu Trigger */}
           <button
             type="button"

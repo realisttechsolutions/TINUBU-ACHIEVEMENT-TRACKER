@@ -106,7 +106,7 @@ export const AchievementsCatalogue: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Verified National Progress Record â€¢ 2023 â€” 2026</span>
+                  <span>Verified National Progress Record • 2023 — 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -114,7 +114,7 @@ export const AchievementsCatalogue: React.FC = () => {
                 </h1>
 
                 <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal">
-                  Search and inspect policies, infrastructure developments, financial reforms, and social safety interventions with full Level 1â€“5 source attribution and verification dates.
+                  Search and inspect policies, infrastructure developments, financial reforms, and social safety interventions with full Level 1–5 source attribution and verification dates.
                 </p>
               </div>
 

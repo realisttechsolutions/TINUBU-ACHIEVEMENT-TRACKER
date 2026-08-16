@@ -546,7 +546,7 @@ const Dashboard = () => {
                   }`}></div>
                   <CardContent className="p-5">
                     <span className="text-xs font-semibold uppercase text-gray-500 tracking-wider">
-                      {item.category} â€¢ {item.date}
+                      {item.category} • {item.date}
                     </span>
                     <h3 className="text-lg font-bold mt-2 mb-3 group-hover:text-brand-blue transition-colors">{item.title}</h3>
                     <p className="text-gray-600 text-sm mb-4">{item.excerpt}</p>

@@ -5,9 +5,10 @@ import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
-import { FileText, Search, ShieldCheck, Scale, Calendar, Building2, FileSpreadsheet } from "lucide-react";
+import { FileText, Search, ShieldCheck, Scale, Calendar, Building2, FileSpreadsheet, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CANONICAL_SECTORS } from "@/adapters/canonicalData";
+import { Link } from "@/lib/navigation";
 
 export const PoliciesCatalogue: React.FC = () => {
   const [selectedSector, setSelectedSector] = useState("all");
@@ -51,7 +52,7 @@ export const PoliciesCatalogue: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <Scale className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Statutory Acts & Executive Orders â€¢ 2023 â€” 2026</span>
+                  <span>Statutory Acts & Executive Orders • 2023 — 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -150,9 +151,12 @@ export const PoliciesCatalogue: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-gov-border/60 flex items-center justify-between text-[11px] text-gov-slate">
+                <div className="pt-3 border-t border-gov-border/60 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-gov-slate">
                   <span>Sector: <strong className="text-gov-navy dark:text-white">{pol.sectorName}</strong></span>
                   <span>Date: {pol.approvalDate}</span>
+                  <Link to={`/policies/${pol.slug}`} className="ml-auto inline-flex items-center gap-1 font-bold text-gov-emerald hover:underline">
+                    View policy record <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
               </div>
             ))}

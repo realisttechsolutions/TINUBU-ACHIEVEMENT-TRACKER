@@ -101,7 +101,7 @@ export const DataExplorer: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <Database className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Public Research Query Engine â€¢ Contract v1.1.2</span>
+                  <span>Public Research Query Engine • Contract v1.1.2</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
@@ -287,7 +287,7 @@ export const DataExplorer: React.FC = () => {
             </div>
 
             <div className="text-xs text-gov-slate">
-              Showing live filtered slice â€¢ Ready for CSV/JSON download
+              Showing live filtered slice • Ready for CSV/JSON download
             </div>
           </div>
 

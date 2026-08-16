@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
-import PolicyDetail from '@/views/PolicyDetail';
+import PublicRecordDetail from '@/components/records/PublicRecordDetail';
 import Loading from '../../loading';
 import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
@@ -57,7 +57,7 @@ export default async function PolicyDetailPage({ params }: Props) {
 
   return (
     <Suspense fallback={<Loading />}>
-      <PolicyDetail />
+      <PublicRecordDetail kind="policy" />
     </Suspense>
   );
 }

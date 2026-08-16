@@ -110,7 +110,7 @@ export const DesktopNavigation: React.FC = () => {
                 onClick={() => setOpenMenu(null)}
                 className="text-xs font-semibold text-gov-emerald hover:underline"
               >
-                View Sectors Directory â†’
+                View Sectors Directory →
               </Link>
             </div>
 

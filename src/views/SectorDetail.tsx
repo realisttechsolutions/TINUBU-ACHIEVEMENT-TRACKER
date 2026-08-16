@@ -139,7 +139,7 @@ export const SectorDetail: React.FC = () => {
                 <ul className="space-y-1.5">
                   {sector.keyObjectives.map((obj, i) => (
                     <li key={i} className="flex items-start gap-2 text-gray-200">
-                      <span className="text-gov-emerald font-bold">â€¢</span>
+                      <span className="text-gov-emerald font-bold">•</span>
                       <span>{obj}</span>
                     </li>
                   ))}

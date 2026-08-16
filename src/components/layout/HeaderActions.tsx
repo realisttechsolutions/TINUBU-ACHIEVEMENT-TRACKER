@@ -25,12 +25,12 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({ onOpenSearch }) =>
         <Search className="h-4 w-4 text-gov-navy" />
         <span className="hidden md:inline">Search...</span>
         <kbd className="hidden lg:inline-block text-[10px] font-mono bg-white px-1.5 py-0.5 rounded border border-gov-border text-gov-slate">
-          âŒ˜K
+          ⌘K
         </kbd>
       </button>
 
       {/* Desktop Language Selector */}
-      <div className="hidden md:flex items-center relative">
+      <div className="hidden 2xl:flex items-center relative">
         <Globe className="h-4 w-4 text-gov-navy absolute left-2 pointer-events-none" />
         <select
           aria-label="Select platform language"
@@ -51,7 +51,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({ onOpenSearch }) =>
 
       {/* Primary Header Action: Reports & Downloads */}
       <Button
-        className="hidden sm:inline-flex bg-gov-emerald hover:bg-emerald-800 text-white font-medium text-xs px-3.5 py-1.5 h-8 gap-1.5 shadow-xs transition-colors"
+        className="hidden 2xl:inline-flex bg-gov-emerald hover:bg-emerald-800 text-white font-medium text-xs px-3.5 py-1.5 h-8 gap-1.5 shadow-xs transition-colors"
         asChild
       >
         <Link to="/downloads">

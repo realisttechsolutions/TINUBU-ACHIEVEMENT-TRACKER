@@ -15,7 +15,7 @@ export const PolicyImpactTimeline: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <Clock className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>Chronological Milestones (May 2023 â€” August 2026)</span>
+              <span>Chronological Milestones (May 2023 — August 2026)</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-gov-navy dark:text-white">
               From Policy Enactment to Verified Delivery

@@ -303,7 +303,7 @@ export const dataAdapter = {
           title: p.title,
           subtitle: `${p.sectorName} • Progress: ${p.progressPercentage}%`,
           category: 'Projects',
-          url: `/projects#${p.slug}`,
+          url: `/projects/${p.slug}`,
           badgeText: `${p.progressPercentage}%`,
           badgeVariant: 'gold'
         });
@@ -318,9 +318,24 @@ export const dataAdapter = {
           title: pol.title,
           subtitle: `${pol.policyTypeLabel} • ${pol.statusLabel}`,
           category: 'Policies',
-          url: `/policies#${pol.slug}`,
+          url: `/policies/${pol.slug}`,
           badgeText: pol.statusLabel,
           badgeVariant: 'navy'
+        });
+      }
+    }
+
+    // Search Programmes
+    for (const programme of programmes()) {
+      if (programme.title.toLowerCase().includes(q) || programme.summary.toLowerCase().includes(q) || programme.coordinatingAgency?.toLowerCase().includes(q)) {
+        results.push({
+          id: programme.id,
+          title: programme.title,
+          subtitle: `${programme.sectorName} • ${programme.statusLabel}`,
+          category: 'Programmes',
+          url: `/programmes/${programme.slug}`,
+          badgeText: programme.statusLabel,
+          badgeVariant: 'emerald'
         });
       }
     }
