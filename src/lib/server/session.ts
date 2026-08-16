@@ -1,9 +1,9 @@
 /**
  * Server-Side Session & Cookie Management
- * Development Mission 10E
+ * Development Mission 10E / 10E-LIVE
  *
  * Implements authoritative session cookie verification, token-to-session exchange,
- * role validation, email verification enforcement, and session revocation.
+ * role validation, email verification enforcement, recent auth enforcement, and session revocation.
  */
 
 import 'server-only';
@@ -16,6 +16,9 @@ export const ADMIN_SESSION_COOKIE_NAME = 'tat_admin_session';
 export const SESSION_DURATION_SECONDS = 8 * 60 * 60;
 // 8 hours in milliseconds for Firebase Admin
 export const SESSION_DURATION_MS = SESSION_DURATION_SECONDS * 1000;
+
+// Maximum acceptable age of ID token auth_time (5 minutes)
+export const MAX_AUTH_AGE_SECONDS = 5 * 60;
 
 export interface SessionCookieOptions {
   name: string;
@@ -54,7 +57,7 @@ export class AuthSecurityError extends Error {
 
 /**
  * Verifies Firebase ID token, validates staff custom claims & email verification,
- * and mints an authoritative server-side session cookie.
+ * enforces recent authentication timestamp, and mints an authoritative server-side session cookie.
  */
 export async function createStaffSession(idToken: string): Promise<CreateSessionResult> {
   if (!idToken || typeof idToken !== 'string') {
@@ -72,7 +75,17 @@ export async function createStaffSession(idToken: string): Promise<CreateSession
     throw new AuthSecurityError(`Token verification failed: ${message}`, 'TOKEN_VERIFICATION_FAILED');
   }
 
-  // 1. Enforce Email Verification
+  // 1. Enforce Recent Authentication Time (<= 5 minutes old)
+  const authTime = decodedToken.auth_time;
+  const currentTime = Math.floor(Date.now() / 1000);
+  if (typeof authTime === 'number' && currentTime - authTime > MAX_AUTH_AGE_SECONDS) {
+    throw new AuthSecurityError(
+      'Recent authentication is required to issue an administrative session. Please re-authenticate.',
+      'RECENT_AUTH_REQUIRED'
+    );
+  }
+
+  // 2. Enforce Email Verification
   if (!decodedToken.email_verified) {
     throw new AuthSecurityError(
       'Staff account email must be verified before an administrative session can be issued.',
@@ -80,7 +93,7 @@ export async function createStaffSession(idToken: string): Promise<CreateSession
     );
   }
 
-  // 2. Enforce Staff Flag
+  // 3. Enforce Staff Flag
   if (decodedToken.tat_staff !== true) {
     throw new AuthSecurityError(
       'User is not authorized for staff administration.',
@@ -88,7 +101,7 @@ export async function createStaffSession(idToken: string): Promise<CreateSession
     );
   }
 
-  // 3. Enforce Valid Staff Role
+  // 4. Enforce Valid Staff Role
   const role = decodedToken.tat_role;
   if (!isValidStaffRole(role)) {
     throw new AuthSecurityError(
@@ -97,7 +110,7 @@ export async function createStaffSession(idToken: string): Promise<CreateSession
     );
   }
 
-  // 4. Create Firebase Server-Side Session Cookie
+  // 5. Create Firebase Server-Side Session Cookie (8 hours)
   let sessionCookie: string;
   try {
     sessionCookie = await auth.createSessionCookie(idToken, {
@@ -149,7 +162,7 @@ export async function verifyStaffSession(sessionCookie: string | undefined): Pro
       displayName: decoded.name || null,
     };
   } catch {
-    // Cookie invalid, expired, or revoked
+    // Cookie invalid, expired, revoked, or user disabled
     return null;
   }
 }

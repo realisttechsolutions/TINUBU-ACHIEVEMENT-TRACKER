@@ -5,11 +5,12 @@ import {
   getSessionCookieAttributes,
   ADMIN_SESSION_COOKIE_NAME,
   SESSION_DURATION_SECONDS,
+  MAX_AUTH_AGE_SECONDS,
   AuthSecurityError,
 } from '@/lib/server/session';
 import * as firebaseAdminModule from '@/lib/server/firebase-admin';
 
-describe('Staff Session & Cookie Verification (Mission 10E)', () => {
+describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
   const mockVerifyIdToken = vi.fn();
   const mockCreateSessionCookie = vi.fn();
   const mockVerifySessionCookie = vi.fn();
@@ -38,13 +39,15 @@ describe('Staff Session & Cookie Verification (Mission 10E)', () => {
   });
 
   describe('createStaffSession', () => {
-    it('successfully creates session for verified staff with valid role', async () => {
+    it('successfully creates session for verified staff with valid role and recent auth', async () => {
+      const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-uid-123',
         email: 'researcher@tracker.gov.ng',
         email_verified: true,
         tat_staff: true,
         tat_role: 'researcher',
+        auth_time: nowSeconds - 30, // 30 seconds ago (< 5 min)
       });
       mockCreateSessionCookie.mockResolvedValue('firebase-session-cookie-789');
 
@@ -62,13 +65,32 @@ describe('Staff Session & Cookie Verification (Mission 10E)', () => {
       });
     });
 
+    it('rejects stale authentication tokens older than 5 minutes', async () => {
+      const nowSeconds = Math.floor(Date.now() / 1000);
+      mockVerifyIdToken.mockResolvedValue({
+        uid: 'staff-uid-stale',
+        email: 'stale@tracker.gov.ng',
+        email_verified: true,
+        tat_staff: true,
+        tat_role: 'researcher',
+        auth_time: nowSeconds - (MAX_AUTH_AGE_SECONDS + 60), // 6 minutes ago
+      });
+
+      await expect(createStaffSession('stale-token')).rejects.toThrowError(
+        /recent authentication is required/i
+      );
+      expect(mockCreateSessionCookie).not.toHaveBeenCalled();
+    });
+
     it('rejects unverified email addresses', async () => {
+      const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-uid-unverified',
         email: 'unverified@tracker.gov.ng',
         email_verified: false,
         tat_staff: true,
         tat_role: 'reviewer',
+        auth_time: nowSeconds - 10,
       });
 
       await expect(createStaffSession('token-unverified')).rejects.toThrowError(
@@ -78,10 +100,12 @@ describe('Staff Session & Cookie Verification (Mission 10E)', () => {
     });
 
     it('rejects users without tat_staff custom claim', async () => {
+      const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'public-user-123',
         email: 'public@example.com',
         email_verified: true,
+        auth_time: nowSeconds - 10,
         // Missing tat_staff: true
       });
 
@@ -92,12 +116,14 @@ describe('Staff Session & Cookie Verification (Mission 10E)', () => {
     });
 
     it('rejects users with invalid or unrecognized staff role claim', async () => {
+      const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-invalid-role',
         email: 'user@tracker.gov.ng',
         email_verified: true,
         tat_staff: true,
         tat_role: 'viewer', // invalid role
+        auth_time: nowSeconds - 10,
       });
 
       await expect(createStaffSession('token-invalid-role')).rejects.toThrowError(

@@ -1,5 +1,5 @@
 # TINUBU ACHIEVEMENT TRACKER V2
-## Session Management, Cookie Security & Anti-CSRF Specifications (Mission 10E)
+## Session Management, Cookie Security & Anti-CSRF Specifications (Mission 10E / 10E-LIVE)
 
 ---
 
@@ -29,14 +29,16 @@ flowchart TD
     E -- Yes --> G[Firebase Admin verifyIdToken idToken, checkRevoked=true]
     G --> H{Token Valid & Not Revoked?}
     H -- No --> I[401 Unauthorized: Verification Failed]
-    H -- Yes --> J{email_verified == true?}
-    J -- No --> K[401 Unauthorized: Email not verified]
-    J -- Yes --> L{tat_staff == true & tat_role valid?}
-    L -- No --> M[401 Unauthorized: Not authorized staff]
-    L -- Yes --> N[Firebase Admin createSessionCookie idToken, 8 hours]
-    N --> O[Server sets tat_admin_session HTTP-only cookie]
-    O --> P[Client clears in-memory Firebase auth state via clientStaffSignOut]
-    P --> Q[Redirects to /admin]
+    H -- Yes --> J{auth_time <= 5 minutes?}
+    J -- No --> K[401 Unauthorized: Recent Auth Required]
+    J -- Yes --> L{email_verified == true?}
+    L -- No --> M[401 Unauthorized: Email not verified]
+    L -- Yes --> N{tat_staff == true & tat_role valid?}
+    N -- No --> O[401 Unauthorized: Not authorized staff]
+    N -- Yes --> P[Firebase Admin createSessionCookie idToken, 8 hours]
+    P --> Q[Server sets tat_admin_session HTTP-only cookie]
+    Q --> R[Client clears in-memory Firebase auth state via clientStaffSignOut]
+    R --> S[Redirects to /admin]
 ```
 
 ---
@@ -56,6 +58,7 @@ flowchart TD
 ## 4. Anti-CSRF Defense Model
 
 To protect state-changing administrative API routes against cross-site exploitation:
-1. **Custom Header Enforcement:** The client sends custom header `x-tat-admin-csrf: 1`. Standard HTML `<form>` submissions and cross-origin fetch requests cannot attach custom headers without preflight approval.
+1. **Custom Header Enforcement:** The client sends custom header `x-tat-admin-csrf: 1`. Standard HTML `<form>` submissions and cross-origin fetch requests cannot attach custom headers without preflight CORS approval.
 2. **Origin & Referer Validation:** The server cross-verifies request `Origin` and `Referer` against the server's `Host` header.
 3. **SameSite Cookie Context:** The `SameSite=Lax` attribute on `tat_admin_session` prevents automatic cookie attachment on cross-origin POST requests.
+4. **Recent Authentication Invariant:** Session cookie minting requires `auth_time` within 5 minutes, preventing session escalation from stale tokens.

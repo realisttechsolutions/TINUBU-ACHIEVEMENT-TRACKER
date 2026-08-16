@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 /**
  * Staff Account Bootstrap Script
- * Development Mission 10E
+ * Development Mission 10E / 10E-LIVE
  *
  * Safe, repeatable operator CLI script to provision staff accounts and assign custom claims.
  *
+ * Invariant: Permanent staff accounts MUST prove email ownership through genuine Firebase
+ * email verification before admin sessions can be minted.
+ *
  * Usage:
- *   node scripts/admin/bootstrap-staff.mjs --email <email> --role <super_admin|researcher|reviewer|publisher> [--verified] [--confirm]
+ *   node scripts/admin/bootstrap-staff.mjs --email <email> --role <super_admin|researcher|reviewer|publisher> [--confirm]
  */
 
 import { initializeApp, getApps } from 'firebase-admin/app';
@@ -19,7 +22,6 @@ function parseArgs() {
   const params = {
     email: '',
     role: '',
-    verified: false,
     confirm: false,
     displayName: '',
   };
@@ -31,8 +33,6 @@ function parseArgs() {
       params.role = args[++i].trim().toLowerCase();
     } else if (args[i] === '--name' && args[i + 1]) {
       params.displayName = args[++i].trim();
-    } else if (args[i] === '--verified') {
-      params.verified = true;
     } else if (args[i] === '--confirm') {
       params.confirm = true;
     }
@@ -42,15 +42,15 @@ function parseArgs() {
 }
 
 async function main() {
-  const { email, role, verified, confirm, displayName } = parseArgs();
+  const { email, role, confirm, displayName } = parseArgs();
 
   console.log('='.repeat(60));
-  console.log('TAT STAFF BOOTSTRAP CLI — MISSION 10E');
+  console.log('TAT STAFF BOOTSTRAP CLI — MISSION 10E-LIVE');
   console.log('='.repeat(60));
 
   if (!email || !email.includes('@')) {
     console.error('Error: Valid --email is required.');
-    console.log('Usage: node scripts/admin/bootstrap-staff.mjs --email <email> --role <role> [--verified] [--confirm]');
+    console.log('Usage: node scripts/admin/bootstrap-staff.mjs --email <email> --role <role> [--confirm]');
     process.exit(1);
   }
 
@@ -63,7 +63,7 @@ async function main() {
   console.log(`Target Firebase Project: ${projectId}`);
   console.log(`Staff Email:             ${email}`);
   console.log(`Assigned Role:           ${role}`);
-  console.log(`Email Verified Flag:     ${verified ? 'TRUE' : 'FALSE'}`);
+  console.log(`Initial Verified Status: UNVERIFIED (Verification Required)`);
   console.log(`Mode:                    ${confirm ? 'EXECUTE MUTATION' : 'DRY RUN ONLY'}`);
   console.log('-'.repeat(60));
 
@@ -88,7 +88,7 @@ async function main() {
         console.log('[INFO] Account does not exist. Creating new staff user record...');
         user = await auth.createUser({
           email,
-          emailVerified: verified,
+          emailVerified: false, // Email verification strictly required
           displayName: displayName || undefined,
           disabled: false,
         });
@@ -98,7 +98,7 @@ async function main() {
       }
     }
 
-    // Set custom claims
+    // Set custom claims server-side
     const customClaims = {
       tat_staff: true,
       tat_role: role,
@@ -107,23 +107,43 @@ async function main() {
     console.log(`[INFO] Setting custom claims: ${JSON.stringify(customClaims)}`);
     await auth.setCustomUserClaims(user.uid, customClaims);
 
-    if (verified && !user.emailVerified) {
-      await auth.updateUser(user.uid, { emailVerified: true });
-      console.log('[INFO] Updated user emailVerified flag to true.');
+    // Generate secure email verification link
+    let verificationLink = '';
+    try {
+      verificationLink = await auth.generateEmailVerificationLink(email);
+    } catch (verErr) {
+      console.warn('[WARN] Could not generate verification link:', verErr.message);
     }
 
-    // Generate password reset link for initial login
+    // Generate secure password reset link
+    let passwordResetLink = '';
     try {
-      const resetLink = await auth.generatePasswordResetLink(email);
-      console.log('='.repeat(60));
-      console.log('[SUCCESS] STAFF ACCOUNT BOOTSTRAP COMPLETE');
-      console.log('='.repeat(60));
-      console.log('Password Reset / Account Activation Link:');
-      console.log(resetLink);
-      console.log('='.repeat(60));
-    } catch {
-      console.log('[SUCCESS] Staff account custom claims set successfully.');
+      passwordResetLink = await auth.generatePasswordResetLink(email);
+    } catch (pwErr) {
+      console.warn('[WARN] Could not generate password reset link:', pwErr.message);
     }
+
+    console.log('='.repeat(60));
+    console.log('[SUCCESS] STAFF ACCOUNT PROVISIONED SUCCESSFULLY');
+    console.log('='.repeat(60));
+    console.log('OPERATOR ACTIVATION INSTRUCTIONS:');
+    console.log('1. First, verify email ownership by opening the link below:');
+    if (verificationLink) {
+      console.log(`   Verification Link: ${verificationLink}`);
+    } else {
+      console.log('   (Send verification email directly from Firebase Console)');
+    }
+    console.log('');
+    console.log('2. Next, set your secure password by opening the link below:');
+    if (passwordResetLink) {
+      console.log(`   Password Link:     ${passwordResetLink}`);
+    } else {
+      console.log('   (Send password reset email via /admin/forgot-password)');
+    }
+    console.log('');
+    console.log('3. Password Requirements: >= 12 characters, uppercase, lowercase, number, special character.');
+    console.log('4. Once verified and password is set, log in at /admin/login.');
+    console.log('='.repeat(60));
   } catch (err) {
     console.error('[ERROR] Bootstrap failed:', err.message);
     process.exit(1);
