@@ -1,6 +1,9 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
+// Mock server-only so server code can be tested in JSDOM environment
+vi.mock("server-only", () => ({}));
+
 // Mock window.matchMedia for JSDOM / Vitest tests
 if (typeof window !== 'undefined') {
   Object.defineProperty(window, "matchMedia", {
