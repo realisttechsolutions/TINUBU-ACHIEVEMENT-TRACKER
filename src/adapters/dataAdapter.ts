@@ -425,7 +425,7 @@ export const dataAdapter = {
         `[Claim ${i+1}] ${c.claimText}\n  Sources: ${c.sources.map(s => `${s.title} (${s.publisher}, Level: ${s.sourceLevel})`).join('; ')}`
       ),
       ``,
-      `DATA WATERMARK: ${record.isDemo ? '[DEMO / SYNTHETIC RESEARCH RECORD]' : '[VERIFIED PRODUCTION RECORD]'}`,
+      `DATA WATERMARK: ${record.isDemo ? '[DEMO / SYNTHETIC RESEARCH RECORD]' : '[PUBLIC DATABASE RECORD]'}`,
       `===================================================================`
     ].join('\n');
 

@@ -1,6 +1,6 @@
 # TAT M10C — Public Data Boundary
 
-**Boundary result:** implemented; live certification is recorded separately
+**Boundary result:** PASS in live Cloud SQL staging
 
 **Browser database access:** prohibited
 
@@ -56,9 +56,11 @@ The public role audit asserts view reads are true while direct reads of `records
 
 The IAM service identity `tat-ingestion-writer@tinubu-achievement-stg.iam.gserviceaccount.com` is a role member and has only Cloud SQL Client and Cloud SQL Instance User at project level. No key exists.
 
+The live audit verified that the public App Hosting identity can select all four views but cannot select `records`, `sources`, or `research_batches`; the ingestion identity can insert/update `records` but cannot delete; and both database roles are `NOLOGIN`, non-superuser, non-createdb, non-createrole, non-replication, and non-bypass-RLS. Both service accounts have zero user-managed keys.
+
 ## Internal/admin access
 
-No new application admin surface was created. The authenticated staging operator remains an out-of-band Cloud SQL administrator for controlled infrastructure work. That identity is not exposed to the Next.js application or browser.
+No new application admin surface was created. Controlled bootstrap uses the existing out-of-band Cloud SQL administrator path, and the staging operator's temporary reader/writer memberships are removed after certification. No operator identity is exposed to the Next.js application or browser.
 
 ## Public serialization
 

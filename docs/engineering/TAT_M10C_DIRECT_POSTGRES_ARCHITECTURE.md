@@ -75,9 +75,11 @@ App Hosting is capped at four instances, so the configured upper application poo
 
 Only the public snapshot is cached, with a 300-second revalidation bound. Internal tables and trusted-ingestion results are not cached through the public application. Detail metadata and the sitemap use the same public snapshot cache. Database health is force-dynamic and is never cached.
 
-## Local authentication
+## Local authentication and controlled bootstrap
 
-The proof and ingestion tools use the operator's existing Firebase CLI login to construct the same Cloud SQL Connector IAM channel. They do not create an ADC file, database password, service-account key, token artifact, or authorized network. The staging writer and reader roles are activated with temporary `SET ROLE` proof membership, then that temporary membership is revoked.
+The proof and ingestion tools use the operator's existing Firebase CLI login to construct the Cloud SQL Connector IAM channel. The operator is temporarily made a member of the narrow reader/writer database roles, uses `SET ROLE`, and is removed from both roles after certification.
+
+The existing physical schema is owned by `postgres`, so an IAM operator cannot replace the corrected public view or grant object privileges. The security bootstrap therefore rotates the built-in administrator to a random in-memory password, connects through the Cloud SQL Node.js Connector, performs the idempotent reference-seed/view/role transaction, closes the session, and rotates the password again to an unknown discarded value. It creates no authorized network, password file, ADC file, connection string, token artifact, or service-account key. Runtime and ingestion authentication remain IAM-only.
 
 ## Current official documentation verified
 

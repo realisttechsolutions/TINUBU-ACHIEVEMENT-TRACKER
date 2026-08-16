@@ -32,7 +32,7 @@ NEXT_PUBLIC_APP_NAME="Tinubu Achievement Tracker"
 NEXT_PUBLIC_APP_VERSION=2.0.0
 
 # Firebase Client SDK Configuration (Google Cloud / Firebase Project)
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDummyLocalDevApiKey123456789
+NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tinubu-achievement-tracker.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=tinubu-achievement-tracker
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=tinubu-achievement-tracker.appspot.com
@@ -43,7 +43,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 # Server-Only Google Cloud / Firebase Admin Credentials (DO NOT EXPOSE TO CLIENT)
 FIREBASE_PROJECT_ID=tinubu-achievement-tracker
 FIREBASE_CLIENT_EMAIL=firebase-adminsdk@tinubu-achievement-tracker.iam.gserviceaccount.com
-# FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC...\n-----END PRIVATE KEY-----\n"
+FIREBASE_PRIVATE_KEY=
 
 # AI Intelligence Service (Vertex AI / Gemini 1.5 Pro)
 GOOGLE_GENAI_API_KEY=
