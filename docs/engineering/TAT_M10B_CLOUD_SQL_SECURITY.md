@@ -53,7 +53,15 @@ No `0.0.0.0/0` rule existed at any point. No password, token, IP address, or pri
 
 ## SQL Connect least-privilege boundary
 
-The physical schema remains owned by the project’s canonical DDL workflow. During the subsequent Firebase brownfield setup, SQL migration handling must be declined. Firebase SQL Connect may receive the database privileges required to execute deployed connector operations, but it must not receive schema-migration ownership merely to simplify deployment.
+The physical schema remains owned by the project’s canonical DDL workflow. PostgreSQL 17 represents the `public` schema owner as its built-in `pg_database_owner` role; Cloud SQL’s actual `tat_staging` database owner is `cloudsqlsuperuser`, and all 27 canonical tables are directly owned by `postgres`. During Firebase brownfield setup, SQL migration handling was explicitly declined. Firebase SQL Connect received the database privileges required to execute connector operations, but it did not receive schema-migration ownership.
+
+The Google-managed SQL Connect service identity was not materialized automatically after the API was enabled. The official Service Usage `generateServiceIdentity` operation created the exact staging service agent, and only its documented `roles/firebasedataconnect.serviceAgent` project role was added. The brownfield setup then created:
+
+- IAM database identities for the authenticated administrator and SQL Connect service agent;
+- `firebasewriter_tat_staging_public` and `firebasereader_tat_staging_public`;
+- table/function/schema privileges and default privileges for those execution roles.
+
+It did **not** create `firebaseowner_tat_staging_public`. A post-setup IAM catalog audit proved that the SQL Connect service agent is a member of the writer role while all 27 tables remain owned by `postgres`.
 
 The instance retains a public IPv4 address because Firebase’s documented existing-Cloud-SQL workflow checks connectivity and IAM database authentication. Direct internet connections are still denied by the empty authorized-network list. IAM database authentication is enabled so Google-managed services can use scoped identity rather than a committed static password.
 
@@ -63,6 +71,8 @@ Relevant official guidance:
 - [Configure public IP](https://cloud.google.com/sql/docs/postgres/configure-ip)
 - [IAM database authentication](https://cloud.google.com/sql/docs/postgres/iam-authentication)
 - [Firebase SQL Connect CLI reference](https://firebase.google.com/docs/sql-connect/cli-reference)
+- [Google Cloud service agents](https://cloud.google.com/iam/docs/service-agents)
+- [Generate a service identity](https://cloud.google.com/service-usage/docs/reference/rest/v1beta1/services/generateServiceIdentity)
 
 ## Residual staging trade-offs
 
@@ -71,7 +81,22 @@ Relevant official guidance:
 - Private IP was not added because it would require VPC/private-services infrastructure beyond this mission and is not necessary for the approved Firebase brownfield topology.
 - A later production mission must perform a separate threat model, HA/backup/PITR decision, private-connectivity evaluation, IAM review, and cost approval. Mission 10B does not authorize production.
 
+## Restart recovery verification — 2026-08-16
+
+Read-only Cloud SQL Admin, Cloud Billing, Resource Manager, Firebase CLI, and IAM-database checks confirmed the security baseline remains unchanged:
+
+- project `tinubu-achievement-stg` is active and billing-linked;
+- instance `tat-db-staging` is `RUNNABLE` in `us-central1-c`;
+- PostgreSQL runtime remains `POSTGRES_17_10` on Enterprise `db-f1-micro`;
+- 10 GB SSD, zonal availability, no replicas, and storage auto-resize disabled;
+- public IPv4 is present with zero authorized networks;
+- `ENCRYPTED_ONLY`, IAM database authentication, deletion protection, standard backups, seven retained backups, and PITR disabled;
+- the only relevant project-level binding found is the expected SQL Connect service agent on `roles/firebasedataconnect.serviceAgent`;
+- IAM database connectivity succeeds without a repository credential;
+- Firebase owner role remains absent and all 27 canonical tables remain owned by `postgres`.
+
+No instance setting, network, IAM binding, role, user, password, or database object was changed during recovery.
+
 ## Verdict
 
 **CLOUD SQL STAGING SECURITY BASELINE: PASS**
-

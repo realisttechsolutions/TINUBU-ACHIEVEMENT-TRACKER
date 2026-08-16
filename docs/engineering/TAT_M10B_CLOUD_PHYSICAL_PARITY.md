@@ -129,7 +129,40 @@ The three append-only history guards are present through `corrections_append_onl
 
 Any failed condition exits nonzero and prevents progression to SQL Connect activation.
 
+## Post-brownfield re-certification
+
+After `dataconnect:sql:setup` completed in brownfield mode, the live database was audited again over a Cloud SQL IAM connector using `scripts/mission-10b/audit-cloud-sql-via-iam.mjs`.
+
+Results:
+
+- canonical catalog differences: `0`;
+- all certified totals above unchanged;
+- `public` schema owner: `pg_database_owner`;
+- `tat_staging` database owner: `cloudsqlsuperuser`;
+- canonical table owners: 27/27 `postgres`;
+- distinct canonical table owners: 1;
+- `firebaseowner_tat_staging_public`: absent;
+- SQL Connect writer/reader roles: present;
+- SQL Connect service agent writer membership and SELECT/INSERT/UPDATE/DELETE privileges: present;
+- canonical table rows before M02 ingestion: 0 across all 27 tables.
+
+The subsequent `dataconnect:sql:diff` was validate-only and did not alter this catalog. No SQL Connect schema or connector deployment followed because the diff was destructive.
+
+## Restart recovery verification — 2026-08-16
+
+The same IAM connector audit was rerun with `--expect-empty` after the Codex desktop restart. It completed successfully and again reported:
+
+- 27 tables and 372 columns;
+- 27 primary keys, 33 uniqueness rules, and 65 foreign keys;
+- 53 `RESTRICT` and 12 `CASCADE` delete actions;
+- 128 checks, 91 indexes, eight special indexes, nine triggers, eight functions, and four views;
+- 149 PostgreSQL-only controls;
+- zero canonical catalog differences;
+- zero rows across all 27 canonical tables;
+- retained non-Firebase ownership and brownfield reader/writer roles.
+
+This was a read-only catalog and row-count verification. Canonical DDL was not reapplied.
+
 ## Verdict
 
 **CANONICAL POSTGRESQL CLOUD PARITY: PASS (100%)**
-
