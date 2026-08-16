@@ -8,6 +8,10 @@ export default defineConfig({
         globals: true,
         environment: "jsdom",
         setupFiles: "./src/test/setup.ts",
+        // Each database suite owns a PGlite WebAssembly runtime. Serial files
+        // prevent parallel workers from exhausting constrained CI/Cloud Build memory.
+        fileParallelism: false,
+        maxWorkers: 1,
     },
     resolve: {
         alias: {

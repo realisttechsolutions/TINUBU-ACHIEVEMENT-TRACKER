@@ -2,11 +2,14 @@ import type { Metadata, Viewport } from 'next';
 import React from 'react';
 import Providers from './providers';
 import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
+import { isStagingEnvironment } from '@/lib/deployment/environment';
 import '@/index.css';
 
 // Runtime rendering is required so App Hosting can hydrate the public adapter
 // from Cloud SQL instead of freezing synthetic build-time data into HTML.
 export const dynamic = 'force-dynamic';
+
+const staging = isStagingEnvironment();
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinubutracker.ng'),
@@ -30,11 +33,12 @@ export const metadata: Metadata = {
   creator: 'Federal Republic of Nigeria Data Intelligence',
   publisher: 'Tinubu Achievement Tracker',
   robots: {
-    index: true,
-    follow: true,
+    index: !staging,
+    follow: !staging,
+    nocache: staging,
     googleBot: {
-      index: true,
-      follow: true,
+      index: !staging,
+      follow: !staging,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -107,6 +111,15 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
+        {staging ? (
+          <div
+            role="status"
+            data-environment="staging"
+            className="bg-amber-300 px-3 py-1 text-center text-xs font-semibold tracking-wide text-slate-950"
+          >
+            STAGING — test environment, not the production website
+          </div>
+        ) : null}
         <Providers publicData={publicData}>{children}</Providers>
       </body>
     </html>

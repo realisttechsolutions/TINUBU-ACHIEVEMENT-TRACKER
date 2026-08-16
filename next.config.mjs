@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
+const staging = process.env.NEXT_PUBLIC_APP_ENV?.trim().toLowerCase() === 'staging';
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  webpack(config, { dev }) {
+    // The production output is the deployable artifact; a persistent webpack
+    // cache is unnecessary in constrained local/CI staging certification jobs.
+    if (!dev) config.cache = false;
+    return config;
+  },
   images: {
     remotePatterns: [
       {
@@ -18,6 +26,21 @@ const nextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+  },
+  async headers() {
+    return staging
+      ? [
+          {
+            source: '/:path*',
+            headers: [
+              {
+                key: 'X-Robots-Tag',
+                value: 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+              },
+            ],
+          },
+        ]
+      : [];
   },
   async redirects() {
     return [
