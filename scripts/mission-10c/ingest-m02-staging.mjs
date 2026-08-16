@@ -17,10 +17,12 @@ if (!commit) {
 }
 
 const database = await createFirebaseIamDatabase({ project: PROJECT, instance: INSTANCE, database: DATABASE, max: 1 });
-const operator = database.username;
-const quotedOperator = `"${operator.replaceAll('"', '""')}"`;
 
 try {
+  const membership = await database.query(
+    "SELECT pg_has_role(current_user, 'tat_ingestion_writer', 'MEMBER') AS permitted",
+  );
+  if (!membership.rows[0].permitted) throw new Error('Authenticated operator is not authorized for the staging ingestion role.');
   const preflight = await database.query(`
     SELECT
       (SELECT count(*)::int FROM records) AS records,
@@ -31,7 +33,6 @@ try {
     throw new Error(`Staging preflight expected an empty M02 domain: ${JSON.stringify(state)}`);
   }
 
-  await database.query(`GRANT tat_ingestion_writer TO ${quotedOperator}`);
   await database.query('SET ROLE tat_ingestion_writer');
   const role = await database.query('SELECT current_user, session_user');
   if (role.rows[0].current_user !== 'tat_ingestion_writer') throw new Error('Trusted ingestion role activation failed.');
@@ -58,6 +59,5 @@ try {
   console.log('M10C M02 CLOUD INGESTION AND DATA PARITY: PASS');
 } finally {
   await database.query('RESET ROLE').catch(() => undefined);
-  await database.query(`REVOKE tat_ingestion_writer FROM ${quotedOperator}`).catch(() => undefined);
   await database.close();
 }

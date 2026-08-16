@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { dataAdapter, hydrateDataAdapter } from '@/adapters/dataAdapter';
 import { mapPublicDataSnapshot } from '@/server/repositories/public-data.mapper';
 import { PublicDataRepository } from '@/server/repositories/public-data.repository';
 import { createFirebaseIamDatabase } from '../../../scripts/mission-10c/firebase-iam-pg.mjs';
@@ -10,7 +11,6 @@ const suite = live ? describe : describe.skip;
 suite('live Cloud SQL public application data layer', { timeout: 120_000 }, () => {
   let database: Awaited<ReturnType<typeof createFirebaseIamDatabase>>;
   let repository: PublicDataRepository;
-  let operator: string;
   let queryCount = 0;
   const latencies: Record<string, number> = {};
 
@@ -23,8 +23,12 @@ suite('live Cloud SQL public application data layer', { timeout: 120_000 }, () =
 
   beforeAll(async () => {
     database = await createFirebaseIamDatabase({ max: 2 });
-    operator = `"${database.username.replaceAll('"', '""')}"`;
-    await database.query(`GRANT tat_public_reader TO ${operator}`);
+    const membership = await database.query(
+      "SELECT pg_has_role(current_user, 'tat_public_reader', 'MEMBER') AS permitted",
+    );
+    if (!(membership.rows[0] as unknown as { permitted: boolean }).permitted) {
+      throw new Error('Authenticated operator is not authorized for the staging public-reader proof role.');
+    }
     await database.query('SET ROLE tat_public_reader');
     repository = new PublicDataRepository({
       async query(text: string, values: readonly unknown[] = []) {
@@ -36,8 +40,8 @@ suite('live Cloud SQL public application data layer', { timeout: 120_000 }, () =
 
   afterAll(async () => {
     if (!database) return;
+    hydrateDataAdapter(null);
     await database.query('RESET ROLE').catch(() => undefined);
-    await database.query(`REVOKE tat_public_reader FROM ${operator}`).catch(() => undefined);
     await database.close();
     console.log(JSON.stringify({ latenciesMs: latencies, queryCount }, null, 2));
   });
@@ -73,11 +77,15 @@ suite('live Cloud SQL public application data layer', { timeout: 120_000 }, () =
     expect(rows.financials).toHaveLength(8);
     expect(rows.beneficiaries).toHaveLength(8);
     const snapshot = mapPublicDataSnapshot(rows);
+    hydrateDataAdapter(snapshot);
     expect(snapshot.achievements).toHaveLength(30);
     expect(snapshot.projects).toHaveLength(8);
     expect(snapshot.policies).toHaveLength(10);
     expect(snapshot.programmes).toHaveLength(8);
     expect(snapshot.timelineEvents).toHaveLength(15);
     expect(snapshot.publicDownload).toHaveLength(56);
+    expect(dataAdapter.getAchievements()).toHaveLength(30);
+    expect(dataAdapter.getProjects()).toHaveLength(8);
+    expect(dataAdapter.getPolicies()).toHaveLength(10);
   });
 });

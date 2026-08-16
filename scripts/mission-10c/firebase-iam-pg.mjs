@@ -64,3 +64,58 @@ export async function createFirebaseIamDatabase({
     throw error;
   }
 }
+
+export async function createFirebasePasswordDatabase({
+  project = 'tinubu-achievement-stg',
+  instance = 'tat-db-staging',
+  database = 'tat_staging',
+  user = 'postgres',
+  password,
+  max = 1,
+} = {}) {
+  if (!password) throw new Error('A temporary in-memory database password is required.');
+  const account = auth.getGlobalDefaultAccount();
+  if (!account) throw new Error('Firebase CLI authentication is required for the staging bootstrap harness.');
+  await requireAuth({ ...account, project });
+  const instanceState = await cloudSqlAdmin.getInstance(project, instance);
+  if (instanceState.project !== project || instanceState.name !== instance) throw new Error('Cloud SQL staging boundary mismatch.');
+
+  const connector = new Connector({ auth: new FBToolsAuthClient() });
+  let pool;
+  try {
+    const connectorOptions = await connector.getOptions({
+      instanceConnectionName: instanceState.connectionName,
+      authType: AuthTypes.PASSWORD,
+      ipType: IpAddressTypes.PUBLIC,
+    });
+    pool = new pg.Pool({
+      ...connectorOptions,
+      user,
+      password,
+      database,
+      max,
+      min: 0,
+      idleTimeoutMillis: 10_000,
+      connectionTimeoutMillis: 15_000,
+      statement_timeout: 120_000,
+      application_name: 'tat-m10c-staging-bootstrap',
+      allowExitOnIdle: true,
+    });
+    const client = await pool.connect();
+    return {
+      username: user,
+      async query(text, values = []) {
+        return client.query(text, values);
+      },
+      async close() {
+        client.release();
+        await pool.end();
+        connector.close();
+      },
+    };
+  } catch (error) {
+    await pool?.end().catch(() => undefined);
+    connector.close();
+    throw error;
+  }
+}

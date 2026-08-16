@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module';
+import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { createFirebaseIamDatabase } from './firebase-iam-pg.mjs';
+import { createFirebaseIamDatabase, createFirebasePasswordDatabase } from './firebase-iam-pg.mjs';
 
 const require = createRequire(import.meta.url);
 const auth = require('../../node_modules/firebase-tools/lib/auth');
@@ -9,6 +10,7 @@ const { Client } = require('../../node_modules/firebase-tools/lib/apiv2');
 const cloudSqlAdmin = require('../../node_modules/firebase-tools/lib/gcp/cloudsql/cloudsqladmin');
 
 const PROJECT = 'tinubu-achievement-stg';
+const PROJECT_NUMBER = '248050067355';
 const INSTANCE = 'tat-db-staging';
 const DATABASE = 'tat_staging';
 const PUBLIC_SERVICE_ACCOUNT_ID = 'firebase-app-hosting-compute';
@@ -22,6 +24,8 @@ const apply = process.argv.includes('--apply');
 const headers = { 'x-goog-user-project': PROJECT };
 const iam = new Client({ urlPrefix: 'https://iam.googleapis.com', apiVersion: 'v1', auth: true });
 const resourceManager = new Client({ urlPrefix: 'https://cloudresourcemanager.googleapis.com', apiVersion: 'v1', auth: true });
+const serviceUsage = new Client({ urlPrefix: 'https://serviceusage.googleapis.com', apiVersion: 'v1', auth: true });
+const sqlAdmin = new Client({ urlPrefix: 'https://sqladmin.googleapis.com', apiVersion: 'v1', auth: true });
 
 function quoteIdentifier(value) {
   return `"${String(value).replaceAll('"', '""')}"`;
@@ -31,6 +35,75 @@ async function authenticate() {
   const account = auth.getGlobalDefaultAccount();
   if (!account) throw new Error('Firebase CLI authentication is required.');
   await requireAuth({ ...account, project: PROJECT });
+}
+
+async function ensureIamApi() {
+  const servicePath = `/projects/${PROJECT_NUMBER}/services/iam.googleapis.com`;
+  const current = await serviceUsage.get(servicePath, { headers });
+  if (current.body.state === 'ENABLED') return false;
+  const operation = await serviceUsage.post(`${servicePath}:enable`, {}, { headers });
+  const operationPath = `/${operation.body.name}`;
+  const deadline = Date.now() + 5 * 60 * 1000;
+  while (Date.now() < deadline) {
+    const status = await serviceUsage.get(operationPath, { headers });
+    if (status.body.done) {
+      if (status.body.error) throw new Error(`IAM API enable failed: ${JSON.stringify(status.body.error)}`);
+      return true;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 5_000));
+  }
+  throw new Error('IAM API enable operation exceeded five minutes.');
+}
+
+async function waitForSqlOperation(operation, label) {
+  const name = operation?.body?.name ?? operation?.name;
+  if (!name) throw new Error(`${label} did not return an operation name.`);
+  const deadline = Date.now() + 5 * 60 * 1000;
+  while (Date.now() < deadline) {
+    const status = await sqlAdmin.get(`/projects/${PROJECT}/operations/${name}`, { headers });
+    if (status.body.status === 'DONE') {
+      const errors = status.body.error?.errors ?? [];
+      if (errors.length) throw new Error(`${label} failed: ${errors.map((error) => error.message).join('; ')}`);
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 2_000));
+  }
+  throw new Error(`${label} exceeded five minutes.`);
+}
+
+function temporaryPassword() {
+  return `${randomBytes(48).toString('base64url')}aA9!`;
+}
+
+async function setPostgresPassword(password, label) {
+  const operation = await sqlAdmin.put(
+    `/projects/${PROJECT}/instances/${INSTANCE}/users`,
+    { name: 'postgres', password, type: 'BUILT_IN' },
+    { headers, queryParams: { name: 'postgres' } },
+  );
+  await waitForSqlOperation(operation, label);
+}
+
+async function withTemporaryAdminDatabase(action) {
+  const bootstrapPassword = temporaryPassword();
+  let database;
+  let primaryError;
+  try {
+    await setPostgresPassword(bootstrapPassword, 'Temporary bootstrap password activation');
+    database = await createFirebasePasswordDatabase({ password: bootstrapPassword });
+    return await action(database);
+  } catch (error) {
+    primaryError = error;
+    throw error;
+  } finally {
+    await database?.close().catch(() => undefined);
+    try {
+      await setPostgresPassword(temporaryPassword(), 'Built-in administrator password cleanup rotation');
+    } catch (cleanupError) {
+      if (!primaryError) throw cleanupError;
+      console.error(`Password cleanup failed after primary error: ${cleanupError.message}`);
+    }
+  }
 }
 
 async function serviceAccounts() {
@@ -89,7 +162,7 @@ function publicCatalogReplacement(schemaSql) {
   return schemaSql.slice(start, end).trim().replace('CREATE VIEW', 'CREATE OR REPLACE VIEW');
 }
 
-function privilegeSql(schemaSql) {
+function privilegeSql(schemaSql, operator) {
   const publicViews = ['public_record_catalog', 'public_claim_evidence', 'public_financial_records', 'public_beneficiary_records'];
   const writerMutableTables = [
     'institutions', 'geographic_units', 'research_batches', 'records', 'achievement_profiles',
@@ -104,8 +177,8 @@ function privilegeSql(schemaSql) {
     ${publicCatalogReplacement(schemaSql)};
     DO $$ BEGIN CREATE ROLE tat_public_reader NOLOGIN; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
     DO $$ BEGIN CREATE ROLE tat_ingestion_writer NOLOGIN; EXCEPTION WHEN duplicate_object THEN NULL; END $$;
-    ALTER ROLE tat_public_reader NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
-    ALTER ROLE tat_ingestion_writer NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+    ALTER ROLE tat_public_reader NOLOGIN NOCREATEDB NOCREATEROLE;
+    ALTER ROLE tat_ingestion_writer NOLOGIN NOCREATEDB NOCREATEROLE;
     REVOKE ALL ON DATABASE ${quoteIdentifier(DATABASE)} FROM tat_public_reader, tat_ingestion_writer;
     GRANT CONNECT ON DATABASE ${quoteIdentifier(DATABASE)} TO tat_public_reader, tat_ingestion_writer;
     REVOKE ALL ON SCHEMA public FROM tat_public_reader, tat_ingestion_writer;
@@ -116,6 +189,7 @@ function privilegeSql(schemaSql) {
     GRANT SELECT, INSERT, UPDATE ON ${writerMutableTables.map(quoteIdentifier).join(', ')} TO tat_ingestion_writer;
     GRANT tat_public_reader TO ${reader};
     GRANT tat_ingestion_writer TO ${writer};
+    GRANT tat_public_reader, tat_ingestion_writer TO ${quoteIdentifier(operator)};
   `;
 }
 
@@ -135,14 +209,19 @@ async function audit(database) {
       has_table_privilege(${`'${INGESTION_DB_USER}'`}, 'public.records', 'UPDATE') AS writer_records_update,
       has_table_privilege(${`'${INGESTION_DB_USER}'`}, 'public.records', 'DELETE') AS writer_records_delete,
       pg_has_role(${`'${PUBLIC_DB_USER}'`}, 'tat_public_reader', 'MEMBER') AS public_role_member,
-      pg_has_role(${`'${INGESTION_DB_USER}'`}, 'tat_ingestion_writer', 'MEMBER') AS writer_role_member`);
+      pg_has_role(${`'${INGESTION_DB_USER}'`}, 'tat_ingestion_writer', 'MEMBER') AS writer_role_member,
+      (SELECT NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb AND NOT rolcanlogin
+         AND NOT rolreplication AND NOT rolbypassrls FROM pg_roles WHERE rolname = 'tat_public_reader') AS public_role_restricted,
+      (SELECT NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb AND NOT rolcanlogin
+         AND NOT rolreplication AND NOT rolbypassrls FROM pg_roles WHERE rolname = 'tat_ingestion_writer') AS writer_role_restricted`);
   const row = result.rows[0];
   const pass = row.public_connect && row.public_schema_usage
     && row.public_catalog_select && row.public_evidence_select
     && row.public_financial_select && row.public_beneficiary_select
     && !row.public_records_select && !row.public_sources_select && !row.public_batches_select
     && row.writer_records_insert && row.writer_records_update && !row.writer_records_delete
-    && row.public_role_member && row.writer_role_member;
+    && row.public_role_member && row.writer_role_member
+    && row.public_role_restricted && row.writer_role_restricted;
   if (!pass) throw new Error(`Staging privilege audit failed: ${JSON.stringify(row)}`);
   return row;
 }
@@ -154,12 +233,13 @@ if (!apply) {
     serviceAccounts: [PUBLIC_SERVICE_ACCOUNT, INGESTION_SERVICE_ACCOUNT],
     iamRoles: ['roles/cloudsql.client', 'roles/cloudsql.instanceUser'],
     databaseRoles: ['tat_public_reader', 'tat_ingestion_writer'],
-    credentialsOrKeysCreated: false,
+    persistentCredentialsOrKeysCreated: false,
   }, null, 2));
   process.exit(0);
 }
 
 const changes = {
+  iamApiEnabled: await ensureIamApi(),
   publicServiceAccountCreated: await ensureServiceAccount(PUBLIC_SERVICE_ACCOUNT_ID, 'Firebase App Hosting compute'),
   ingestionServiceAccountCreated: await ensureServiceAccount(INGESTION_SERVICE_ACCOUNT_ID, 'TAT staging ingestion writer'),
 };
@@ -167,20 +247,26 @@ changes.projectIamChanged = await ensureProjectRoles();
 changes.publicIamDatabaseUserCreated = await ensureIamDatabaseUser(PUBLIC_DB_USER);
 changes.ingestionIamDatabaseUserCreated = await ensureIamDatabaseUser(INGESTION_DB_USER);
 
-const database = await createFirebaseIamDatabase();
-try {
+const operatorDatabase = await createFirebaseIamDatabase();
+const operator = operatorDatabase.username;
+await operatorDatabase.close();
+const result = await withTemporaryAdminDatabase(async (database) => {
   const schemaSql = await readFile(new URL('../../database/schema.sql', import.meta.url), 'utf8');
   await database.query('BEGIN');
   try {
-    await database.query(privilegeSql(schemaSql));
+    await database.query(privilegeSql(schemaSql, operator));
     await database.query('COMMIT');
   } catch (error) {
     await database.query('ROLLBACK');
     throw error;
   }
   const privileges = await audit(database);
-  console.log(JSON.stringify({ changes, privileges, credentialsOrKeysCreated: false }, null, 2));
-  console.log('M10C STAGING SECURITY MODEL: PASS');
-} finally {
-  await database.close();
-}
+  return { changes, privileges };
+});
+console.log(JSON.stringify({
+  ...result,
+  runtimeAndIngestionAuthentication: 'IAM',
+  temporaryAdminCredential: 'rotated and discarded in process memory',
+  persistentCredentialsOrKeysCreated: false,
+}, null, 2));
+console.log('M10C STAGING SECURITY MODEL: PASS');
