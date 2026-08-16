@@ -1,5 +1,5 @@
 # TINUBU ACHIEVEMENT TRACKER V2
-## Technical Architecture: Staff Authentication & Editorial Isolation (Mission 10E)
+## Technical Architecture: Staff Authentication & Editorial Isolation (Mission 10E / 10E-FINAL-GATE)
 
 ---
 
@@ -10,6 +10,7 @@ Mission 10E establishes the authoritative, server-verified authentication and ro
 The architecture is governed by two fundamental security imperatives:
 1. **Public Site Anonymity (Zero-Login Immunity):** Public visitors, researchers, journalists, and citizens access the platform without authentication or accounts. No public viewer role, user registration, or anonymous Firebase session is permitted.
 2. **Server-Authoritative RBAC & Editorial Isolation:** Administrative privileges and editorial routes are gated by server-side Firebase Admin SDK session verification and cryptographic claims (`tat_staff: true`, `tat_role: <role>`). No client-side token or local storage claim is trusted.
+3. **Public Database Boundary:** The public runtime database identity (`tat-staging-db-app@...` / `tat_public_reader`) has `SELECT` access ONLY through the four authorized public views (`public_record_catalog`, `public_claim_evidence`, `public_financial_records`, `public_beneficiary_records`). Direct `SELECT` on all 27 canonical base tables is strictly **DENIED**. All write operations (`INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `ALTER`, `CREATE`) are strictly **DENIED**.
 
 ---
 
@@ -31,8 +32,8 @@ sequenceDiagram
     ClientSDK-->>Browser: Returns short-lived Firebase ID token
     Browser->>SessionAPI: POST /api/admin/auth/session (Header: x-tat-admin-csrf: 1, Body: { idToken })
     SessionAPI->>AdminSDK: verifyIdToken(idToken, checkRevoked=true)
-    AdminSDK-->>SessionAPI: Decoded claims: email_verified, tat_staff, tat_role
-    Note over SessionAPI: Enforces email_verified == true<br/>Enforces tat_staff == true<br/>Enforces tat_role in allowed roles
+    AdminSDK-->>SessionAPI: Decoded claims: auth_time, email_verified, tat_staff, tat_role
+    Note over SessionAPI: Enforces auth_time <= 5 minutes<br/>Enforces email_verified == true<br/>Enforces tat_staff == true<br/>Enforces tat_role in allowed roles
     SessionAPI->>AdminSDK: createSessionCookie(idToken, { expiresIn: 8 hours })
     AdminSDK-->>SessionAPI: Authoritative session cookie string
     SessionAPI-->>Browser: Set-Cookie: tat_admin_session (HttpOnly, Secure, SameSite=Lax, Max-Age=28800)
@@ -60,6 +61,7 @@ sequenceDiagram
 - **Attributes:** `HttpOnly`, `Secure` (in production/staging), `SameSite=Lax`, `Path=/`.
 - **Validation Rules:**
   - Token signature and revocation check (`checkRevoked: true`).
+  - Recent authentication check (`auth_time` age <= 5 minutes / 300 seconds).
   - `email_verified === true` (unverified accounts cannot obtain session cookies).
   - `tat_staff === true` (custom claim set only by authorized backend procedures).
   - `tat_role` must match one of the 4 canonical roles (`super_admin`, `researcher`, `reviewer`, `publisher`).
@@ -84,9 +86,15 @@ sequenceDiagram
 
 ---
 
-## 4. Public Site Non-Interference Guarantee
+## 4. Public Site & Database Non-Interference Guarantee
 
 The public site is completely decoupled from authentication:
 - Public routes (`/`, `/achievements`, `/policies`, `/projects`, `/programmes`, `/sectors`, `/timeline`, `/impact-map`, `/api/health`) execute with zero auth middleware overhead.
-- Database access by public runtime identity (`tat-staging-db-app@...`) remains strictly **READ-ONLY** (`SELECT` on canonical tables/views).
+- Database access by public runtime identity (`tat-staging-db-app@...` / `tat_public_reader`) is restricted to **`SELECT` ONLY through four approved public views**:
+  1. `public_record_catalog`
+  2. `public_claim_evidence`
+  3. `public_financial_records`
+  4. `public_beneficiary_records`
+- Direct `SELECT` on all 27 canonical base tables is completely **DENIED**.
+- All write operations (`INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `ALTER`, `CREATE`) are completely **DENIED**.
 - Public components bundle 0 bytes of Firebase Admin SDK or administrative secrets.

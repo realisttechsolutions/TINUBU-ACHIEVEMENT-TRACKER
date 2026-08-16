@@ -33,6 +33,7 @@
 5. **Canonical Database Authority**:
    - `database/schema.sql` is the physical database authority for all 27 tables, constraints, triggers, and views.
    - No ORM or vendor-generated schema may override physical PostgreSQL controls.
+   - Public runtime identity (`tat-staging-db-app@...` / `tat_public_reader`) has `SELECT` ONLY through four approved public views (`public_record_catalog`, `public_claim_evidence`, `public_financial_records`, `public_beneficiary_records`). Direct `SELECT` on base tables is DENIED. All writes are DENIED.
 
 ---
 
@@ -42,12 +43,14 @@
 - **Worktree:** `C:\Users\DELL\Documents\111 ANTI & CODEX\TINUBU ACHIEVEMENTS TRACKER-ANTIGRAVITY-M10E`
 - **Scope Accomplished:**
   - Complete server-side staff authentication with 8-hour HTTP-only session cookies (`tat_admin_session`).
+  - Recent authentication verification (`auth_time` age <= 5 minutes / 300s).
   - Four staff roles (`super_admin`, `researcher`, `reviewer`, `publisher`) enforced via custom claims.
   - Route matrix with server component guards (`requireStaffAuth`).
   - Anti-CSRF protection across all state-changing auth endpoints.
   - Security headers (`noindex`, `no-store`) on all administrative paths.
   - Public site zero-login immunity certified across 11 core routes.
-  - Out-of-band operator bootstrap scripts (`scripts/admin/bootstrap-staff.mjs`, `scripts/admin/set-staff-role.mjs`, `scripts/admin/disable-staff.mjs`).
+  - Public database boundary certified (SELECT only on 4 public views; 0 base table access; 0 writes).
+  - Out-of-band operator bootstrap scripts (`scripts/admin/bootstrap-staff.mjs`, `scripts/admin/set-staff-role.mjs`, `scripts/admin/disable-staff.mjs`) with strict email verification requirement.
   - 100% test pass rate across 26 test suites (99 passed, 2 skipped live Cloud SQL in local mock mode, 0 failed).
   - Next.js production build certified clean (68 static/dynamic routes).
-- **First Super Admin Status:** `FIRST SUPER ADMIN ACCOUNT STILL REQUIRES OPERATOR INPUT` (documented in `docs/engineering/TAT_M10E_SUPER_ADMIN_BOOTSTRAP.md`).
+- **First Super Admin Status:** `READY FOR FIRST SUPER ADMIN EMAIL: YES` (documented in `docs/engineering/TAT_M10E_SUPER_ADMIN_BOOTSTRAP.md`).
