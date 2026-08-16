@@ -13,13 +13,14 @@ Status values are current for the M10D-FINAL staging branch. The register covers
 | M10D-007 | `/projects`, `/policies`, `/programmes` | Catalogue cards | Catalogue cards did not link to their public record pages. | Users could inspect catalogue summaries but not open their individual records. | P1 | Functional | Detail links had not been wired to the new route surface. | Resolved | Add explicit accessible “View … record” links. | Pending | Build and post-rollout route navigation QA. |
 | M10D-008 | Global search | `dataAdapter.searchGlobal` | Search used obsolete project/policy hash links and omitted programme records. | Search results bypassed new public detail routes. | P1 | Functional | Legacy catalogue-hash URL mapping remained after the route design. | Resolved | Link project/policy results to detail routes and include programme search results. | Pending | Focused data adapter test and post-rollout search QA. |
 | M10D-009 | `/sitemap.xml` | Sitemap route | Project and programme public record URLs were absent from the generated sitemap. | New detail routes would not be represented in discovery output. | P2 | SEO | Sitemap enumerated only the original record categories. | Resolved | Include Cloud SQL-backed project and programme entries. | Pending | Build and route-level output verification. |
+| M10D-010 | `/` at 768px | Latest updates cards | The three-column update-card grid caused page-level horizontal overflow. | Each card became too narrow for its source badge and verification link. | P2 | Responsive layout | The grid changed to three columns at the `md` breakpoint. | Resolved | Defer the three-column layout to `lg`. | Pending | Browser viewport QA confirms no horizontal overflow. |
 
 ## Counts
 
-- Total defects: 9
+- Total defects: 10
 - P0: 0
 - P1: 7
-- P2: 2
+- P2: 3
 - P3: 0
-- Resolved in source: 9
+- Resolved in source: 10
 - Remaining before rollout: 0 source defects; live verification remains pending for deployment-dependent paths.
