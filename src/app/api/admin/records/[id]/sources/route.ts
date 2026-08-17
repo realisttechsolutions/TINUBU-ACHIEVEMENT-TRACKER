@@ -33,7 +33,8 @@ export async function POST(
       );
     }
 
-    const result = await saveSource(parsedBody.data, staffUser);
+    const { id: recordId } = await params;
+    const result = await saveSource(parsedBody.data, staffUser, recordId);
     return NextResponse.json({ success: true, ...result });
   } catch (err: any) {
     if (err.message?.includes('UNAUTHENTICATED')) {

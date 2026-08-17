@@ -87,8 +87,20 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       return sendJson(res, 201, { success: true, ...created });
     }
 
+    // POST /api/sources (Save Source directly)
+    if (pathname === '/api/sources' && method === 'POST') {
+      const staff = await authenticateAdminRequest(req.headers, 'write');
+      const body = await parseJsonBody(req);
+      const parsed = sourceSchema.safeParse(body);
+      if (!parsed.success) {
+        return sendJson(res, 400, { error: 'Invalid source payload', details: parsed.error.flatten() });
+      }
+      const result = await manager.saveSource(parsed.data, staff);
+      return sendJson(res, 200, { success: true, ...result });
+    }
+
     // Dynamic Route Matching: /api/records/:id(/subpath)
-    const match = pathname.match(/^\/api\/records\/([a-f0-9-]+)(?:\/([a-z]+))?$/i);
+    const match = pathname.match(/^\/api\/records\/([a-z0-9_-]+)(?:\/([a-z0-9_-]+))?$/i);
     if (match) {
       const recordId = match[1];
       const subpath = match[2];

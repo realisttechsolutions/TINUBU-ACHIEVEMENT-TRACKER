@@ -189,6 +189,7 @@ export type SourceInput = z.infer<typeof sourceSchema>;
 
 export const financialRecordSchema = z.object({
   id: z.string().uuid().optional(),
+  claim_id: z.string().uuid().optional().nullable(),
   financial_type: z.enum(FINANCIAL_TYPES),
   amount: z.string().regex(/^\d+(\.\d{1,4})?$/, 'Amount must be a valid positive numeric string'),
   currency_code: z.string().length(3).default('NGN'),
@@ -205,6 +206,7 @@ export type FinancialRecordInput = z.infer<typeof financialRecordSchema>;
 
 export const beneficiaryRecordSchema = z.object({
   id: z.string().uuid().optional(),
+  claim_id: z.string().uuid().optional().nullable(),
   beneficiary_type: z.string().min(2).max(100),
   beneficiary_stage: z.enum(BENEFICIARY_STAGES),
   count_value: z.coerce.number().int().nonnegative(),

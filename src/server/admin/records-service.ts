@@ -426,8 +426,10 @@ export async function saveClaim(
 export async function saveSource(
   input: SourceInput,
   staffUser: StaffUser,
+  recordId?: string,
 ): Promise<{ id: string }> {
-  const res = await forwardToAdminControlPlane(`/api/records/${input.id || 'new'}/sources`, {
+  const targetId = recordId || input.id || '00000000-0000-0000-0000-000000000000';
+  const res = await forwardToAdminControlPlane(`/api/records/${targetId}/sources`, {
     method: 'POST',
     body: input,
   });
