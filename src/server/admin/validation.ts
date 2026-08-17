@@ -258,3 +258,24 @@ export const listAdminRecordsSchema = z.object({
 });
 
 export type ListAdminRecordsQuery = z.infer<typeof listAdminRecordsSchema>;
+
+export const WORKFLOW_ACTIONS = [
+  'submit_for_review',
+  'approve_review',
+  'return_for_changes',
+  'reject_review',
+  'publish',
+  'unpublish',
+] as const;
+
+export type WorkflowAction = (typeof WORKFLOW_ACTIONS)[number];
+
+export const workflowTransitionSchema = z.object({
+  action: z.enum(WORKFLOW_ACTIONS),
+  reason: z.string().max(2000).optional().nullable(),
+  expected_updated_at: z.string().min(1, 'expected_updated_at is required for optimistic concurrency check'),
+  qualification: z.string().max(1000).optional().nullable(),
+});
+
+export type WorkflowTransitionInput = z.infer<typeof workflowTransitionSchema>;
+

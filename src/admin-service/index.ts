@@ -10,6 +10,7 @@ import {
   financialRecordSchema,
   beneficiaryRecordSchema,
   timelineEventSchema,
+  workflowTransitionSchema,
 } from './validation';
 
 let dbInstance: AdminControlPlaneDb | null = null;
@@ -99,11 +100,44 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       return sendJson(res, 200, { success: true, ...result });
     }
 
+    // GET /api/records/review-queue (Review Queue)
+    if (pathname === '/api/records/review-queue' && method === 'GET') {
+      await authenticateAdminRequest(req.headers, 'review');
+      const queue = await manager.getReviewQueue();
+      return sendJson(res, 200, { success: true, records: queue });
+    }
+
+    // GET /api/records/publish-queue (Publish Queue)
+    if (pathname === '/api/records/publish-queue' && method === 'GET') {
+      await authenticateAdminRequest(req.headers, 'publish');
+      const queue = await manager.getPublishQueue();
+      return sendJson(res, 200, { success: true, records: queue });
+    }
+
     // Dynamic Route Matching: /api/records/:id(/subpath)
     const match = pathname.match(/^\/api\/records\/([a-z0-9_-]+)(?:\/([a-z0-9_-]+))?$/i);
     if (match) {
       const recordId = match[1];
       const subpath = match[2];
+
+      // POST /api/records/:id/workflow (Workflow Transition)
+      if (subpath === 'workflow' && method === 'POST') {
+        const staff = await authenticateAdminRequest(req.headers, 'workflow');
+        const body = await parseJsonBody(req);
+        const parsed = workflowTransitionSchema.safeParse(body);
+        if (!parsed.success) {
+          return sendJson(res, 400, { error: 'Invalid workflow payload', details: parsed.error.flatten() });
+        }
+        const result = await manager.executeWorkflowTransition(recordId, parsed.data, staff);
+        return sendJson(res, 200, { success: true, ...result });
+      }
+
+      // GET /api/records/:id/history (Review Decision Trail)
+      if (subpath === 'history' && method === 'GET') {
+        await authenticateAdminRequest(req.headers, 'read');
+        const history = await manager.getRecordReviewHistory(recordId);
+        return sendJson(res, 200, { success: true, history });
+      }
 
       // PUT /api/records/:id (Update Overview)
       if (!subpath && method === 'PUT') {
@@ -188,6 +222,15 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
     }
     if (error.message === 'CONCURRENCY_CONFLICT') {
       return sendJson(res, 409, { error: 'Conflict: Record was modified concurrently. Please refresh.' });
+    }
+    if (error.message?.includes('RECORD_LOCKED_FOR_REVIEW')) {
+      return sendJson(res, 403, { error: error.message });
+    }
+    if (error.message?.includes('FORBIDDEN_TRANSITION_ROLE')) {
+      return sendJson(res, 403, { error: 'Forbidden: Your role is not authorized for this workflow transition.' });
+    }
+    if (error.message?.includes('INVALID_TRANSITION') || error.message?.includes('REASON_REQUIRED')) {
+      return sendJson(res, 400, { error: error.message });
     }
     console.error('Admin Control Plane Unhandled Error:', error);
     return sendJson(res, 500, { error: 'Internal Server Error' });

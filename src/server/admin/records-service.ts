@@ -10,6 +10,7 @@ import type {
   FinancialRecordInput,
   BeneficiaryRecordInput,
   TimelineEventInput,
+  WorkflowTransitionInput,
   ListAdminRecordsQuery,
 } from './validation';
 
@@ -48,6 +49,7 @@ export interface AdminRecordDetail {
     lead_sector_id: string | null;
     lead_institution_id: string | null;
     implementation_status: string;
+    workflow_status: string;
     publication_status: string;
     is_public: boolean;
     provisional: boolean;
@@ -306,6 +308,7 @@ export async function getAdminRecordDetail(recordId: string): Promise<AdminRecor
       lead_sector_id: null,
       lead_institution_id: null,
       implementation_status: r.implementation_status,
+      workflow_status: r.workflow_status || (r.publication_status === 'published' ? 'ready_for_publication' : 'draft'),
       publication_status: r.publication_status,
       is_public: true,
       provisional: false,
@@ -495,7 +498,71 @@ export async function saveTimelineEvent(
   return res.data;
 }
 
-// 10. Dashboard Stats (Read-Only via Public Catalog)
+// 10. Execute Workflow Transition (Proxied to Admin Control Plane)
+export async function executeWorkflowTransition(
+  recordId: string,
+  input: WorkflowTransitionInput,
+  staffUser: StaffUser,
+): Promise<{
+  success: boolean;
+  workflow_status: string;
+  publication_status: string;
+  is_public: boolean;
+  updated_at: string;
+  decision_id?: string;
+}> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/workflow`, {
+    method: 'POST',
+    body: input,
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to execute workflow transition via Admin Control Plane');
+  }
+
+  return res.data;
+}
+
+// 11. Get Review Queue (Proxied to Admin Control Plane)
+export async function getReviewQueue(staffUser: StaffUser): Promise<any[]> {
+  const res = await forwardToAdminControlPlane(`/api/records/review-queue`, {
+    method: 'GET',
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to fetch review queue');
+  }
+
+  return res.data.records || [];
+}
+
+// 12. Get Publish Queue (Proxied to Admin Control Plane)
+export async function getPublishQueue(staffUser: StaffUser): Promise<any[]> {
+  const res = await forwardToAdminControlPlane(`/api/records/publish-queue`, {
+    method: 'GET',
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to fetch publish queue');
+  }
+
+  return res.data.records || [];
+}
+
+// 13. Get Record Review History (Proxied to Admin Control Plane)
+export async function getRecordReviewHistory(recordId: string, staffUser: StaffUser): Promise<any[]> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/history`, {
+    method: 'GET',
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to fetch record review history');
+  }
+
+  return res.data.history || [];
+}
+
+// 14. Dashboard Stats (Read-Only via Public Catalog)
 export async function getAdminDashboardStats() {
   const db = await getDatabaseConnection();
 
@@ -536,3 +603,4 @@ export async function getAdminDashboardStats() {
     recentRecords: recentRes.rows,
   };
 }
+

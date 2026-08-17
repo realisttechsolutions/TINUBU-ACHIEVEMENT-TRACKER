@@ -19,7 +19,7 @@ export default function RecordEditorClient({
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'claims' | 'sources' | 'financials' | 'beneficiaries' | 'timeline' | 'geography' | 'institutions' | 'indicators' | 'metadata'
+    'overview' | 'claims' | 'sources' | 'financials' | 'beneficiaries' | 'timeline' | 'geography' | 'institutions' | 'indicators' | 'history' | 'metadata'
   >('overview');
 
   const [record, setRecord] = useState(detail.record);
@@ -32,6 +32,76 @@ export default function RecordEditorClient({
 
   const [saving, setSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Workflow Modal State
+  const [showWorkflowModal, setShowWorkflowModal] = useState(false);
+  const [workflowAction, setWorkflowAction] = useState<string>('');
+  const [workflowReason, setWorkflowReason] = useState<string>('');
+  const [workflowQualification, setWorkflowQualification] = useState<string>('');
+
+  // History State
+  const [historyList, setHistoryList] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  const fetchHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const res = await fetch(`/api/admin/records/${record.id}/history`);
+      const data = await res.json();
+      if (res.ok && data.history) {
+        setHistoryList(data.history);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchHistory();
+  }, [record.id]);
+
+  const handleWorkflowTransition = async (action: string, reason?: string, qualification?: string) => {
+    setSaving(true);
+    setStatusMessage(null);
+    try {
+      const res = await fetch(`/api/admin/records/${record.id}/workflow`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-tat-admin-csrf': '1' },
+        body: JSON.stringify({
+          action,
+          reason: reason || undefined,
+          qualification: qualification || undefined,
+          expected_updated_at: record.updated_at,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Workflow transition failed');
+      }
+      setRecord((prev) => ({
+        ...prev,
+        workflow_status: data.workflow_status,
+        publication_status: data.publication_status,
+        is_public: data.is_public,
+        updated_at: data.updated_at,
+      }));
+      setStatusMessage({
+        type: 'success',
+        text: `Workflow action '${action.replace(/_/g, ' ')}' succeeded. Record is now '${data.workflow_status}' / '${data.publication_status}'.`,
+      });
+      setShowWorkflowModal(false);
+      setWorkflowReason('');
+      setWorkflowQualification('');
+      fetchHistory();
+      router.refresh();
+    } catch (err: any) {
+      setStatusMessage({ type: 'error', text: err.message });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // Modals state
   const [showClaimModal, setShowClaimModal] = useState(false);
@@ -275,8 +345,12 @@ export default function RecordEditorClient({
     { id: 'geography', label: '7. Geography', count: detail.geographies.length },
     { id: 'institutions', label: '8. Institutions', count: detail.institutions.length },
     { id: 'indicators', label: '9. Indicators', count: null },
-    { id: 'metadata', label: '10. Metadata & Audit', count: null },
+    { id: 'history', label: '10. Review Trail', count: historyList.length },
+    { id: 'metadata', label: '11. Metadata & Audit', count: null },
   ] as const;
+
+  const currentWorkflowStatus = record.workflow_status || 'draft';
+  const isDraftLocked = currentWorkflowStatus !== 'draft' && userRole !== 'super_admin';
 
   return (
     <div className="space-y-6">
@@ -298,16 +372,153 @@ export default function RecordEditorClient({
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0 font-mono text-xs">
-          <div className="px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-800/60 text-amber-300 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className="uppercase">{record.publication_status}</span>
+        <div className="flex flex-wrap items-center gap-2 shrink-0 font-mono text-xs">
+          <div className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 ${
+            currentWorkflowStatus === 'draft'
+              ? 'bg-slate-950 border-slate-700 text-slate-300'
+              : currentWorkflowStatus === 'evidence_review'
+              ? 'bg-amber-950/80 border-amber-800/60 text-amber-300'
+              : currentWorkflowStatus === 'ready_for_publication'
+              ? 'bg-emerald-950/80 border-emerald-800/60 text-emerald-300'
+              : 'bg-rose-950/80 border-rose-800/60 text-rose-300'
+          }`}>
+            <span className="w-2 h-2 rounded-full bg-current" />
+            <span className="uppercase">{currentWorkflowStatus.replace(/_/g, ' ')}</span>
           </div>
+
+          <div className={`px-3 py-1.5 rounded-xl border ${
+            record.publication_status === 'published'
+              ? 'bg-emerald-950/80 border-emerald-700 text-emerald-300'
+              : 'bg-slate-950 border-slate-800 text-slate-400'
+          }`}>
+            {record.is_public ? 'PUBLIC' : 'INTERNAL'}
+          </div>
+
           <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">
-            {canEdit ? 'EDIT PERMITTED' : 'READ ONLY'}
+            ROLE: {userRole.toUpperCase()}
           </div>
         </div>
       </div>
+
+      {/* Workflow Transition Action Bar */}
+      <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="text-xs">
+          <span className="font-semibold text-white">Workflow Phase: </span>
+          <span className="font-mono text-slate-300 capitalize">{currentWorkflowStatus.replace(/_/g, ' ')}</span>
+          <span className="text-slate-500 mx-2">•</span>
+          <span className="text-slate-400">Publication: </span>
+          <span className="font-mono text-slate-300 uppercase">{record.publication_status}</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Researcher / Super Admin: Submit */}
+          {currentWorkflowStatus === 'draft' && (userRole === 'researcher' || userRole === 'super_admin') && (
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => handleWorkflowTransition('submit_for_review')}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-lg shadow-amber-950/30"
+            >
+              <span>🚀</span>
+              <span>Submit for Review</span>
+            </button>
+          )}
+
+          {/* Reviewer / Super Admin: Review decisions */}
+          {currentWorkflowStatus === 'evidence_review' && (userRole === 'reviewer' || userRole === 'super_admin') && (
+            <>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => {
+                  setWorkflowAction('approve_review');
+                  setShowWorkflowModal(true);
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-colors flex items-center gap-1"
+              >
+                <span>✅</span>
+                <span>Approve Review</span>
+              </button>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => {
+                  setWorkflowAction('return_for_changes');
+                  setShowWorkflowModal(true);
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-700/50 text-xs font-medium transition-colors flex items-center gap-1"
+              >
+                <span>↩️</span>
+                <span>Return for Changes</span>
+              </button>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => {
+                  setWorkflowAction('reject_review');
+                  setShowWorkflowModal(true);
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 text-xs font-medium transition-colors flex items-center gap-1"
+              >
+                <span>❌</span>
+                <span>Reject</span>
+              </button>
+            </>
+          )}
+
+          {/* Publisher / Super Admin: Publication decisions */}
+          {currentWorkflowStatus === 'ready_for_publication' && (record.publication_status === 'publishable' || record.publication_status === 'publishable_with_qualification') && (userRole === 'publisher' || userRole === 'super_admin') && (
+            <>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => handleWorkflowTransition('publish')}
+                className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-lg shadow-emerald-950/30"
+              >
+                <span>🌐</span>
+                <span>Publish to Public Catalog</span>
+              </button>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => {
+                  setWorkflowAction('return_for_changes');
+                  setShowWorkflowModal(true);
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-700/50 text-xs font-medium transition-colors flex items-center gap-1"
+              >
+                <span>↩️</span>
+                <span>Return to Review</span>
+              </button>
+            </>
+          )}
+
+          {/* Publisher / Super Admin: Unpublish */}
+          {(record.publication_status === 'published' || record.publication_status === 'corrected') && (userRole === 'publisher' || userRole === 'super_admin') && (
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => {
+                setWorkflowAction('unpublish');
+                setShowWorkflowModal(true);
+              }}
+              className="px-4 py-2 rounded-xl bg-rose-950 hover:bg-rose-900 text-rose-200 border border-rose-800 text-xs font-bold transition-colors flex items-center gap-1.5"
+            >
+              <span>⚠️</span>
+              <span>Unpublish Record</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {isDraftLocked && (
+        <div className="p-4 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs flex items-center gap-3">
+          <span className="text-base">🔒</span>
+          <div>
+            <strong>Record Locked for Editing:</strong> This record is currently in <strong>{currentWorkflowStatus.replace(/_/g, ' ')}</strong> state. Direct content mutations are restricted until it is returned to draft.
+          </div>
+        </div>
+      )}
 
       {statusMessage && (
         <div
@@ -781,18 +992,160 @@ export default function RecordEditorClient({
         </div>
       )}
 
-      {/* 10. METADATA TAB */}
+      {/* 10. REVIEW TRAIL / HISTORY TAB */}
+      {activeTab === 'history' && (
+        <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4 text-xs">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-white">Append-Only Review Decision Audit Trail</h2>
+              <p className="text-slate-400">Formal record of editorial approval gates, rationales, and review timestamps.</p>
+            </div>
+            <button
+              type="button"
+              onClick={fetchHistory}
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-[11px]"
+            >
+              Refresh Trail
+            </button>
+          </div>
+
+          {loadingHistory ? (
+            <div className="p-8 text-center text-slate-500 font-mono">Loading review decision history...</div>
+          ) : historyList.length === 0 ? (
+            <div className="p-8 text-center text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800/60 font-mono">
+              No formal review decisions recorded for this record yet. Decisions are appended upon workflow transitions.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {historyList.map((h) => (
+                <div key={h.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 font-mono">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        h.decision === 'approved' || h.decision === 'approved_with_qualification'
+                          ? 'bg-emerald-950 border border-emerald-800 text-emerald-300'
+                          : h.decision === 'revision_requested'
+                          ? 'bg-amber-950 border border-amber-800 text-amber-300'
+                          : 'bg-rose-950 border border-rose-800 text-rose-300'
+                      }`}>
+                        {h.decision.replace(/_/g, ' ')}
+                      </span>
+                      <span className="text-slate-400 text-[11px]">Gate: {h.gate_code}</span>
+                    </div>
+                    <div className="text-slate-400 text-[11px]">
+                      {new Date(h.decided_at).toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="text-slate-200">{h.rationale}</div>
+                  <div className="text-[11px] text-slate-400 font-mono flex items-center gap-2 pt-1">
+                    <span>Reviewer: {h.reviewer_name || h.reviewer_email || 'Staff Reviewer'}</span>
+                    <span>•</span>
+                    <span>Revision: #{h.record_revision || 1}</span>
+                    <span>•</span>
+                    <span>ID: {h.id}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 11. METADATA TAB */}
       {activeTab === 'metadata' && (
         <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4 text-xs font-mono">
           <h2 className="text-base font-bold text-white font-sans">System Metadata & Audit Trail</h2>
           <div className="space-y-2 text-slate-300 bg-slate-950 p-4 rounded-xl border border-slate-800">
             <div><strong>Record UUID:</strong> {record.id}</div>
             <div><strong>Canonical Schema:</strong> database/schema.sql (PostgreSQL 17)</div>
+            <div><strong>Workflow Status:</strong> {currentWorkflowStatus}</div>
             <div><strong>Publication Status:</strong> {record.publication_status}</div>
             <div><strong>Public Visibility:</strong> {record.is_public ? 'PUBLIC (Published)' : 'FALSE (Draft Isolated)'}</div>
             <div><strong>Created Timestamp:</strong> {record.created_at}</div>
             <div><strong>Updated Timestamp:</strong> {record.updated_at}</div>
             <div><strong>Database Identity:</strong> tat_admin_writer (Least Privilege)</div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: WORKFLOW TRANSITION ACTION */}
+      {showWorkflowModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 text-xs">
+            <h3 className="text-base font-bold text-white font-sans capitalize">
+              Confirm Action: {workflowAction.replace(/_/g, ' ')}
+            </h3>
+
+            {workflowAction === 'approve_review' && (
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Editorial Qualification (Optional)
+                </label>
+                <input
+                  value={workflowQualification}
+                  onChange={(e) => setWorkflowQualification(e.target.value)}
+                  placeholder="e.g. Scope verified for Q1–Q3; awaiting Q4 gazette"
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                />
+              </div>
+            )}
+
+            {(workflowAction === 'return_for_changes' || workflowAction === 'reject_review' || workflowAction === 'unpublish') && (
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Reason / Rationale (Mandatory, min 5 chars) *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={workflowReason}
+                  onChange={(e) => setWorkflowReason(e.target.value)}
+                  placeholder="Describe why this action is being taken for the audit trail..."
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                />
+              </div>
+            )}
+
+            {workflowAction === 'approve_review' && (
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">
+                  Reviewer Rationale (Optional)
+                </label>
+                <textarea
+                  rows={2}
+                  value={workflowReason}
+                  onChange={(e) => setWorkflowReason(e.target.value)}
+                  placeholder="Notes on verified evidence package..."
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                />
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowWorkflowModal(false);
+                  setWorkflowReason('');
+                  setWorkflowQualification('');
+                }}
+                className="px-4 py-2 bg-slate-800 rounded-lg text-slate-300"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={saving || ((workflowAction === 'return_for_changes' || workflowAction === 'reject_review' || workflowAction === 'unpublish') && workflowReason.trim().length < 5)}
+                onClick={() => handleWorkflowTransition(workflowAction, workflowReason, workflowQualification)}
+                className={`px-4 py-2 text-white rounded-lg font-semibold ${
+                  workflowAction.includes('reject') || workflowAction.includes('unpublish')
+                    ? 'bg-rose-600 hover:bg-rose-500'
+                    : 'bg-emerald-600 hover:bg-emerald-500'
+                }`}
+              >
+                Confirm {workflowAction.replace(/_/g, ' ')}
+              </button>
+            </div>
           </div>
         </div>
       )}

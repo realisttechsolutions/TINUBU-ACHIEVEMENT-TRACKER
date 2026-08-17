@@ -9,9 +9,30 @@ import type {
   FinancialRecordInput,
   BeneficiaryRecordInput,
   TimelineEventInput,
+  WorkflowTransitionInput,
 } from './validation';
 
 const SYSTEM_ACTOR_ID = '00000000-0000-4000-8000-000000000005';
+
+async function ensureStaffActor(tx: any, staff: VerifiedStaffContext): Promise<string> {
+  const existing = await tx.query(
+    `SELECT id FROM actor_profiles WHERE firebase_uid = $1 OR email = $2 LIMIT 1`,
+    [staff.uid, staff.email],
+  );
+  if (existing.rows.length > 0) {
+    return existing.rows[0].id;
+  }
+  const actorId = randomUUID();
+  await tx.query(
+    `
+    INSERT INTO actor_profiles (id, external_id, firebase_uid, actor_kind, display_name, email, status)
+    VALUES ($1, $2, $3, 'human', $4, $5, 'active')
+    ON CONFLICT (firebase_uid) DO UPDATE SET email = EXCLUDED.email
+    `,
+    [actorId, `ACT-${actorId.substring(0, 8).toUpperCase()}`, staff.uid, staff.email.split('@')[0] || 'Staff User', staff.email],
+  );
+  return actorId;
+}
 
 function getEvidenceProfile(recordType: string): string {
   switch (recordType) {
@@ -348,8 +369,8 @@ export class AdminRecordsManager {
     staff: VerifiedStaffContext,
   ): Promise<{ success: boolean; updated_at: string }> {
     return this.db.withTransaction(async (tx) => {
-      const checkRes = await tx.query<{ updated_at: string }>(
-        `SELECT updated_at::text FROM records WHERE id = $1`,
+      const checkRes = await tx.query<{ updated_at: string; workflow_status: string }>(
+        `SELECT updated_at::text, workflow_status FROM records WHERE id = $1`,
         [recordId],
       );
 
@@ -357,9 +378,13 @@ export class AdminRecordsManager {
         throw new Error('RECORD_NOT_FOUND');
       }
 
-      const currentUpdatedAt = checkRes.rows[0].updated_at;
+      const { updated_at: currentUpdatedAt, workflow_status } = checkRes.rows[0];
       if (input.expected_updated_at && currentUpdatedAt !== input.expected_updated_at) {
         throw new Error('CONCURRENCY_CONFLICT');
+      }
+
+      if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
 
       const updateRes = await tx.query<{ updated_at: string }>(
@@ -460,6 +485,17 @@ export class AdminRecordsManager {
   // 3. Manage Claims
   async saveClaim(recordId: string, input: ClaimInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
+      const recordCheck = await tx.query<{ workflow_status: string }>(
+        `SELECT workflow_status FROM records WHERE id = $1`,
+        [recordId],
+      );
+      if (recordCheck.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      }
+
       const claimId = input.id || randomUUID();
       const externalId = `CLM-${claimId.substring(0, 8).toUpperCase()}`;
 
@@ -603,6 +639,17 @@ export class AdminRecordsManager {
   // 5. Manage Financials
   async saveFinancialRecord(recordId: string, input: FinancialRecordInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
+      const recordCheck = await tx.query<{ workflow_status: string }>(
+        `SELECT workflow_status FROM records WHERE id = $1`,
+        [recordId],
+      );
+      if (recordCheck.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      }
+
       if (!input.id) {
         const existingFin = await tx.query<{ id: string }>(
           `SELECT id FROM financial_records WHERE record_id = $1 LIMIT 1`,
@@ -715,6 +762,17 @@ export class AdminRecordsManager {
   // 6. Manage Beneficiaries
   async saveBeneficiaryRecord(recordId: string, input: BeneficiaryRecordInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
+      const recordCheck = await tx.query<{ workflow_status: string }>(
+        `SELECT workflow_status FROM records WHERE id = $1`,
+        [recordId],
+      );
+      if (recordCheck.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      }
+
       if (!input.id) {
         const existingBen = await tx.query<{ id: string }>(
           `SELECT id FROM beneficiary_records WHERE record_id = $1 LIMIT 1`,
@@ -822,6 +880,16 @@ export class AdminRecordsManager {
   // 7. Manage Timeline Events
   async saveTimelineEvent(recordId: string, input: TimelineEventInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
+      const recordCheck = await tx.query<{ workflow_status: string }>(
+        `SELECT workflow_status FROM records WHERE id = $1`,
+        [recordId],
+      );
+      if (recordCheck.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      }
       if (!input.id) {
         const existingEvt = await tx.query<{ id: string }>(
           `SELECT id FROM timeline_events WHERE record_id = $1 LIMIT 1`,
@@ -958,5 +1026,429 @@ export class AdminRecordsManager {
       }
       throw err;
     });
+  }
+
+  // 9. Execute Workflow Transition (Role-Gated & Audited)
+  async executeWorkflowTransition(
+    recordId: string,
+    input: WorkflowTransitionInput,
+    staff: VerifiedStaffContext,
+  ): Promise<{
+    success: boolean;
+    workflow_status: string;
+    publication_status: string;
+    is_public: boolean;
+    updated_at: string;
+    decision_id?: string;
+  }> {
+    return this.db.withTransaction(async (tx) => {
+      const recordRes = await tx.query<{
+        id: string;
+        workflow_status: string;
+        publication_status: string;
+        is_public: boolean;
+        current_revision: number;
+        updated_at: string;
+      }>(
+        `
+        SELECT id, workflow_status, publication_status, is_public, current_revision, updated_at::text
+        FROM records
+        WHERE id = $1
+        FOR UPDATE
+        `,
+        [recordId],
+      );
+
+      if (recordRes.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+
+      const rec = recordRes.rows[0];
+
+      // Optimistic concurrency check
+      if (input.expected_updated_at && rec.updated_at !== input.expected_updated_at) {
+        throw new Error('CONCURRENCY_CONFLICT');
+      }
+
+      const actorId = await ensureStaffActor(tx, staff);
+      const action = input.action;
+      let newWorkflowStatus = rec.workflow_status;
+      let newPublicationStatus = rec.publication_status;
+      let newIsPublic = rec.is_public;
+      let setPublishedAt: boolean | null = null;
+      let decisionId: string | undefined;
+
+      switch (action) {
+        case 'submit_for_review': {
+          // Researcher or Super Admin
+          if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (rec.workflow_status !== 'draft') {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}' cannot be submitted for review.`);
+          }
+          newWorkflowStatus = 'evidence_review';
+          newPublicationStatus = 'under_review';
+          newIsPublic = false;
+          setPublishedAt = false;
+
+          // Update child claims & relationships review status
+          await tx.query(
+            `UPDATE evidence_claims SET workflow_status = 'evidence_review', updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+          await tx.query(
+            `UPDATE claim_source_relationships SET review_status = 'evidence_review', updated_at = CURRENT_TIMESTAMP WHERE claim_id IN (SELECT id FROM evidence_claims WHERE record_id = $1)`,
+            [recordId],
+          );
+          break;
+        }
+
+        case 'approve_review': {
+          // Reviewer or Super Admin
+          if (staff.role !== 'reviewer' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (rec.workflow_status !== 'evidence_review') {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}' cannot be approved by reviewer.`);
+          }
+          newWorkflowStatus = 'ready_for_publication';
+          newPublicationStatus = input.qualification ? 'publishable_with_qualification' : 'publishable';
+          newIsPublic = false;
+          setPublishedAt = false;
+
+          // Update child claims & relationships review status
+          await tx.query(
+            `UPDATE evidence_claims SET workflow_status = 'ready_for_publication', verification_status = 'source_confirmed', updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+          await tx.query(
+            `UPDATE claim_source_relationships SET review_status = 'ready_for_publication', updated_at = CURRENT_TIMESTAMP WHERE claim_id IN (SELECT id FROM evidence_claims WHERE record_id = $1)`,
+            [recordId],
+          );
+
+          // Append Review Decision
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_4_editorial_human_approval',
+              $5, $6, $7, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              input.qualification ? 'approved_with_qualification' : 'approved',
+              actorId,
+              input.reason?.trim() || (input.qualification ? `Approved with qualification: ${input.qualification}` : 'Editorial review approved for publication readiness'),
+            ],
+          );
+          break;
+        }
+
+        case 'return_for_changes': {
+          // Reviewer, Publisher, or Super Admin
+          if (staff.role !== 'reviewer' && staff.role !== 'publisher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (rec.workflow_status !== 'evidence_review' && rec.workflow_status !== 'ready_for_publication') {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}' cannot be returned for changes.`);
+          }
+          if (!input.reason || input.reason.trim().length < 5) {
+            throw new Error('REASON_REQUIRED: A return reason of at least 5 characters is mandatory.');
+          }
+          newWorkflowStatus = 'draft';
+          newPublicationStatus = 'unpublished';
+          newIsPublic = false;
+          setPublishedAt = false;
+
+          // Return child claims & relationships to draft
+          await tx.query(
+            `UPDATE evidence_claims SET workflow_status = 'draft', updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+          await tx.query(
+            `UPDATE claim_source_relationships SET review_status = 'draft', updated_at = CURRENT_TIMESTAMP WHERE claim_id IN (SELECT id FROM evidence_claims WHERE record_id = $1)`,
+            [recordId],
+          );
+
+          // Append Review Decision
+          decisionId = randomUUID();
+          const gateCode = staff.role === 'publisher' ? 'gate_5_publication_stewardship' : 'gate_4_editorial_human_approval';
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, $5,
+              'revision_requested', $6, $7, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              gateCode,
+              actorId,
+              input.reason.trim(),
+            ],
+          );
+          break;
+        }
+
+        case 'reject_review': {
+          // Reviewer or Super Admin
+          if (staff.role !== 'reviewer' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (rec.workflow_status !== 'evidence_review') {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}' cannot be rejected.`);
+          }
+          if (!input.reason || input.reason.trim().length < 5) {
+            throw new Error('REASON_REQUIRED: A rejection reason of at least 5 characters is mandatory.');
+          }
+          newWorkflowStatus = 'rejected';
+          newPublicationStatus = 'unpublished';
+          newIsPublic = false;
+          setPublishedAt = false;
+
+          // Reject child claims & relationships
+          await tx.query(
+            `UPDATE evidence_claims SET workflow_status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+          await tx.query(
+            `UPDATE claim_source_relationships SET review_status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE claim_id IN (SELECT id FROM evidence_claims WHERE record_id = $1)`,
+            [recordId],
+          );
+
+          // Append Review Decision
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_4_editorial_human_approval',
+              'rejected', $5, $6, 'medium', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              actorId,
+              input.reason.trim(),
+            ],
+          );
+          break;
+        }
+
+        case 'publish': {
+          // Publisher or Super Admin
+          if (staff.role !== 'publisher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (
+            rec.workflow_status !== 'ready_for_publication' ||
+            (rec.publication_status !== 'publishable' && rec.publication_status !== 'publishable_with_qualification')
+          ) {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}/${rec.publication_status}' is not approved for publication.`);
+          }
+          newWorkflowStatus = 'ready_for_publication';
+          newPublicationStatus = 'published';
+          newIsPublic = true;
+          setPublishedAt = true;
+
+          // Update timeline events for record to public
+          await tx.query(
+            `UPDATE timeline_events SET is_public = true, updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+
+          // Ensure linked sources visibility is public
+          await tx.query(
+            `
+            UPDATE sources SET visibility_class = 'public', updated_at = CURRENT_TIMESTAMP
+            WHERE id IN (
+              SELECT csr.source_id
+              FROM claim_source_relationships csr
+              JOIN evidence_claims ec ON ec.id = csr.claim_id
+              WHERE ec.record_id = $1
+            )
+            `,
+            [recordId],
+          );
+
+          // Append Review Decision
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_5_publication_stewardship',
+              'approved', $5, $6, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              actorId,
+              input.reason?.trim() || 'Publisher approved and projected record to public catalog',
+            ],
+          );
+          break;
+        }
+
+        case 'unpublish': {
+          // Publisher or Super Admin
+          if (staff.role !== 'publisher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (rec.publication_status !== 'published' && rec.publication_status !== 'corrected') {
+            throw new Error(`INVALID_TRANSITION: Record in '${rec.publication_status}' is not currently published.`);
+          }
+          if (!input.reason || input.reason.trim().length < 5) {
+            throw new Error('REASON_REQUIRED: An unpublish reason of at least 5 characters is mandatory.');
+          }
+          newWorkflowStatus = 'ready_for_publication';
+          newPublicationStatus = 'unpublished';
+          newIsPublic = false;
+          setPublishedAt = false;
+
+          // Make timeline events non-public
+          await tx.query(
+            `UPDATE timeline_events SET is_public = false, updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
+            [recordId],
+          );
+
+          // Append Review Decision
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_5_publication_stewardship',
+              'revision_requested', $5, $6, 'medium', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              actorId,
+              input.reason.trim(),
+            ],
+          );
+          break;
+        }
+
+        default:
+          throw new Error(`UNRECOGNIZED_WORKFLOW_ACTION: ${action}`);
+      }
+
+      // Update record row
+      let updateSql = `
+        UPDATE records SET
+          workflow_status = $1,
+          publication_status = $2,
+          is_public = $3,
+          qualification = COALESCE($4, qualification),
+          updated_at = CURRENT_TIMESTAMP
+      `;
+      const updateParams: any[] = [newWorkflowStatus, newPublicationStatus, newIsPublic, input.qualification || null];
+
+      if (setPublishedAt === true) {
+        updateSql += `, published_at = CURRENT_TIMESTAMP `;
+      } else if (setPublishedAt === false) {
+        updateSql += `, published_at = NULL `;
+      }
+
+      updateSql += ` WHERE id = $5 RETURNING updated_at::text `;
+      updateParams.push(recordId);
+
+      const finalUpdate = await tx.query<{ updated_at: string }>(updateSql, updateParams);
+      const updatedTimestamp = finalUpdate.rows[0].updated_at;
+
+      return {
+        success: true,
+        workflow_status: newWorkflowStatus,
+        publication_status: newPublicationStatus,
+        is_public: newIsPublic,
+        updated_at: updatedTimestamp,
+        decision_id: decisionId,
+      };
+    });
+  }
+
+  // 10. Query Review Queue
+  async getReviewQueue(): Promise<any[]> {
+    const res = await this.db.query(
+      `
+      SELECT r.id, r.external_id, r.slug, r.record_type, r.title, r.summary, r.workflow_status, r.publication_status,
+             r.risk_level, r.updated_at, r.created_at, ap.display_name AS researcher_name,
+             (SELECT count(*)::int FROM evidence_claims WHERE record_id = r.id) AS claim_count,
+             (SELECT count(*)::int FROM financial_records WHERE record_id = r.id) AS financial_count,
+             (SELECT count(*)::int FROM beneficiary_records WHERE record_id = r.id) AS beneficiary_count,
+             (SELECT count(*)::int FROM timeline_events WHERE record_id = r.id) AS timeline_count
+      FROM records r
+      LEFT JOIN actor_profiles ap ON ap.id = r.created_by
+      WHERE r.workflow_status = 'evidence_review'
+      ORDER BY r.updated_at ASC
+      `,
+    );
+    return res.rows;
+  }
+
+  // 11. Query Publication Queue
+  async getPublishQueue(): Promise<any[]> {
+    const res = await this.db.query(
+      `
+      SELECT r.id, r.external_id, r.slug, r.record_type, r.title, r.summary, r.workflow_status, r.publication_status,
+             r.risk_level, r.qualification, r.updated_at, r.created_at, ap.display_name AS researcher_name,
+             (SELECT count(*)::int FROM evidence_claims WHERE record_id = r.id) AS claim_count,
+             (SELECT count(*)::int FROM financial_records WHERE record_id = r.id) AS financial_count,
+             (SELECT count(*)::int FROM beneficiary_records WHERE record_id = r.id) AS beneficiary_count,
+             (SELECT count(*)::int FROM timeline_events WHERE record_id = r.id) AS timeline_count
+      FROM records r
+      LEFT JOIN actor_profiles ap ON ap.id = r.created_by
+      WHERE r.workflow_status = 'ready_for_publication' AND r.publication_status IN ('publishable', 'publishable_with_qualification')
+      ORDER BY r.updated_at ASC
+      `,
+    );
+    return res.rows;
+  }
+
+  // 12. Query Record Review Decisions History
+  async getRecordReviewHistory(recordId: string): Promise<any[]> {
+    const res = await this.db.query(
+      `
+      SELECT rd.id, rd.external_id, rd.gate_code, rd.decision, rd.rationale, rd.risk_level,
+             rd.decided_at, rd.record_revision, ap.display_name AS reviewer_name, ap.email AS reviewer_email
+      FROM review_decisions rd
+      LEFT JOIN actor_profiles ap ON ap.id = rd.reviewer_id
+      WHERE rd.record_id = $1
+      ORDER BY rd.decided_at DESC
+      `,
+      [recordId],
+    );
+    return res.rows;
   }
 }

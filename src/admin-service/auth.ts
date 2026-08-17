@@ -31,9 +31,11 @@ export function getAdminAuth(): Auth {
  * 1. Verifies that the request comes from an authenticated Google caller / proxy.
  * 2. Independently verifies the human Firebase session cookie and role authorization.
  */
+export type AdminPermission = 'read' | 'write' | 'review' | 'publish' | 'workflow' | 'any_staff';
+
 export async function authenticateAdminRequest(
   headers: Record<string, string | string[] | undefined>,
-  requiredPermission: 'read' | 'write' = 'write',
+  requiredPermission: AdminPermission = 'write',
 ): Promise<VerifiedStaffContext> {
   const auth = getAdminAuth();
 
@@ -87,7 +89,16 @@ export async function authenticateAdminRequest(
     if (role !== 'super_admin' && role !== 'researcher') {
       throw new AuthError(403, `FORBIDDEN: Role ${role} is not authorized for administrative mutations.`);
     }
+  } else if (requiredPermission === 'review') {
+    if (role !== 'super_admin' && role !== 'reviewer') {
+      throw new AuthError(403, `FORBIDDEN: Role ${role} is not authorized for reviewer queue and decisions.`);
+    }
+  } else if (requiredPermission === 'publish') {
+    if (role !== 'super_admin' && role !== 'publisher') {
+      throw new AuthError(403, `FORBIDDEN: Role ${role} is not authorized for publication stewardship.`);
+    }
   }
+  // 'read', 'workflow', 'any_staff' are open to all valid staff roles (workflow validates transition action specifically)
 
   return {
     uid: decoded.uid,

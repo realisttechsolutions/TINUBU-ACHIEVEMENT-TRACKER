@@ -1,8 +1,17 @@
 import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { getPublishQueue } from '@/server/admin/records-service';
 import Link from 'next/link';
 
 export default async function AdminPublishPage() {
-  const staffUser = await requireStaffAuth(['publisher']);
+  const staffUser = await requireStaffAuth(['publisher', 'super_admin']);
+  let records: any[] = [];
+  let fetchError: string | null = null;
+
+  try {
+    records = await getPublishQueue(staffUser);
+  } catch (err: any) {
+    fetchError = err.message || 'Failed to load publication queue';
+  }
 
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto p-6 sm:p-8 space-y-8">
@@ -10,75 +19,117 @@ export default async function AdminPublishPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
         <div>
           <div className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1 font-semibold">
-            Editorial Module • Publisher Role
+            Editorial Workflow • Publication Gate
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
-            Publication & Release Management
+            Publication Stewardship Queue
           </h1>
           <p className="text-xs text-slate-300 mt-1">
-            Canonical record publication, public catalog projections, and release changelog management.
+            Final gate before public projection. Review approved evidence packages and project records into the public catalogue.
           </p>
         </div>
 
         <Link
-          href="/admin"
+          href="/admin/records"
           className="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300 transition-colors w-fit"
         >
-          ← Back to Console
+          All Records
         </Link>
       </div>
 
-      {/* Module Inactive Warning Banner */}
-      <div className="p-5 rounded-xl bg-emerald-950/40 border border-emerald-800/50 text-xs text-emerald-200 flex items-start gap-3">
-        <div className="p-2 rounded-lg bg-emerald-900/60 text-emerald-300 shrink-0">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+      {fetchError && (
+        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800/50 text-xs text-rose-200">
+          <strong>Error loading queue:</strong> {fetchError}
         </div>
-        <div className="space-y-1">
-          <div className="font-semibold text-emerald-300 text-sm">
-            Publishing Authority Active (M10E Scaffolding)
-          </div>
-          <p className="text-emerald-200/80 leading-relaxed">
-            Role authentication and route authorization for <strong>Publisher</strong> and <strong>Super Admin</strong> are fully certified. Public snapshot generation and live database publishing mechanisms will be activated in Mission 10F.
-          </p>
+      )}
+
+      {/* Queue Stats Banner */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <div className="text-[11px] font-mono text-slate-400 uppercase">Ready For Publication</div>
+          <div className="text-2xl font-bold text-emerald-400 mt-1">{records.length}</div>
+        </div>
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <div className="text-[11px] font-mono text-slate-400 uppercase">Authorized Roles</div>
+          <div className="text-sm font-medium text-slate-200 mt-1">Publisher, Super Admin</div>
+        </div>
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <div className="text-[11px] font-mono text-slate-400 uppercase">Gate Protocol</div>
+          <div className="text-sm font-medium text-cyan-400 mt-1">Gate 5 Publication Stewardship</div>
         </div>
       </div>
 
-      {/* Scaffolding Placeholder Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 space-y-2">
-          <div className="text-slate-300 font-mono text-[11px]">RELEASE PIPELINE 01</div>
-          <h3 className="font-bold text-white text-sm">Stage-to-Production Release</h3>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            Atomic transition of approved achievement drafts into canonical live published status with cryptographic release stamping.
-          </p>
-          <div className="pt-3 text-[11px] text-slate-300 font-mono italic">
-            Status: Scaffolding Ready (M10F)
-          </div>
+      {/* Publication Queue Table */}
+      <div className="bg-slate-900/40 border border-slate-800 rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-white">Approved Records Awaiting Publication</h2>
+          <span className="text-xs font-mono text-slate-400">{records.length} record(s)</span>
         </div>
 
-        <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 space-y-2">
-          <div className="text-slate-300 font-mono text-[11px]">RELEASE PIPELINE 02</div>
-          <h3 className="font-bold text-white text-sm">Public Materialized Cache Refresh</h3>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            On-demand cache revalidation for public catalogue views, search index embeddings, and downloads data export.
-          </p>
-          <div className="pt-3 text-[11px] text-slate-300 font-mono italic">
-            Status: Scaffolding Ready (M10F)
+        {records.length === 0 ? (
+          <div className="p-12 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-slate-800/80 text-slate-400 flex items-center justify-center mx-auto">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-sm font-semibold text-slate-300">Publication Queue is Clear</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              There are currently no records approved and awaiting publication. When reviewers approve submitted packages, they will appear here.
+            </p>
           </div>
-        </div>
-
-        <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 space-y-2">
-          <div className="text-slate-300 font-mono text-[11px]">RELEASE PIPELINE 03</div>
-          <h3 className="font-bold text-white text-sm">Public Errata & Corrections Log</h3>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            Publication of transparent corrections, updated figures, and retracted data points in the public corrections ledger.
-          </p>
-          <div className="pt-3 text-[11px] text-slate-300 font-mono italic">
-            Status: Scaffolding Ready (M10F)
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-950/60 text-slate-400 font-mono text-[11px] uppercase border-b border-slate-800">
+                <tr>
+                  <th className="px-6 py-3">Record / Title</th>
+                  <th className="px-6 py-3">Type</th>
+                  <th className="px-6 py-3">Status</th>
+                  <th className="px-6 py-3 text-center">Claims</th>
+                  <th className="px-6 py-3 text-center">Financials</th>
+                  <th className="px-6 py-3 text-center">Beneficiaries</th>
+                  <th className="px-6 py-3">Approved Date</th>
+                  <th className="px-6 py-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                {records.map((r) => (
+                  <tr key={r.id} className="hover:bg-slate-800/30 transition-colors">
+                    <td className="px-6 py-4 max-w-xs">
+                      <div className="font-semibold text-white truncate">{r.title}</div>
+                      <div className="text-[11px] font-mono text-slate-500 truncate">{r.id}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-slate-800 text-slate-300 border border-slate-700">
+                        {r.record_type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-emerald-950/60 text-emerald-300 border border-emerald-800/60">
+                        {r.publication_status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center font-mono text-slate-400">{r.claim_count || 0}</td>
+                    <td className="px-6 py-4 text-center font-mono text-slate-400">{r.financial_count || 0}</td>
+                    <td className="px-6 py-4 text-center font-mono text-slate-400">{r.beneficiary_count || 0}</td>
+                    <td className="px-6 py-4 text-slate-400 text-[11px]">
+                      {new Date(r.updated_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        href={`/admin/records/${r.id}`}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors inline-block"
+                      >
+                        Inspect & Publish →
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
