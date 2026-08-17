@@ -9,12 +9,12 @@
 | `policy_details` | **NONE** | `SELECT, INSERT, UPDATE` | Policy specific details |
 | `project_details` | **NONE** | `SELECT, INSERT, UPDATE` | Project specific details |
 | `programme_details` | **NONE** | `SELECT, INSERT, UPDATE` | Programme specific details |
-| `record_sectors` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Sector relationship associations |
-| `record_institutions` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Institution relationship associations |
-| `record_geographies` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Geography relationship associations |
-| `sources` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Citation and source documents |
-| `evidence_claims` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Evidence claim statements and metrics |
-| `claim_source_relationships` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Linkage between claims and sources |
+| `record_sectors` | **NONE** | `SELECT, INSERT, UPDATE` | Sector relationship associations |
+| `record_institutions` | **NONE** | `SELECT, INSERT, UPDATE` | Institution relationship associations |
+| `record_geographies` | **NONE** | `SELECT, INSERT, UPDATE` | Geography relationship associations |
+| `sources` | **NONE** | `SELECT, INSERT, UPDATE` | Citation and source documents (DELETE = DENIED) |
+| `evidence_claims` | **NONE** | `SELECT, INSERT, UPDATE` | Evidence claim statements and metrics (DELETE = DENIED) |
+| `claim_source_relationships` | **NONE** | `SELECT, INSERT, UPDATE, DELETE` | Linkage between claims and sources (Unlinking draft citations) |
 | `financial_records` | **NONE** | `SELECT, INSERT, UPDATE` | Financial figures and appropriations |
 | `beneficiary_records` | **NONE** | `SELECT, INSERT, UPDATE` | Beneficiary counts and cohorts |
 | `timeline_events` | **NONE** | `SELECT, INSERT, UPDATE` | Key chronological milestones |
