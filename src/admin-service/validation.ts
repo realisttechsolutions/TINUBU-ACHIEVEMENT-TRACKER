@@ -239,6 +239,50 @@ export const timelineEventSchema = z.object({
 
 export type TimelineEventInput = z.infer<typeof timelineEventSchema>;
 
+export const CORRECTION_TYPES = [
+  'factual_error',
+  'numerical_update',
+  'status_correction',
+  'date_refinement',
+  'source_replacement',
+  'retraction',
+  'typographical',
+] as const;
+
+export type CorrectionType = (typeof CORRECTION_TYPES)[number];
+
+export const CORRECTION_LIFECYCLE_STATUSES = [
+  'proposed',
+  'under_review',
+  'approved',
+  'published',
+  'rejected',
+] as const;
+
+export type CorrectionLifecycleStatus = (typeof CORRECTION_LIFECYCLE_STATUSES)[number];
+
+export const openCorrectionSchema = z.object({
+  correction_type: z.enum(CORRECTION_TYPES),
+  reason: z.string().min(10, 'Reason must be at least 10 characters').max(2000),
+  public_notice: z.string().max(2000).optional().nullable(),
+  claim_id: z.string().uuid().optional().nullable(),
+  source_id: z.string().uuid().optional().nullable(),
+  expected_revision: z.coerce.number().int().positive().optional().nullable(),
+  changes: z.record(z.unknown()).optional().nullable(),
+});
+
+export type OpenCorrectionInput = z.infer<typeof openCorrectionSchema>;
+
+export const updateCorrectionDraftSchema = z.object({
+  correction_type: z.enum(CORRECTION_TYPES).optional(),
+  reason: z.string().min(10, 'Reason must be at least 10 characters').max(2000).optional(),
+  public_notice: z.string().max(2000).optional().nullable(),
+  changes: z.record(z.unknown()),
+  expected_revision: z.coerce.number().int().positive().optional().nullable(),
+});
+
+export type UpdateCorrectionDraftInput = z.infer<typeof updateCorrectionDraftSchema>;
+
 export const WORKFLOW_ACTIONS = [
   'submit_for_review',
   'approve_review',
@@ -246,6 +290,12 @@ export const WORKFLOW_ACTIONS = [
   'reject_review',
   'publish',
   'unpublish',
+  'submit_correction',
+  'approve_correction',
+  'return_correction',
+  'reject_correction',
+  'cancel_correction',
+  'publish_correction',
 ] as const;
 
 export type WorkflowAction = (typeof WORKFLOW_ACTIONS)[number];
@@ -255,7 +305,9 @@ export const workflowTransitionSchema = z.object({
   reason: z.string().max(2000).optional().nullable(),
   expected_updated_at: z.string().min(1, 'expected_updated_at is required for optimistic concurrency check'),
   qualification: z.string().max(1000).optional().nullable(),
+  expected_revision: z.coerce.number().int().positive().optional().nullable(),
 });
 
 export type WorkflowTransitionInput = z.infer<typeof workflowTransitionSchema>;
+
 

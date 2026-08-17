@@ -11,8 +11,11 @@ import type {
   BeneficiaryRecordInput,
   TimelineEventInput,
   WorkflowTransitionInput,
+  OpenCorrectionInput,
+  UpdateCorrectionDraftInput,
   ListAdminRecordsQuery,
 } from './validation';
+
 
 export interface AdminRecordSummary {
   id: string;
@@ -52,6 +55,7 @@ export interface AdminRecordDetail {
     workflow_status: string;
     publication_status: string;
     is_public: boolean;
+    current_revision?: number;
     provisional: boolean;
     announced_date: string | null;
     announced_date_precision: string | null;
@@ -63,6 +67,7 @@ export interface AdminRecordDetail {
     created_at: string;
     updated_at: string;
   };
+
   profile: Record<string, unknown> | null;
   sectors: Array<{ id: string; code: string; label: string; role_code: string }>;
   institutions: Array<{ id: string; canonical_name: string; short_name: string | null; role_code: string }>;
@@ -311,7 +316,9 @@ export async function getAdminRecordDetail(recordId: string): Promise<AdminRecor
       workflow_status: r.workflow_status || (r.publication_status === 'published' ? 'ready_for_publication' : 'draft'),
       publication_status: r.publication_status,
       is_public: true,
+      current_revision: r.current_revision || 1,
       provisional: false,
+
       announced_date: null,
       announced_date_precision: null,
       start_date: null,
@@ -561,6 +568,72 @@ export async function getRecordReviewHistory(recordId: string, staffUser: StaffU
 
   return res.data.history || [];
 }
+
+// 14. Get Unified Record Full History (Proxied to Admin Control Plane)
+export async function getRecordFullHistory(recordId: string, staffUser: StaffUser): Promise<any> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/full-history`, {
+    method: 'GET',
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to fetch record full history');
+  }
+
+  return res.data;
+}
+
+// 15. Open Audited Correction (Proxied to Admin Control Plane)
+export async function openCorrection(
+  recordId: string,
+  input: OpenCorrectionInput,
+  staffUser: StaffUser,
+): Promise<{ success: boolean; id: string; status: string; current_revision: number; target_revision: number }> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/corrections`, {
+    method: 'POST',
+    body: input,
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to open correction');
+  }
+
+  return res.data;
+}
+
+// 16. Get Record Corrections (Proxied to Admin Control Plane)
+export async function getRecordCorrections(
+  recordId: string,
+  staffUser: StaffUser,
+): Promise<{ active: any | null; corrections: any[] }> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/corrections`, {
+    method: 'GET',
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to fetch record corrections');
+  }
+
+  return { active: res.data.active || null, corrections: res.data.corrections || [] };
+}
+
+// 17. Update Correction Draft Workspace (Proxied to Admin Control Plane)
+export async function updateCorrectionDraft(
+  recordId: string,
+  input: UpdateCorrectionDraftInput,
+  staffUser: StaffUser,
+): Promise<{ success: boolean; id: string; status: string }> {
+  const res = await forwardToAdminControlPlane(`/api/records/${recordId}/corrections/draft`, {
+    method: 'PUT',
+    body: input,
+  });
+
+  if (res.status >= 400) {
+    throw new Error(res.data.error || 'Failed to update correction draft');
+  }
+
+  return res.data;
+}
+
 
 // 14. Dashboard Stats (Read-Only via Public Catalog)
 export async function getAdminDashboardStats() {

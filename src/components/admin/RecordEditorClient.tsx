@@ -19,7 +19,7 @@ export default function RecordEditorClient({
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'claims' | 'sources' | 'financials' | 'beneficiaries' | 'timeline' | 'geography' | 'institutions' | 'indicators' | 'history' | 'metadata'
+    'overview' | 'claims' | 'sources' | 'financials' | 'beneficiaries' | 'timeline' | 'geography' | 'institutions' | 'indicators' | 'corrections' | 'history' | 'metadata'
   >('overview');
 
   const [record, setRecord] = useState(detail.record);
@@ -41,15 +41,33 @@ export default function RecordEditorClient({
 
   // History State
   const [historyList, setHistoryList] = useState<any[]>([]);
+  const [fullHistoryData, setFullHistoryData] = useState<any | null>(null);
   const [loadingHistory, setLoadingHistory] = useState(false);
+
+  // Corrections State
+  const [correctionsList, setCorrectionsList] = useState<any[]>([]);
+  const [activeCorrection, setActiveCorrection] = useState<any | null>(null);
+  const [showOpenCorrectionModal, setShowOpenCorrectionModal] = useState(false);
+  const [newCorrection, setNewCorrection] = useState({
+    correction_type: 'factual_error',
+    reason: '',
+    public_notice: '',
+    title: detail.record.title,
+    short_summary: detail.record.short_summary || '',
+    full_description: detail.record.full_description || '',
+    implementation_status: detail.record.implementation_status || 'implementation_ongoing',
+  });
+
+  const isPublished = (record.publication_status === 'published' || record.publication_status === 'corrected') && record.is_public;
 
   const fetchHistory = async () => {
     setLoadingHistory(true);
     try {
       const res = await fetch(`/api/admin/records/${record.id}/history`);
       const data = await res.json();
-      if (res.ok && data.history) {
-        setHistoryList(data.history);
+      if (res.ok) {
+        setHistoryList(data.events || data.history || []);
+        setFullHistoryData(data);
       }
     } catch {
       // ignore
@@ -58,9 +76,58 @@ export default function RecordEditorClient({
     }
   };
 
+  const fetchCorrections = async () => {
+    try {
+      const res = await fetch(`/api/admin/records/${record.id}/corrections`);
+      const data = await res.json();
+      if (res.ok) {
+        setActiveCorrection(data.active || null);
+        setCorrectionsList(data.corrections || []);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
   React.useEffect(() => {
     fetchHistory();
+    fetchCorrections();
   }, [record.id]);
+
+  const handleOpenCorrection = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setStatusMessage(null);
+    try {
+      const res = await fetch(`/api/admin/records/${record.id}/corrections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-tat-admin-csrf': '1' },
+        body: JSON.stringify({
+          correction_type: newCorrection.correction_type,
+          reason: newCorrection.reason,
+          public_notice: newCorrection.public_notice || undefined,
+          expected_revision: (fullHistoryData?.currentRevision || record.current_revision || 1),
+          changes: {
+            title: newCorrection.title,
+            short_summary: newCorrection.short_summary,
+            full_description: newCorrection.full_description,
+            implementation_status: newCorrection.implementation_status,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to open correction');
+      setShowOpenCorrectionModal(false);
+      setStatusMessage({ type: 'success', text: 'Audited correction opened successfully. You can now submit it for review.' });
+      fetchCorrections();
+      fetchHistory();
+      setActiveTab('corrections');
+    } catch (err: any) {
+      setStatusMessage({ type: 'error', text: err.message });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleWorkflowTransition = async (action: string, reason?: string, qualification?: string) => {
     setSaving(true);
@@ -95,6 +162,7 @@ export default function RecordEditorClient({
       setWorkflowReason('');
       setWorkflowQualification('');
       fetchHistory();
+      fetchCorrections();
       router.refresh();
     } catch (err: any) {
       setStatusMessage({ type: 'error', text: err.message });
@@ -102,6 +170,7 @@ export default function RecordEditorClient({
       setSaving(false);
     }
   };
+
 
   // Modals state
   const [showClaimModal, setShowClaimModal] = useState(false);
@@ -345,12 +414,13 @@ export default function RecordEditorClient({
     { id: 'geography', label: '7. Geography', count: detail.geographies.length },
     { id: 'institutions', label: '8. Institutions', count: detail.institutions.length },
     { id: 'indicators', label: '9. Indicators', count: null },
-    { id: 'history', label: '10. Review Trail', count: historyList.length },
-    { id: 'metadata', label: '11. Metadata & Audit', count: null },
+    { id: 'corrections', label: '10. Corrections', count: correctionsList.length },
+    { id: 'history', label: '11. Version & Decision Trail', count: historyList.length },
+    { id: 'metadata', label: '12. Metadata & Audit', count: null },
   ] as const;
 
   const currentWorkflowStatus = record.workflow_status || 'draft';
-  const isDraftLocked = currentWorkflowStatus !== 'draft' && userRole !== 'super_admin';
+  const isDraftLocked = currentWorkflowStatus !== 'draft' && userRole !== 'super_admin' && !isPublished;
 
   return (
     <div className="space-y-6">
@@ -387,11 +457,11 @@ export default function RecordEditorClient({
           </div>
 
           <div className={`px-3 py-1.5 rounded-xl border ${
-            record.publication_status === 'published'
+            record.publication_status === 'published' || record.publication_status === 'corrected'
               ? 'bg-emerald-950/80 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-400'
           }`}>
-            {record.is_public ? 'PUBLIC' : 'INTERNAL'}
+            {record.is_public ? `PUBLIC (v${record.current_revision || 1})` : 'INTERNAL'}
           </div>
 
           <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">
@@ -411,8 +481,8 @@ export default function RecordEditorClient({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* Researcher / Super Admin: Submit */}
-          {currentWorkflowStatus === 'draft' && (userRole === 'researcher' || userRole === 'super_admin') && (
+          {/* Researcher / Super Admin: Submit for Review (only when in draft) */}
+          {currentWorkflowStatus === 'draft' && !isPublished && (userRole === 'researcher' || userRole === 'super_admin') && (
             <button
               type="button"
               disabled={saving}
@@ -424,8 +494,27 @@ export default function RecordEditorClient({
             </button>
           )}
 
+          {/* Published Record: Open Audited Correction */}
+          {isPublished && (userRole === 'researcher' || userRole === 'super_admin') && (
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => {
+                if (activeCorrection) {
+                  setActiveTab('corrections');
+                } else {
+                  setShowOpenCorrectionModal(true);
+                }
+              }}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-colors flex items-center gap-1.5 shadow-lg shadow-amber-950/30"
+            >
+              <span>✏️</span>
+              <span>{activeCorrection ? 'View Active Correction' : 'Open Audited Correction'}</span>
+            </button>
+          )}
+
           {/* Reviewer / Super Admin: Review decisions */}
-          {currentWorkflowStatus === 'evidence_review' && (userRole === 'reviewer' || userRole === 'super_admin') && (
+          {currentWorkflowStatus === 'evidence_review' && !isPublished && (userRole === 'reviewer' || userRole === 'super_admin') && (
             <>
               <button
                 type="button"
@@ -467,7 +556,7 @@ export default function RecordEditorClient({
           )}
 
           {/* Publisher / Super Admin: Publication decisions */}
-          {currentWorkflowStatus === 'ready_for_publication' && (record.publication_status === 'publishable' || record.publication_status === 'publishable_with_qualification') && (userRole === 'publisher' || userRole === 'super_admin') && (
+          {currentWorkflowStatus === 'ready_for_publication' && !isPublished && (record.publication_status === 'publishable' || record.publication_status === 'publishable_with_qualification') && (userRole === 'publisher' || userRole === 'super_admin') && (
             <>
               <button
                 type="button"
@@ -494,7 +583,7 @@ export default function RecordEditorClient({
           )}
 
           {/* Publisher / Super Admin: Unpublish */}
-          {(record.publication_status === 'published' || record.publication_status === 'corrected') && (userRole === 'publisher' || userRole === 'super_admin') && (
+          {isPublished && (userRole === 'publisher' || userRole === 'super_admin') && (
             <button
               type="button"
               disabled={saving}
@@ -510,6 +599,29 @@ export default function RecordEditorClient({
           )}
         </div>
       </div>
+
+      {isPublished && (
+        <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-800/60 flex items-start justify-between gap-4 text-amber-200 text-xs">
+          <div className="flex items-start gap-3">
+            <span className="text-lg">🔒</span>
+            <div>
+              <div className="font-bold text-sm text-amber-300">Published Record Lock Active (Revision #{record.current_revision || 1})</div>
+              <div className="mt-0.5 text-amber-200/80">
+                Published information is locked against silent edits to ensure public accountability and data integrity. To make modifications, open a peer-reviewed correction workflow.
+              </div>
+            </div>
+          </div>
+          {(userRole === 'researcher' || userRole === 'super_admin') && !activeCorrection && (
+            <button
+              type="button"
+              onClick={() => setShowOpenCorrectionModal(true)}
+              className="shrink-0 px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs"
+            >
+              Open Correction
+            </button>
+          )}
+        </div>
+      )}
 
       {isDraftLocked && (
         <div className="p-4 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs flex items-center gap-3">
@@ -532,7 +644,7 @@ export default function RecordEditorClient({
         </div>
       )}
 
-      {/* 10-Section Navigation Bar */}
+      {/* Navigation Bar */}
       <div className="flex overflow-x-auto border-b border-slate-800 gap-1 pb-px scrollbar-thin">
         {tabs.map((t) => (
           <button
@@ -565,12 +677,13 @@ export default function RecordEditorClient({
               <label htmlFor="edit-title" className="block font-medium text-slate-300 mb-1">Title</label>
               <input
                 id="edit-title"
-                disabled={!canEdit}
+                disabled={!canEdit || isPublished}
                 value={record.title}
                 onChange={(e) => setRecord({ ...record, title: e.target.value })}
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white disabled:opacity-50 text-sm font-semibold"
               />
             </div>
+
 
             <div>
               <label htmlFor="edit-slug" className="block font-medium text-slate-300 mb-1">Slug</label>
@@ -992,13 +1105,223 @@ export default function RecordEditorClient({
         </div>
       )}
 
-      {/* 10. REVIEW TRAIL / HISTORY TAB */}
+      {/* 10. CORRECTIONS TAB */}
+      {activeTab === 'corrections' && (
+        <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-6 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-base font-bold text-white">Audited Corrections Workspace</h2>
+              <p className="text-slate-400">Formal review and publication pipeline for corrections to published records.</p>
+            </div>
+            {isPublished && (userRole === 'researcher' || userRole === 'super_admin') && !activeCorrection && (
+              <button
+                type="button"
+                onClick={() => setShowOpenCorrectionModal(true)}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-amber-950/30"
+              >
+                <span>+ Open New Correction</span>
+              </button>
+            )}
+          </div>
+
+          {/* Active Correction Workspace */}
+          {activeCorrection ? (
+            <div className="p-5 rounded-2xl bg-slate-950 border border-amber-900/50 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-lg bg-amber-950/80 border border-amber-800/80 text-amber-300 font-mono font-bold uppercase text-[11px]">
+                    Correction {activeCorrection.lifecycle_status.replace(/_/g, ' ')}
+                  </span>
+                  <span className="font-mono text-slate-400 text-[11px]">{activeCorrection.external_id || activeCorrection.id}</span>
+                  <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">
+                    Type: {activeCorrection.correction_type}
+                  </span>
+                </div>
+                <div className="text-slate-400 font-mono text-[11px]">
+                  Created by {activeCorrection.creator_name || activeCorrection.creator_email || 'Researcher'}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div><strong>Reason:</strong> <span className="text-slate-300">{activeCorrection.reason}</span></div>
+                {activeCorrection.public_notice && (
+                  <div><strong>Public Notice:</strong> <span className="text-slate-300">{activeCorrection.public_notice}</span></div>
+                )}
+              </div>
+
+              {/* Side-by-Side Diff */}
+              <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-2">
+                <h4 className="font-bold text-slate-200">Proposed Changes Comparison</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                    <div className="font-bold text-slate-400 font-mono text-[11px]">Published State (v{record.current_revision || 1})</div>
+                    <div className="space-y-1 text-slate-300">
+                      <div><strong className="text-slate-400">Title:</strong> {record.title}</div>
+                      <div><strong className="text-slate-400">Summary:</strong> {record.short_summary}</div>
+                      <div><strong className="text-slate-400">Status:</strong> {record.implementation_status}</div>
+
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-800/40 space-y-2">
+                    <div className="font-bold text-amber-400 font-mono text-[11px]">Proposed Corrected State (v{(record.current_revision || 1) + 1})</div>
+                    <div className="space-y-1 text-slate-200">
+                      <div>
+                        <strong className="text-slate-400">Title:</strong>{' '}
+                        {(typeof activeCorrection.corrected_state === 'string' ? JSON.parse(activeCorrection.corrected_state) : activeCorrection.corrected_state)?.title || record.title}
+                      </div>
+                      <div>
+                        <strong className="text-slate-400">Summary:</strong>{' '}
+                        {(typeof activeCorrection.corrected_state === 'string' ? JSON.parse(activeCorrection.corrected_state) : activeCorrection.corrected_state)?.short_summary || record.short_summary}
+                      </div>
+                      <div>
+                        <strong className="text-slate-400">Status:</strong>{' '}
+                        {(typeof activeCorrection.corrected_state === 'string' ? JSON.parse(activeCorrection.corrected_state) : activeCorrection.corrected_state)?.implementation_status || record.implementation_status}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Correction Lifecycle Action Buttons */}
+              <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-end gap-2">
+                {activeCorrection.lifecycle_status === 'proposed' && (userRole === 'researcher' || userRole === 'super_admin') && (
+                  <>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => handleWorkflowTransition('cancel_correction', 'Cancelled by author')}
+                      className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 font-medium"
+                    >
+                      Cancel Correction
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => handleWorkflowTransition('submit_correction')}
+                      className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold flex items-center gap-1"
+                    >
+                      <span>🚀</span>
+                      <span>Submit Correction for Review</span>
+                    </button>
+                  </>
+                )}
+
+                {activeCorrection.lifecycle_status === 'under_review' && (userRole === 'reviewer' || userRole === 'super_admin') && (
+                  <>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => {
+                        setWorkflowAction('return_correction');
+                        setShowWorkflowModal(true);
+                      }}
+                      className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-medium"
+                    >
+                      Return for Changes
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => {
+                        setWorkflowAction('reject_correction');
+                        setShowWorkflowModal(true);
+                      }}
+                      className="px-3.5 py-1.5 rounded-lg bg-rose-950 hover:bg-rose-900 text-rose-300 font-medium border border-rose-800"
+                    >
+                      Reject Correction
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => {
+                        setWorkflowAction('approve_correction');
+                        setShowWorkflowModal(true);
+                      }}
+                      className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold flex items-center gap-1"
+                    >
+                      <span>✅</span>
+                      <span>Approve Correction</span>
+                    </button>
+                  </>
+                )}
+
+                {activeCorrection.lifecycle_status === 'approved' && (userRole === 'publisher' || userRole === 'super_admin') && (
+                  <>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => {
+                        setWorkflowAction('return_correction');
+                        setShowWorkflowModal(true);
+                      }}
+                      className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-medium"
+                    >
+                      Return to Editorial Review
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => handleWorkflowTransition('publish_correction', 'Publisher released corrected revision into catalog')}
+                      className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold flex items-center gap-1 shadow-lg shadow-emerald-950/30"
+                    >
+                      <span>🌐</span>
+                      <span>Publish Corrected Revision (v{(record.current_revision || 1) + 1})</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="p-8 text-center text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800/60 font-mono">
+              {isPublished
+                ? 'No active correction in progress. Click "+ Open New Correction" to propose an audited revision.'
+                : 'Corrections apply only to published records. Unpublish or edit directly in draft.'}
+            </div>
+          )}
+
+          {/* Past Corrections Log */}
+          <div className="space-y-3 pt-4">
+            <h3 className="font-bold text-white text-sm">Corrections History Log</h3>
+            {correctionsList.length === 0 ? (
+              <div className="p-4 text-center text-slate-500 font-mono">No prior corrections on record.</div>
+            ) : (
+              correctionsList.map((c) => (
+                <div key={c.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex items-start justify-between gap-4 font-mono">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
+                        c.lifecycle_status === 'published'
+                          ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                          : c.lifecycle_status === 'rejected'
+                          ? 'bg-rose-950 text-rose-300 border border-rose-800'
+                          : 'bg-amber-950 text-amber-300 border border-amber-800'
+                      }`}>
+                        {c.lifecycle_status}
+                      </span>
+                      <span className="text-slate-300 text-xs font-bold">{c.correction_type}</span>
+                    </div>
+                    <p className="text-slate-300 font-sans text-xs">{c.reason}</p>
+                    {c.public_notice && <p className="text-slate-400 font-sans text-xs italic">Notice: {c.public_notice}</p>}
+                  </div>
+                  <div className="text-right text-[11px] text-slate-400 shrink-0">
+                    <div>{new Date(c.created_at).toLocaleDateString()}</div>
+                    <div>By: {c.creator_name || 'Staff'}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 11. VERSION & DECISION TRAIL TAB */}
       {activeTab === 'history' && (
         <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4 text-xs">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-white">Append-Only Review Decision Audit Trail</h2>
-              <p className="text-slate-400">Formal record of editorial approval gates, rationales, and review timestamps.</p>
+              <h2 className="text-base font-bold text-white">Unified Record History & Decision Trail</h2>
+              <p className="text-slate-400">Append-only audit trail: Revisions, Editorial Approval Decisions, and Correction Milestones.</p>
             </div>
             <button
               type="button"
@@ -1010,39 +1333,55 @@ export default function RecordEditorClient({
           </div>
 
           {loadingHistory ? (
-            <div className="p-8 text-center text-slate-500 font-mono">Loading review decision history...</div>
+            <div className="p-8 text-center text-slate-500 font-mono">Loading history trail...</div>
           ) : historyList.length === 0 ? (
             <div className="p-8 text-center text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800/60 font-mono">
-              No formal review decisions recorded for this record yet. Decisions are appended upon workflow transitions.
+              No history events recorded for this record yet.
             </div>
           ) : (
             <div className="space-y-3">
-              {historyList.map((h) => (
-                <div key={h.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 font-mono">
+              {historyList.map((h, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 font-mono">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                        h.decision === 'approved' || h.decision === 'approved_with_qualification'
-                          ? 'bg-emerald-950 border border-emerald-800 text-emerald-300'
-                          : h.decision === 'revision_requested'
-                          ? 'bg-amber-950 border border-amber-800 text-amber-300'
-                          : 'bg-rose-950 border border-rose-800 text-rose-300'
-                      }`}>
-                        {h.decision.replace(/_/g, ' ')}
-                      </span>
-                      <span className="text-slate-400 text-[11px]">Gate: {h.gate_code}</span>
+                      {h.eventType === 'review_decision' ? (
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          h.decision === 'approved' || h.decision === 'approved_with_qualification'
+                            ? 'bg-emerald-950 border border-emerald-800 text-emerald-300'
+                            : h.decision === 'revision_requested'
+                            ? 'bg-amber-950 border border-amber-800 text-amber-300'
+                            : 'bg-rose-950 border border-rose-800 text-rose-300'
+                        }`}>
+                          Gate: {h.gateCode} ({h.decision.replace(/_/g, ' ')})
+                        </span>
+                      ) : h.eventType === 'version_snapshot' ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-950 border border-blue-800 text-blue-300">
+                          Revision #{h.versionNumber} Snapshot
+                        </span>
+                      ) : h.eventType === 'correction_milestone' ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-950 border border-amber-800 text-amber-300">
+                          Correction Milestone ({h.lifecycleStatus})
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-800 text-slate-300">
+                          Record Created
+                        </span>
+                      )}
                     </div>
                     <div className="text-slate-400 text-[11px]">
-                      {new Date(h.decided_at).toLocaleString()}
+                      {new Date(h.timestamp).toLocaleString()}
                     </div>
                   </div>
-                  <div className="text-slate-200">{h.rationale}</div>
-                  <div className="text-[11px] text-slate-400 font-mono flex items-center gap-2 pt-1">
-                    <span>Reviewer: {h.reviewer_name || h.reviewer_email || 'Staff Reviewer'}</span>
-                    <span>•</span>
-                    <span>Revision: #{h.record_revision || 1}</span>
-                    <span>•</span>
-                    <span>ID: {h.id}</span>
+
+                  <div className="text-slate-200 font-sans text-xs">
+                    {h.rationale || h.description || h.changeReason || h.reason || 'No description provided'}
+                  </div>
+
+                  <div className="text-[11px] text-slate-400 flex flex-wrap items-center gap-3 pt-1">
+                    {h.reviewerName && <span>Reviewer: {h.reviewerName}</span>}
+                    {h.changedByName && <span>Changed By: {h.changedByName}</span>}
+                    {h.creatorName && <span>Created By: {h.creatorName}</span>}
+                    {h.revision && <span>Revision: #{h.revision}</span>}
                   </div>
                 </div>
               ))}
@@ -1051,13 +1390,14 @@ export default function RecordEditorClient({
         </div>
       )}
 
-      {/* 11. METADATA TAB */}
+      {/* 12. METADATA TAB */}
       {activeTab === 'metadata' && (
         <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4 text-xs font-mono">
           <h2 className="text-base font-bold text-white font-sans">System Metadata & Audit Trail</h2>
           <div className="space-y-2 text-slate-300 bg-slate-950 p-4 rounded-xl border border-slate-800">
             <div><strong>Record UUID:</strong> {record.id}</div>
             <div><strong>Canonical Schema:</strong> database/schema.sql (PostgreSQL 17)</div>
+            <div><strong>Current Revision:</strong> #{record.current_revision || 1}</div>
             <div><strong>Workflow Status:</strong> {currentWorkflowStatus}</div>
             <div><strong>Publication Status:</strong> {record.publication_status}</div>
             <div><strong>Public Visibility:</strong> {record.is_public ? 'PUBLIC (Published)' : 'FALSE (Draft Isolated)'}</div>
@@ -1065,6 +1405,106 @@ export default function RecordEditorClient({
             <div><strong>Updated Timestamp:</strong> {record.updated_at}</div>
             <div><strong>Database Identity:</strong> tat_admin_writer (Least Privilege)</div>
           </div>
+        </div>
+      )}
+
+      {/* MODAL: OPEN AUDITED CORRECTION */}
+      {showOpenCorrectionModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <form onSubmit={handleOpenCorrection} className="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 text-xs">
+            <h3 className="text-base font-bold text-white font-sans">Open Audited Correction Workflow</h3>
+            <p className="text-slate-400">
+              Opening a correction creates a tracked revision draft. Changes undergo full editorial review before publication.
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">Correction Type *</label>
+                <select
+                  value={newCorrection.correction_type}
+                  onChange={(e) => setNewCorrection({ ...newCorrection, correction_type: e.target.value })}
+                  className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                >
+                  <option value="factual_error">Factual Error</option>
+                  <option value="numerical_update">Numerical Update</option>
+                  <option value="status_correction">Status Correction</option>
+                  <option value="date_refinement">Date Refinement</option>
+                  <option value="source_replacement">Source Replacement</option>
+                  <option value="retraction">Retraction</option>
+                  <option value="typographical">Typographical</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">Target Revision</label>
+                <input
+                  disabled
+                  value={`Revision #${(record.current_revision || 1) + 1}`}
+                  className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-400 font-mono disabled:opacity-70"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Reason / Rationale (Mandatory, min 5 chars) *</label>
+              <textarea
+                required
+                rows={2}
+                value={newCorrection.reason}
+                onChange={(e) => setNewCorrection({ ...newCorrection, reason: e.target.value })}
+                placeholder="Explain the precise need for this correction and what source evidence warrants it..."
+                className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block font-medium text-slate-300 mb-1">Public Notice (Optional, visible to public catalog readers)</label>
+              <input
+                value={newCorrection.public_notice}
+                onChange={(e) => setNewCorrection({ ...newCorrection, public_notice: e.target.value })}
+                placeholder="e.g. Updated disbursement figures based on Q3 audited gazette release."
+                className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+              />
+            </div>
+
+            <div className="pt-2 border-t border-slate-800 space-y-3">
+              <h4 className="font-bold text-white">Proposed Modifications</h4>
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">Title</label>
+                <input
+                  value={newCorrection.title}
+                  onChange={(e) => setNewCorrection({ ...newCorrection, title: e.target.value })}
+                  className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white font-semibold"
+                />
+              </div>
+              <div>
+                <label className="block font-medium text-slate-300 mb-1">Short Summary</label>
+                <textarea
+                  rows={2}
+                  value={newCorrection.short_summary}
+                  onChange={(e) => setNewCorrection({ ...newCorrection, short_summary: e.target.value })}
+                  className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => setShowOpenCorrectionModal(false)}
+                className="px-4 py-2 bg-slate-800 rounded-lg text-slate-300"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving || newCorrection.reason.trim().length < 5}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg"
+              >
+                Create Correction Draft
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
@@ -1090,7 +1530,7 @@ export default function RecordEditorClient({
               </div>
             )}
 
-            {(workflowAction === 'return_for_changes' || workflowAction === 'reject_review' || workflowAction === 'unpublish') && (
+            {(workflowAction === 'return_for_changes' || workflowAction === 'reject_review' || workflowAction === 'unpublish' || workflowAction === 'return_correction' || workflowAction === 'reject_correction') && (
               <div>
                 <label className="block font-medium text-slate-300 mb-1">
                   Reason / Rationale (Mandatory, min 5 chars) *
@@ -1106,7 +1546,7 @@ export default function RecordEditorClient({
               </div>
             )}
 
-            {workflowAction === 'approve_review' && (
+            {(workflowAction === 'approve_review' || workflowAction === 'approve_correction') && (
               <div>
                 <label className="block font-medium text-slate-300 mb-1">
                   Reviewer Rationale (Optional)
@@ -1135,7 +1575,15 @@ export default function RecordEditorClient({
               </button>
               <button
                 type="button"
-                disabled={saving || ((workflowAction === 'return_for_changes' || workflowAction === 'reject_review' || workflowAction === 'unpublish') && workflowReason.trim().length < 5)}
+                disabled={
+                  saving ||
+                  ((workflowAction === 'return_for_changes' ||
+                    workflowAction === 'reject_review' ||
+                    workflowAction === 'unpublish' ||
+                    workflowAction === 'return_correction' ||
+                    workflowAction === 'reject_correction') &&
+                    workflowReason.trim().length < 5)
+                }
                 onClick={() => handleWorkflowTransition(workflowAction, workflowReason, workflowQualification)}
                 className={`px-4 py-2 text-white rounded-lg font-semibold ${
                   workflowAction.includes('reject') || workflowAction.includes('unpublish')
@@ -1431,3 +1879,4 @@ export default function RecordEditorClient({
     </div>
   );
 }
+

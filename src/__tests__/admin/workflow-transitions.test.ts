@@ -83,12 +83,13 @@ describe('Admin Workflow Transitions & State Machine', () => {
         const normalized = sql.trim().replace(/\s+/g, ' ');
 
         // Query record for update
-        if (normalized.includes('SELECT id, workflow_status, publication_status, is_public, current_revision, updated_at::text FROM records WHERE id = $1')) {
+        if (normalized.includes('FROM records WHERE id = $1') || normalized.includes('SELECT id, workflow_status, publication_status, is_public, current_revision, updated_at::text FROM records WHERE id = $1')) {
           if (params?.[0] === recordState.id) {
             return { rows: [{ ...recordState }] };
           }
           return { rows: [] };
         }
+
 
         // Query actor profile (read-only)
         if (normalized.includes('SELECT id FROM actor_profiles WHERE firebase_uid = $1 OR email = $2')) {

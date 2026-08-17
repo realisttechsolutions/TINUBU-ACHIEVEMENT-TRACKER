@@ -10,6 +10,8 @@ import type {
   BeneficiaryRecordInput,
   TimelineEventInput,
   WorkflowTransitionInput,
+  OpenCorrectionInput,
+  UpdateCorrectionDraftInput,
 } from './validation';
 
 const SYSTEM_ACTOR_ID = '00000000-0000-4000-8000-000000000005';
@@ -360,8 +362,14 @@ export class AdminRecordsManager {
     staff: VerifiedStaffContext,
   ): Promise<{ success: boolean; updated_at: string }> {
     return this.db.withTransaction(async (tx) => {
-      const checkRes = await tx.query<{ updated_at: string; workflow_status: string }>(
-        `SELECT updated_at::text, workflow_status FROM records WHERE id = $1`,
+      const checkRes = await tx.query<{
+        updated_at: string;
+        workflow_status: string;
+        publication_status: string;
+        current_revision: number;
+        is_public: boolean;
+      }>(
+        `SELECT updated_at::text, workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
         [recordId],
       );
 
@@ -369,7 +377,12 @@ export class AdminRecordsManager {
         throw new Error('RECORD_NOT_FOUND');
       }
 
-      const { updated_at: currentUpdatedAt, workflow_status } = checkRes.rows[0];
+      const { updated_at: currentUpdatedAt, workflow_status, publication_status, current_revision, is_public } = checkRes.rows[0];
+
+      if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+        throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+      }
+
       if (input.expected_updated_at && currentUpdatedAt !== input.expected_updated_at) {
         throw new Error('CONCURRENCY_CONFLICT');
       }
@@ -377,6 +390,7 @@ export class AdminRecordsManager {
       if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
         throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
+
 
       const updateRes = await tx.query<{ updated_at: string }>(
         `
@@ -476,15 +490,24 @@ export class AdminRecordsManager {
   // 3. Manage Claims
   async saveClaim(recordId: string, input: ClaimInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
-      const recordCheck = await tx.query<{ workflow_status: string }>(
-        `SELECT workflow_status FROM records WHERE id = $1`,
+      const recordCheck = await tx.query<{
+        workflow_status: string;
+        publication_status: string;
+        current_revision: number;
+        is_public: boolean;
+      }>(
+        `SELECT workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
         [recordId],
       );
       if (recordCheck.rows.length === 0) {
         throw new Error('RECORD_NOT_FOUND');
       }
-      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
-        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      const { workflow_status, publication_status, current_revision, is_public } = recordCheck.rows[0];
+      if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+        throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+      }
+      if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
 
       const claimId = input.id || randomUUID();
@@ -630,15 +653,24 @@ export class AdminRecordsManager {
   // 5. Manage Financials
   async saveFinancialRecord(recordId: string, input: FinancialRecordInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
-      const recordCheck = await tx.query<{ workflow_status: string }>(
-        `SELECT workflow_status FROM records WHERE id = $1`,
+      const recordCheck = await tx.query<{
+        workflow_status: string;
+        publication_status: string;
+        current_revision: number;
+        is_public: boolean;
+      }>(
+        `SELECT workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
         [recordId],
       );
       if (recordCheck.rows.length === 0) {
         throw new Error('RECORD_NOT_FOUND');
       }
-      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
-        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      const { workflow_status, publication_status, current_revision, is_public } = recordCheck.rows[0];
+      if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+        throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+      }
+      if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
 
       if (!input.id) {
@@ -753,15 +785,24 @@ export class AdminRecordsManager {
   // 6. Manage Beneficiaries
   async saveBeneficiaryRecord(recordId: string, input: BeneficiaryRecordInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
-      const recordCheck = await tx.query<{ workflow_status: string }>(
-        `SELECT workflow_status FROM records WHERE id = $1`,
+      const recordCheck = await tx.query<{
+        workflow_status: string;
+        publication_status: string;
+        current_revision: number;
+        is_public: boolean;
+      }>(
+        `SELECT workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
         [recordId],
       );
       if (recordCheck.rows.length === 0) {
         throw new Error('RECORD_NOT_FOUND');
       }
-      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
-        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      const { workflow_status, publication_status, current_revision, is_public } = recordCheck.rows[0];
+      if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+        throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+      }
+      if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
 
       if (!input.id) {
@@ -871,15 +912,24 @@ export class AdminRecordsManager {
   // 7. Manage Timeline Events
   async saveTimelineEvent(recordId: string, input: TimelineEventInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
-      const recordCheck = await tx.query<{ workflow_status: string }>(
-        `SELECT workflow_status FROM records WHERE id = $1`,
+      const recordCheck = await tx.query<{
+        workflow_status: string;
+        publication_status: string;
+        current_revision: number;
+        is_public: boolean;
+      }>(
+        `SELECT workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
         [recordId],
       );
       if (recordCheck.rows.length === 0) {
         throw new Error('RECORD_NOT_FOUND');
       }
-      if (recordCheck.rows[0].workflow_status !== 'draft' && staff.role !== 'super_admin') {
-        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${recordCheck.rows[0].workflow_status}' state and cannot be modified until returned to draft.`);
+      const { workflow_status, publication_status, current_revision, is_public } = recordCheck.rows[0];
+      if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+        throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+      }
+      if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+        throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
       }
       if (!input.id) {
         const existingEvt = await tx.query<{ id: string }>(
@@ -1035,6 +1085,11 @@ export class AdminRecordsManager {
     return this.db.withTransaction(async (tx) => {
       const recordRes = await tx.query<{
         id: string;
+        title: string;
+        slug: string;
+        summary: string;
+        body: string;
+        implementation_status: string;
         workflow_status: string;
         publication_status: string;
         is_public: boolean;
@@ -1042,13 +1097,14 @@ export class AdminRecordsManager {
         updated_at: string;
       }>(
         `
-        SELECT id, workflow_status, publication_status, is_public, current_revision, updated_at::text
+        SELECT id, title, slug, summary, body, implementation_status, workflow_status, publication_status, is_public, current_revision, updated_at::text
         FROM records
         WHERE id = $1
         FOR UPDATE
         `,
         [recordId],
       );
+
 
       if (recordRes.rows.length === 0) {
         throw new Error('RECORD_NOT_FOUND');
@@ -1409,6 +1465,577 @@ export class AdminRecordsManager {
           break;
         }
 
+        case 'submit_correction': {
+          if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'proposed' ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_ACTIVE_PROPOSED_CORRECTION: No proposed correction available to submit.');
+          }
+          const active = activeRes.rows[0];
+          const targetRevision = rec.current_revision + 1;
+
+          if (input.expected_revision && input.expected_revision !== rec.current_revision) {
+            throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
+          }
+
+          const newCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'under_review',
+              $10, $11, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              newCorrId,
+              `COR-${newCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              input.reason?.trim() || active.reason,
+              active.public_notice,
+              actorId,
+            ],
+          );
+
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_3_automated_data_readiness',
+              'escalated_to_human_lead', $5, $6, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              targetRevision,
+              actorId,
+              input.reason?.trim() || 'Submitted proposed correction for editorial review',
+            ],
+          );
+
+          const updateTouch = await tx.query<{ updated_at: string }>(
+            `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: rec.workflow_status,
+            publication_status: rec.publication_status,
+            is_public: rec.is_public,
+            updated_at: updateTouch.rows[0].updated_at,
+            decision_id: decisionId,
+          };
+        }
+
+        case 'approve_correction': {
+          if (staff.role !== 'reviewer' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'under_review' ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to approve.');
+          }
+          const active = activeRes.rows[0];
+          const targetRevision = rec.current_revision + 1;
+
+          if (input.expected_revision && input.expected_revision !== rec.current_revision) {
+            throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
+          }
+
+          const newCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              reviewed_by, approved_by, approved_at, public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'approved',
+              $10, $10, CURRENT_TIMESTAMP, $11, $10, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              newCorrId,
+              `COR-${newCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              input.reason?.trim() || active.reason,
+              actorId,
+              active.public_notice,
+            ],
+          );
+
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_4_editorial_human_approval',
+              $5, $6, $7, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              targetRevision,
+              input.qualification ? 'approved_with_qualification' : 'approved',
+              actorId,
+              input.reason?.trim() || (input.qualification ? `Approved correction with qualification: ${input.qualification}` : 'Editorial review approved correction for publication readiness'),
+            ],
+          );
+
+          const updateTouch = await tx.query<{ updated_at: string }>(
+            `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: rec.workflow_status,
+            publication_status: rec.publication_status,
+            is_public: rec.is_public,
+            updated_at: updateTouch.rows[0].updated_at,
+            decision_id: decisionId,
+          };
+        }
+
+        case 'return_correction': {
+          if (staff.role !== 'reviewer' && staff.role !== 'publisher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (!input.reason || input.reason.trim().length < 5) {
+            throw new Error('REASON_REQUIRED: A return reason of at least 5 characters is mandatory.');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('under_review', 'approved') ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_ACTIVE_CORRECTION: No correction under review or approved found to return.');
+          }
+          const active = activeRes.rows[0];
+          const targetRevision = rec.current_revision + 1;
+
+          const newCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'proposed',
+              $10, $11, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              newCorrId,
+              `COR-${newCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              input.reason.trim(),
+              active.public_notice,
+              actorId,
+            ],
+          );
+
+          decisionId = randomUUID();
+          const gateCode = staff.role === 'publisher' ? 'gate_5_publication_stewardship' : 'gate_4_editorial_human_approval';
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, $5,
+              'revision_requested', $6, $7, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              targetRevision,
+              gateCode,
+              actorId,
+              input.reason.trim(),
+            ],
+          );
+
+          const updateTouch = await tx.query<{ updated_at: string }>(
+            `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: rec.workflow_status,
+            publication_status: rec.publication_status,
+            is_public: rec.is_public,
+            updated_at: updateTouch.rows[0].updated_at,
+            decision_id: decisionId,
+          };
+        }
+
+        case 'reject_correction': {
+          if (staff.role !== 'reviewer' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          if (!input.reason || input.reason.trim().length < 5) {
+            throw new Error('REASON_REQUIRED: A rejection reason of at least 5 characters is mandatory.');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'under_review' ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to reject.');
+          }
+          const active = activeRes.rows[0];
+          const targetRevision = rec.current_revision + 1;
+
+          const newCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'rejected',
+              $10, $11, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              newCorrId,
+              `COR-${newCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              input.reason.trim(),
+              active.public_notice,
+              actorId,
+            ],
+          );
+
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_4_editorial_human_approval',
+              'rejected', $5, $6, 'medium', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              targetRevision,
+              actorId,
+              input.reason.trim(),
+            ],
+          );
+
+          const updateTouch = await tx.query<{ updated_at: string }>(
+            `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: rec.workflow_status,
+            publication_status: rec.publication_status,
+            is_public: rec.is_public,
+            updated_at: updateTouch.rows[0].updated_at,
+            decision_id: decisionId,
+          };
+        }
+
+        case 'cancel_correction': {
+          if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('proposed', 'under_review') ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_ACTIVE_CORRECTION: No active correction found to cancel.');
+          }
+          const active = activeRes.rows[0];
+
+          const newCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'rejected',
+              $10, $11, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              newCorrId,
+              `COR-${newCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              `Cancelled by author: ${input.reason?.trim() || 'No longer required'}`,
+              active.public_notice,
+              actorId,
+            ],
+          );
+
+          const updateTouch = await tx.query<{ updated_at: string }>(
+            `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: rec.workflow_status,
+            publication_status: rec.publication_status,
+            is_public: rec.is_public,
+            updated_at: updateTouch.rows[0].updated_at,
+          };
+        }
+
+        case 'publish_correction': {
+          if (staff.role !== 'publisher' && staff.role !== 'super_admin') {
+            throw new Error('FORBIDDEN_TRANSITION_ROLE');
+          }
+          const activeRes = await tx.query<any>(
+            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'approved' ORDER BY created_at DESC LIMIT 1`,
+            [recordId],
+          );
+          if (activeRes.rows.length === 0) {
+            throw new Error('NO_APPROVED_CORRECTION: No approved correction available to publish.');
+          }
+          const active = activeRes.rows[0];
+          const targetRevision = rec.current_revision + 1;
+
+          if (input.expected_revision && input.expected_revision !== rec.current_revision) {
+            throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
+          }
+
+          // Exact reviewed-revision binding:
+          const approvalRes = await tx.query<{ id: string; decision: string }>(
+            `
+            SELECT id, decision
+            FROM review_decisions
+            WHERE record_id = $1
+              AND record_revision = $2
+              AND gate_code = 'gate_4_editorial_human_approval'
+              AND decision IN ('approved', 'approved_with_qualification')
+            ORDER BY decided_at DESC
+            LIMIT 1
+            `,
+            [recordId, targetRevision],
+          );
+
+          if (approvalRes.rows.length === 0) {
+            throw new Error(`REVIEW_APPROVAL_REQUIRED: Corrected revision #${targetRevision} cannot be published without a matching Gate 4 editorial approval decision.`);
+          }
+
+          const corrected = (typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state) || {};
+          const original = (typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state) || {};
+
+          // Compute diff
+          const diff: Record<string, { before: any; after: any }> = {};
+          for (const key of ['title', 'slug', 'short_summary', 'full_description', 'implementation_status']) {
+            if (corrected[key] !== undefined && corrected[key] !== original[key]) {
+              diff[key] = { before: original[key] ?? null, after: corrected[key] };
+            }
+          }
+
+          // 1. Record versions snapshot & diff
+          const versionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO record_versions (
+              id, record_id, version_number, changed_by, change_reason,
+              snapshot_json, diff_json, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              versionId,
+              recordId,
+              targetRevision,
+              actorId,
+              active.reason,
+              JSON.stringify(corrected),
+              JSON.stringify(diff),
+            ],
+          );
+
+          // 2. Update record
+          const updateTitle = corrected.title || rec.title;
+          const updateSlug = corrected.slug || rec.slug;
+          const updateSummary = corrected.short_summary || rec.summary;
+          const updateBody = corrected.full_description !== undefined ? corrected.full_description : rec.body;
+          const updateStatus = corrected.implementation_status ? mapImplementationStatus(corrected.implementation_status) : rec.implementation_status;
+
+          await tx.query(
+            `
+            UPDATE records SET
+              title = $1,
+              slug = $2,
+              summary = $3,
+              body = $4,
+              implementation_status = $5,
+              current_revision = $6,
+              publication_status = 'corrected',
+              verification_status = 'corrected',
+              workflow_status = 'ready_for_publication',
+              is_public = true,
+              published_at = CURRENT_TIMESTAMP,
+              updated_at = CURRENT_TIMESTAMP
+            WHERE id = $7
+            `,
+            [
+              updateTitle,
+              updateSlug,
+              updateSummary,
+              updateBody,
+              updateStatus,
+              targetRevision,
+              recordId,
+            ],
+          );
+
+          // 3. Add correction timeline event
+          const timelineId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO timeline_events (
+              id, external_id, record_id, event_type, title, description,
+              date_value, date_precision, is_public, created_by, created_at, updated_at
+            ) VALUES (
+              $1, $2, $3, 'correction', $4, $5,
+              CURRENT_DATE, 'exact_day', true, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              timelineId,
+              `TLE-${timelineId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              `Correction: ${active.reason.substring(0, 100)}`,
+              active.public_notice || active.reason,
+              actorId,
+            ],
+          );
+
+          // 4. Insert final published entry in corrections
+          const publishedCorrId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO corrections (
+              id, external_id, record_id, claim_id, source_id, correction_type,
+              original_state, corrected_state, reason, lifecycle_status,
+              reviewed_by, approved_by, approved_at, effective_at, public_notice, created_by, created_at
+            ) VALUES (
+              $1, $2, $3, $4, $5, $6,
+              $7, $8, $9, 'published',
+              $10, $10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $11, $10, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              publishedCorrId,
+              `COR-${publishedCorrId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              active.claim_id,
+              active.source_id,
+              active.correction_type,
+              JSON.stringify(active.original_state),
+              JSON.stringify(active.corrected_state),
+              active.reason,
+              actorId,
+              active.public_notice,
+            ],
+          );
+
+          // 5. Append Gate 5 decision in review_decisions
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_5_publication_stewardship',
+              'approved', $5, $6, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              targetRevision,
+              actorId,
+              input.reason?.trim() || 'Publisher released corrected revision into public catalog',
+            ],
+          );
+
+          const finalUpdate = await tx.query<{ updated_at: string }>(
+            `SELECT updated_at::text FROM records WHERE id = $1`,
+            [recordId],
+          );
+          return {
+            success: true,
+            workflow_status: 'ready_for_publication',
+            publication_status: 'corrected',
+            is_public: true,
+            updated_at: finalUpdate.rows[0].updated_at,
+            decision_id: decisionId,
+          };
+        }
+
         default:
           throw new Error(`UNRECOGNIZED_WORKFLOW_ACTION: ${action}`);
       }
@@ -1447,7 +2074,219 @@ export class AdminRecordsManager {
     });
   }
 
-  // 10. Query Review Queue
+  // 10. Open Audited Correction
+  async openCorrection(
+    recordId: string,
+    input: OpenCorrectionInput,
+    staff: VerifiedStaffContext,
+  ): Promise<{ success: boolean; id: string; status: string; current_revision: number; target_revision: number }> {
+    return this.db.withTransaction(async (tx) => {
+      const actorId = await resolveStaffActor(tx, staff);
+
+      if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
+        throw new Error('FORBIDDEN_TRANSITION_ROLE: Only researchers or super admins can open a correction.');
+      }
+
+      const recRes = await tx.query<any>(
+        `SELECT * FROM records WHERE id = $1`,
+        [recordId],
+      );
+      if (recRes.rows.length === 0) {
+        throw new Error('RECORD_NOT_FOUND');
+      }
+      const rec = recRes.rows[0];
+
+      if (rec.publication_status !== 'published' && rec.publication_status !== 'corrected' && !rec.is_public) {
+        throw new Error(`INVALID_TRANSITION: Cannot open a correction on unpublished record (status: '${rec.publication_status}'). Ordinary edits are allowed in draft.`);
+      }
+
+      if (input.expected_revision && input.expected_revision !== rec.current_revision) {
+        throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
+      }
+
+      // Prevent duplicate active corrections
+      const activeCheck = await tx.query<any>(
+        `SELECT id, lifecycle_status FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('proposed', 'under_review', 'approved') ORDER BY created_at DESC LIMIT 1`,
+        [recordId],
+      );
+      if (activeCheck.rows.length > 0) {
+        throw new Error(`DUPLICATE_CORRECTION_IN_PROGRESS: An active correction is already in progress for record revision #${rec.current_revision}.`);
+      }
+
+      // Snapshot child records
+      const [claimsRes, finRes, benRes, tlRes] = await Promise.all([
+        tx.query<any>(`SELECT * FROM evidence_claims WHERE record_id = $1`, [recordId]),
+        tx.query<any>(`SELECT * FROM financial_records WHERE record_id = $1`, [recordId]),
+        tx.query<any>(`SELECT * FROM beneficiary_records WHERE record_id = $1`, [recordId]),
+        tx.query<any>(`SELECT * FROM timeline_events WHERE record_id = $1`, [recordId]),
+      ]);
+
+      const originalState = {
+        revision: rec.current_revision,
+        record_id: rec.id,
+        title: rec.title,
+        slug: rec.slug,
+        short_summary: rec.summary,
+        full_description: rec.body,
+        implementation_status: rec.implementation_status,
+        record_type: rec.record_type,
+        evidence_profile: rec.evidence_profile,
+        published_at: rec.published_at,
+        claims: claimsRes.rows,
+        financials: finRes.rows,
+        beneficiaries: benRes.rows,
+        timeline: tlRes.rows,
+      };
+
+      const targetRevision = rec.current_revision + 1;
+      const correctedState = {
+        ...originalState,
+        target_revision: targetRevision,
+        ...(input.changes || {}),
+      };
+
+      const correctionId = randomUUID();
+      const externalId = `COR-${correctionId.substring(0, 8).toUpperCase()}`;
+
+      await tx.query(
+        `
+        INSERT INTO corrections (
+          id, external_id, record_id, claim_id, source_id, correction_type,
+          original_state, corrected_state, reason, lifecycle_status,
+          public_notice, created_by, created_at
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6,
+          $7, $8, $9, 'proposed',
+          $10, $11, CURRENT_TIMESTAMP
+        )
+        `,
+        [
+          correctionId,
+          externalId,
+          recordId,
+          input.claim_id || null,
+          input.source_id || null,
+          input.correction_type,
+          JSON.stringify(originalState),
+          JSON.stringify(correctedState),
+          input.reason.trim(),
+          input.public_notice?.trim() || null,
+          actorId,
+        ],
+      );
+
+      return {
+        success: true,
+        id: correctionId,
+        status: 'proposed',
+        current_revision: rec.current_revision,
+        target_revision: targetRevision,
+      };
+    });
+  }
+
+  // 11. Get Active Correction
+  async getActiveCorrection(recordId: string): Promise<any | null> {
+    const res = await this.db.query(
+      `
+      SELECT c.*, ap.display_name AS creator_name, ap.email AS creator_email,
+             rev_ap.display_name AS reviewer_name, app_ap.display_name AS approver_name
+      FROM corrections c
+      LEFT JOIN actor_profiles ap ON ap.id = c.created_by
+      LEFT JOIN actor_profiles rev_ap ON rev_ap.id = c.reviewed_by
+      LEFT JOIN actor_profiles app_ap ON app_ap.id = c.approved_by
+      WHERE c.record_id = $1 AND c.lifecycle_status IN ('proposed', 'under_review', 'approved')
+      ORDER BY c.created_at DESC
+      LIMIT 1
+      `,
+      [recordId],
+    );
+    return res.rows[0] || null;
+  }
+
+  // 12. List All Corrections for a Record
+  async getCorrectionsList(recordId: string): Promise<any[]> {
+    const res = await this.db.query(
+      `
+      SELECT c.*, ap.display_name AS creator_name, ap.email AS creator_email,
+             rev_ap.display_name AS reviewer_name, app_ap.display_name AS approver_name
+      FROM corrections c
+      LEFT JOIN actor_profiles ap ON ap.id = c.created_by
+      LEFT JOIN actor_profiles rev_ap ON rev_ap.id = c.reviewed_by
+      LEFT JOIN actor_profiles app_ap ON app_ap.id = c.approved_by
+      WHERE c.record_id = $1
+      ORDER BY c.created_at DESC
+      `,
+      [recordId],
+    );
+    return res.rows;
+  }
+
+  // 13. Update Correction Draft Workspace
+  async updateCorrectionDraft(
+    recordId: string,
+    input: UpdateCorrectionDraftInput,
+    staff: VerifiedStaffContext,
+  ): Promise<{ success: boolean; id: string; status: string }> {
+    return this.db.withTransaction(async (tx) => {
+      const actorId = await resolveStaffActor(tx, staff);
+      if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
+        throw new Error('FORBIDDEN_TRANSITION_ROLE: Only researchers or super admins can update correction draft.');
+      }
+
+      const activeRes = await tx.query<any>(
+        `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'proposed' ORDER BY created_at DESC LIMIT 1`,
+        [recordId],
+      );
+      if (activeRes.rows.length === 0) {
+        throw new Error('NO_ACTIVE_PROPOSED_CORRECTION: No editable proposed correction found for this record.');
+      }
+      const currentActive = activeRes.rows[0];
+
+      const currentCorrected = typeof currentActive.corrected_state === 'string'
+        ? JSON.parse(currentActive.corrected_state)
+        : currentActive.corrected_state;
+
+      const updatedCorrectedState = {
+        ...currentCorrected,
+        ...input.changes,
+      };
+
+      const newCorrectionId = randomUUID();
+      const newExternalId = `COR-${newCorrectionId.substring(0, 8).toUpperCase()}`;
+
+      await tx.query(
+        `
+        INSERT INTO corrections (
+          id, external_id, record_id, claim_id, source_id, correction_type,
+          original_state, corrected_state, reason, lifecycle_status,
+          public_notice, created_by, created_at
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6,
+          $7, $8, $9, 'proposed',
+          $10, $11, CURRENT_TIMESTAMP
+        )
+        `,
+        [
+          newCorrectionId,
+          newExternalId,
+          recordId,
+          currentActive.claim_id,
+          currentActive.source_id,
+          input.correction_type || currentActive.correction_type,
+          JSON.stringify(currentActive.original_state),
+          JSON.stringify(updatedCorrectedState),
+          input.reason ? input.reason.trim() : currentActive.reason,
+          input.public_notice !== undefined ? input.public_notice : currentActive.public_notice,
+          actorId,
+        ],
+      );
+
+      return { success: true, id: newCorrectionId, status: 'proposed' };
+    });
+  }
+
+  // 14. Query Review Queue
   async getReviewQueue(): Promise<any[]> {
     const res = await this.db.query(
       `
@@ -1466,7 +2305,7 @@ export class AdminRecordsManager {
     return res.rows;
   }
 
-  // 11. Query Publication Queue
+  // 15. Query Publication Queue
   async getPublishQueue(): Promise<any[]> {
     const res = await this.db.query(
       `
@@ -1485,7 +2324,7 @@ export class AdminRecordsManager {
     return res.rows;
   }
 
-  // 12. Query Record Review Decisions History
+  // 16. Query Record Review Decisions History
   async getRecordReviewHistory(recordId: string): Promise<any[]> {
     const res = await this.db.query(
       `
@@ -1500,4 +2339,128 @@ export class AdminRecordsManager {
     );
     return res.rows;
   }
+
+  // 17. Query Unified Record Full History (Classified History Model)
+  async getRecordFullHistory(recordId: string): Promise<any> {
+    const [recRes, versionsRes, decisionsRes, correctionsRes] = await Promise.all([
+      this.db.query<any>(`SELECT * FROM records WHERE id = $1`, [recordId]),
+      this.db.query<any>(
+        `
+        SELECT rv.*, ap.display_name AS changed_by_name, ap.email AS changed_by_email
+        FROM record_versions rv
+        LEFT JOIN actor_profiles ap ON ap.id = rv.changed_by
+        WHERE rv.record_id = $1
+        ORDER BY rv.version_number ASC, rv.created_at ASC
+        `,
+        [recordId],
+      ),
+      this.db.query<any>(
+        `
+        SELECT rd.*, ap.display_name AS reviewer_name, ap.email AS reviewer_email
+        FROM review_decisions rd
+        LEFT JOIN actor_profiles ap ON ap.id = rd.reviewer_id
+        WHERE rd.record_id = $1
+        ORDER BY rd.decided_at ASC
+        `,
+        [recordId],
+      ),
+      this.db.query<any>(
+        `
+        SELECT c.*, ap.display_name AS creator_name, ap.email AS creator_email,
+               rev_ap.display_name AS reviewer_name, app_ap.display_name AS approver_name
+        FROM corrections c
+        LEFT JOIN actor_profiles ap ON ap.id = c.created_by
+        LEFT JOIN actor_profiles rev_ap ON rev_ap.id = c.reviewed_by
+        LEFT JOIN actor_profiles app_ap ON app_ap.id = c.approved_by
+        WHERE c.record_id = $1
+        ORDER BY c.created_at ASC
+        `,
+        [recordId],
+      ),
+    ]);
+
+    if (recRes.rows.length === 0) {
+      throw new Error('RECORD_NOT_FOUND');
+    }
+
+    const rec = recRes.rows[0];
+    const events: any[] = [];
+
+    // 1. Initial creation
+    events.push({
+      eventType: 'record_created',
+      timestamp: rec.created_at,
+      revision: 1,
+      description: `Initial draft created: "${rec.title}"`,
+      actorId: rec.created_by,
+    });
+
+    // 2. Review Decisions
+    for (const rd of decisionsRes.rows) {
+      events.push({
+        eventType: 'review_decision',
+        timestamp: rd.decided_at,
+        revision: rd.record_revision,
+        gateCode: rd.gate_code,
+        decision: rd.decision,
+        rationale: rd.rationale,
+        riskLevel: rd.risk_level,
+        reviewerId: rd.reviewer_id,
+        reviewerName: rd.reviewer_name,
+        reviewerEmail: rd.reviewer_email,
+      });
+    }
+
+    // 3. Correction Milestones
+    for (const c of correctionsRes.rows) {
+      events.push({
+        eventType: 'correction_milestone',
+        timestamp: c.created_at,
+        correctionId: c.id,
+        correctionType: c.correction_type,
+        lifecycleStatus: c.lifecycle_status,
+        reason: c.reason,
+        publicNotice: c.public_notice,
+        originalState: c.original_state,
+        correctedState: c.corrected_state,
+        creatorId: c.created_by,
+        creatorName: c.creator_name,
+        creatorEmail: c.creator_email,
+        reviewerName: c.reviewer_name,
+        approverName: c.approver_name,
+        approvedAt: c.approved_at,
+        effectiveAt: c.effective_at,
+      });
+    }
+
+    // 4. Record Versions Snapshots
+    for (const v of versionsRes.rows) {
+      events.push({
+        eventType: 'version_snapshot',
+        timestamp: v.created_at,
+        versionNumber: v.version_number,
+        changeReason: v.change_reason,
+        snapshotJson: v.snapshot_json,
+        diffJson: v.diff_json,
+        changedByName: v.changed_by_name,
+        changedByEmail: v.changed_by_email,
+      });
+    }
+
+    events.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+    return {
+      recordId: rec.id,
+      currentRevision: rec.current_revision,
+      publicationStatus: rec.publication_status,
+      workflowStatus: rec.workflow_status,
+      isPublic: rec.is_public,
+      historyCapability: 'FULL_SNAPSHOT_AND_EVENT_HISTORY',
+      events,
+      versions: versionsRes.rows,
+      reviewDecisions: decisionsRes.rows,
+      corrections: correctionsRes.rows,
+    };
+  }
 }
+

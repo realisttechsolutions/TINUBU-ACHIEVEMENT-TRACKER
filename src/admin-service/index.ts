@@ -11,6 +11,8 @@ import {
   beneficiaryRecordSchema,
   timelineEventSchema,
   workflowTransitionSchema,
+  openCorrectionSchema,
+  updateCorrectionDraftSchema,
 } from './validation';
 
 let dbInstance: AdminControlPlaneDb | null = null;
@@ -114,11 +116,12 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       return sendJson(res, 200, { success: true, records: queue });
     }
 
-    // Dynamic Route Matching: /api/records/:id(/subpath)
-    const match = pathname.match(/^\/api\/records\/([a-z0-9_-]+)(?:\/([a-z0-9_-]+))?$/i);
+    // Dynamic Route Matching: /api/records/:id(/subpath)(/subsubpath)
+    const match = pathname.match(/^\/api\/records\/([a-z0-9_-]+)(?:\/([a-z0-9_-]+))?(?:\/([a-z0-9_-]+))?$/i);
     if (match) {
       const recordId = match[1];
       const subpath = match[2];
+      const subsubpath = match[3];
 
       // POST /api/records/:id/workflow (Workflow Transition)
       if (subpath === 'workflow' && method === 'POST') {
@@ -137,6 +140,47 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
         await authenticateAdminRequest(req.headers, 'read');
         const history = await manager.getRecordReviewHistory(recordId);
         return sendJson(res, 200, { success: true, history });
+      }
+
+      // GET /api/records/:id/full-history (Unified Record Full History)
+      if (subpath === 'full-history' && method === 'GET') {
+        await authenticateAdminRequest(req.headers, 'read');
+        const fullHistory = await manager.getRecordFullHistory(recordId);
+        return sendJson(res, 200, { success: true, ...fullHistory });
+      }
+
+      // POST /api/records/:id/corrections (Open Correction)
+      if (subpath === 'corrections' && !subsubpath && method === 'POST') {
+        const staff = await authenticateAdminRequest(req.headers, 'write');
+        const body = await parseJsonBody(req);
+        const parsed = openCorrectionSchema.safeParse(body);
+        if (!parsed.success) {
+          return sendJson(res, 400, { error: 'Invalid correction payload', details: parsed.error.flatten() });
+        }
+        const result = await manager.openCorrection(recordId, parsed.data, staff);
+        return sendJson(res, 201, result);
+      }
+
+      // GET /api/records/:id/corrections (List & Active Correction)
+      if (subpath === 'corrections' && !subsubpath && method === 'GET') {
+        await authenticateAdminRequest(req.headers, 'read');
+        const [active, list] = await Promise.all([
+          manager.getActiveCorrection(recordId),
+          manager.getCorrectionsList(recordId),
+        ]);
+        return sendJson(res, 200, { success: true, active, corrections: list });
+      }
+
+      // PUT /api/records/:id/corrections/draft (Update Correction Draft)
+      if (subpath === 'corrections' && subsubpath === 'draft' && method === 'PUT') {
+        const staff = await authenticateAdminRequest(req.headers, 'write');
+        const body = await parseJsonBody(req);
+        const parsed = updateCorrectionDraftSchema.safeParse(body);
+        if (!parsed.success) {
+          return sendJson(res, 400, { error: 'Invalid draft update payload', details: parsed.error.flatten() });
+        }
+        const result = await manager.updateCorrectionDraft(recordId, parsed.data, staff);
+        return sendJson(res, 200, result);
       }
 
       // PUT /api/records/:id (Update Overview)
@@ -220,8 +264,14 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
     if (error.message === 'RECORD_NOT_FOUND') {
       return sendJson(res, 404, { error: 'Record not found' });
     }
-    if (error.message === 'CONCURRENCY_CONFLICT') {
+    if (error.message?.includes('CONCURRENCY_CONFLICT')) {
       return sendJson(res, 409, { error: 'Conflict: Record was modified concurrently. Please refresh.' });
+    }
+    if (error.message?.includes('CORRECTION_REQUIRED')) {
+      return sendJson(res, 403, { error: error.message });
+    }
+    if (error.message?.includes('DUPLICATE_CORRECTION_IN_PROGRESS')) {
+      return sendJson(res, 409, { error: error.message });
     }
     if (error.message?.includes('RECORD_LOCKED_FOR_REVIEW')) {
       return sendJson(res, 403, { error: error.message });
@@ -235,7 +285,14 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
     if (error.message?.includes('REVIEW_APPROVAL_REQUIRED')) {
       return sendJson(res, 400, { error: error.message });
     }
-    if (error.message?.includes('INVALID_TRANSITION') || error.message?.includes('REASON_REQUIRED')) {
+    if (
+      error.message?.includes('INVALID_TRANSITION') ||
+      error.message?.includes('REASON_REQUIRED') ||
+      error.message?.includes('NO_ACTIVE_PROPOSED_CORRECTION') ||
+      error.message?.includes('NO_CORRECTION_UNDER_REVIEW') ||
+      error.message?.includes('NO_APPROVED_CORRECTION') ||
+      error.message?.includes('NO_ACTIVE_CORRECTION')
+    ) {
       return sendJson(res, 400, { error: error.message });
     }
     console.error('Admin Control Plane Unhandled Error:', error);
@@ -250,3 +307,4 @@ if (process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
     console.log(`TAT Admin Control Plane listening on port ${PORT}`);
   });
 }
+
