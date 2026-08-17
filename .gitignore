@@ -17,6 +17,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-admin/
+*.tar.gz
 
 # Environment local files
 .env.local
