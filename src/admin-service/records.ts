@@ -1469,19 +1469,22 @@ export class AdminRecordsManager {
           if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
             throw new Error('FORBIDDEN_TRANSITION_ROLE');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'proposed' ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || activeCorrection.lifecycle_status !== 'proposed') {
             throw new Error('NO_ACTIVE_PROPOSED_CORRECTION: No proposed correction available to submit.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
           const targetRevision = rec.current_revision + 1;
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
             throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
           }
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const chainId = origState?.chain_id || corrState?.chain_id || active.id;
+          const origWithChain = { ...origState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1503,8 +1506,8 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               input.reason?.trim() || active.reason,
               active.public_notice,
               actorId,
@@ -1550,19 +1553,22 @@ export class AdminRecordsManager {
           if (staff.role !== 'reviewer' && staff.role !== 'super_admin') {
             throw new Error('FORBIDDEN_TRANSITION_ROLE');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'under_review' ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || activeCorrection.lifecycle_status !== 'under_review') {
             throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to approve.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
           const targetRevision = rec.current_revision + 1;
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
             throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
           }
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const chainId = origState?.chain_id || corrState?.chain_id || active.id;
+          const origWithChain = { ...origState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1584,8 +1590,8 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               input.reason?.trim() || active.reason,
               actorId,
               active.public_notice,
@@ -1635,15 +1641,18 @@ export class AdminRecordsManager {
           if (!input.reason || input.reason.trim().length < 5) {
             throw new Error('REASON_REQUIRED: A return reason of at least 5 characters is mandatory.');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('under_review', 'approved') ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || !['under_review', 'approved'].includes(activeCorrection.lifecycle_status)) {
             throw new Error('NO_ACTIVE_CORRECTION: No correction under review or approved found to return.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
           const targetRevision = rec.current_revision + 1;
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const chainId = origState?.chain_id || corrState?.chain_id || active.id;
+          const origWithChain = { ...origState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1665,8 +1674,8 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               input.reason.trim(),
               active.public_notice,
               actorId,
@@ -1717,15 +1726,18 @@ export class AdminRecordsManager {
           if (!input.reason || input.reason.trim().length < 5) {
             throw new Error('REASON_REQUIRED: A rejection reason of at least 5 characters is mandatory.');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'under_review' ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || activeCorrection.lifecycle_status !== 'under_review') {
             throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to reject.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
           const targetRevision = rec.current_revision + 1;
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const chainId = origState?.chain_id || corrState?.chain_id || active.id;
+          const origWithChain = { ...origState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1747,8 +1759,8 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               input.reason.trim(),
               active.public_notice,
               actorId,
@@ -1794,14 +1806,17 @@ export class AdminRecordsManager {
           if (staff.role !== 'researcher' && staff.role !== 'super_admin') {
             throw new Error('FORBIDDEN_TRANSITION_ROLE');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('proposed', 'under_review') ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
-            throw new Error('NO_ACTIVE_CORRECTION: No active correction found to cancel.');
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || !['proposed', 'under_review'].includes(activeCorrection.lifecycle_status)) {
+            throw new Error('NO_ACTIVE_CORRECTION: No active proposed or under review correction found to cancel.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const chainId = origState?.chain_id || corrState?.chain_id || active.id;
+          const origWithChain = { ...origState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1823,8 +1838,8 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               `Cancelled by author: ${input.reason?.trim() || 'No longer required'}`,
               active.public_notice,
               actorId,
@@ -1848,14 +1863,11 @@ export class AdminRecordsManager {
           if (staff.role !== 'publisher' && staff.role !== 'super_admin') {
             throw new Error('FORBIDDEN_TRANSITION_ROLE');
           }
-          const activeRes = await tx.query<any>(
-            `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'approved' ORDER BY created_at DESC LIMIT 1`,
-            [recordId],
-          );
-          if (activeRes.rows.length === 0) {
+          const activeCorrection = await this.getActiveCorrection(recordId, tx);
+          if (!activeCorrection || activeCorrection.lifecycle_status !== 'approved') {
             throw new Error('NO_APPROVED_CORRECTION: No approved correction available to publish.');
           }
-          const active = activeRes.rows[0];
+          const active = activeCorrection;
           const targetRevision = rec.current_revision + 1;
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
@@ -1883,6 +1895,9 @@ export class AdminRecordsManager {
 
           const corrected = (typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state) || {};
           const original = (typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state) || {};
+          const chainId = original?.chain_id || corrected?.chain_id || active.id;
+          const origWithChain = { ...original, chain_id: chainId };
+          const corrWithChain = { ...corrected, chain_id: chainId };
 
           // Compute diff
           const diff: Record<string, { before: any; after: any }> = {};
@@ -1992,13 +2007,14 @@ export class AdminRecordsManager {
               active.claim_id,
               active.source_id,
               active.correction_type,
-              JSON.stringify(active.original_state),
-              JSON.stringify(active.corrected_state),
+              JSON.stringify(origWithChain),
+              JSON.stringify(corrWithChain),
               active.reason,
               actorId,
               active.public_notice,
             ],
           );
+
 
           // 5. Append Gate 5 decision in review_decisions
           decisionId = randomUUID();
@@ -2104,13 +2120,12 @@ export class AdminRecordsManager {
         throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
       }
 
-      // Prevent duplicate active corrections
-      const activeCheck = await tx.query<any>(
-        `SELECT id, lifecycle_status FROM corrections WHERE record_id = $1 AND lifecycle_status IN ('proposed', 'under_review', 'approved') ORDER BY created_at DESC LIMIT 1`,
-        [recordId],
-      );
-      if (activeCheck.rows.length > 0) {
-        throw new Error(`DUPLICATE_CORRECTION_IN_PROGRESS: An active correction is already in progress for record revision #${rec.current_revision}.`);
+      // Prevent duplicate active corrections by evaluating latest chain states
+      const activeCorrection = await this.getActiveCorrection(recordId, tx);
+      if (activeCorrection) {
+        const origState = typeof activeCorrection.original_state === 'string' ? JSON.parse(activeCorrection.original_state) : activeCorrection.original_state;
+        const chainId = origState?.chain_id || activeCorrection.id;
+        throw new Error(`DUPLICATE_CORRECTION_IN_PROGRESS: An active correction (chain #${chainId}, status: '${activeCorrection.lifecycle_status}') is already in progress for record revision #${rec.current_revision}.`);
       }
 
       // Snapshot child records
@@ -2121,7 +2136,10 @@ export class AdminRecordsManager {
         tx.query<any>(`SELECT * FROM timeline_events WHERE record_id = $1`, [recordId]),
       ]);
 
+      const chainId = randomUUID();
+
       const originalState = {
+        chain_id: chainId,
         revision: rec.current_revision,
         record_id: rec.id,
         title: rec.title,
@@ -2141,6 +2159,7 @@ export class AdminRecordsManager {
       const targetRevision = rec.current_revision + 1;
       const correctedState = {
         ...originalState,
+        chain_id: chainId,
         target_revision: targetRevision,
         ...(input.changes || {}),
       };
@@ -2185,18 +2204,29 @@ export class AdminRecordsManager {
     });
   }
 
-  // 11. Get Active Correction
-  async getActiveCorrection(recordId: string): Promise<any | null> {
-    const res = await this.db.query(
+  // 11. Get Active Correction (Latest state of each logical correction chain)
+  async getActiveCorrection(recordId: string, client?: any): Promise<any | null> {
+    const dbClient = client || this.db;
+    const res = await dbClient.query(
       `
-      SELECT c.*, ap.display_name AS creator_name, ap.email AS creator_email,
-             rev_ap.display_name AS reviewer_name, app_ap.display_name AS approver_name
-      FROM corrections c
-      LEFT JOIN actor_profiles ap ON ap.id = c.created_by
-      LEFT JOIN actor_profiles rev_ap ON rev_ap.id = c.reviewed_by
-      LEFT JOIN actor_profiles app_ap ON app_ap.id = c.approved_by
-      WHERE c.record_id = $1 AND c.lifecycle_status IN ('proposed', 'under_review', 'approved')
-      ORDER BY c.created_at DESC
+      WITH latest_chain_states AS (
+        SELECT DISTINCT ON (COALESCE(c.original_state->>'chain_id', c.id::text))
+          c.*,
+          ap.display_name AS creator_name,
+          ap.email AS creator_email,
+          rev_ap.display_name AS reviewer_name,
+          app_ap.display_name AS approver_name
+        FROM corrections c
+        LEFT JOIN actor_profiles ap ON ap.id = c.created_by
+        LEFT JOIN actor_profiles rev_ap ON rev_ap.id = c.reviewed_by
+        LEFT JOIN actor_profiles app_ap ON app_ap.id = c.approved_by
+        WHERE c.record_id = $1
+        ORDER BY COALESCE(c.original_state->>'chain_id', c.id::text), c.created_at DESC
+      )
+      SELECT *
+      FROM latest_chain_states
+      WHERE lifecycle_status IN ('proposed', 'under_review', 'approved')
+      ORDER BY created_at DESC
       LIMIT 1
       `,
       [recordId],
@@ -2234,21 +2264,30 @@ export class AdminRecordsManager {
         throw new Error('FORBIDDEN_TRANSITION_ROLE: Only researchers or super admins can update correction draft.');
       }
 
-      const activeRes = await tx.query<any>(
-        `SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = 'proposed' ORDER BY created_at DESC LIMIT 1`,
-        [recordId],
-      );
-      if (activeRes.rows.length === 0) {
+      const activeCorrection = await this.getActiveCorrection(recordId, tx);
+      if (!activeCorrection || activeCorrection.lifecycle_status !== 'proposed') {
         throw new Error('NO_ACTIVE_PROPOSED_CORRECTION: No editable proposed correction found for this record.');
       }
-      const currentActive = activeRes.rows[0];
+      const currentActive = activeCorrection;
+
+      const currentOrig = typeof currentActive.original_state === 'string'
+        ? JSON.parse(currentActive.original_state)
+        : currentActive.original_state;
 
       const currentCorrected = typeof currentActive.corrected_state === 'string'
         ? JSON.parse(currentActive.corrected_state)
         : currentActive.corrected_state;
 
+      const chainId = currentOrig?.chain_id || currentCorrected?.chain_id || currentActive.id;
+
+      const updatedOrigState = {
+        ...currentOrig,
+        chain_id: chainId,
+      };
+
       const updatedCorrectedState = {
         ...currentCorrected,
+        chain_id: chainId,
         ...input.changes,
       };
 
@@ -2274,7 +2313,7 @@ export class AdminRecordsManager {
           currentActive.claim_id,
           currentActive.source_id,
           input.correction_type || currentActive.correction_type,
-          JSON.stringify(currentActive.original_state),
+          JSON.stringify(updatedOrigState),
           JSON.stringify(updatedCorrectedState),
           input.reason ? input.reason.trim() : currentActive.reason,
           input.public_notice !== undefined ? input.public_notice : currentActive.public_notice,
@@ -2285,6 +2324,7 @@ export class AdminRecordsManager {
       return { success: true, id: newCorrectionId, status: 'proposed' };
     });
   }
+
 
   // 14. Query Review Queue
   async getReviewQueue(): Promise<any[]> {

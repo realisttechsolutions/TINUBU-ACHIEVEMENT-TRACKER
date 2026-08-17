@@ -147,50 +147,34 @@ describe('Authoritative Corrections & Version History Lifecycle', () => {
           return { rows: timelineState.filter((t) => t.record_id === params?.[0]) };
         }
 
-        // Check active correction query
-        if (normalized.includes('SELECT id, lifecycle_status FROM corrections WHERE record_id = $1 AND lifecycle_status IN (\'proposed\', \'under_review\', \'approved\')')) {
-          const active = correctionsState.filter(
-            (c) => c.record_id === params?.[0] && ['proposed', 'under_review', 'approved'].includes(c.lifecycle_status),
+        // Check active correction query (chain-aware resolution with CTE)
+        if (normalized.includes('WITH latest_chain_states AS') || normalized.includes('FROM latest_chain_states') || normalized.includes('SELECT id, lifecycle_status FROM corrections WHERE record_id = $1')) {
+          const recordCorrections = correctionsState.filter((c) => c.record_id === params?.[0]);
+          const chainsMap = new Map<string, any>();
+          for (const c of recordCorrections) {
+            const chainId = c.original_state?.chain_id || c.corrected_state?.chain_id || c.id;
+            chainsMap.set(chainId, c); // Last appended row for this chain is stored
+          }
+          const activeChains = Array.from(chainsMap.values()).filter((c) =>
+            ['proposed', 'under_review', 'approved'].includes(c.lifecycle_status),
           );
-          return { rows: active.slice(-1) };
-        }
-
-        // Select proposed correction
-        if (normalized.includes('SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = \'proposed\'')) {
-          const active = correctionsState.filter((c) => c.record_id === params?.[0] && c.lifecycle_status === 'proposed');
-          return { rows: active.slice(-1) };
-        }
-
-        // Select under_review correction
-        if (normalized.includes('SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = \'under_review\'')) {
-          const active = correctionsState.filter((c) => c.record_id === params?.[0] && c.lifecycle_status === 'under_review');
-          return { rows: active.slice(-1) };
-        }
-
-        // Select approved correction
-        if (normalized.includes('SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status = \'approved\'')) {
-          const active = correctionsState.filter((c) => c.record_id === params?.[0] && c.lifecycle_status === 'approved');
-          return { rows: active.slice(-1) };
-        }
-
-        // Select under_review or approved
-        if (normalized.includes('SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN (\'under_review\', \'approved\')')) {
-          const active = correctionsState.filter(
-            (c) => c.record_id === params?.[0] && ['under_review', 'approved'].includes(c.lifecycle_status),
-          );
-          return { rows: active.slice(-1) };
-        }
-
-        // Select proposed or under_review
-        if (normalized.includes('SELECT * FROM corrections WHERE record_id = $1 AND lifecycle_status IN (\'proposed\', \'under_review\')')) {
-          const active = correctionsState.filter(
-            (c) => c.record_id === params?.[0] && ['proposed', 'under_review'].includes(c.lifecycle_status),
-          );
-          return { rows: active.slice(-1) };
+          return { rows: activeChains.slice(-1) };
         }
 
         // Insert into corrections
         if (normalized.includes('INSERT INTO corrections')) {
+          const origParsed = typeof params?.[6] === 'string' ? JSON.parse(params?.[6]) : params?.[6];
+          const corrParsed = typeof params?.[7] === 'string' ? JSON.parse(params?.[7]) : params?.[7];
+          const statusMatch = normalized.includes('\'under_review\'')
+            ? 'under_review'
+            : normalized.includes('\'approved\'')
+            ? 'approved'
+            : normalized.includes('\'rejected\'')
+            ? 'rejected'
+            : normalized.includes('\'published\'')
+            ? 'published'
+            : 'proposed';
+
           const newCorr = {
             id: params?.[0],
             external_id: params?.[1],
@@ -198,10 +182,10 @@ describe('Authoritative Corrections & Version History Lifecycle', () => {
             claim_id: params?.[3],
             source_id: params?.[4],
             correction_type: params?.[5],
-            original_state: typeof params?.[6] === 'string' ? JSON.parse(params?.[6]) : params?.[6],
-            corrected_state: typeof params?.[7] === 'string' ? JSON.parse(params?.[7]) : params?.[7],
+            original_state: origParsed,
+            corrected_state: corrParsed,
             reason: params?.[8],
-            lifecycle_status: normalized.includes('\'under_review\'') ? 'under_review' : normalized.includes('\'approved\'') ? 'approved' : normalized.includes('\'rejected\'') ? 'rejected' : normalized.includes('\'published\'') ? 'published' : 'proposed',
+            lifecycle_status: statusMatch,
             public_notice: params?.[9] || null,
             created_by: params?.[10] || params?.[9],
             created_at: new Date().toISOString(),
@@ -209,6 +193,7 @@ describe('Authoritative Corrections & Version History Lifecycle', () => {
           correctionsState.push(newCorr);
           return { rows: [{ id: newCorr.id }] };
         }
+
 
         // Insert into review_decisions
         if (normalized.includes('INSERT INTO review_decisions')) {
@@ -614,5 +599,133 @@ describe('Authoritative Corrections & Version History Lifecycle', () => {
         mockReviewer,
       ),
     ).rejects.toThrow(/FORBIDDEN_TRANSITION_ROLE/);
+  });
+
+  // 8. Terminal State Isolation: Prevents resurrection of old lifecycle rows after terminal state
+  it('strictly isolates terminal states (published, rejected, cancelled) without resurrecting superseded rows', async () => {
+    // A. Rejection Cycle: Open -> Submit -> Reject
+    const openRes = await manager.openCorrection(
+      recordState.id,
+      {
+        correction_type: 'factual_error',
+        reason: 'Correction to be rejected',
+        expected_revision: 1,
+      },
+      mockResearcher,
+    );
+    expect(openRes.success).toBe(true);
+
+    await manager.executeWorkflowTransition(
+      recordState.id,
+      { action: 'submit_correction' },
+      mockResearcher,
+    );
+
+    // Reject correction
+    const rejectRes = await manager.executeWorkflowTransition(
+      recordState.id,
+      { action: 'reject_correction', reason: 'Evidence does not corroborate proposed change' },
+      mockReviewer,
+    );
+    expect(rejectRes.success).toBe(true);
+
+    // Verify terminal state: No active correction exists (old proposed/under_review rows are NOT resurrected)
+    const activeAfterReject = await manager.getActiveCorrection(recordState.id);
+    expect(activeAfterReject).toBeNull();
+
+    // B. Cancellation Cycle: Open -> Cancel
+    const openCancel = await manager.openCorrection(
+      recordState.id,
+      {
+        correction_type: 'typographical',
+        reason: 'Correction to be cancelled',
+        expected_revision: 1,
+      },
+      mockResearcher,
+    );
+    expect(openCancel.success).toBe(true);
+
+    await manager.executeWorkflowTransition(
+      recordState.id,
+      { action: 'cancel_correction', reason: 'Author decided typo is minor' },
+      mockResearcher,
+    );
+
+    // Verify terminal state: No active correction exists
+    const activeAfterCancel = await manager.getActiveCorrection(recordState.id);
+    expect(activeAfterCancel).toBeNull();
+  });
+
+  // 9. Multiple Sequential Correction Cycles with Distinct Chain Identities
+  it('supports multiple sequential correction cycles across revisions with distinct chain identities and intact history', async () => {
+    // --- CYCLE 1: Revision 1 -> Revision 2 ---
+    const openRes1 = await manager.openCorrection(
+      recordState.id,
+      {
+        correction_type: 'numerical_update',
+        reason: 'Cycle 1 correction: Update allocation',
+        expected_revision: 1,
+        changes: { title: 'Lagos-Calabar Highway v2 Title' },
+      },
+      mockResearcher,
+    );
+    expect(openRes1.success).toBe(true);
+    expect(openRes1.current_revision).toBe(1);
+    expect(openRes1.target_revision).toBe(2);
+
+    await manager.executeWorkflowTransition(recordState.id, { action: 'submit_correction' }, mockResearcher);
+    await manager.executeWorkflowTransition(recordState.id, { action: 'approve_correction' }, mockReviewer);
+    const pubRes1 = await manager.executeWorkflowTransition(recordState.id, { action: 'publish_correction' }, mockPublisher);
+
+    expect(pubRes1.success).toBe(true);
+    expect(recordState.current_revision).toBe(2);
+
+    // Active correction for record must be null after publication
+    const activeAfterCycle1 = await manager.getActiveCorrection(recordState.id);
+    expect(activeAfterCycle1).toBeNull();
+
+    // --- CYCLE 2: Revision 2 -> Revision 3 ---
+    const openRes2 = await manager.openCorrection(
+      recordState.id,
+      {
+        correction_type: 'date_refinement',
+        reason: 'Cycle 2 correction: Update start date',
+        expected_revision: 2,
+        changes: { title: 'Lagos-Calabar Highway v3 Title' },
+      },
+      mockResearcher,
+    );
+    expect(openRes2.success).toBe(true);
+    expect(openRes2.current_revision).toBe(2);
+    expect(openRes2.target_revision).toBe(3);
+
+    // Update draft of Cycle 2
+    await manager.updateCorrectionDraft(
+      recordState.id,
+      {
+        public_notice: 'Updated notice for Cycle 2 revision 3',
+      },
+      mockResearcher,
+    );
+
+    await manager.executeWorkflowTransition(recordState.id, { action: 'submit_correction' }, mockResearcher);
+
+    // Verify active correction is Cycle 2 under_review, not resurrecting Cycle 1
+    const activeCycle2 = await manager.getActiveCorrection(recordState.id);
+    expect(activeCycle2).not.toBeNull();
+    expect(activeCycle2.lifecycle_status).toBe('under_review');
+    expect(activeCycle2.reason).toContain('Cycle 2');
+
+    await manager.executeWorkflowTransition(recordState.id, { action: 'approve_correction' }, mockReviewer);
+    const pubRes2 = await manager.executeWorkflowTransition(recordState.id, { action: 'publish_correction' }, mockPublisher);
+
+    expect(pubRes2.success).toBe(true);
+    expect(recordState.current_revision).toBe(3);
+
+    // Full history must contain all events from both Cycle 1 and Cycle 2
+    const fullHistory = await manager.getRecordFullHistory(recordState.id);
+    expect(fullHistory.currentRevision).toBe(3);
+    expect(fullHistory.publicationStatus).toBe('corrected');
+    expect(recordVersions.length).toBe(3);
   });
 });
