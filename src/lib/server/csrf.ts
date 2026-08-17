@@ -8,6 +8,7 @@ import { type NextRequest } from 'next/server';
 import { CSRF_HEADER_NAME, CSRF_HEADER_EXPECTED_VALUE } from '../auth/types';
 
 export { CSRF_HEADER_NAME, CSRF_HEADER_EXPECTED_VALUE };
+export const validateCsrfProtection = validateCsrf;
 
 /**
  * Validates that an incoming administrative POST request contains the required

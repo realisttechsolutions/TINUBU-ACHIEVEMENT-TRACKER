@@ -43,10 +43,10 @@ export function isValidStaffRole(role: unknown): role is StaffRole {
  * Route authorization matrix
  */
 export const ROLE_ROUTE_PERMISSIONS: Record<StaffRole, readonly string[]> = {
-  super_admin: ['/admin', '/admin/research', '/admin/review', '/admin/publish', '/admin/users'],
-  researcher: ['/admin', '/admin/research'],
-  reviewer: ['/admin', '/admin/review'],
-  publisher: ['/admin', '/admin/publish'],
+  super_admin: ['/admin', '/admin/records', '/admin/research', '/admin/review', '/admin/publish', '/admin/users'],
+  researcher: ['/admin', '/admin/records', '/admin/research'],
+  reviewer: ['/admin', '/admin/records', '/admin/review'],
+  publisher: ['/admin', '/admin/records', '/admin/publish'],
 } as const;
 
 /**
@@ -62,6 +62,13 @@ export function isRoleAuthorizedForPath(role: StaffRole, targetPath: string): bo
     : targetPath;
 
   if (normalizedPath === '/admin') {
+    return true;
+  }
+
+  if (normalizedPath === '/admin/records' || normalizedPath.startsWith('/admin/records/')) {
+    if (normalizedPath === '/admin/records/new') {
+      return role === 'researcher';
+    }
     return true;
   }
 

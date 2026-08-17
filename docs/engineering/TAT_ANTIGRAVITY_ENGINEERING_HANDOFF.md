@@ -58,11 +58,28 @@
 
 ---
 
-## 3. Mission 10F Readiness & Scope Boundaries
+## 3. Mission 10F Execution & Completion Summary
 
-- **Next Mission:** Mission 10F (Editorial CRUD & Research Entry Foundation).
-- **Invariants for M10F:**
-  - Public viewer identity remains four-view-only with zero login.
-  - Database write privileges for staff operations will be structured under explicit service boundaries.
+- **Branch:** `antigravity/mission-10f-admin-crud`
+- **Scope Accomplished:**
+  - Dedicated admin database writer connection pool (`src/server/db/admin-pool.ts`) supporting atomic transactions (`withTransaction<T>()`) and least-privilege role scoping (`tat_admin_writer`).
+  - Strict publication isolation verified and proven: non-public draft records (`is_public = false`, `publication_status = 'draft'`) are mathematically excluded from all four approved public views (`public_record_catalog`, `public_claim_evidence`, `public_financial_records`, `public_beneficiary_records`).
+  - Strict Zod validation schemas across all 4 record model classes, factual claims, sources, financial allocations, beneficiary counts, and milestone timeline events (`src/server/admin/validation.ts`).
+  - Transactional admin records repository and service layer (`src/server/admin/records-service.ts`, `src/server/admin/reference-service.ts`) with optimistic concurrency protection on `updated_at`.
+  - Comprehensive admin API routes with server-side RBAC and anti-CSRF protection (`src/app/api/admin/records/`, `src/app/api/admin/reference-data`).
+  - Upgraded Admin Dashboard (`/admin`), Records Index (`/admin/records`), Create Record Wizard (`/admin/records/new`), and Full 10-Section Tabbed Record Editor (`/admin/records/[id]`).
+  - 100% test pass rate across 28 test suites (123 passed, 2 skipped live Cloud SQL in local mock mode, 0 failed).
+  - Next.js production build compiled cleanly across 70 routes with 0 errors.
+- **Mission 10F Status:** **COMPLETE & CERTIFIED CLOSED**.
+
+---
+
+## 4. Mission 10G Readiness & Scope Boundaries
+
+- **Next Mission:** Mission 10G (Editorial Review, Approval Workflows & Release Management).
+- **Invariants for M10G:**
+  - Multi-stage editorial review workflow (Draft -> In Review -> Ready for Publication -> Published).
+  - Four-eyes principle: Researchers cannot approve their own submissions; Reviewers/Publishers govern release state transitions.
+  - Public reader identity remains read-only on four public views with zero login.
   - Production (`tinubu-achievement-tracker`) remains UNAUTHORIZED until full staging signoff.
   - AI automation remains UNAUTHORIZED.

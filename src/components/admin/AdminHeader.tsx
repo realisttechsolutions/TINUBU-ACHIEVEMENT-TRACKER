@@ -16,6 +16,7 @@ interface AdminHeaderProps {
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'Overview' },
+  { href: '/admin/records', label: 'Records' },
   { href: '/admin/research', label: 'Research' },
   { href: '/admin/review', label: 'Review' },
   { href: '/admin/publish', label: 'Publish' },
