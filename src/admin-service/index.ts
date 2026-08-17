@@ -215,7 +215,8 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
         if (!parsed.success) {
           return sendJson(res, 400, { error: 'Invalid source payload', details: parsed.error.flatten() });
         }
-        const result = await manager.saveSource(parsed.data, staff);
+        const result = await manager.saveSource(parsed.data, staff, recordId);
+
         return sendJson(res, 200, { success: true, ...result });
       }
 

@@ -583,8 +583,29 @@ export class AdminRecordsManager {
   }
 
   // 4. Manage Sources
-  async saveSource(input: SourceInput, staff: VerifiedStaffContext): Promise<{ id: string }> {
+  async saveSource(input: SourceInput, staff: VerifiedStaffContext, recordId?: string): Promise<{ id: string }> {
     return this.db.withTransaction(async (tx) => {
+      if (recordId && recordId !== '00000000-0000-0000-0000-000000000000') {
+        const recordCheck = await tx.query<{
+          workflow_status: string;
+          publication_status: string;
+          current_revision: number;
+          is_public: boolean;
+        }>(
+          `SELECT workflow_status, publication_status, current_revision, is_public FROM records WHERE id = $1`,
+          [recordId],
+        );
+        if (recordCheck.rows.length > 0) {
+          const { workflow_status, publication_status, current_revision, is_public } = recordCheck.rows[0];
+          if ((publication_status === 'published' || publication_status === 'corrected') && is_public) {
+            throw new Error(`CORRECTION_REQUIRED: Record is currently published (revision #${current_revision}). Direct modification of published records is prohibited. Open an audited correction to revise published content.`);
+          }
+          if (workflow_status !== 'draft' && staff.role !== 'super_admin') {
+            throw new Error(`RECORD_LOCKED_FOR_REVIEW: Record is in '${workflow_status}' state and cannot be modified until returned to draft.`);
+          }
+        }
+      }
+
       if (input.original_url && !input.id) {
         const existing = await tx.query<{ id: string }>(
           `SELECT id FROM sources WHERE original_url = $1`,
@@ -605,6 +626,7 @@ export class AdminRecordsManager {
           return { id: existingId };
         }
       }
+
 
       const sourceId = input.id || randomUUID();
       const externalId = `SRC-${sourceId.substring(0, 8).toUpperCase()}`;
