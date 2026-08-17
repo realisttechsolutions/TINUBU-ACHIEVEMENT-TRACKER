@@ -39,6 +39,14 @@ export async function POST(
     if (err.message?.includes('UNAUTHENTICATED')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    if (
+      err.message?.includes('CORRECTION_REQUIRED') ||
+      err.message?.includes('RECORD_LOCKED_FOR_REVIEW') ||
+      err.message?.includes('FORBIDDEN') ||
+      err.message?.includes('Forbidden')
+    ) {
+      return NextResponse.json({ error: err.message }, { status: 403 });
+    }
     console.error('Error in POST /api/admin/records/[id]/timeline:', err);
     return NextResponse.json({ error: 'Failed to save timeline event' }, { status: 500 });
   }

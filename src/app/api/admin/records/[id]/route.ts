@@ -72,6 +72,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     if (
+      err.message?.includes('CORRECTION_REQUIRED') ||
       err.message?.includes('RECORD_LOCKED_FOR_REVIEW') ||
       err.message?.includes('FORBIDDEN') ||
       err.message?.includes('Forbidden')
