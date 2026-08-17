@@ -19,7 +19,7 @@ import {
 } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyPlaceholderForStagingClientEnvKey',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyDALsIYsYfBjU5uoBN7xKcLmi9vOpHOrXg',
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'tinubu-achievement-stg.firebaseapp.com',
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'tinubu-achievement-stg',
 };

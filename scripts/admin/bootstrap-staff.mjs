@@ -73,7 +73,34 @@ async function main() {
   }
 
   if (getApps().length === 0) {
-    initializeApp({ projectId });
+    let credential;
+    try {
+      const { createRequire } = await import('node:module');
+      const require = createRequire(import.meta.url);
+      const fbAuth = require('../../node_modules/firebase-tools/lib/auth');
+      const { requireAuth } = require('../../node_modules/firebase-tools/lib/requireAuth');
+      const apiv2 = require('../../node_modules/firebase-tools/lib/apiv2');
+      const account = fbAuth.getGlobalDefaultAccount();
+      if (account) {
+        await requireAuth({ ...account, project: projectId });
+        credential = {
+          getAccessToken: async () => {
+            const token = await apiv2.getAccessToken();
+            return {
+              access_token: token,
+              expires_in: 3600,
+            };
+          },
+        };
+      }
+    } catch {
+      // Fallback to ADC if firebase-tools is not accessible
+    }
+
+    initializeApp({
+      projectId,
+      credential,
+    });
   }
 
   const auth = getAuth();

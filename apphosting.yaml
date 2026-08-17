@@ -14,6 +14,21 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyDALsIYsYfBjU5uoBN7xKcLmi9vOpHOrXg
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: tinubu-achievement-stg.firebaseapp.com
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: tinubu-achievement-stg
+    availability:
+      - BUILD
+      - RUNTIME
   - variable: TAT_DATA_SOURCE
     value: cloud-sql
     availability:
