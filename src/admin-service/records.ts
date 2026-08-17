@@ -1083,6 +1083,17 @@ export class AdminRecordsManager {
           newIsPublic = false;
           setPublishedAt = false;
 
+          // If current revision already has review decisions (e.g. previous return cycle), advance revision
+          let targetRevision = rec.current_revision;
+          const existingDecisions = await tx.query(
+            `SELECT 1 FROM review_decisions WHERE record_id = $1 AND record_revision = $2 LIMIT 1`,
+            [recordId, targetRevision],
+          );
+          if (existingDecisions.rows.length > 0) {
+            targetRevision = targetRevision + 1;
+            await tx.query(`UPDATE records SET current_revision = $1 WHERE id = $2`, [targetRevision, recordId]);
+          }
+
           // Update child claims & relationships review status
           await tx.query(
             `UPDATE evidence_claims SET workflow_status = 'evidence_review', updated_at = CURRENT_TIMESTAMP WHERE record_id = $1`,
@@ -1109,7 +1120,7 @@ export class AdminRecordsManager {
               decisionId,
               `RD-${decisionId.substring(0, 8).toUpperCase()}`,
               recordId,
-              rec.current_revision,
+              targetRevision,
               actorId,
               input.reason?.trim() || 'Submitted draft package for editorial review',
             ],

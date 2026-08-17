@@ -71,6 +71,13 @@ export async function PUT(
     if (err.message?.includes('UNAUTHENTICATED')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    if (
+      err.message?.includes('RECORD_LOCKED_FOR_REVIEW') ||
+      err.message?.includes('FORBIDDEN') ||
+      err.message?.includes('Forbidden')
+    ) {
+      return NextResponse.json({ error: err.message }, { status: 403 });
+    }
     console.error('Error in PUT /api/admin/records/[id]:', err);
     return NextResponse.json({ error: 'Failed to update record' }, { status: 500 });
   }
