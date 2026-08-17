@@ -43,7 +43,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
       const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-uid-123',
-        email: 'researcher@tracker.gov.ng',
+        email: 'researcher@example.com',
         email_verified: true,
         tat_staff: true,
         tat_role: 'researcher',
@@ -55,7 +55,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
 
       expect(result.sessionCookie).toBe('firebase-session-cookie-789');
       expect(result.user.uid).toBe('staff-uid-123');
-      expect(result.user.email).toBe('researcher@tracker.gov.ng');
+      expect(result.user.email).toBe('researcher@example.com');
       expect(result.user.role).toBe('researcher');
       expect(result.user.emailVerified).toBe(true);
 
@@ -69,7 +69,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
       const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-uid-stale',
-        email: 'stale@tracker.gov.ng',
+        email: 'stale@example.com',
         email_verified: true,
         tat_staff: true,
         tat_role: 'researcher',
@@ -86,7 +86,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
       const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-uid-unverified',
-        email: 'unverified@tracker.gov.ng',
+        email: 'unverified@example.com',
         email_verified: false,
         tat_staff: true,
         tat_role: 'reviewer',
@@ -119,7 +119,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
       const nowSeconds = Math.floor(Date.now() / 1000);
       mockVerifyIdToken.mockResolvedValue({
         uid: 'staff-invalid-role',
-        email: 'user@tracker.gov.ng',
+        email: 'user@example.com',
         email_verified: true,
         tat_staff: true,
         tat_role: 'viewer', // invalid role
@@ -137,7 +137,7 @@ describe('Staff Session & Cookie Verification (Mission 10E / 10E-LIVE)', () => {
     it('returns StaffUser for active, valid session cookie', async () => {
       mockVerifySessionCookie.mockResolvedValue({
         uid: 'staff-uid-456',
-        email: 'superadmin@tracker.gov.ng',
+        email: 'superadmin@example.com',
         email_verified: true,
         tat_staff: true,
         tat_role: 'super_admin',

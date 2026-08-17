@@ -1,5 +1,5 @@
 # TINUBU ACHIEVEMENT TRACKER V2
-## Cloud Configuration & Staging Changes Register (Mission 10E / 10E-FINAL-GATE)
+## Cloud Configuration & Staging Changes Register (Mission 10E / 10E-FINAL-GATE / 10E-LIVE)
 
 ---
 
@@ -16,7 +16,7 @@ Under Section 35 of Development Mission 10E and Mission 10E-FINAL-GATE, changes 
 | **Identity Toolkit API** | `tinubu-achievement-stg` | `identitytoolkit.googleapis.com` enabled | Required for Firebase Authentication and Admin SDK token validation. |
 | **Auth Provider** | `tinubu-achievement-stg` | **Email/Password** provider enabled. Public registration disabled. | Strictly gates account creation to out-of-band operator bootstrap CLI scripts. |
 | **Password Policy** | `tinubu-achievement-stg` | Enforce 12+ chars, uppercase, lowercase, numeric, non-alphanumeric. | Prevents brute-force or dictionary compromises of staff credentials. |
-| **Email Enumeration Protection** | `tinubu-achievement-stg` | Enabled (`client.permissions.disabledUserSignup: true`, generic auth responses). | Prevents external probing of staff email addresses. |
+| **Email Enumeration Protection** | `tinubu-achievement-stg` | Enabled (`emailPrivacyConfig.enableImprovedEmailPrivacy: true`, generic auth responses). | Prevents external probing of staff email addresses. |
 | **App Hosting Staging Backend** | `tat-staging` | Backend `tat-staging` (us-central1). | Live staging verification of `/admin/*` routes and session cookies. |
 | **Cloud SQL Connection Boundary** | `tat-staging-db-app@...` / `tat_public_reader` | **SELECT ONLY THROUGH FOUR APPROVED PUBLIC VIEWS**. Direct base-table SELECT = **DENIED**. Writes = **DENIED**. | Zero base-table access or write privileges granted. |
 

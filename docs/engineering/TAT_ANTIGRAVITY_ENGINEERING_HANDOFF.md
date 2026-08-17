@@ -37,7 +37,7 @@
 
 ---
 
-## 6. Mission 10E Execution & Completion Summary
+## 2. Mission 10E Execution & Completion Summary
 
 - **Branch:** `antigravity/mission-10e-admin-auth`
 - **Worktree:** `C:\Users\DELL\Documents\111 ANTI & CODEX\TINUBU ACHIEVEMENTS TRACKER-ANTIGRAVITY-M10E`
@@ -50,7 +50,19 @@
   - Security headers (`noindex`, `no-store`) on all administrative paths.
   - Public site zero-login immunity certified across 11 core routes.
   - Public database boundary certified (SELECT only on 4 public views; 0 base table access; 0 writes).
-  - Out-of-band operator bootstrap scripts (`scripts/admin/bootstrap-staff.mjs`, `scripts/admin/set-staff-role.mjs`, `scripts/admin/disable-staff.mjs`) with strict email verification requirement.
+  - Out-of-band operator bootstrap scripts (`scripts/admin/bootstrap-staff.mjs`, `scripts/admin/set-staff-role.mjs`, `scripts/admin/disable-staff.mjs`, `scripts/admin/get-staff-status.mjs`, `scripts/admin/generate-action-links.mjs`) with strict email verification requirement.
   - 100% test pass rate across 26 test suites (99 passed, 2 skipped live Cloud SQL in local mock mode, 0 failed).
   - Next.js production build certified clean (68 static/dynamic routes).
-- **First Super Admin Status:** `READY FOR FIRST SUPER ADMIN EMAIL: YES` (documented in `docs/engineering/TAT_M10E_SUPER_ADMIN_BOOTSTRAP.md`).
+- **First Super Admin Certification:** Certified live on staging (`realisttechsolutions@gmail.com`: emailVerified=true, tat_staff=true, tat_role="super_admin", live human login, session issuance, and logout/re-login verified).
+- **Mission 10E Status:** **COMPLETE & CERTIFIED CLOSED**.
+
+---
+
+## 3. Mission 10F Readiness & Scope Boundaries
+
+- **Next Mission:** Mission 10F (Editorial CRUD & Research Entry Foundation).
+- **Invariants for M10F:**
+  - Public viewer identity remains four-view-only with zero login.
+  - Database write privileges for staff operations will be structured under explicit service boundaries.
+  - Production (`tinubu-achievement-tracker`) remains UNAUTHORIZED until full staging signoff.
+  - AI automation remains UNAUTHORIZED.

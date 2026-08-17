@@ -9,7 +9,11 @@ const { requireAuth } = require('../../node_modules/firebase-tools/lib/requireAu
 const apiv2 = require('../../node_modules/firebase-tools/lib/apiv2');
 
 async function main() {
-  const email = (process.argv[2] || 'realisttechsolutions@gmail.com').trim().toLowerCase();
+  const email = process.argv[2]?.trim().toLowerCase();
+  if (!email || !email.includes('@')) {
+    console.error('Usage: node scripts/admin/get-staff-status.mjs <email>');
+    process.exit(1);
+  }
   const projectId = process.env.FIREBASE_PROJECT_ID || 'tinubu-achievement-stg';
 
   const account = fbAuth.getGlobalDefaultAccount();

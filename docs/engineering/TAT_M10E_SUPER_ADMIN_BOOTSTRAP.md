@@ -84,17 +84,17 @@ Once the first Super Admin is active, additional staff accounts can be provision
 
 ```bash
 # Provision a Researcher
-node scripts/admin/bootstrap-staff.mjs --email researcher1@tracker.gov.ng --role researcher --confirm
+node scripts/admin/bootstrap-staff.mjs --email researcher1@example.com --role researcher --confirm
 
 # Provision a Reviewer
-node scripts/admin/bootstrap-staff.mjs --email reviewer1@tracker.gov.ng --role reviewer --confirm
+node scripts/admin/bootstrap-staff.mjs --email reviewer1@example.com --role reviewer --confirm
 
 # Provision a Publisher
-node scripts/admin/bootstrap-staff.mjs --email publisher1@tracker.gov.ng --role publisher --confirm
+node scripts/admin/bootstrap-staff.mjs --email publisher1@example.com --role publisher --confirm
 
 # Promote/Change an existing staff role
-node scripts/admin/set-staff-role.mjs --email staff@tracker.gov.ng --role reviewer --confirm
+node scripts/admin/set-staff-role.mjs --email staff@example.com --role reviewer --confirm
 
 # Immediately Disable an account and revoke active sessions
-node scripts/admin/disable-staff.mjs --email staff@tracker.gov.ng --confirm
+node scripts/admin/disable-staff.mjs --email staff@example.com --confirm
 ```

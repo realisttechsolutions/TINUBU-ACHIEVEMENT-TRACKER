@@ -32,7 +32,7 @@ describe('Admin Authentication API Routes (Mission 10E)', () => {
         sessionCookie: 'mock-firebase-session-cookie',
         user: {
           uid: 'staff-uid-1',
-          email: 'publisher@tracker.gov.ng',
+          email: 'publisher@example.com',
           emailVerified: true,
           role: 'publisher',
           displayName: 'Test Publisher',
@@ -54,7 +54,7 @@ describe('Admin Authentication API Routes (Mission 10E)', () => {
       const data = await res.json();
       expect(data.success).toBe(true);
       expect(data.role).toBe('publisher');
-      expect(data.email).toBe('publisher@tracker.gov.ng');
+      expect(data.email).toBe('publisher@example.com');
 
       const setCookieHeader = res.headers.get('set-cookie');
       expect(setCookieHeader).toContain(sessionModule.ADMIN_SESSION_COOKIE_NAME);
@@ -102,7 +102,7 @@ describe('Admin Authentication API Routes (Mission 10E)', () => {
     it('returns authenticated user info when valid session cookie is present', async () => {
       vi.spyOn(sessionModule, 'verifyStaffSession').mockResolvedValue({
         uid: 'staff-uid-99',
-        email: 'superadmin@tracker.gov.ng',
+        email: 'superadmin@example.com',
         emailVerified: true,
         role: 'super_admin',
         displayName: 'Super Admin User',
@@ -119,7 +119,7 @@ describe('Admin Authentication API Routes (Mission 10E)', () => {
       expect(res.status).toBe(200);
       const data = await res.json();
       expect(data.authenticated).toBe(true);
-      expect(data.user.email).toBe('superadmin@tracker.gov.ng');
+      expect(data.user.email).toBe('superadmin@example.com');
       expect(data.user.role).toBe('super_admin');
     });
   });

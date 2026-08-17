@@ -1,5 +1,5 @@
 # TINUBU ACHIEVEMENT TRACKER V2
-## Staff Authentication & Authorization Test Report (Mission 10E / 10E-LIVE)
+## Staff Authentication & Authorization Test Report (Mission 10E / 10E-FINAL-GATE / 10E-LIVE)
 
 ---
 
@@ -7,8 +7,9 @@
 
 - **Execution Environment:** Node.js v24.12.0 / Vitest v4.0.18 / React 18 / Next.js 15.5.21
 - **Auth Test Suites:** 6 suites, 45 tests (100% Passed)
-- **Full Repository Suites:** 26 suites, 101 tests (99 Passed, 2 Skipped live cloud SQL in local mock mode, 0 Failed)
+- **Full Repository Suites:** 26 suites, 101 tests (99 Passed, 2 Skipped live Cloud SQL in local mock mode, 0 Failed)
 - **Regression Status:** Zero regressions across database migrations, PGlite schemas, M02 research ingestion reconciliation, and public UI components.
+- **Admin Auth Neutralization:** All `.gov.ng` demo placeholders in admin auth components and fixtures replaced with standard neutral domains (`name@example.com`, `user@example.com`).
 
 ---
 
@@ -59,7 +60,7 @@
 
 ---
 
-## 3. Production Build & Local HTTP Verification
+## 3. Production Build & Live Verification
 
 - **Next.js Production Build:** 68 static and dynamic routes compiled with 0 errors.
-- **Local HTTP Verification:** 12/12 automated integration tests passed (anonymous access, noindex/no-store headers, 307 redirects, 403 CSRF enforcement).
+- **Live Staging Certification:** Deployed to Firebase App Hosting backend `tat-staging` on `tinubu-achievement-stg`. Live human login, session cookie issuance, RBAC routing, and logout certified.

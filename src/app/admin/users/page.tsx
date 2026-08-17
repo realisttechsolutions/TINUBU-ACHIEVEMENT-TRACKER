@@ -58,21 +58,21 @@ export default async function AdminUsersPage() {
           <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
             <div className="text-slate-300 text-[11px] font-sans mb-1"># Provision a new staff user or promote an existing account</div>
             <code className="text-emerald-400">
-              node scripts/admin/bootstrap-staff.mjs --email user@tracker.gov.ng --role researcher --confirm
+              node scripts/admin/bootstrap-staff.mjs --email user@example.com --role researcher --confirm
             </code>
           </div>
 
           <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
             <div className="text-slate-300 text-[11px] font-sans mb-1"># Update assigned staff role</div>
             <code className="text-emerald-400">
-              node scripts/admin/set-staff-role.mjs --email user@tracker.gov.ng --role reviewer --confirm
+              node scripts/admin/set-staff-role.mjs --email user@example.com --role reviewer --confirm
             </code>
           </div>
 
           <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
             <div className="text-slate-300 text-[11px] font-sans mb-1"># Disable staff account & revoke active sessions</div>
             <code className="text-emerald-400">
-              node scripts/admin/disable-staff.mjs --email user@tracker.gov.ng --confirm
+              node scripts/admin/disable-staff.mjs --email user@example.com --confirm
             </code>
           </div>
         </div>

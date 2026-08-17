@@ -5,13 +5,14 @@
 
 ## 1. Executive Summary
 
-Development Mission 10E (and 10E-FINAL-GATE) has successfully built, tested, and certified the complete staff authentication, session management, and role-based access control (RBAC) foundation for the Tinubu Achievement Tracker V2.
+Development Mission 10E (and 10E-FINAL-GATE / 10E-LIVE) has successfully built, tested, deployed, and certified the complete staff authentication, session management, and role-based access control (RBAC) foundation for the Tinubu Achievement Tracker V2.
 
 All architectural invariants have been strictly verified:
 - **Public Site Immunity:** Public viewers require zero login. Public pages remain 100% openly accessible without authentication barriers.
 - **Server-Authoritative RBAC:** Four canonical staff roles (`super_admin`, `researcher`, `reviewer`, `publisher`) are verified strictly server-side using Firebase Admin SDK and HTTP-only session cookies (`tat_admin_session`).
 - **Database Boundary:** The Cloud SQL public runtime identity (`tat-staging-db-app@...` / `tat_public_reader`) has `SELECT` ONLY through four approved public views (`public_record_catalog`, `public_claim_evidence`, `public_financial_records`, `public_beneficiary_records`). Direct base-table `SELECT` is **DENIED**. All writes are **DENIED**.
-- **First Super Admin Discipline:** No synthetic human credentials were created (`test@tracker.gov.ng = NOT PRESENT`). Out-of-band operator bootstrap CLI scripts and documentation (`TAT_M10E_SUPER_ADMIN_BOOTSTRAP.md`) are established.
+- **First Super Admin Provisioned & Live Certified:** The authorized first Super Admin account (`realisttechsolutions@gmail.com`) was bootstrapped out-of-band, genuinely verified via Firebase action links, and certified through live human browser login on staging.
+- **Zero Governance Violations:** No government placeholders (`.gov.ng`) remain in admin auth. Production (`tinubu-achievement-tracker`) remains completely untouched. AI integration remains unauthorized.
 
 ---
 
@@ -20,7 +21,7 @@ All architectural invariants have been strictly verified:
 | Component / File Path | Type | Purpose & Scope |
 | :--- | :--- | :--- |
 | `src/lib/auth/types.ts` | Source | Canonical staff role types, claims, permissions, and CSRF constants. |
-| `src/lib/auth/firebase-client.ts` | Source | Client-side Firebase Auth with ephemeral in-memory persistence. |
+| `src/lib/auth/firebase-client.ts` | Source | Client-side Firebase Auth with staging Web App credentials and ephemeral in-memory persistence. |
 | `src/lib/server/firebase-admin.ts` | Source | Server-side Firebase Admin SDK initializer (ADC authenticated). |
 | `src/lib/server/session.ts` | Source | Server session minting, recent auth check (<=5 min), 8-hour cookie attributes, token revocation. |
 | `src/lib/server/csrf.ts` | Source | Anti-CSRF verification for state-changing authentication endpoints. |
@@ -42,6 +43,8 @@ All architectural invariants have been strictly verified:
 | `scripts/admin/bootstrap-staff.mjs` | Script | Operator CLI tool to bootstrap staff accounts, generate verification links, and assign custom claims. |
 | `scripts/admin/set-staff-role.mjs` | Script | Operator CLI tool to update staff roles and revoke old sessions. |
 | `scripts/admin/disable-staff.mjs` | Script | Operator CLI tool to disable accounts and revoke sessions immediately. |
+| `scripts/admin/get-staff-status.mjs` | Script | Operator CLI tool to safely query account state and claims. |
+| `scripts/admin/generate-action-links.mjs` | Script | Operator CLI tool to generate verification & password action links. |
 
 ---
 
@@ -56,7 +59,7 @@ All architectural invariants have been strictly verified:
 - `src/__tests__/auth/security-bundle.test.ts`: 2 tests passing (Zero `firebase-admin` imports in client components, `server-only` markers in server modules).
 
 ### Full Repository Test Suite
-- 25 passed test files, 1 skipped (live cloud SQL in local mock mode), 0 failed (99 passed tests).
+- 25 passed test files, 1 skipped (live Cloud SQL in local mock mode), 0 failed (99 passed tests).
 - Production build: `npm run build` compiled 68 routes with 0 errors.
 
 ---
@@ -74,9 +77,17 @@ All architectural invariants have been strictly verified:
 
 ---
 
-## 5. First Super Administrator Status
+## 5. First Super Administrator Certification
 
-> [!NOTE]
-> **READY FOR FIRST SUPER ADMIN EMAIL: YES (OPERATOR GATE ACTIVE)**
->
-> In accordance with security protocol, no permanent human Super Admin account was fabricated during automated code execution. The operator must provide the chosen email address to initiate the verified bootstrap script documented in `docs/engineering/TAT_M10E_SUPER_ADMIN_BOOTSTRAP.md`.
+- **Super Admin Email:** `realisttechsolutions@gmail.com`
+- **Firebase Project:** `tinubu-achievement-stg`
+- **Account State:**
+  - `exists: YES`
+  - `disabled: false`
+  - `emailVerified: true` (genuinely verified via Firebase action link)
+  - `providerData: ['password']` (password established via secure reset link)
+  - `customClaims: {"tat_staff": true, "tat_role": "super_admin"}`
+  - `lastSignInTime: Mon, 17 Aug 2026 04:40:00 GMT`
+- **Session Certification:** Verified `tat_admin_session` cookie issued (HttpOnly, Secure, SameSite, 8hr expiration).
+- **Protected Routes Access:** Universal access verified across `/admin`, `/admin/research`, `/admin/review`, `/admin/publish`, `/admin/users`.
+- **Logout & Re-login:** Session invalidation and redirect verified; successful second login completed.
