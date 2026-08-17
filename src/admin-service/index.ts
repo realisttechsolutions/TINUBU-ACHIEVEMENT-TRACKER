@@ -226,8 +226,14 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
     if (error.message?.includes('RECORD_LOCKED_FOR_REVIEW')) {
       return sendJson(res, 403, { error: error.message });
     }
+    if (error.message?.includes('STAFF_ACTOR_NOT_PROVISIONED')) {
+      return sendJson(res, 403, { error: error.message });
+    }
     if (error.message?.includes('FORBIDDEN_TRANSITION_ROLE')) {
       return sendJson(res, 403, { error: 'Forbidden: Your role is not authorized for this workflow transition.' });
+    }
+    if (error.message?.includes('REVIEW_APPROVAL_REQUIRED')) {
+      return sendJson(res, 400, { error: error.message });
     }
     if (error.message?.includes('INVALID_TRANSITION') || error.message?.includes('REASON_REQUIRED')) {
       return sendJson(res, 400, { error: error.message });

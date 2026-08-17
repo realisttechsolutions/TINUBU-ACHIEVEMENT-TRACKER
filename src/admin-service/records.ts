@@ -14,7 +14,7 @@ import type {
 
 const SYSTEM_ACTOR_ID = '00000000-0000-4000-8000-000000000005';
 
-async function ensureStaffActor(tx: any, staff: VerifiedStaffContext): Promise<string> {
+async function resolveStaffActor(tx: any, staff: VerifiedStaffContext): Promise<string> {
   const existing = await tx.query(
     `SELECT id FROM actor_profiles WHERE firebase_uid = $1 OR email = $2 LIMIT 1`,
     [staff.uid, staff.email],
@@ -22,16 +22,7 @@ async function ensureStaffActor(tx: any, staff: VerifiedStaffContext): Promise<s
   if (existing.rows.length > 0) {
     return existing.rows[0].id;
   }
-  const actorId = randomUUID();
-  await tx.query(
-    `
-    INSERT INTO actor_profiles (id, external_id, firebase_uid, actor_kind, display_name, email, status)
-    VALUES ($1, $2, $3, 'human', $4, $5, 'active')
-    ON CONFLICT (firebase_uid) DO UPDATE SET email = EXCLUDED.email
-    `,
-    [actorId, `ACT-${actorId.substring(0, 8).toUpperCase()}`, staff.uid, staff.email.split('@')[0] || 'Staff User', staff.email],
-  );
-  return actorId;
+  throw new Error(`STAFF_ACTOR_NOT_PROVISIONED: Authenticated staff identity '${staff.email}' (UID: ${staff.uid}) has no active profile in actor_profiles. Contact administrator.`);
 }
 
 function getEvidenceProfile(recordType: string): string {
@@ -1070,7 +1061,7 @@ export class AdminRecordsManager {
         throw new Error('CONCURRENCY_CONFLICT');
       }
 
-      const actorId = await ensureStaffActor(tx, staff);
+      const actorId = await resolveStaffActor(tx, staff);
       const action = input.action;
       let newWorkflowStatus = rec.workflow_status;
       let newPublicationStatus = rec.publication_status;
@@ -1100,6 +1091,28 @@ export class AdminRecordsManager {
           await tx.query(
             `UPDATE claim_source_relationships SET review_status = 'evidence_review', updated_at = CURRENT_TIMESTAMP WHERE claim_id IN (SELECT id FROM evidence_claims WHERE record_id = $1)`,
             [recordId],
+          );
+
+          // Append Review Decision (Gate 3 Data Readiness & Escalation to Editorial Human Approval)
+          decisionId = randomUUID();
+          await tx.query(
+            `
+            INSERT INTO review_decisions (
+              id, external_id, record_id, subject_scope, record_revision, gate_code,
+              decision, reviewer_id, rationale, risk_level, decided_at, created_at
+            ) VALUES (
+              $1, $2, $3, 'record', $4, 'gate_3_automated_data_readiness',
+              'escalated_to_human_lead', $5, $6, 'low', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+            `,
+            [
+              decisionId,
+              `RD-${decisionId.substring(0, 8).toUpperCase()}`,
+              recordId,
+              rec.current_revision,
+              actorId,
+              input.reason?.trim() || 'Submitted draft package for editorial review',
+            ],
           );
           break;
         }
@@ -1265,6 +1278,26 @@ export class AdminRecordsManager {
           ) {
             throw new Error(`INVALID_TRANSITION: Record in '${rec.workflow_status}/${rec.publication_status}' is not approved for publication.`);
           }
+
+          // Verify actual reviewer approval exists for the exact current revision
+          const approvalRes = await tx.query<{ id: string; decision: string }>(
+            `
+            SELECT id, decision
+            FROM review_decisions
+            WHERE record_id = $1
+              AND record_revision = $2
+              AND gate_code = 'gate_4_editorial_human_approval'
+              AND decision IN ('approved', 'approved_with_qualification')
+            ORDER BY decided_at DESC
+            LIMIT 1
+            `,
+            [recordId, rec.current_revision],
+          );
+
+          if (approvalRes.rows.length === 0) {
+            throw new Error(`REVIEW_APPROVAL_REQUIRED: Record revision #${rec.current_revision} cannot be published without a matching Gate 4 editorial approval decision.`);
+          }
+
           newWorkflowStatus = 'ready_for_publication';
           newPublicationStatus = 'published';
           newIsPublic = true;
