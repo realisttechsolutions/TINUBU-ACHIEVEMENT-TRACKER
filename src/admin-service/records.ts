@@ -1369,6 +1369,11 @@ export class AdminRecordsManager {
           if (!input.reason || input.reason.trim().length < 5) {
             throw new Error('REASON_REQUIRED: An unpublish reason of at least 5 characters is mandatory.');
           }
+
+          // Advance revision so that unpublish is recorded as a new audit state
+          const unpublishRevision = rec.current_revision + 1;
+          await tx.query(`UPDATE records SET current_revision = $1 WHERE id = $2`, [unpublishRevision, recordId]);
+
           newWorkflowStatus = 'ready_for_publication';
           newPublicationStatus = 'unpublished';
           newIsPublic = false;
@@ -1396,7 +1401,7 @@ export class AdminRecordsManager {
               decisionId,
               `RD-${decisionId.substring(0, 8).toUpperCase()}`,
               recordId,
-              rec.current_revision,
+              unpublishRevision,
               actorId,
               input.reason.trim(),
             ],

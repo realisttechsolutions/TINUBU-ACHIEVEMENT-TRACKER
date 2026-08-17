@@ -113,6 +113,20 @@ describe('Admin Workflow Transitions & State Machine', () => {
           return { rows: matching };
         }
 
+        // Query existing review decisions for revision check
+        if (normalized.includes('SELECT 1 FROM review_decisions WHERE record_id = $1 AND record_revision = $2')) {
+          const matching = reviewDecisions.filter(
+            (rd) => rd.record_id === params?.[0] && rd.record_revision === params?.[1],
+          );
+          return { rows: matching.length > 0 ? [{ '?column?': 1 }] : [] };
+        }
+
+        // Update record revision
+        if (normalized.startsWith('UPDATE records SET current_revision = $1 WHERE id = $2')) {
+          recordState.current_revision = params?.[0];
+          return { rows: [] };
+        }
+
         // Update records workflow status
         if (normalized.startsWith('UPDATE records SET workflow_status = $1, publication_status = $2, is_public = $3')) {
           recordState.workflow_status = params?.[0];
