@@ -9,8 +9,10 @@ export const MOTION_TOKENS = {
   FAST: 0.2,        // 200ms - micro-interactions, toggles, badges
   STANDARD: 0.35,   // 350ms - card transitions, spotlight switches
   SLOW: 0.6,        // 600ms - section reveals, modal entrances
-  ROTATION_INTERVAL: 6000, // 6s - intelligence line & spotlight cycle
+  ROTATION_INTERVAL: 6000, // 6s - supporting statement rotation cycle
+  SPOTLIGHT_INTERVAL: 5000, // 5s - continuous spotlight forever loop cycle
 };
+
 
 // Check if user prefers reduced motion
 export const prefersReducedMotion = (): boolean => {

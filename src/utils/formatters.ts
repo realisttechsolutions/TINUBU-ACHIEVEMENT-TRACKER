@@ -103,15 +103,62 @@ export const formatLargeNumber = (
 
 // Nigerian Naira formatting with appropriate suffix
 export const formatNaira = (
-  value: number, 
+  value: number | string,
   language: string = 'en',
   compact: boolean = false
 ): string => {
+
+  const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]+/g, '')) : value;
+  if (isNaN(num) || num === 0) return '₦0';
   if (compact) {
-    return '₦' + formatLargeNumber(value, language);
+    return '₦' + formatLargeNumber(num, language);
   }
-  return formatCurrency(value, language, 'NGN');
+  const sign = num < 0 ? '-' : '';
+  const absNum = Math.abs(num);
+  return `${sign}₦${formatNumber(absNum, language, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
+
+
+/**
+ * Canonical PTAT Public Currency Formatter (Section 16)
+ * Public standard: Nigerian Naira (₦).
+ * Consistent institutional formatting for public money values.
+ */
+export const formatPublicMoney = (
+  value: number | string,
+  options: {
+    language?: string;
+    compact?: boolean;
+    fullWord?: boolean;
+    precision?: number;
+  } = {}
+): string => {
+  const { language = 'en', compact = false, fullWord = true, precision = 1 } = options;
+  const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]+/g, '')) : value;
+  if (isNaN(num)) return '₦0';
+
+  const absVal = Math.abs(num);
+  const sign = num < 0 ? '-' : '';
+
+  if (fullWord) {
+    if (absVal >= 1e12) {
+      const formatted = (absVal / 1e12).toFixed(precision).replace(/\.0+$/, '');
+      return `${sign}₦${formatted} trillion`;
+    } else if (absVal >= 1e9) {
+      const formatted = (absVal / 1e9).toFixed(precision).replace(/\.0+$/, '');
+      return `${sign}₦${formatted} billion`;
+    } else if (absVal >= 1e6) {
+      const formatted = (absVal / 1e6).toFixed(precision).replace(/\.0+$/, '');
+      return `${sign}₦${formatted} million`;
+    } else if (absVal >= 1e3) {
+      const formatted = (absVal / 1e3).toFixed(precision).replace(/\.0+$/, '');
+      return `${sign}₦${formatted} thousand`;
+    }
+  }
+
+  return formatNaira(num, language, compact);
+};
+
 
 // Helper function to get locale string for Intl APIs
 const getLocaleString = (language: string): string => {

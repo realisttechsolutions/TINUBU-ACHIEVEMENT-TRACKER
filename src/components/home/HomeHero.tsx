@@ -30,56 +30,87 @@ const SUPPORTING_STATEMENTS = [
 ];
 
 
-// Verified spotlight achievements for right-side interactive intelligence panel (Section 8)
-const SPOTLIGHT_ACHIEVEMENTS = [
-  {
-    id: "nelfund",
-    sector: "Education & Human Capital",
-    badgeColor: "text-emerald-400 bg-emerald-950/60 border-emerald-500/40",
-    statusText: "Verified Operational",
-    title: "NELFUND Tertiary Student Loan & Upkeep Scheme",
-    summary: "Over 350,000 tertiary students funded with direct institutional tuition disbursements and monthly upkeep stipends.",
-    slug: "nelfund-student-loan-disbursement",
-    keyStat: "350,000+",
-    keyStatLabel: "Funded Students"
-  },
-  {
-    id: "coastal-highway",
-    sector: "Infrastructure & Works",
-    badgeColor: "text-blue-400 bg-blue-950/60 border-blue-500/40",
-    statusText: "In Execution",
-    title: "700km Lagos-Calabar Coastal Superhighway",
-    summary: "Section 1 concrete-reinforced dual-carriageway connecting Victoria Island to the deep sea port commercial corridor.",
-    slug: "lagos-calabar-coastal-highway-section-1",
-    keyStat: "700 km",
-    keyStatLabel: "10-State Corridor"
-  },
-  {
-    id: "electricity-act",
-    sector: "Power & Energy Devolution",
-    badgeColor: "text-purple-400 bg-purple-950/60 border-purple-500/40",
-    statusText: "Statute In Force",
-    title: "Electricity Act 2023 Sub-National Devolution",
-    summary: "Historic constitutional devolution empowering state governments to license and regulate independent electricity markets.",
-    slug: "electricity-act-2023",
-    keyStat: "10+ States",
-    keyStatLabel: "State Power Regulators"
-  },
-  {
-    id: "fx-unification",
-    sector: "Macroeconomic & Fiscal Policy",
-    badgeColor: "text-amber-400 bg-amber-950/60 border-amber-500/40",
-    statusText: "Structural Reform",
-    title: "FX Market Unification & Single Window System",
-    summary: "Market-determined foreign exchange price discovery and automated National Single Window trade compliance platform.",
-    slug: "fx-market-unification-single-window",
-    keyStat: "$10B+",
-    keyStatLabel: "FX Inflow Recovery"
+// Helper function to build a data-driven, verified spotlight pool from published records (Section 6)
+interface SpotlightItem {
+  id: string;
+  sector: string;
+  badgeColor: string;
+  statusText: string;
+  title: string;
+  summary: string;
+  slug: string;
+  keyStat: string;
+  keyStatLabel: string;
+}
+
+function getEligibleSpotlightAchievements(): SpotlightItem[] {
+  const allAchievements = dataAdapter.getAchievements();
+  const eligible = allAchievements.filter(
+    (a) => a.title && a.summary && a.statusLabel
+  );
+
+  if (eligible.length === 0) {
+    return [
+      {
+        id: "nelfund",
+        sector: "Education & Human Capital",
+        badgeColor: "text-emerald-400 bg-emerald-950/60 border-emerald-500/40",
+        statusText: "Verified Operational",
+        title: "NELFUND Tertiary Student Loan & Upkeep Scheme",
+        summary: "Over 350,000 tertiary students funded with direct institutional tuition disbursements and monthly upkeep stipends.",
+        slug: "nelfund-student-loan-disbursement",
+        keyStat: "350,000+",
+        keyStatLabel: "Funded Students"
+      }
+    ];
   }
-];
+
+  return eligible.map((a) => {
+    let badgeColor = "text-emerald-400 bg-emerald-950/60 border-emerald-500/40";
+    if (a.publicNavigationGroup === "infrastructure") {
+      badgeColor = "text-blue-400 bg-blue-950/60 border-blue-500/40";
+    } else if (a.publicNavigationGroup === "economy") {
+      badgeColor = "text-amber-400 bg-amber-950/60 border-amber-500/40";
+    } else if (a.publicNavigationGroup === "security") {
+      badgeColor = "text-red-400 bg-red-950/60 border-red-500/40";
+    } else if (a.publicNavigationGroup === "governance") {
+      badgeColor = "text-purple-400 bg-purple-950/60 border-purple-500/40";
+    }
+
+    let keyStat = "Verified";
+    let keyStatLabel = "Evidence Profile";
+
+    if (a.beneficiaryMetrics && a.beneficiaryMetrics.length > 0) {
+      keyStat = a.beneficiaryMetrics[0].formattedCount;
+      keyStatLabel = a.beneficiaryMetrics[0].stageLabel || a.beneficiaryMetrics[0].beneficiaryType || "Beneficiaries";
+    } else if (a.financialMetrics && a.financialMetrics.length > 0) {
+      keyStat = a.financialMetrics[0].formattedAmount;
+      keyStatLabel = a.financialMetrics[0].financialTypeLabel || "Funding Scope";
+    } else if (a.statesCovered && a.statesCovered.length > 1) {
+      keyStat = `${a.statesCovered.length} States`;
+      keyStatLabel = "Geographic Scope";
+    } else if (a.progressPercentage) {
+      keyStat = `${a.progressPercentage}%`;
+      keyStatLabel = "Delivery Milestone";
+    }
+
+    return {
+      id: a.id,
+      sector: a.sectorName || a.publicNavigationGroupLabel || "National Reform",
+      badgeColor,
+      statusText: a.statusLabel || "Verified Record",
+      title: a.title,
+      summary: a.summary,
+      slug: a.slug,
+      keyStat,
+      keyStatLabel,
+    };
+  });
+}
 
 export const HomeHero: React.FC = () => {
   const macroCounters = dataAdapter.getMacroCounters();
+  const spotlightAchievements = getEligibleSpotlightAchievements();
 
   // State for rotating supporting statement
   const [statementIndex, setStatementIndex] = useState(0);
@@ -118,14 +149,14 @@ export const HomeHero: React.FC = () => {
     );
   }, [statementIndex]);
 
-  // Advance spotlight every 6s
+  // Advance spotlight in a continuous forever loop every 5s (Section 5)
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
-      setSpotlightIndex((prev) => (prev + 1) % SPOTLIGHT_ACHIEVEMENTS.length);
-    }, MOTION_TOKENS.ROTATION_INTERVAL);
+      setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
+    }, MOTION_TOKENS.SPOTLIGHT_INTERVAL);
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, spotlightAchievements.length]);
 
   // Animate spotlight card transition on change
   useEffect(() => {
@@ -169,14 +200,15 @@ export const HomeHero: React.FC = () => {
   }, []);
 
   const handleNextSpotlight = useCallback(() => {
-    setSpotlightIndex((prev) => (prev + 1) % SPOTLIGHT_ACHIEVEMENTS.length);
-  }, []);
+    setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
+  }, [spotlightAchievements.length]);
 
   const handlePrevSpotlight = useCallback(() => {
-    setSpotlightIndex((prev) => (prev - 1 + SPOTLIGHT_ACHIEVEMENTS.length) % SPOTLIGHT_ACHIEVEMENTS.length);
-  }, []);
+    setSpotlightIndex((prev) => (prev - 1 + spotlightAchievements.length) % spotlightAchievements.length);
+  }, [spotlightAchievements.length]);
 
-  const currentSpotlight = SPOTLIGHT_ACHIEVEMENTS[spotlightIndex];
+  const currentSpotlight = spotlightAchievements[spotlightIndex] || spotlightAchievements[0];
+
 
   return (
     <section
@@ -337,8 +369,9 @@ export const HomeHero: React.FC = () => {
 
                   </button>
                   <span className="text-[11px] font-mono text-gray-400 px-1">
-                    {spotlightIndex + 1}/{SPOTLIGHT_ACHIEVEMENTS.length}
+                    {spotlightIndex + 1}/{spotlightAchievements.length}
                   </span>
+
                   <button
                     type="button"
                     onClick={handleNextSpotlight}
@@ -381,9 +414,9 @@ export const HomeHero: React.FC = () => {
 
               {/* Progress Indicator Dots */}
               <div className="flex items-center justify-center gap-1.5 pt-1">
-                {SPOTLIGHT_ACHIEVEMENTS.map((item, idx) => (
+                {spotlightAchievements.map((item, idx) => (
                   <button
-                    key={item.id}
+                    key={`${item.id}-${idx}`}
                     type="button"
                     onClick={() => setSpotlightIndex(idx)}
                     aria-label={`View achievement ${idx + 1}: ${item.title}`}
@@ -393,6 +426,7 @@ export const HomeHero: React.FC = () => {
                   />
                 ))}
               </div>
+
 
               {/* Direct Action Link to Selected Achievement */}
               <Link
