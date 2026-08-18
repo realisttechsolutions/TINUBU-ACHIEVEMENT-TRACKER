@@ -1496,7 +1496,16 @@ export class AdminRecordsManager {
             throw new Error('NO_ACTIVE_PROPOSED_CORRECTION: No proposed correction available to submit.');
           }
           const active = activeCorrection;
-          const targetRevision = rec.current_revision + 1;
+
+          let targetRevision = rec.current_revision + 1;
+          const existingDecisions = await tx.query<{ max_rev: number }>(
+            `SELECT COALESCE(MAX(record_revision), 0) as max_rev FROM review_decisions WHERE record_id = $1`,
+            [recordId],
+          );
+          const maxRev = existingDecisions.rows[0]?.max_rev || 0;
+          if (maxRev >= targetRevision) {
+            targetRevision = maxRev + 1;
+          }
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
             throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
@@ -1506,7 +1515,7 @@ export class AdminRecordsManager {
           const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
           const chainId = origState?.chain_id || corrState?.chain_id || active.id;
           const origWithChain = { ...origState, chain_id: chainId };
-          const corrWithChain = { ...corrState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId, target_revision: targetRevision };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1580,17 +1589,18 @@ export class AdminRecordsManager {
             throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to approve.');
           }
           const active = activeCorrection;
-          const targetRevision = rec.current_revision + 1;
+
+          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
+          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const targetRevision = corrState?.target_revision || (rec.current_revision + 1);
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
             throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
           }
 
-          const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
-          const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
           const chainId = origState?.chain_id || corrState?.chain_id || active.id;
           const origWithChain = { ...origState, chain_id: chainId };
-          const corrWithChain = { ...corrState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId, target_revision: targetRevision };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1668,13 +1678,13 @@ export class AdminRecordsManager {
             throw new Error('NO_ACTIVE_CORRECTION: No correction under review or approved found to return.');
           }
           const active = activeCorrection;
-          const targetRevision = rec.current_revision + 1;
 
           const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
           const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const targetRevision = corrState?.target_revision || (rec.current_revision + 1);
           const chainId = origState?.chain_id || corrState?.chain_id || active.id;
           const origWithChain = { ...origState, chain_id: chainId };
-          const corrWithChain = { ...corrState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId, target_revision: targetRevision };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1753,13 +1763,13 @@ export class AdminRecordsManager {
             throw new Error('NO_CORRECTION_UNDER_REVIEW: No correction under review found to reject.');
           }
           const active = activeCorrection;
-          const targetRevision = rec.current_revision + 1;
 
           const origState = typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state;
           const corrState = typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state;
+          const targetRevision = corrState?.target_revision || (rec.current_revision + 1);
           const chainId = origState?.chain_id || corrState?.chain_id || active.id;
           const origWithChain = { ...origState, chain_id: chainId };
-          const corrWithChain = { ...corrState, chain_id: chainId };
+          const corrWithChain = { ...corrState, chain_id: chainId, target_revision: targetRevision };
 
           const newCorrId = randomUUID();
           await tx.query(
@@ -1809,6 +1819,7 @@ export class AdminRecordsManager {
               input.reason.trim(),
             ],
           );
+
 
           const updateTouch = await tx.query<{ updated_at: string }>(
             `UPDATE records SET updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING updated_at::text`,
@@ -1890,7 +1901,10 @@ export class AdminRecordsManager {
             throw new Error('NO_APPROVED_CORRECTION: No approved correction available to publish.');
           }
           const active = activeCorrection;
-          const targetRevision = rec.current_revision + 1;
+
+          const corrected = (typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state) || {};
+          const original = (typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state) || {};
+          const targetRevision = corrected?.target_revision || (rec.current_revision + 1);
 
           if (input.expected_revision && input.expected_revision !== rec.current_revision) {
             throw new Error(`CONCURRENCY_CONFLICT: Expected revision #${input.expected_revision} does not match current record revision #${rec.current_revision}.`);
@@ -1915,11 +1929,10 @@ export class AdminRecordsManager {
             throw new Error(`REVIEW_APPROVAL_REQUIRED: Corrected revision #${targetRevision} cannot be published without a matching Gate 4 editorial approval decision.`);
           }
 
-          const corrected = (typeof active.corrected_state === 'string' ? JSON.parse(active.corrected_state) : active.corrected_state) || {};
-          const original = (typeof active.original_state === 'string' ? JSON.parse(active.original_state) : active.original_state) || {};
           const chainId = original?.chain_id || corrected?.chain_id || active.id;
           const origWithChain = { ...original, chain_id: chainId };
-          const corrWithChain = { ...corrected, chain_id: chainId };
+          const corrWithChain = { ...corrected, chain_id: chainId, target_revision: targetRevision };
+
 
           // Compute diff
           const diff: Record<string, { before: any; after: any }> = {};
@@ -2178,13 +2191,23 @@ export class AdminRecordsManager {
         timeline: tlRes.rows,
       };
 
-      const targetRevision = rec.current_revision + 1;
+      let targetRevision = rec.current_revision + 1;
+      const existingDecisions = await tx.query<{ max_rev: number }>(
+        `SELECT COALESCE(MAX(record_revision), 0) as max_rev FROM review_decisions WHERE record_id = $1`,
+        [recordId],
+      );
+      const maxRev = existingDecisions.rows[0]?.max_rev || 0;
+      if (maxRev >= targetRevision) {
+        targetRevision = maxRev + 1;
+      }
+
       const correctedState = {
         ...originalState,
         chain_id: chainId,
         target_revision: targetRevision,
         ...(input.changes || {}),
       };
+
 
       const correctionId = randomUUID();
       const externalId = `COR-${correctionId.substring(0, 8).toUpperCase()}`;

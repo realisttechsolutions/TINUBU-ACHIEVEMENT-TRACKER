@@ -35,12 +35,21 @@ export async function POST(
     if (err.message?.includes('CONCURRENCY_CONFLICT')) {
       return NextResponse.json({ error: 'Conflict: Record was modified by another user. Please refresh.' }, { status: 409 });
     }
-    if (err.message?.includes('INVALID_TRANSITION') || err.message?.includes('REASON_REQUIRED')) {
+    if (
+      err.message?.includes('INVALID_TRANSITION') ||
+      err.message?.includes('REASON_REQUIRED') ||
+      err.message?.includes('NO_ACTIVE_PROPOSED_CORRECTION') ||
+      err.message?.includes('NO_CORRECTION_UNDER_REVIEW') ||
+      err.message?.includes('NO_APPROVED_CORRECTION') ||
+      err.message?.includes('NO_ACTIVE_CORRECTION') ||
+      err.message?.includes('REVIEW_APPROVAL_REQUIRED')
+    ) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
     return NextResponse.json(
       { error: err.message || 'Internal server error' },
       { status: 500 },
     );
+
   }
 }
