@@ -4,7 +4,22 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+// Canonical PTAT Motion Timing Tokens (Section 9)
+export const MOTION_TOKENS = {
+  FAST: 0.2,        // 200ms - micro-interactions, toggles, badges
+  STANDARD: 0.35,   // 350ms - card transitions, spotlight switches
+  SLOW: 0.6,        // 600ms - section reveals, modal entrances
+  ROTATION_INTERVAL: 6000, // 6s - intelligence line & spotlight cycle
+};
+
+// Check if user prefers reduced motion
+export const prefersReducedMotion = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
+
 // Animation presets
+
 export const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
