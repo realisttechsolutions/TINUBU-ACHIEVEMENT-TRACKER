@@ -1,9 +1,10 @@
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { getAdminReferenceData } from '@/server/admin/reference-service';
 import CreateRecordClient from '@/components/admin/CreateRecordClient';
 
+
 export default async function NewRecordPage() {
-  const staffUser = await requireStaffAuth();
+  const staffUser = await requireStaffPageAuth();
 
   if (staffUser.role !== 'super_admin' && staffUser.role !== 'researcher') {
     return (

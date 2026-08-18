@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { getAdminRecordDetail } from '@/server/admin/records-service';
 import { getAdminReferenceData } from '@/server/admin/reference-service';
 import RecordEditorClient from '@/components/admin/RecordEditorClient';
@@ -9,7 +9,7 @@ export default async function AdminRecordEditorPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const staffUser = await requireStaffAuth();
+  const staffUser = await requireStaffPageAuth();
   const { id } = await params;
 
   const [detail, refData] = await Promise.all([

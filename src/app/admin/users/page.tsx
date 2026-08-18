@@ -1,8 +1,9 @@
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import Link from 'next/link';
 
 export default async function AdminUsersPage() {
-  const staffUser = await requireStaffAuth(['super_admin']);
+  const staffUser = await requireStaffPageAuth(['super_admin']);
+
 
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto p-6 sm:p-8 space-y-8">

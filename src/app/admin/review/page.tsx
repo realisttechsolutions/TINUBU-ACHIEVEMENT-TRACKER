@@ -1,9 +1,10 @@
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { getReviewQueue } from '@/server/admin/records-service';
 import Link from 'next/link';
 
 export default async function AdminReviewPage() {
-  const staffUser = await requireStaffAuth(['reviewer', 'super_admin']);
+  const staffUser = await requireStaffPageAuth(['reviewer', 'super_admin']);
+
   let records: any[] = [];
   let fetchError: string | null = null;
 

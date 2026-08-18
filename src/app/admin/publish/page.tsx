@@ -1,9 +1,10 @@
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { getPublishQueue } from '@/server/admin/records-service';
 import Link from 'next/link';
 
 export default async function AdminPublishPage() {
-  const staffUser = await requireStaffAuth(['publisher', 'super_admin']);
+  const staffUser = await requireStaffPageAuth(['publisher', 'super_admin']);
+
   let records: any[] = [];
   let fetchError: string | null = null;
 

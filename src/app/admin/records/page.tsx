@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { listAdminRecords } from '@/server/admin/records-service';
 import { getAdminReferenceData } from '@/server/admin/reference-service';
 import type { RecordType } from '@/server/admin/validation';
@@ -16,7 +16,8 @@ export default async function AdminRecordsIndexPage({
     page?: string;
   }>;
 }) {
-  const staffUser = await requireStaffAuth();
+  const staffUser = await requireStaffPageAuth();
+
   const params = await searchParams;
 
   const page = parseInt(params.page || '1', 10);

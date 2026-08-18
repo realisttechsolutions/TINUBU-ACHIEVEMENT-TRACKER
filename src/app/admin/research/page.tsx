@@ -1,8 +1,8 @@
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import Link from 'next/link';
 
-export default async function AdminResearchPage() {
-  const staffUser = await requireStaffAuth(['researcher']);
+export default async function ResearcherDashboardPage() {
+  const staffUser = await requireStaffPageAuth(['researcher']);
 
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto p-6 sm:p-8 space-y-8">

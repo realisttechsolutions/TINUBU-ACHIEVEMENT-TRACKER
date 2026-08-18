@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { requireStaffAuth } from '@/lib/server/admin-guard';
+import { requireStaffPageAuth } from '@/lib/server/admin-guard';
 import { getAdminDashboardStats } from '@/server/admin/records-service';
 
 export default async function AdminDashboardPage() {
-  const staffUser = await requireStaffAuth();
+  const staffUser = await requireStaffPageAuth();
+
   const stats = await getAdminDashboardStats();
 
   return (
