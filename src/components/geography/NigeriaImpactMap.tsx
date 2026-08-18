@@ -1,31 +1,27 @@
 'use client';
 
-import React, { useState } from "react";
-import { Link } from "@/lib/navigation";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "@/lib/navigation";
 import { 
-  MapPin, 
   ChevronRight, 
-  Building2, 
-  Award, 
-  ExternalLink, 
   List, 
   Compass, 
   Info,
-  CheckCircle2,
-  Layers,
   Search,
-  Filter
+  ShieldCheck,
+  MapPin,
+  ExternalLink
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { 
   getAllStates, 
   getGeopoliticalZones, 
   getStateByCode, 
   getStateImpactSummary 
 } from "@/services/geographyService";
-import { nigeriaStatePaths, NIGERIA_MAP_VIEWBOX } from "@/data/geography/nigeria-states.geojson";
+import { resolveStateMapping } from "@/lib/geography/nigeria-state-mapping";
+import NigeriaMapSvg from "@/components/geography/NigeriaMapSvg";
 import { StateRecord, GeopoliticalZone } from "@/types/geography.types";
 
 interface NigeriaImpactMapProps {
@@ -37,6 +33,7 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
   onSelectState,
   selectedZoneFilter,
 }) => {
+  const [searchParams] = useSearchParams();
   const [hoveredStateCode, setHoveredStateCode] = useState<string | null>(null);
   const [selectedStateCode, setSelectedStateCode] = useState<string | null>("NG-LA");
   const [viewMode, setViewMode] = useState<"map" | "table">("map");
@@ -45,6 +42,21 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
 
   const allStates = getAllStates();
   const zones = getGeopoliticalZones();
+
+  // Query parameter support: e.g. /impact-map?state=lagos or ?state=NG-LA (Section 21)
+  useEffect(() => {
+    const queryState = searchParams.get("state");
+    if (queryState) {
+      const resolved = resolveStateMapping(queryState);
+      if (resolved) {
+        setSelectedStateCode(resolved.code);
+        const stateObj = getStateByCode(resolved.code);
+        if (stateObj && onSelectState) {
+          onSelectState(stateObj);
+        }
+      }
+    }
+  }, [searchParams, onSelectState]);
 
   const selectedState = selectedStateCode ? getStateByCode(selectedStateCode) : undefined;
   const selectedStateSummary = selectedStateCode ? getStateImpactSummary(selectedState?.slug || "") : undefined;
@@ -79,7 +91,7 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0 max-w-full">
       {/* View & Zone Controls Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white dark:bg-gov-navy/30 p-4 rounded-xl border border-gov-border">
         {/* Zone Filter Tabs */}
@@ -144,71 +156,30 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold uppercase tracking-wider text-gov-slate flex items-center gap-1.5">
                 <Compass className="h-4 w-4 text-gov-gold" />
-                Interactive Geopolitical Map of Nigeria
+                Interactive Geopolitical Map of Nigeria (ADM1)
               </span>
-              <span className="text-[11px] text-gov-slate hidden sm:inline">Click state polygon to inspect interventions</span>
+              <span className="text-[11px] text-gov-slate hidden sm:inline">
+                Click or tab to any state polygon to inspect evidence
+              </span>
             </div>
 
             {/* SVG Map Container */}
-            <div className="relative w-full aspect-[5/4] max-h-[550px] flex items-center justify-center min-w-0 max-w-full overflow-hidden">
-              <svg
-                viewBox={NIGERIA_MAP_VIEWBOX}
-                className="w-full h-full max-w-full drop-shadow-md select-none"
-                aria-label="Interactive Map of Nigeria States"
-              >
-
-                {nigeriaStatePaths.map((statePath) => {
-                  const stateObj = getStateByCode(statePath.code);
-                  const isSelected = selectedStateCode === statePath.code;
-                  const isHovered = hoveredStateCode === statePath.code;
-                  const isZoneFiltered =
-                    activeZone !== "all" && stateObj && stateObj.zone.toLowerCase() !== activeZone.toLowerCase();
-
-                  const zoneColor = stateObj ? getZoneColor(stateObj.zone) : "#475569";
-
-                  return (
-                    <g key={statePath.code}>
-                      <path
-                        d={statePath.d}
-                        fill={isZoneFiltered ? "#E2E8F0" : isSelected ? "#047857" : isHovered ? zoneColor : zoneColor}
-                        fillOpacity={isZoneFiltered ? 0.3 : isSelected ? 0.95 : isHovered ? 0.85 : 0.6}
-                        stroke={isSelected ? "#10B981" : "#FFFFFF"}
-                        strokeWidth={isSelected ? "3" : "1.5"}
-                        className="cursor-pointer transition-all duration-200 hover:scale-[1.01]"
-                        onMouseEnter={() => setHoveredStateCode(statePath.code)}
-                        onMouseLeave={() => setHoveredStateCode(null)}
-                        onClick={() => handleStateClick(statePath.code)}
-                        tabIndex={0}
-                        role="button"
-                        aria-label={`${statePath.name} State`}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            handleStateClick(statePath.code);
-                          }
-                        }}
-                      />
-                      {/* State Label Text */}
-                      <text
-                        x={statePath.center[0]}
-                        y={statePath.center[1]}
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        className={`pointer-events-none text-[11px] font-extrabold transition-opacity fill-white dark:fill-slate-100 ${
-                          isZoneFiltered ? "opacity-30" : "opacity-90"
-                        }`}
-                        style={{ textShadow: "0px 1px 2px rgba(0,0,0,0.8)" }}
-                      >
-                        {statePath.name}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
+            <div className="relative w-full aspect-[10/8.5] max-h-[600px] flex items-center justify-center min-w-0 max-w-full overflow-hidden">
+              <NigeriaMapSvg
+                selectedStateCode={selectedStateCode}
+                hoveredStateCode={hoveredStateCode}
+                activeZone={activeZone}
+                onStateHover={setHoveredStateCode}
+                onStateSelect={handleStateClick}
+                getZoneColor={getZoneColor}
+              />
             </div>
 
             {/* Zone Legend */}
             <div className="mt-6 pt-4 border-t border-gov-border flex flex-wrap items-center justify-between gap-3 text-xs text-gov-slate">
-              <span className="font-bold uppercase text-[10px] tracking-wider text-gov-navy dark:text-white">Geopolitical Zone Key:</span>
+              <span className="font-bold uppercase text-[10px] tracking-wider text-gov-navy dark:text-white">
+                Geopolitical Zone Key:
+              </span>
               <div className="flex flex-wrap items-center gap-3">
                 {zones.map((z) => (
                   <div key={z.id} className="flex items-center gap-1.5">
@@ -218,10 +189,20 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* Boundary Data Provenance & Attribution (Section 26) */}
+            <div className="mt-4 pt-3 border-t border-gov-border/60 text-[10px] text-gov-slate leading-relaxed flex items-center justify-between">
+              <span>
+                Boundary geometry source: <strong>geoBoundaries (CC-BY 4.0) / GRID3 Nigeria</strong>.
+              </span>
+              <span>
+                Achievement records verified under PTAT Research Methodology.
+              </span>
+            </div>
           </div>
 
           {/* Selected State Inspector Panel Column */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="lg:col-span-4 space-y-6 w-full min-w-0 max-w-full">
             {selectedState && selectedStateSummary ? (
               <Card className="border-gov-border dark:bg-gov-navy/40 shadow-lg overflow-hidden">
                 <div
@@ -327,7 +308,7 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
             </div>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full min-w-0">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-gov-canvas dark:bg-gov-navy border-b border-gov-border text-gov-slate uppercase font-bold tracking-wider">

@@ -1,0 +1,21 @@
+{
+  "sourceOrganization": "geoBoundaries / William & Mary GeoLab",
+  "datasetProduct": "gbOpen Nigeria ADM1",
+  "boundaryId": "NGA-ADM1-27671186",
+  "countryIso": "NGA",
+  "administrativeLevel": "ADM1",
+  "featureCount": 37,
+  "buildDate": "Dec 12, 2023",
+  "sourceDataUpdateDate": "Feb 26, 2023",
+  "retrievalDate": "2026-08-18",
+  "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "attribution": "Boundary data provided by geoBoundaries (www.geoboundaries.org) / GRID3.",
+  "underlyingSource": "GRID3 Nigeria State Boundaries (data.grid3.org)",
+  "downloadUrl": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/NGA/ADM1/geoBoundaries-NGA-ADM1_simplified.geojson",
+  "fullDownloadUrl": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/NGA/ADM1/geoBoundaries-NGA-ADM1.geojson",
+  "fullPayloadBytes": 2289696,
+  "simplifiedPayloadBytes": 827817,
+  "selectedGeometryType": "Simplified GeoJSON",
+  "sha256Checksum": "edd28050c7f1ae40471424605f74e4d2df83502e4f301089761ae18f8ae2fbbf",
+  "fullSha256Checksum": "64fa218ac3d453cc1e66412ff461c5dfa1a4a1ade0da93b239a9891b587d28f9"
+}
