@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
@@ -140,22 +140,23 @@ export const NigeriaImpactMap: React.FC<NigeriaImpactMapProps> = ({
       {viewMode === "map" ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Map Vector Display Column */}
-          <div className="lg:col-span-8 bg-white dark:bg-gov-navy/30 p-6 rounded-2xl border border-gov-border relative overflow-hidden shadow-xs">
+          <div className="lg:col-span-8 bg-white dark:bg-gov-navy/30 p-4 sm:p-6 rounded-2xl border border-gov-border relative overflow-hidden shadow-xs w-full min-w-0 max-w-full">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold uppercase tracking-wider text-gov-slate flex items-center gap-1.5">
                 <Compass className="h-4 w-4 text-gov-gold" />
                 Interactive Geopolitical Map of Nigeria
               </span>
-              <span className="text-[11px] text-gov-slate">Click state polygon to inspect interventions</span>
+              <span className="text-[11px] text-gov-slate hidden sm:inline">Click state polygon to inspect interventions</span>
             </div>
 
             {/* SVG Map Container */}
-            <div className="relative w-full aspect-[5/4] max-h-[550px] flex items-center justify-center">
+            <div className="relative w-full aspect-[5/4] max-h-[550px] flex items-center justify-center min-w-0 max-w-full overflow-hidden">
               <svg
                 viewBox={NIGERIA_MAP_VIEWBOX}
-                className="w-full h-full drop-shadow-md select-none"
+                className="w-full h-full max-w-full drop-shadow-md select-none"
                 aria-label="Interactive Map of Nigeria States"
               >
+
                 {nigeriaStatePaths.map((statePath) => {
                   const stateObj = getStateByCode(statePath.code);
                   const isSelected = selectedStateCode === statePath.code;

@@ -1,7 +1,5 @@
 'use client';
 import React from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/ui/hero-section";
 import SectionHeader from "@/components/common/SectionHeader";
 import NigeriaImpactMap from "@/components/geography/NigeriaImpactMap";
@@ -14,12 +12,10 @@ const ImpactMapPage: React.FC = () => {
   const allStates = getAllStates();
 
   return (
-    <div className="flex flex-col min-h-screen bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
-      <Navbar />
+    <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
+      {/* Page Hero */}
+      <HeroSection
 
-      <main className="flex-grow">
-        {/* Page Hero */}
-        <HeroSection
           title="National Geographic Impact Map"
           subtitle="Explore federal achievements, multi-state transport corridors, physical infrastructure projects, and social interventions across Nigeria's 36 states and the Federal Capital Territory."
           action={{ text: "Explore Interactive Map", href: "#map-section" }}
@@ -66,10 +62,7 @@ const ImpactMapPage: React.FC = () => {
             </div>
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
   );
 };
 

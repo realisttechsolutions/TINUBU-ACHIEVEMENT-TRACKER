@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 
 import React, { useState, useEffect } from "react";
@@ -14,8 +14,6 @@ import {
   CheckCircle,
   Info
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/ui/hero-section";
 import SectionHeader from "@/components/common/SectionHeader";
 import MetricCard from "@/components/dashboard/MetricCard";
@@ -28,7 +26,18 @@ import { formatPercentage, formatLargeNumber, formatNaira } from "@/utils/format
 
 const Dashboard = () => {
   const { t, currentLanguage } = useTranslation();
+  const [activeTab, setActiveTab] = useState("all");
+  const [animatedIndex, setAnimatedIndex] = useState(0);
   const [animatedCounter, setAnimatedCounter] = useState(0);
+
+  // Rotating subtitle taglines
+  const taglines = [
+    "Transforming Every Sector",
+    "Building Nigeria's Future",
+    "From Poverty to Prosperity",
+    "Security and Development"
+  ];
+
   
   // Simple animation effect for stats
   useEffect(() => {
@@ -174,15 +183,13 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      
-      <main className="flex-grow">
-        <HeroSection 
-          title={t('dashboard.title')}
-          subtitle={t('dashboard.subtitle')}
-          action={{ text: t('dashboard.exploreAction'), href: "#sectors" }}
-          secondaryAction={{ text: t('dashboard.timelineAction'), href: "#timeline" }}
+    <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
+      <HeroSection
+        title={t('dashboard.title')}
+        subtitle={t('dashboard.subtitle')}
+        action={{ text: t('dashboard.exploreAction'), href: "#sectors" }}
+        secondaryAction={{ text: t('dashboard.timelineAction'), href: "#timeline" }}
+
           backgroundImage="https://images.unsplash.com/photo-1516937941344-00b4e0337589"
           highlightStats={[
             { value: formatNaira(4000000000000, currentLanguage, true), label: t('hero.stats.annualSavings') },
@@ -566,10 +573,7 @@ const Dashboard = () => {
             </a>
           </div>
         </section>
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
   );
 };
 

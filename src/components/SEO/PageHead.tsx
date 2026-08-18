@@ -12,14 +12,15 @@ interface PageHeadProps {
 }
 
 export const PageHead: React.FC<PageHeadProps> = ({
-  title = "Tinubu Achievement Tracker - Nigeria Progress Dashboard",
+  title = "President Tinubu Achievement Tracker - Nigeria Progress Dashboard",
   description = "A comprehensive data-driven hub showcasing President Bola Ahmed Tinubu's policies and achievements across economic, security, social, and infrastructure sectors (2023 - 2026).",
   keywords = "Nigeria progress, Tinubu administration, economic reforms, infrastructure development, security improvements, social services, data dashboard, government achievements",
   canonical,
   ogImage = "/assets/og-image.jpg",
   structuredData
 }) => {
-  const fullTitle = title.includes("Tinubu") || title.includes("Renewed Hope") ? title : `${title} | Tinubu Achievement Tracker`;
+  const fullTitle = title.includes("President Tinubu") || title.includes("Tinubu") || title.includes("Renewed Hope") ? title : `${title} | President Tinubu Achievement Tracker`;
+
 
   useEffect(() => {
     if (typeof document !== 'undefined') {

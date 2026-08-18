@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useMemo } from "react";
 import PageHead from "@/components/SEO/PageHead";
@@ -292,9 +292,10 @@ export const DataExplorer: React.FC = () => {
           </div>
 
           {/* Tabular Results Preview Table */}
-          <div className="rounded-3xl bg-white dark:bg-gov-darkSurface border border-gov-border shadow-md overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="rounded-3xl bg-white dark:bg-gov-darkSurface border border-gov-border shadow-md overflow-hidden w-full min-w-0 max-w-full">
+            <div className="overflow-x-auto w-full min-w-0">
               <table className="w-full text-left text-xs text-gov-navy dark:text-gray-200">
+
                 <thead className="bg-gov-navy text-white text-[11px] font-bold uppercase tracking-wider">
                   <tr>
                     <th className="p-4">Record ID</th>

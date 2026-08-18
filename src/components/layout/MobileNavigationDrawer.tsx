@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link, useLocation } from "@/lib/navigation";
@@ -38,18 +38,31 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   const location = useLocation();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden flex">
+    <div className="fixed inset-0 z-50 xl:hidden flex" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
+
 
       {/* Drawer Panel */}
       <div className="relative ml-0 mr-auto w-full max-w-sm h-full bg-white dark:bg-gov-darkSurface shadow-2xl flex flex-col z-10 animate-slide-in-right overflow-y-auto">

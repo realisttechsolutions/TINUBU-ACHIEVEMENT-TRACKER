@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 
 export const metadata = {
   title: '404 - Page Not Found',
-  description: 'The requested page or record could not be found in the Tinubu Achievement Tracker database.',
+  description: 'The requested page or record could not be found in the President Tinubu Achievement Tracker database.',
 };
+
 
 export default function NotFound() {
   return (

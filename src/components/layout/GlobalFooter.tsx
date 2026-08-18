@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
 import BrandLockup from "./BrandLockup";
 import { ShieldCheck, Info, FileSpreadsheet, Download, Database, Compass, Award, ExternalLink } from "lucide-react";
@@ -125,15 +125,16 @@ export const GlobalFooter: React.FC = () => {
         <div className="p-4 rounded-xl bg-gov-darkSurface border border-gov-gold/20 flex items-start gap-3 text-xs text-gray-300">
           <Info className="h-4 w-4 text-gov-gold shrink-0 mt-0.5" />
           <p className="leading-relaxed">
-            <strong className="text-white">Editorial & Truth Standard:</strong> The Tinubu Achievement Tracker operates an achievements-focused editorial mandate governed by 18 immutable truth safeguards. Presentation is positive and confident, but claims never exceed underlying verifiable primary evidence. Financial metrics declare exact value types and are never improperly aggregated across incompatible categories.
+            <strong className="text-white">Editorial & Truth Standard:</strong> The President Tinubu Achievement Tracker (PTAT) operates an achievements-focused editorial mandate governed by 18 immutable truth safeguards. Presentation is positive and confident, but claims never exceed underlying verifiable primary evidence. Financial metrics declare exact value types and are never improperly aggregated across incompatible categories.
           </p>
         </div>
 
         {/* Bottom Bar: Copyright & Standards */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gov-slate">
           <div>
-            © {currentYear} Tinubu Achievement Tracker (TAT) • Renewed Hope Progress Intelligence
+            © {currentYear} President Tinubu Achievement Tracker (PTAT) • Renewed Hope Progress Intelligence
           </div>
+
           <div className="flex items-center gap-4 text-gray-400">
             <Link to="/data-sources" className="hover:text-white transition-colors">
               Methodology & Sources

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
@@ -12,8 +12,6 @@ import {
   Layers,
   ArrowRight
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/ui/hero-section";
 import SectionHeader from "@/components/common/SectionHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,12 +34,10 @@ const StatesCatalogue: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
-      <Navbar />
+    <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
+      {/* Page Hero */}
+      <HeroSection
 
-      <main className="flex-grow">
-        {/* Page Hero */}
-        <HeroSection
           title="Nigeria State Performance Catalogue"
           subtitle="Directory of Nigeria's 36 States and the Federal Capital Territory documenting federal policies, regional infrastructure projects, and localized social interventions."
           action={{ text: "View National Impact Map", href: "/impact-map" }}
@@ -162,10 +158,7 @@ const StatesCatalogue: React.FC = () => {
             })}
           </div>
         </section>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
   );
 };
 

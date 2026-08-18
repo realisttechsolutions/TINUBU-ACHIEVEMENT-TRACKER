@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
@@ -22,13 +22,14 @@ export const GlobalHeader: React.FC = () => {
             type="button"
             onClick={() => setMobileDrawerOpen(true)}
             aria-label="Open mobile navigation menu"
-            className="p-2 rounded-md text-gov-navy dark:text-white hover:bg-gov-canvas lg:hidden focus:outline-none focus:ring-2 focus:ring-gov-navy"
+            className="p-2 rounded-md text-gov-navy dark:text-white hover:bg-gov-canvas xl:hidden focus:outline-none focus:ring-2 focus:ring-gov-navy shrink-0"
           >
             <Menu className="h-6 w-6" />
           </button>
 
           <BrandLockup />
         </div>
+
 
         {/* Center: Desktop Navigation */}
         <DesktopNavigation />

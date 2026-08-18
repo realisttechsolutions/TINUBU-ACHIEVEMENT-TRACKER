@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "@/lib/navigation";
@@ -53,17 +53,6 @@ export const DesktopNavigation: React.FC = () => {
     >
       {/* 1. Direct Links */}
       <Link
-        to="/"
-        className={`px-3 py-2 rounded-md transition-colors ${
-          isActive("/") 
-            ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10" 
-            : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
-        }`}
-      >
-        Home
-      </Link>
-
-      <Link
         to="/achievements"
         className={`px-3 py-2 rounded-md transition-colors ${
           isActive("/achievements") 
@@ -73,6 +62,7 @@ export const DesktopNavigation: React.FC = () => {
       >
         Achievements
       </Link>
+
 
       {/* 2. Sectors Mega Dropdown (5 Groups -> 15 Canonical Sectors) */}
       <div className="relative">

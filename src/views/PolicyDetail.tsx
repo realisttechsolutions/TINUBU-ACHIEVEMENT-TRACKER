@@ -16,8 +16,6 @@ import {
   Calendar,
   AlertCircle
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import PolicyStatusBadge from "@/components/policies/PolicyStatusBadge";
@@ -30,9 +28,8 @@ export const PolicyDetail: React.FC = () => {
 
   if (!policy) {
     return (
-      <div className="flex flex-col min-h-screen bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
-        <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-20 text-center">
+      <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
+        <div className="container mx-auto px-4 py-20 text-center">
           <AlertCircle className="h-16 w-16 text-gov-gold mx-auto mb-4" />
           <h1 className="text-3xl font-bold mb-2">Policy Record Not Found</h1>
           <p className="text-gov-slate max-w-md mx-auto mb-6">
@@ -45,8 +42,7 @@ export const PolicyDetail: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
             Return to Policy Directory
           </Link>
-        </main>
-        <Footer />
+        </div>
       </div>
     );
   }
@@ -54,7 +50,7 @@ export const PolicyDetail: React.FC = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${policy.title} | Tinubu Achievement Tracker`,
+        title: `${policy.title} | President Tinubu Achievement Tracker`,
         url: window.location.href,
       }).catch(() => {});
     } else {
@@ -64,11 +60,10 @@ export const PolicyDetail: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
-      <Navbar />
+    <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
+      {/* Breadcrumbs Bar */}
 
-      <main className="flex-grow">
-        {/* Breadcrumbs Bar */}
+
         <div className="bg-gov-navy text-slate-300 py-3 border-b border-gov-gold/20">
           <div className="container mx-auto px-4 flex items-center justify-between text-xs">
             <nav className="flex items-center gap-2">
@@ -235,10 +230,7 @@ export const PolicyDetail: React.FC = () => {
             )}
           </section>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
   );
 };
 

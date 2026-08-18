@@ -14,12 +14,14 @@ const staging = isStagingEnvironment();
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinubutracker.ng'),
   title: {
-    default: 'Tinubu Achievement Tracker - Nigeria National Progress & Evidence Hub (2023 - 2026)',
-    template: '%s | Tinubu Achievement Tracker',
+    default: 'President Tinubu Achievement Tracker - Nigeria National Progress & Evidence Hub (2023 - 2026)',
+    template: '%s | President Tinubu Achievement Tracker',
   },
   description:
     "Official empirical tracker documenting President Bola Ahmed Tinubu's achievements, infrastructure projects, statutory policies, and economic reforms backed by primary institutional evidence.",
   keywords: [
+    'President Tinubu Achievement Tracker',
+    'PTAT',
     'Tinubu Achievement Tracker',
     'Nigeria Federal Government',
     'Bola Ahmed Tinubu',
@@ -29,9 +31,9 @@ export const metadata: Metadata = {
     'Nigeria Progress Dashboard',
     'National Development',
   ],
-  authors: [{ name: 'Tinubu Achievement Tracker Research & Data Team' }],
+  authors: [{ name: 'President Tinubu Achievement Tracker Research & Data Team' }],
   creator: 'Federal Republic of Nigeria Data Intelligence',
-  publisher: 'Tinubu Achievement Tracker',
+  publisher: 'President Tinubu Achievement Tracker',
   robots: {
     index: !staging,
     follow: !staging,
@@ -48,8 +50,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_NG',
     url: 'https://tinubutracker.ng',
-    siteName: 'Tinubu Achievement Tracker',
-    title: 'Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
+    siteName: 'President Tinubu Achievement Tracker',
+    title: 'President Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
     description:
       "Comprehensive data-driven platform tracking President Bola Ahmed Tinubu's national achievements, infrastructure investments, and statutory policies.",
     images: [
@@ -57,13 +59,13 @@ export const metadata: Metadata = {
         url: '/assets/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Tinubu Achievement Tracker - National Progress Platform',
+        alt: 'President Tinubu Achievement Tracker - National Progress Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
+    title: 'President Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
     description:
       "Verified achievements, infrastructure delivery, and macroeconomic data under the administration of President Bola Ahmed Tinubu (2023 - 2026).",
     images: ['/assets/og-image.jpg'],
@@ -74,6 +76,7 @@ export const metadata: Metadata = {
     apple: '/assets/apple-touch-icon.png',
   },
 };
+
 
 export const viewport: Viewport = {
   themeColor: [

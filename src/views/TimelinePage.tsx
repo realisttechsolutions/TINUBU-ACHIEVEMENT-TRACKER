@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useMemo } from "react";
 import { Link } from "@/lib/navigation";
@@ -265,9 +265,10 @@ export const TimelinePage: React.FC = () => {
 
           {/* Timeline Display: Research Table Mode */}
           {viewMode === "table" && (
-            <div className="rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
+            <div className="rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border shadow-sm overflow-hidden w-full min-w-0 max-w-full">
+              <div className="overflow-x-auto w-full min-w-0">
                 <table className="w-full text-left text-xs text-gov-navy dark:text-gray-200">
+
                   <thead className="bg-gov-navy text-white text-[11px] font-bold uppercase tracking-wider">
                     <tr>
                       <th className="p-3.5">Date</th>
