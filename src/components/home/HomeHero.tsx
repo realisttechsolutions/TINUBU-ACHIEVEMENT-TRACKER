@@ -20,14 +20,15 @@ import {
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { gsap, MOTION_TOKENS, prefersReducedMotion } from "@/lib/animations";
 
-// Truthful, platform-oriented rotating supporting statements (Section 7)
+// Truthful, platform-oriented rotating supporting statements (Section 7, M10J-C1 truth audit)
 const SUPPORTING_STATEMENTS = [
-  "See the verifiable primary evidence behind national progress.",
+  "See verifiable primary evidence behind national progress.",
   "Follow policy reforms from gazette announcement to measurable impact.",
   "Explore capital projects, social programmes, and statutory acts across Nigeria.",
-  "Every documented claim is linked to verified institutional records.",
-  "One national record. Searchable. Traceable. Evidence-backed."
+  "Explore source-linked records across projects, policies and programmes.",
+  "A national progress record. Searchable. Traceable. Evidence-backed."
 ];
+
 
 // Verified spotlight achievements for right-side interactive intelligence panel (Section 8)
 const SPOTLIGHT_ACHIEVEMENTS = [
@@ -219,13 +220,12 @@ export const HomeHero: React.FC = () => {
               An open, evidence-driven public platform documenting verified policy reforms, physical infrastructure projects, and measurable outcomes of President Bola Ahmed Tinubu's administration.
             </p>
 
-            {/* Rotating Supporting Intelligence Line (Section 7) */}
+            {/* Rotating Supporting Intelligence Line (Section 7, M10J-C1 accessibility hardening) */}
             <div className="h-7 sm:h-8 flex items-center">
               <div
                 ref={statementRef}
                 className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-gov-gold bg-gov-gold/10 px-3 py-1 rounded-lg border border-gov-gold/20 backdrop-blur-xs"
-                role="status"
-                aria-live="polite"
+                aria-live="off"
               >
                 <Sparkles className="h-3.5 w-3.5 text-gov-gold shrink-0 animate-pulse" />
                 <span className="truncate">{SUPPORTING_STATEMENTS[statementIndex]}</span>
@@ -275,7 +275,7 @@ export const HomeHero: React.FC = () => {
               </Button>
             </div>
 
-            {/* High-Level Non-Overwhelming Key Counters (Section 13, 14, 15) */}
+            {/* High-Level Non-Overwhelming Key Counters (Section 13, 14, 15, M10J-C1 truth audit) */}
             <div
               ref={metricsRef}
               className="pt-6 border-t border-white/15 grid grid-cols-3 gap-2 sm:gap-4 text-xs"
@@ -300,13 +300,14 @@ export const HomeHero: React.FC = () => {
 
               <div className="space-y-0.5 p-2 rounded-lg bg-white/5 sm:bg-transparent">
                 <div className="text-lg sm:text-2xl font-black font-display text-gov-emerald tabular-nums">
-                  100%
+                  Primary
                 </div>
                 <div className="text-gray-300 font-medium text-[11px] sm:text-xs">
-                  Cited Evidence
+                  Source Citations
                 </div>
               </div>
             </div>
+
           </div>
 
           {/* Right Column: Controlled Premium Achievement Spotlight (Section 8) */}

@@ -71,12 +71,11 @@ describe('PTAT HomeHero Component', () => {
     expect(tertiaryCta.getAttribute('href')).toBe('/data');
   });
 
-  it('renders rotating supporting intelligence line with aria-live status', () => {
-    render(<HomeHero />);
-    const statusContainer = screen.getByRole('status');
-    expect(statusContainer).toBeDefined();
-    expect(statusContainer.getAttribute('aria-live')).toBe('polite');
-    expect(screen.getByText(/See the verifiable primary evidence behind national progress/i)).toBeDefined();
+  it('renders rotating supporting intelligence line with aria-live="off" to prevent screen reader noise', () => {
+    const { container } = render(<HomeHero />);
+    const liveContainer = container.querySelector('[aria-live="off"]');
+    expect(liveContainer).toBeDefined();
+    expect(screen.getByText(/See verifiable primary evidence behind national progress/i)).toBeDefined();
 
     // Fast-forward 6s to test statement rotation
     act(() => {
@@ -113,13 +112,13 @@ describe('PTAT HomeHero Component', () => {
     expect(screen.getByText('1/4')).toBeDefined();
   });
 
-  it('renders certified macro truth counters without hallucinated numbers', () => {
+  it('renders certified macro truth counters without unverified absolute claims', () => {
     render(<HomeHero />);
     expect(screen.getByText('15')).toBeDefined();
     expect(screen.getByText('Canonical Sectors')).toBeDefined();
     expect(screen.getByText('36 + FCT')).toBeDefined();
     expect(screen.getByText('Sub-National Scope')).toBeDefined();
-    expect(screen.getByText('100%')).toBeDefined();
-    expect(screen.getByText('Cited Evidence')).toBeDefined();
+    expect(screen.getByText('Primary')).toBeDefined();
+    expect(screen.getByText('Source Citations')).toBeDefined();
   });
 });

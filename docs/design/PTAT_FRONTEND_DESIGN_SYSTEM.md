@@ -94,7 +94,9 @@ export const MOTION_TOKENS = {
 1. **No Frame-Rate React Rerenders:** DOM transforms and opacity transitions run via GSAP hardware-accelerated transforms (`x`, `y`, `opacity`, `scale`).
 2. **No Layout Shift:** Rotating text and spotlight cards reside in fixed/constrained height containers (`min-h-[170px]`).
 3. **Pause on Hover / Focus:** Auto-rotation timers pause when mouse enters the hero or spotlight, when a control receives keyboard focus, or when the browser tab is hidden (`visibilitychange`).
-4. **Reduced Motion:** If `window.matchMedia('(prefers-reduced-motion: reduce)')` is true, GSAP animations and translations are bypassed for immediate state presentation.
+4. **Accessibility on Auto-Rotation (`aria-live="off"`):** Automatic supporting statement rotation must use `aria-live="off"` to prevent periodic screen-reader spam every 6 seconds, while remaining fully accessible in the static DOM.
+5. **Reduced Motion:** If `window.matchMedia('(prefers-reduced-motion: reduce)')` is true, GSAP animations and translations are bypassed for immediate state presentation.
+
 
 ---
 
