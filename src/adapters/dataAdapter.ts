@@ -268,8 +268,9 @@ export const dataAdapter = {
       capitalProjectsActive: DEMO_PROJECTS.length,
       subNationalStatesTracked: DEMO_NIGERIA_STATES.length,
       studentBeneficiariesFormatted: "350,000+",
-      externalReservesFormatted: "$38.5 Billion",
+      externalReservesFormatted: "36-Month High Buffer",
       highwayKilometersFormatted: "2,400+ km",
+
       lastAuditSync: "2026-08-15"
     };
   },

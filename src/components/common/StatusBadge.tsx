@@ -1,16 +1,16 @@
 export type AchievementStatus = string;
 import React from "react";
-import { 
-  Megaphone, 
-  FileCheck, 
-  DollarSign, 
-  ShoppingBag, 
-  Clock, 
-  CheckCircle2, 
-  Activity, 
-  Award, 
-  ShieldCheck, 
-  Archive, 
+import {
+  Megaphone,
+  FileCheck,
+  Banknote,
+  ShoppingBag,
+  Clock,
+  CheckCircle2,
+  Activity,
+  Award,
+  ShieldCheck,
+  Archive,
   AlertCircle,
   HelpCircle,
   LucideIcon
@@ -35,8 +35,9 @@ const statusConfigs: Record<string, StatusConfig> = {
   approved: { label: "Approved", className: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: FileCheck },
   enacted: { label: "Enacted into Law", className: "bg-indigo-100 text-indigo-900 border-indigo-300 font-semibold", icon: FileCheck },
   effective: { label: "In Force", className: "bg-indigo-50 text-indigo-800 border-indigo-200", icon: FileCheck },
-  funded: { label: "Budget Allocated", className: "bg-emerald-50 text-emerald-800 border-emerald-200", icon: DollarSign },
-  funding_released: { label: "Funding Released", className: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold", icon: DollarSign },
+  funded: { label: "Budget Allocated", className: "bg-emerald-50 text-emerald-800 border-emerald-200", icon: Banknote },
+  funding_released: { label: "Funding Released", className: "bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold", icon: Banknote },
+
   procurement: { label: "In Procurement", className: "bg-slate-50 text-slate-700 border-slate-200", icon: ShoppingBag },
   implementation_planning: { label: "Planning Phase", className: "bg-amber-50 text-amber-800 border-amber-200", icon: Clock },
   implementation_ongoing: { label: "Ongoing Execution", className: "bg-sky-50 text-sky-800 border-sky-200", icon: Clock },

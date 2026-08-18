@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "@/lib/navigation";
@@ -8,18 +8,19 @@ import DataClassificationBadge from "@/components/common/DataClassificationBadge
 import SourceBadge from "@/components/common/SourceBadge";
 import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
-import { 
-  ArrowLeft, 
-  Share2, 
-  Download, 
-  FileText, 
-  ShieldCheck, 
-  Building2, 
-  MapPin, 
-  Calendar, 
-  CheckCircle2, 
-  DollarSign, 
-  Users, 
+import {
+  ArrowLeft,
+  Share2,
+  Download,
+  FileText,
+  ShieldCheck,
+  Building2,
+  MapPin,
+  Calendar,
+  CheckCircle2,
+  Banknote,
+  Users,
+
   ExternalLink,
   Layers,
   Copy,
@@ -243,7 +244,7 @@ export const AchievementDetail: React.FC = () => {
                 >
                   <div className="flex items-center justify-between text-xs text-gov-slate">
                     <span className="font-bold uppercase tracking-wider text-gov-emerald flex items-center gap-1.5">
-                      <DollarSign className="h-4 w-4" />
+                      <Banknote className="h-4 w-4" />
                       <span>{fin.financialTypeLabel}</span>
                     </span>
                     <span className="text-[10px] bg-gov-canvas dark:bg-white/10 px-2 py-0.5 rounded font-mono">

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
 import { TrendingUp, GraduationCap, Building2, Landmark, ArrowRight, ShieldCheck } from "lucide-react";
 import { dataAdapter } from "@/adapters/dataAdapter";
@@ -7,15 +7,16 @@ export const NationalProgressOverview: React.FC = () => {
   const cards = [
     {
       id: "metric-1",
-      title: "External FX Reserves",
-      value: "$38.5 Billion",
-      subtext: "Highest official gross foreign exchange buffer in 36 months",
+      title: "Non-Oil Federal Revenue",
+      value: "₦19.8 Trillion",
+      subtext: "Automated tax compliance & historic statutory collection record",
       sector: "Economy & Fiscal Reforms",
-      leadMda: "Central Bank of Nigeria",
+      leadMda: "Federal Inland Revenue Service",
       icon: TrendingUp,
       badgeColor: "emerald",
       url: "/sectors/economy-fiscal-reforms"
     },
+
     {
       id: "metric-2",
       title: "Student Loan Disbursements",

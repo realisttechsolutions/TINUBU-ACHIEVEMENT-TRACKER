@@ -152,7 +152,7 @@ export const achievementsData: AchievementRecord[] = [
     sector: "economy",
     summary: "Consolidation of multiple official foreign exchange rate windows into a transparent, market-driven willing-buyer, willing-seller framework.",
     fullDescription: "In June 2023, the Central Bank of Nigeria (CBN) abolished the multiple foreign exchange windows (including the I&E window, official peg, and parallel market distortions) in favor of a single market-determined rate structure. This structural reform eliminated multi-billion dollar currency arbitrage, boosted foreign investor confidence, and enhanced gross external reserves.",
-    impactOutcome: "Currency arbitrage eliminated; gross foreign exchange reserves increased to $36.2B.",
+    impactOutcome: "Currency arbitrage eliminated; gross foreign exchange reserves increased to 36-month high liquidity buffer.",
     beneficiariesOrScope: "National Macroeconomic & Financial System",
     status: "Outcome Recorded",
     classification: "Actual",
@@ -165,8 +165,8 @@ export const achievementsData: AchievementRecord[] = [
     verificationDate: "Apr 2025",
     featuredImage: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
     keyMetrics: [
-      { label: "FX Reserve Growth", value: "$36.2 Billion", unit: "Gross Reserves" },
-      { label: "FX Backlog Cleared", value: "$7.0 Billion", unit: "Verified Claims" },
+      { label: "FX Reserve Growth", value: "36-Month High", unit: "Gross Buffer" },
+      { label: "FX Backlog Cleared", value: "100% Cleared", unit: "Verified Claims" },
       { label: "FDI Growth Rate", value: "205%", unit: "YoY Surge" },
       { label: "Arbitrage Spread", value: "<2%", unit: "Market Convergence" },
     ],
@@ -195,7 +195,7 @@ export const achievementsData: AchievementRecord[] = [
       },
       {
         date: "March 2024",
-        title: "$7B FX Backlog Clearance Completed",
+        title: "Inherited FX Backlog Clearance Completed",
         status: "Outcome Recorded",
         description: "Central Bank fully settles all verified outstanding foreign exchange obligations.",
       },
@@ -203,9 +203,10 @@ export const achievementsData: AchievementRecord[] = [
         date: "Feb 2025",
         title: "Reserves Reach 3-Year High",
         status: "Independently Confirmed",
-        description: "Gross foreign reserves touch $36.2B amidst rising remittance inflows.",
+        description: "Gross foreign reserves touch multi-year high amidst rising remittance inflows.",
       },
     ],
+
     relatedAchievementSlugs: ["fuel-subsidy-reallocation", "lagos-calabar-coastal-highway"],
   },
   {

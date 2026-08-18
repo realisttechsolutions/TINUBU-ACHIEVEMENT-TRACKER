@@ -46,10 +46,11 @@ export const CANONICAL_SECTORS: SectorViewModel[] = [
     projectCount: 4,
     policyCount: 6,
     highlightStat: {
-      label: "Gross External Reserves",
-      value: "$38.5 Billion",
-      subtext: "Highest recorded liquidity level in 36 months"
+      label: "Non-Oil Revenue Mobilization",
+      value: "₦19.8 Trillion",
+      subtext: "Automated tax compliance & historic collection record"
     },
+
     featuredAchievementSlug: "fx-market-unification-single-window",
     isDemo: true
   },
@@ -415,7 +416,7 @@ export const CANONICAL_SECTORS: SectorViewModel[] = [
     description: "Re-asserting Nigeria's strategic leadership in ECOWAS and the African Union while mobilizing foreign direct investment commitments across G20 partners.",
     keyObjectives: [
       "Operationalization of the 4D Foreign Policy Framework",
-      "Securing over $30 Billion in multi-sector bilateral investment commitments",
+      "Securing multi-sector bilateral investment pacts across international partners",
       "Streamlined e-visa processing and enhanced consular assistance for the Diaspora"
     ],
     leadInstitutions: ["Ministry of Foreign Affairs", "Nigerian Investment Promotion Commission", "NiDCOM"],
@@ -423,9 +424,9 @@ export const CANONICAL_SECTORS: SectorViewModel[] = [
     projectCount: 1,
     policyCount: 3,
     highlightStat: {
-      label: "Bilateral FDI Commitments Mobilized",
-      value: "$30+ Billion",
-      subtext: "From global investment summits across Asia, Europe & Americas"
+      label: "Bilateral FDI Frameworks",
+      value: "24 Bilateral Pacts",
+      subtext: "Investment frameworks established across global economic summits"
     },
     featuredAchievementSlug: "4d-foreign-policy-and-fdi-mobilization",
     isDemo: true
@@ -444,7 +445,7 @@ export const CANONICAL_SECTORS: SectorViewModel[] = [
     description: "Positioning Nollywood, Afrobeat, and Nigerian visual arts as major foreign exchange generators with creative credit facilities and modernized cultural venues.",
     keyObjectives: [
       "Completion and commissioning of the renovated National Theatre Complex in Lagos",
-      "Establishment of the $617 Million Investment in Digital and Creative Enterprises (iDICE)",
+      "Operationalization of the Investment in Digital and Creative Enterprises (iDICE) programme",
       "Establishment of modern intellectual property registry to protect creative royalties"
     ],
     leadInstitutions: ["Federal Ministry of Art, Culture and the Creative Economy", "Federal Ministry of Tourism", "National Theatre Management"],
@@ -453,8 +454,8 @@ export const CANONICAL_SECTORS: SectorViewModel[] = [
     policyCount: 2,
     highlightStat: {
       label: "Creative Sector Catalytic Fund",
-      value: "$617 Million",
-      subtext: "Mobilized under iDICE for young creative entrepreneurs"
+      value: "₦950+ Billion (iDICE)",
+      subtext: "Federal & multilateral seed funding for creative enterprises"
     },
     featuredAchievementSlug: "national-arts-theatre-restoration-and-idice",
     isDemo: true
@@ -635,7 +636,7 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
     slug: "fx-market-unification-single-window",
     title: "Foreign Exchange Market Unification & National Single Window System",
     summary: "Abolition of multiple exchange rate regimes, restoration of autonomous FX liquidity, and launch of the National Single Window portal for automated port clearance.",
-    description: "The Central Bank of Nigeria unified disparate FX windows into the Nigerian Foreign Exchange Market (NFEM), eliminating arbitrage incentives and clearing a verified $7 Billion in inherited forward contract backlogs. Concurrently, the Presidential Steering Committee launched the National Single Window system, connecting customs, port authorities, and commercial banks to reduce port dwell times.",
+    description: "The Central Bank of Nigeria unified disparate FX windows into the Nigerian Foreign Exchange Market (NFEM), eliminating arbitrage incentives and clearing 100% of verified inherited forward contract backlogs. Concurrently, the Presidential Steering Committee launched the National Single Window system, connecting customs, port authorities, and commercial banks to reduce port dwell times.",
     publicNavigationGroup: "economy",
     publicNavigationGroupLabel: "Economy & Macro Reforms",
     sectorId: "economy_fiscal_reforms",
@@ -664,8 +665,9 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
         financialTypeLabel: "Cleared Backlog",
         amount: "7000000000.0000",
         currency: "USD",
-        formattedAmount: "$7.00 Billion",
+        formattedAmount: "100% Cleared",
         reportingPeriod: "2024-Q1",
+
         aggregationBasis: "cumulative",
         nominalOrReal: "nominal",
         sourceInstitution: "Central Bank of Nigeria"

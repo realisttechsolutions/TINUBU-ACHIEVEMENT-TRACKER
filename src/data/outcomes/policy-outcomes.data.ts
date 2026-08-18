@@ -27,11 +27,12 @@ export const policyOutcomesData: PolicyOutcomeRecord[] = [
     id: "poc-003",
     policySlug: "fx-market-unification-framework",
     metricName: "Cleared FX Forward Obligations",
-    value: "7.0 Billion",
-    unit: "USD",
-    baseline: "$7bn pending backlog",
+    value: "100%",
+    unit: "Verified Settlement",
+    baseline: "Inherited Backlog",
     period: "Q1 2024",
     auditBody: "Central Bank of Nigeria",
     verificationSourceUrl: "https://www.cbn.gov.ng/"
   }
+
 ];

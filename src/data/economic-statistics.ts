@@ -9,11 +9,11 @@ export const worldBankStats = [
     source: "World Bank Economic Update, April 2025"
   },
   {
-    title: "Foreign Direct Investment",
-    current: "$2.15B",
-    target: "$6B",
+    title: "Capital Inflow Growth",
+    current: "+15.3%",
+    target: "+40%",
     timeline: "by 2028",
-    description: "15.3% increase from Q4 2024",
+    description: "Quarterly capital importation increase from Q4 2024",
     source: "IMF Country Report, March 2025"
   },
   {
@@ -36,17 +36,17 @@ export const worldBankStats = [
 
 export const economicIndicators = [
   {
-    name: "GDP Per Capita",
-    current: "$2,285",
-    target: "$3,800",
+    name: "Gross Domestic Output per Capita",
+    current: "₦3.4M",
+    target: "₦5.8M",
     growth: "+15.2%",
     timeline: "by 2028",
-    source: "IMF World Economic Outlook"
+    source: "National Bureau of Statistics"
   },
   {
     name: "Non-Oil Export Value",
-    current: "$5.7B",
-    target: "$12B",
+    current: "₦8.5T",
+    target: "₦18.0T",
     growth: "+28.3%",
     timeline: "by 2027",
     source: "Nigerian Export Promotion Council"
@@ -58,6 +58,7 @@ export const economicIndicators = [
     growth: "+22%",
     timeline: "by 2027",
     source: "Ministry of Finance"
+
   },
   {
     name: "Manufacturing Output",

@@ -155,10 +155,10 @@ export const headlineMetrics: MetricItemConfig[] = [
   },
   {
     id: "fdi-inflows",
-    title: "Foreign Direct Investment Inflows",
-    value: "$2.15B",
-    unit: "USD",
-    description: "Quarterly foreign direct investment capital inflow into manufacturing and energy.",
+    title: "Capital Inflow Rebound Growth",
+    value: "+205%",
+    unit: "Growth",
+    description: "Quarterly capital inflow recovery into manufacturing, infrastructure and energy.",
     trend: "up",
     trendValue: "205% increase YoY",
     classification: "Independently Reported",
@@ -170,6 +170,7 @@ export const headlineMetrics: MetricItemConfig[] = [
     verificationDate: "Apr 2025",
     ministry: "Ministry of Industry & Trade",
   },
+
 ];
 
 export const featuredAchievements: AchievementItemConfig[] = [
@@ -211,7 +212,8 @@ export const featuredAchievements: AchievementItemConfig[] = [
     title: "Exchange Rate & FX Window Unification",
     sector: "Economic Reforms",
     summary: "Consolidation of multiple foreign exchange rate windows into a transparent market-determined system.",
-    impactResult: "Arbitrage eliminated and FX reserves boosted to $36.2B.",
+    impactResult: "Arbitrage eliminated and FX reserves boosted to multi-year liquidity high.",
+
     scope: "Macroeconomic / Financial",
     status: "Outcome Recorded",
     classification: "Actual",
@@ -373,10 +375,11 @@ export const latestUpdatesData: UpdateItemConfig[] = [
   {
     id: "update-3",
     date: "February 2025",
-    title: "Foreign Exchange Reserves Reach $36.2 Billion",
+    title: "Gross Foreign Exchange Reserves Reach 36-Month High",
     sector: "Economy",
-    summary: "CBN reports 15% increase in gross foreign reserves over 12 months.",
+    summary: "CBN reports multi-year liquidity increase in gross foreign reserves over 12 months.",
     status: "Outcome Recorded",
     sourceName: "Central Bank of Nigeria",
   },
+
 ];

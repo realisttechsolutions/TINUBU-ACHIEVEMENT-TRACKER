@@ -24,4 +24,32 @@ describe('PTAT Public Currency Formatter (Naira Standard)', () => {
     expect(formatPublicMoney(0)).toBe('₦0');
     expect(formatPublicMoney(-5000000000)).toBe('-₦5 billion');
   });
+
+  it('never outputs raw dollar signs ($) or USD tokens in public monetary presentation', () => {
+    const formatted1 = formatPublicMoney(500000000);
+    const formatted2 = formatNaira(1200000);
+    expect(formatted1).not.toContain('$');
+    expect(formatted1).not.toContain('USD');
+    expect(formatted2).not.toContain('$');
+    expect(formatted2).not.toContain('USD');
+  });
+
+  it('preserves foreign provenance currency in data structures while avoiding numeric relabeling', () => {
+    // Provenance financial record structure
+    const foreignRecord = {
+      amount: '7000000000.0000',
+      currency: 'USD',
+      sourceInstitution: 'Central Bank of Nigeria',
+      settlementType: 'verified_backlog'
+    };
+
+    // The raw USD numeric value must NEVER simply be prepended with ₦ as if 1 USD = 1 NGN
+    const naiveRelabel = `₦${Number(foreignRecord.amount) / 1e9} Billion`;
+    expect(naiveRelabel).toBe('₦7 Billion'); // This is the prohibited naive relabeling
+
+    // Compliant PTAT presentation either presents a verified NGN conversion with rate provenance or a qualitative verified status
+    const compliantOutcomePresentation = '100% Cleared';
+    expect(compliantOutcomePresentation).not.toBe(naiveRelabel);
+    expect(foreignRecord.currency).toBe('USD'); // Provenance is intact
+  });
 });

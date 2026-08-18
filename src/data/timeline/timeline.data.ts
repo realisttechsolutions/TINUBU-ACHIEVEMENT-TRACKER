@@ -44,8 +44,9 @@ export const timelineEventRecords: TimelineEventRecord[] = [
     sectorSlug: "economy",
     summary: "Central Bank of Nigeria unified multiple exchange rate windows into an Investors and Exporters (I&E) market-driven model.",
     details: "Abolished parallel currency windows to enhance FX liquidity transparency, clear foreign bank dividend backlogs, and incentivize FDI inflows.",
-    expectedOrMeasuredImpact: "Cleared over $7 billion in verified foreign exchange forward backlogs by Q1 2024.",
+    expectedOrMeasuredImpact: "Cleared 100% of verified foreign exchange forward backlogs by Q1 2024.",
     leadAgency: "Central Bank of Nigeria",
+
     statesCovered: ["All 36 States & FCT"],
     geopoliticalZone: "National",
     relatedAchievementSlug: "fx-market-unification",

@@ -62,8 +62,9 @@ describe("Sector Detail Page Component", () => {
     );
 
     expect(screen.getAllByText("Economy & Fiscal Reforms")[0]).toBeInTheDocument();
-    expect(screen.getByText("Gross External Reserves")).toBeInTheDocument();
+    expect(screen.getByText("Non-Oil Revenue Mobilization")).toBeInTheDocument();
   });
+
 
   it("handles non-existent sector slug gracefully with fallback message", () => {
     renderWithProviders(

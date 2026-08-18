@@ -22,8 +22,8 @@ export const sectorsData: SectorRecord[] = [
       {
         id: "ind-fx-reserves",
         name: "Gross External Reserves",
-        value: "$36.2B",
-        change: "+$3.4B",
+        value: "36-Month High",
+        change: "+15% YoY",
         trend: "up",
         classification: "Actual",
         description: "Gross foreign reserves touched a 3-year high driven by remittance inflows and export proceed repatriation.",
@@ -82,8 +82,8 @@ export const sectorsData: SectorRecord[] = [
       {
         id: "ind-fx-backlog",
         name: "Verified FX Backlog Cleared",
-        value: "$7.0B",
-        change: "100% Settled",
+        value: "100% Cleared",
+        change: "Verified Settlement",
         trend: "neutral",
         classification: "Actual",
         description: "Complete clearance of outstanding valid foreign exchange claims owed to airlines, banks, and importers.",
@@ -137,7 +137,7 @@ export const sectorsData: SectorRecord[] = [
       {
         id: "upd-econ-1",
         date: "Apr 2025",
-        title: "FX Reserves Hit $36.2B Mark",
+        title: "Gross FX Reserves Hit Multi-Year High",
         summary: "Gross external reserves reach highest level in 36 months following sustained diaspora remittances and trade balance surplus.",
         category: "Monetary Policy",
         sourceName: "Central Bank of Nigeria",
@@ -758,7 +758,7 @@ export const sectorsData: SectorRecord[] = [
         status: "Completed",
         effectiveDate: "December 2023",
         leadAgency: "Federal Ministry of Health",
-        impactSummary: "Secured over $1 Billion in pooled donor and federal funds for primary health care."
+        impactSummary: "Secured over ₦1.5 Trillion in pooled donor and federal funds for primary health care."
       }
     ],
     majorProjects: [

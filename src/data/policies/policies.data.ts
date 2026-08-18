@@ -172,16 +172,17 @@ export const policiesData: PolicyRecord[] = [
       },
       {
         date: "2024-03-20",
-        title: "Clearance of $7bn FX Backlog",
+        title: "Clearance of Inherited FX Backlog",
         description: "CBN completed verification and settlement of all valid pending FX claims.",
         stage: "operational"
       }
     ],
     relatedAchievementSlugs: ["fx-market-unification"],
     reportedOutcomes: [
-      "Cleared $7 billion inherited FX forward backlog",
+      "Cleared 100% of verified inherited FX forward backlog",
       "Foreign Portfolio Investment (FPI) inflows increased by over 200% in H1 2024"
     ],
+
     primarySources: [
       {
         name: "CBN Financial Stability Report H1 2024",

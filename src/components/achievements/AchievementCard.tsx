@@ -1,6 +1,8 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
-import { ArrowRight, MapPin, Building2, Calendar, ShieldCheck, CheckCircle2, DollarSign, Users } from "lucide-react";
+import { ArrowRight, MapPin, Building2, Calendar, ShieldCheck, CheckCircle2, Banknote, Users } from "lucide-react";
+
+
 import StatusBadge from "../common/StatusBadge";
 import DataClassificationBadge from "../common/DataClassificationBadge";
 import SourceBadge from "../common/SourceBadge";
@@ -127,7 +129,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
           <div className="p-2.5 rounded-xl bg-gov-canvas dark:bg-white/5 border border-gov-border/60 flex items-center justify-between text-xs font-semibold">
             {formattedFin && (
               <span className="flex items-center gap-1 text-emerald-800 dark:text-emerald-300">
-                <DollarSign className="h-3.5 w-3.5 text-gov-emerald" />
+                <Banknote className="h-3.5 w-3.5 text-gov-emerald" />
                 <span>{formattedFin}</span>
               </span>
             )}
