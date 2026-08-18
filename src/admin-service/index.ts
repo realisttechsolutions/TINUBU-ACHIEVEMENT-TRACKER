@@ -266,8 +266,9 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       return sendJson(res, 404, { error: 'Record not found' });
     }
     if (error.message?.includes('CONCURRENCY_CONFLICT')) {
-      return sendJson(res, 409, { error: 'Conflict: Record was modified concurrently. Please refresh.' });
+      return sendJson(res, 409, { error: error.message });
     }
+
     if (error.message?.includes('CORRECTION_REQUIRED')) {
       return sendJson(res, 403, { error: error.message });
     }

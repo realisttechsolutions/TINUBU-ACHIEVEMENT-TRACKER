@@ -55,12 +55,17 @@ export async function POST(
     if (err.message?.includes('FORBIDDEN')) {
       return NextResponse.json({ error: err.message || 'Forbidden' }, { status: 403 });
     }
-    if (err.message?.includes('CONCURRENCY_CONFLICT') || err.message?.includes('DUPLICATE_CORRECTION_IN_PROGRESS')) {
+    if (
+      err.message?.includes('CONCURRENCY_CONFLICT') ||
+      err.message?.includes('DUPLICATE_CORRECTION_IN_PROGRESS') ||
+      err.message?.includes('Conflict')
+    ) {
       return NextResponse.json({ error: err.message }, { status: 409 });
     }
     if (err.message?.includes('INVALID_TRANSITION') || err.message?.includes('REASON_REQUIRED')) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
+
     return NextResponse.json(
       { error: err.message || 'Internal server error' },
       { status: 500 },

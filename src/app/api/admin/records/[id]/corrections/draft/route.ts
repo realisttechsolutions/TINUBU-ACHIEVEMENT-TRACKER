@@ -32,9 +32,13 @@ export async function PUT(
     if (err.message?.includes('FORBIDDEN')) {
       return NextResponse.json({ error: err.message || 'Forbidden' }, { status: 403 });
     }
-    if (err.message?.includes('NO_ACTIVE_PROPOSED_CORRECTION') || err.message?.includes('REASON_REQUIRED')) {
+    if (err.message?.includes('CONCURRENCY_CONFLICT') || err.message?.includes('Conflict')) {
+      return NextResponse.json({ error: err.message }, { status: 409 });
+    }
+    if (err.message?.includes('NO_ACTIVE_PROPOSED_CORRECTION') || err.message?.includes('REASON_REQUIRED') || err.message?.includes('INVALID_TRANSITION')) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
+
     return NextResponse.json(
       { error: err.message || 'Internal server error' },
       { status: 500 },
