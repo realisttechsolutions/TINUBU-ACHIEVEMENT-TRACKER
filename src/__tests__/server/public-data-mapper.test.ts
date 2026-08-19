@@ -136,11 +136,33 @@ describe('public data mapping', () => {
     expect(formatExactDecimal('1234567890.0000')).toBe('1,234,567,890.0000');
   });
 
-  it('sanitizes public narrative text removing foreign currency tokens truthfully', () => {
-    const raw = 'Bilateral financing activation with foreign partners for the USD 1.1 billion Green Imperative Project to assemble 10,000 tractors.';
-    const sanitized = sanitizePublicPresentationText(raw);
-    expect(sanitized).toBe('Bilateral financing activation with foreign partners for the Green Imperative Project to assemble 10,000 tractors.');
-    expect(sanitized).not.toMatch(/\$|USD|dollar/i);
+  it('sanitizes public narrative text removing foreign currency tokens truthfully without introducing unsupported assertions', () => {
+    // Green Imperative:
+    const rawGreen = 'Bilateral financing activation with foreign partners for the USD 1.1 billion Green Imperative Project to assemble 10,000 tractors.';
+    expect(sanitizePublicPresentationText(rawGreen)).toBe('Bilateral financing activation with foreign partners for the Green Imperative Project to assemble 10,000 tractors.');
+
+    // External Reserves - conservative without unverified "36-month high" claim:
+    const rawReserves = 'Gross external reserves recovered to USD 38.5 Billion following foreign exchange market harmonization and portfolio inflows';
+    const sanitizedReserves = sanitizePublicPresentationText(rawReserves);
+    expect(sanitizedReserves).toBe('Gross external reserves strengthened following foreign exchange market harmonization and portfolio inflows');
+    expect(sanitizedReserves).not.toContain('36-month');
+    expect(sanitizedReserves).not.toMatch(/\$|USD|dollar/i);
+
+    // External Reserves Balance:
+    const rawBalance = 'Gross external reserves balance reported at USD 38.5 Billion';
+    expect(sanitizePublicPresentationText(rawBalance)).toBe('Gross external reserves balance reported');
+
+    // Oil & Gas Commitments - no unverified magnitude adjective added:
+    const rawOilGas = 'Over USD 5 billion in accelerated final investment decision commitments unlocked across deepwater and shallow assets';
+    expect(sanitizePublicPresentationText(rawOilGas)).toBe('Accelerated final investment decision commitments unlocked across deepwater and shallow assets');
+
+    // FX Arbitrage - no unverified "massive" adjective added:
+    const rawFx = 'Elimination of official FX arbitrage gap and multi-billion dollar recovery in net foreign portfolio investments';
+    expect(sanitizePublicPresentationText(rawFx)).toBe('Elimination of official FX arbitrage gap and recovery in net foreign portfolio investments');
+
+    // Greenfield goal - no unverified "major" adjective added:
+    const rawGoal = 'Aimed at unlocking over USD 5B in greenfield investments';
+    expect(sanitizePublicPresentationText(rawGoal)).toBe('Aimed at unlocking greenfield investments');
   });
 
   it('formats public contract values safely for NGN and foreign records', () => {
