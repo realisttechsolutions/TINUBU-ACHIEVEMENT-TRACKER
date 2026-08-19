@@ -26,7 +26,7 @@ export const BrandLockup: React.FC<BrandLockupProps> = ({
 
       {/* Typographic Lockup */}
       <div className="flex flex-col min-w-0 justify-center">
-        <span className="font-display font-extrabold text-xs sm:text-sm md:text-base lg:text-base xl:text-lg text-gov-navy dark:text-white leading-tight tracking-tight whitespace-nowrap">
+        <span className="font-display font-extrabold text-xs sm:text-sm md:text-sm lg:text-sm xl:text-[14px] 2xl:text-lg text-gov-navy dark:text-white leading-tight tracking-tight whitespace-nowrap">
           President Tinubu Achievement Tracker
         </span>
         {!compact && (

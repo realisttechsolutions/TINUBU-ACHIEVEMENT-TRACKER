@@ -1,6 +1,6 @@
 'use client';
 import React from "react";
-import HeroSection from "@/components/ui/hero-section";
+import GeographicHero from "@/components/geography/GeographicHero";
 import SectionHeader from "@/components/common/SectionHeader";
 import NigeriaImpactMap from "@/components/geography/NigeriaImpactMap";
 import { getGeopoliticalZones, getAllStates } from "@/services/geographyService";
@@ -14,18 +14,7 @@ const ImpactMapPage: React.FC = () => {
   return (
     <div className="w-full bg-gov-canvas dark:bg-gov-darkSurface text-gov-navy dark:text-white">
       {/* Page Hero */}
-      <HeroSection
-
-          title="National Geographic Impact Map"
-          subtitle="Explore federal achievements, multi-state transport corridors, physical infrastructure projects, and social interventions across Nigeria's 36 states and the Federal Capital Territory."
-          action={{ text: "Explore Interactive Map", href: "#map-section" }}
-          backgroundImage="https://images.unsplash.com/photo-1516937941344-00b4e0337589"
-          highlightStats={[
-            { value: "36 + FCT", label: "States & Capital" },
-            { value: "6", label: "Geopolitical Zones" },
-            { value: "100%", label: "Verified Data Bounds" }
-          ]}
-        />
+      <GeographicHero />
 
         {/* Core Map Section */}
         <section id="map-section" className="container mx-auto px-4 py-12">

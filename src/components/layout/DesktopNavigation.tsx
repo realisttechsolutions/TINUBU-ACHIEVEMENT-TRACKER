@@ -47,14 +47,14 @@ export const DesktopNavigation: React.FC = () => {
 
   return (
     <nav
-      className="hidden xl:flex items-center space-x-1 font-sans text-sm font-medium"
+      className="hidden xl:flex items-center space-x-0.5 2xl:space-x-1 font-sans text-xs 2xl:text-sm font-medium shrink-0"
       aria-label="Main Navigation"
       ref={menuRef}
     >
       {/* 1. Direct Links */}
       <Link
         to="/achievements"
-        className={`px-3 py-2 rounded-md transition-colors ${
+        className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md transition-colors whitespace-nowrap ${
           isActive("/achievements") 
             ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10" 
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
@@ -71,7 +71,7 @@ export const DesktopNavigation: React.FC = () => {
           onClick={() => setOpenMenu(openMenu === "sectors" ? null : "sectors")}
           onMouseEnter={() => setOpenMenu("sectors")}
           aria-expanded={openMenu === "sectors"}
-          className={`px-3 py-2 rounded-md inline-flex items-center gap-1.5 transition-colors ${
+          className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md inline-flex items-center gap-1 2xl:gap-1.5 transition-colors whitespace-nowrap ${
             location.pathname.startsWith("/sectors")
               ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10"
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
@@ -145,7 +145,7 @@ export const DesktopNavigation: React.FC = () => {
           onClick={() => setOpenMenu(openMenu === "initiatives" ? null : "initiatives")}
           onMouseEnter={() => setOpenMenu("initiatives")}
           aria-expanded={openMenu === "initiatives"}
-          className={`px-3 py-2 rounded-md inline-flex items-center gap-1.5 transition-colors ${
+          className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md inline-flex items-center gap-1 2xl:gap-1.5 transition-colors whitespace-nowrap ${
             location.pathname === "/projects" || location.pathname === "/policies" || location.pathname === "/programmes"
               ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10"
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
@@ -210,7 +210,7 @@ export const DesktopNavigation: React.FC = () => {
       {/* 4. Geography & Map */}
       <Link
         to="/impact-map"
-        className={`px-3 py-2 rounded-md transition-colors ${
+        className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md transition-colors whitespace-nowrap ${
           isActive("/impact-map") 
             ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10" 
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
@@ -222,7 +222,7 @@ export const DesktopNavigation: React.FC = () => {
       {/* 5. Timeline */}
       <Link
         to="/timeline"
-        className={`px-3 py-2 rounded-md transition-colors ${
+        className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md transition-colors whitespace-nowrap ${
           isActive("/timeline") 
             ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10" 
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
@@ -238,7 +238,7 @@ export const DesktopNavigation: React.FC = () => {
           onClick={() => setOpenMenu(openMenu === "data" ? null : "data")}
           onMouseEnter={() => setOpenMenu("data")}
           aria-expanded={openMenu === "data"}
-          className={`px-3 py-2 rounded-md inline-flex items-center gap-1.5 transition-colors ${
+          className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md inline-flex items-center gap-1 2xl:gap-1.5 transition-colors whitespace-nowrap ${
             location.pathname === "/data" || location.pathname === "/data-sources" || location.pathname === "/downloads" || location.pathname === "/dashboard"
               ? "text-gov-navy dark:text-white font-bold bg-gov-canvas dark:bg-white/10"
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"

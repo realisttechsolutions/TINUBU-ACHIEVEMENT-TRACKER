@@ -190,14 +190,13 @@ const Dashboard = () => {
         action={{ text: t('dashboard.exploreAction'), href: "#sectors" }}
         secondaryAction={{ text: t('dashboard.timelineAction'), href: "#timeline" }}
 
-          backgroundImage="https://images.unsplash.com/photo-1516937941344-00b4e0337589"
-          highlightStats={[
-            { value: formatNaira(4000000000000, currentLanguage, true), label: t('hero.stats.annualSavings') },
-            { value: formatPercentage(15, currentLanguage), label: t('hero.stats.studentBeneficiaries') },
-            { value: formatPercentage(68, currentLanguage), label: t('hero.stats.gdpGrowth') }
-          ]}
-          animatedSlogans={renewedHopeSlogans}
-        />
+        highlightStats={[
+          { value: formatNaira(4000000000000, currentLanguage, true), label: t('hero.stats.annualSavings') },
+          { value: formatPercentage(15, currentLanguage), label: t('hero.stats.studentBeneficiaries') },
+          { value: formatPercentage(68, currentLanguage), label: t('hero.stats.gdpGrowth') }
+        ]}
+        animatedSlogans={renewedHopeSlogans}
+      />
 
         <section className="container mx-auto px-4 py-12">
           <SectionHeader 
