@@ -5,7 +5,7 @@ import { getAllowedRoutesForRole, type StaffRole } from '@/lib/auth/types';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 
 export const metadata: Metadata = {
-  title: 'Staff Administration | Tinubu Achievement Tracker',
+  title: 'Staff Administration | President Tinubu Achievement Tracker',
   robots: {
     index: false,
     follow: false,

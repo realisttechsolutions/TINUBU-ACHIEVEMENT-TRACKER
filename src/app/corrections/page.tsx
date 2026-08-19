@@ -4,7 +4,7 @@ import DataSources from '@/views/DataSources';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Audited Corrections & Retractions Register | Tinubu Achievement Tracker',
+  title: 'Audited Corrections & Retractions Register | President Tinubu Achievement Tracker',
   description:
     'Public audit register of evidence corrections, data updates, methodological adjustments, and editorial rectifications.',
   alternates: {

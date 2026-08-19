@@ -1,7 +1,5 @@
 'use client';
 import React from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import SectionHeader from "@/components/common/SectionHeader";
 import { Shield, Users, MapPin, TrendingDown, BarChart3, CalendarRange, ArrowUpRight, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -127,9 +125,7 @@ const SecurityProgress = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
+    <div className="min-h-screen flex flex-col font-sans">
       <main className="flex-grow">
         <div className="relative bg-gradient-to-br from-indigo-900 to-blue-900 text-white py-16">
           <div className="absolute inset-0 opacity-10 bg-[url('/lovable-uploads/0cce3ec5-b800-424c-9c93-8ca7249b5ba2.png')] bg-cover"></div>
@@ -473,8 +469,6 @@ const SecurityProgress = () => {
           </ScrollReveal>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

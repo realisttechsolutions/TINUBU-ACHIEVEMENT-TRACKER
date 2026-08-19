@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
 import { ChevronRight, Share2 } from "lucide-react";
 
@@ -10,7 +10,7 @@ export const AchievementBreadcrumbs: React.FC<AchievementBreadcrumbsProps> = ({ 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${title} | Tinubu Achievement Tracker`,
+        title: `${title} | President Tinubu Achievement Tracker`,
         url: window.location.href,
       }).catch(() => {});
     } else {

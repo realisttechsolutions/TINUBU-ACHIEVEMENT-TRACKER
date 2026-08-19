@@ -4,9 +4,9 @@ import DataSources from '@/views/DataSources';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Data Sources & Public Methodology | Tinubu Achievement Tracker',
+  title: 'Data Sources & Public Methodology | President Tinubu Achievement Tracker',
   description:
-    'Complete empirical research methodology, institutional source register, evidence verification standards, and editorial governance protocols governing the Tinubu Achievement Tracker.',
+    'Complete empirical research methodology, institutional source register, evidence verification standards, and editorial governance protocols governing the President Tinubu Achievement Tracker.',
   alternates: {
     canonical: 'https://tinubutracker.ng/data-sources',
   },

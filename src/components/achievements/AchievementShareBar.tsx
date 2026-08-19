@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Share2, Copy, Check, Twitter, Linkedin, MessageCircle } from "lucide-react";
@@ -21,7 +21,7 @@ export const AchievementShareBar: React.FC<AchievementShareBarProps> = ({ title,
   };
 
   const shareTwitter = () => {
-    const text = encodeURIComponent(`Verified Achievement Record: "${title}" via Tinubu Achievement Tracker`);
+    const text = encodeURIComponent(`Verified Achievement Record: "${title}" via President Tinubu Achievement Tracker (PTAT)`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(fullUrl)}`, "_blank");
   };
 

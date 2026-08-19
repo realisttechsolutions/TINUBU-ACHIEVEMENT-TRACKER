@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
@@ -50,7 +50,7 @@ export const SectorsCatalogue: React.FC = () => {
   return (
     <>
       <PageHead
-        title="National Sector Performance Catalogue | Tinubu Achievement Tracker"
+        title="National Sector Performance Catalogue | President Tinubu Achievement Tracker"
         description="Comprehensive directory of the 15 canonical research sectors organized under 5 public navigation groups under President Bola Ahmed Tinubu's administration (2023 - 2026)."
         keywords="Nigeria sectors, economic reforms, infrastructure, agriculture, security, education, health, power, digital economy, Contract v1.1.2"
       />

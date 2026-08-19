@@ -80,8 +80,8 @@ export const DataSources: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Sources Hierarchy & Methodology | Tinubu Achievement Tracker"
-        description="Transparent 6-tier primary evidence hierarchy, 18 truth safeguards, and cited institutional publisher directory governing the Tinubu Achievement Tracker (2023 - 2026)."
+        title="Sources Hierarchy & Methodology | President Tinubu Achievement Tracker"
+        description="Transparent 6-tier primary evidence hierarchy, 18 truth safeguards, and cited institutional publisher directory governing the President Tinubu Achievement Tracker (2023 - 2026)."
         keywords="Nigeria data sources, research methodology, 6-level source hierarchy, NBS, CBN, Official Gazette, fact checking Nigeria"
       />
 

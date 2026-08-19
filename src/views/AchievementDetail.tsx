@@ -7,6 +7,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import DataClassificationBadge from "@/components/common/DataClassificationBadge";
 import SourceBadge from "@/components/common/SourceBadge";
 import DemoWatermark from "@/components/common/DemoWatermark";
+import CitizenImpactSection from "@/components/impact/CitizenImpactSection";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import {
   ArrowLeft,
@@ -39,12 +40,20 @@ export const AchievementDetail: React.FC = () => {
 
   if (!achievement) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center space-y-4">
-        <h2 className="text-2xl font-bold text-gov-navy dark:text-white">Record Not Found</h2>
-        <p className="text-sm text-gov-slate max-w-md">
-          The requested achievement record could not be found or has been relocated in the canonical registry.
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4 px-4">
+        <div className="p-4 rounded-full bg-gov-gold/10 text-gov-gold">
+          <AlertTriangle className="h-10 w-10" />
+        </div>
+        <h2 className="text-2xl font-bold font-display text-gov-navy dark:text-white">
+          Achievement Record Not Found
+        </h2>
+        <p className="text-sm text-gov-slate max-w-md text-center">
+          The requested achievement record slug could not be located in the canonical tracker registry.
         </p>
-        <Button onClick={() => navigate("/achievements")} className="bg-gov-navy text-white rounded-xl">
+        <Button
+          onClick={() => navigate("/achievements")}
+          className="bg-gov-emerald hover:bg-emerald-800 text-white font-bold text-xs"
+        >
           Return to Achievements Explorer
         </Button>
       </div>
@@ -54,7 +63,7 @@ export const AchievementDetail: React.FC = () => {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const handleDownloadBrief = () => {
@@ -90,7 +99,7 @@ export const AchievementDetail: React.FC = () => {
   return (
     <>
       <PageHead
-        title={`${achievement.title} | Tinubu Achievement Tracker`}
+        title={`${achievement.title} | President Tinubu Achievement Tracker`}
         description={achievement.summary}
         keywords={`${achievement.title}, ${achievement.sectorName}, Tinubu administration, Nigeria verified progress`}
       />
@@ -300,6 +309,9 @@ export const AchievementDetail: React.FC = () => {
               <p>{achievement.description}</p>
             </div>
           </div>
+
+          {/* Citizen Impact Foundation ("What This Means for Nigerians") */}
+          <CitizenImpactSection impact={achievement.citizenImpact} />
 
           {/* Atomic Claims & Deep Evidence Citations */}
           <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gov-darkSurface border-2 border-gov-gold/40 shadow-lg space-y-6">

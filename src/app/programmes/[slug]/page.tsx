@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const programme = (await getPublicDataSnapshot())?.programmes.find((record) => record.slug === slug)
     ?? dataAdapter.getProgrammeBySlug(slug);
-  return programme ? { title: `${programme.title} | Tinubu Achievement Tracker`, description: programme.summary } : { title: 'Programme Not Found | Tinubu Achievement Tracker' };
+  return programme ? { title: `${programme.title} | President Tinubu Achievement Tracker`, description: programme.summary } : { title: 'Programme Not Found | President Tinubu Achievement Tracker' };
 }
 
 export default async function ProgrammeDetailPage({ params }: Props) {

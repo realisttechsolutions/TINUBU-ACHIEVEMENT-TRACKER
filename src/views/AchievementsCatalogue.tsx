@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useMemo } from "react";
 import { useSearchParams } from "@/lib/navigation";
@@ -89,7 +89,7 @@ export const AchievementsCatalogue: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Achievements Explorer | Tinubu Achievement Tracker"
+        title="Achievements Explorer | President Tinubu Achievement Tracker"
         description="Searchable, evidence-backed repository of policies, infrastructure projects, reforms, and measurable national outcomes under President Bola Ahmed Tinubu's administration (2023 - 2026)."
         keywords="Nigeria achievement catalogue, Tinubu progress database, coastal highway, NELFUND loans, economic reforms Nigeria, 15 sectors"
       />

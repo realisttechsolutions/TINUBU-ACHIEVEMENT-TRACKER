@@ -268,7 +268,7 @@ export const dataAdapter = {
       capitalProjectsActive: DEMO_PROJECTS.length,
       subNationalStatesTracked: DEMO_NIGERIA_STATES.length,
       studentBeneficiariesFormatted: "350,000+",
-      externalReservesFormatted: "36-Month High Buffer",
+      externalReservesFormatted: "Strengthened Buffer",
       highwayKilometersFormatted: "2,400+ km",
 
       lastAuditSync: "2026-08-15"

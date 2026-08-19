@@ -4,7 +4,7 @@ import TimelinePage from '@/views/TimelinePage';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'National Policy & Reform Timeline | Tinubu Achievement Tracker',
+  title: 'National Policy & Reform Timeline | President Tinubu Achievement Tracker',
   description:
     'Chronological evidence timeline tracking statutory presidential assents, macroeconomic policy circulars, project groundbreakings, and commissioning milestones (2023 - 2026).',
   alternates: {

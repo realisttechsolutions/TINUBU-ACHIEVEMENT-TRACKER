@@ -22,7 +22,7 @@ const Index: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Tinubu Achievement Tracker | Tracking the Renewed Hope Agenda"
+        title="President Tinubu Achievement Tracker (PTAT) | Official Evidence-Backed Records (2023–2026)"
         description="Explore policies, projects, reforms and measurable outcomes under President Bola Ahmed Tinubu's administration through sector-based data, timelines and cited evidence."
         keywords="Nigeria progress tracker, Tinubu administration achievements, economic reforms Nigeria, infrastructure development, security improvements, social services Nigeria"
         structuredData={structuredData}

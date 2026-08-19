@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 
 import React, { useState, useEffect } from "react";
@@ -72,11 +72,11 @@ const Navbar = () => {
                 className="flex items-center space-x-2.5 ml-2 md:ml-0 group transition-transform duration-300 hover:scale-[1.02]"
               >
                 <div className="bg-gov-navy text-white font-display font-extrabold text-sm px-2 py-1 rounded shadow-sm border border-gov-gold/40 group-hover:border-gov-gold transition-colors">
-                  <span className="text-gov-gold">TAT</span>
+                  <span className="text-gov-gold">PTAT</span>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-display font-bold text-base md:text-lg text-gov-navy leading-tight group-hover:text-gov-emerald transition-colors">
-                    Tinubu Achievement Tracker
+                    President Tinubu Achievement Tracker
                   </span>
                   <span className="text-[10px] text-gov-slate uppercase tracking-wider font-medium hidden lg:block">
                     Renewed Hope Progress Platform

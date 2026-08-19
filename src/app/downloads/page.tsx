@@ -4,7 +4,7 @@ import Downloads from '@/views/Downloads';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Reports & Open Data Downloads Centre | Tinubu Achievement Tracker',
+  title: 'Reports & Open Data Downloads Centre | President Tinubu Achievement Tracker',
   description:
     'Download public policy briefs, sectoral delivery reports, open research datasets (CSV/JSON), and official presidential achievement compendiums.',
   alternates: {

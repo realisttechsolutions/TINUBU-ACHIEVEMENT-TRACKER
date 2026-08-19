@@ -33,7 +33,7 @@ const KeyMetrics = ({ heroStats }: KeyMetricsProps) => {
       <ScrollReveal delay={400}>
         <MetricCard
           title={t('metrics.foreignReserves')}
-          value="36-Month High"
+          value="Strengthened Buffer"
           description={t('metrics.april2025')}
           trend="up"
           trendValue={t('metrics.increaseIn12Months')}

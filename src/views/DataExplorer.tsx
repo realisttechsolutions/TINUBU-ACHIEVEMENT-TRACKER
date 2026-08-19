@@ -88,7 +88,7 @@ export const DataExplorer: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Interactive Data Explorer | Tinubu Achievement Tracker"
+        title="Interactive Data Explorer | President Tinubu Achievement Tracker"
         description="Query, filter, inspect, and export structured public datasets of achievements, capital projects, structural reforms, and social programmes under President Bola Ahmed Tinubu (2023 - 2026)."
         keywords="Nigeria open data, Tinubu achievements query builder, CSV download, JSON export, public dataset"
       />

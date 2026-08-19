@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = (await getPublicDataSnapshot())?.projects.find((record) => record.slug === slug)
     ?? dataAdapter.getProjectBySlug(slug);
-  return project ? { title: `${project.title} | Tinubu Achievement Tracker`, description: project.summary } : { title: 'Project Not Found | Tinubu Achievement Tracker' };
+  return project ? { title: `${project.title} | President Tinubu Achievement Tracker`, description: project.summary } : { title: 'Project Not Found | President Tinubu Achievement Tracker' };
 }
 
 export default async function ProjectDetailPage({ params }: Props) {

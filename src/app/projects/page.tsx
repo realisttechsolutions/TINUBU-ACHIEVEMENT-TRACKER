@@ -4,7 +4,7 @@ import ProjectsCatalogue from '@/views/ProjectsCatalogue';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Capital Infrastructure Projects | Tinubu Achievement Tracker',
+  title: 'Capital Infrastructure Projects | President Tinubu Achievement Tracker',
   description:
     'Major physical infrastructure, rail transit, highway corridors, energy assets, and housing developments delivered across Nigeria.',
   alternates: {

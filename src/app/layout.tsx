@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   keywords: [
     'President Tinubu Achievement Tracker',
     'PTAT',
-    'Tinubu Achievement Tracker',
+    'President Tinubu Achievement Tracker',
     'Nigeria Federal Government',
     'Bola Ahmed Tinubu',
     'Renewed Hope Agenda',

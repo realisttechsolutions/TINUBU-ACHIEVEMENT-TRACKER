@@ -9,8 +9,6 @@ import {
   ShoppingCart,
   Briefcase
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/ui/hero-section";
 import SectionHeader from "@/components/common/SectionHeader";
 import MetricCard from "@/components/dashboard/MetricCard";
@@ -111,9 +109,7 @@ const policyInitiatives = [
 
 const EconomicReforms = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
+    <div className="min-h-screen bg-gray-50 font-sans">
       <main>
         <HeroSection
           title="Economic Reforms"
@@ -145,7 +141,7 @@ const EconomicReforms = () => {
             />
             <MetricCard
               title="Foreign Exchange Reserves"
-              value="36-Month High"
+              value="Strengthened Buffer"
               description="As of June 2024 (CBN Buffer)"
               trend="up"
               trendValue="15% increase in 12 months"
@@ -353,8 +349,6 @@ const EconomicReforms = () => {
           </Tabs>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

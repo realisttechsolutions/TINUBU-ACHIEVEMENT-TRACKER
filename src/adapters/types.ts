@@ -79,6 +79,21 @@ export interface AtomicClaimViewModel {
   verificationStatus: VerificationStatus;
 }
 
+export type ImpactNature =
+  | 'observed_outcome'
+  | 'intended_benefit'
+  | 'expected_effect'
+  | 'implementation_dependent';
+
+export interface CitizenImpactViewModel {
+  summary: string;
+  significance?: string;
+  beneficiaryGroups?: string[];
+  practicalExample?: string;
+  importantContext?: string;
+  impactNature?: ImpactNature;
+}
+
 export interface AchievementViewModel {
   id: string;
   slug: string;
@@ -117,6 +132,9 @@ export interface AchievementViewModel {
   // Progress
   progressPercentage?: number;
   contractor?: string;
+
+  // Citizen Impact Layer (UI Foundation)
+  citizenImpact?: CitizenImpactViewModel;
 
   // Citations & Claims
   evidenceClaims: AtomicClaimViewModel[];
@@ -175,6 +193,7 @@ export interface ProjectViewModel {
   datePrecision: DatePrecision;
   contractValue?: string;
   disbursedValue?: string;
+  citizenImpact?: CitizenImpactViewModel;
   evidenceClaims: AtomicClaimViewModel[];
   isDemo: boolean;
 }
@@ -195,6 +214,7 @@ export interface PolicyViewModel {
   effectiveDate?: string;
   gazetteNumber?: string;
   datePrecision: DatePrecision;
+  citizenImpact?: CitizenImpactViewModel;
   evidenceClaims: AtomicClaimViewModel[];
   isDemo: boolean;
 }
@@ -217,6 +237,7 @@ export interface ProgrammeViewModel {
   targetBeneficiaryTypeLabel: string;
   beneficiaryCountFormatted?: string;
   statesCovered: string[];
+  citizenImpact?: CitizenImpactViewModel;
   evidenceClaims: AtomicClaimViewModel[];
   isDemo: boolean;
 }

@@ -61,7 +61,7 @@ export const TimelinePage: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Policy & Reform Implementation Timeline | Tinubu Achievement Tracker"
+        title="Policy & Reform Implementation Timeline | President Tinubu Achievement Tracker"
         description="Chronological event stream tracking policy decisions, legislative enactments, project contracts, and verified delivery outcomes (29 May 2023 – August 2026)."
         keywords="Nigeria timeline, Tinubu administration milestones, policy history Nigeria, Electricity Act 2023, NELFUND timeline"
       />

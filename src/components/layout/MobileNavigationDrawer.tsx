@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "@/lib/navigation";
 import { 
   X, 
@@ -37,6 +38,11 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
 }) => {
   const location = useLocation();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,11 +56,11 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const isActive = (path: string) => location.pathname === path;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 xl:hidden flex" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
       {/* Backdrop */}
       <div 
@@ -308,7 +314,8 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           <ThemeToggle />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

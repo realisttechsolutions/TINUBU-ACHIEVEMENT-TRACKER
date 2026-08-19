@@ -4,7 +4,7 @@ import DataSources from '@/views/DataSources';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Primary Institutional Source Directory | Tinubu Achievement Tracker',
+  title: 'Primary Institutional Source Directory | President Tinubu Achievement Tracker',
   description:
     'Primary sources, gazettes, ministerial reports, central bank statistical bulletins, and multilateral datasets supporting verified claims on the tracker.',
   alternates: {

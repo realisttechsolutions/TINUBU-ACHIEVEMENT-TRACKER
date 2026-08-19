@@ -4,7 +4,7 @@ import ImpactMapPage from '@/views/ImpactMapPage';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Nigeria National Impact Map | Tinubu Achievement Tracker',
+  title: 'Nigeria National Impact Map | President Tinubu Achievement Tracker',
   description:
     'Interactive geospatial visualization of capital projects, beneficiary distributions, and policy impacts across all 36 States and the Federal Capital Territory.',
   alternates: {

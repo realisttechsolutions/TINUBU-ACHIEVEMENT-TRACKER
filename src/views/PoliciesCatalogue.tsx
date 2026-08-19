@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
@@ -39,7 +39,7 @@ export const PoliciesCatalogue: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Policy & Reform Intelligence Directory | Tinubu Achievement Tracker"
+        title="Policy & Reform Intelligence Directory | President Tinubu Achievement Tracker"
         description="Searchable legal gazette directory of executive orders, statutory acts of parliament, and structural policy frameworks under President Bola Ahmed Tinubu's administration."
         keywords="Nigeria policies, Electricity Act 2023, Student Loans Act 2024, Pharmaceutical Executive Order, legal gazette Nigeria"
       />

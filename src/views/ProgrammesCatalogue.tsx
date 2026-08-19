@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
@@ -39,7 +39,7 @@ export const ProgrammesCatalogue: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Social Programmes Catalogue | Tinubu Achievement Tracker"
+        title="Social Programmes Catalogue | President Tinubu Achievement Tracker"
         description="Searchable directory of student financing schemes, consumer credit platforms, youth capacity programs, and social safety nets under President Bola Ahmed Tinubu's administration."
         keywords="Nigeria social programmes, NELFUND student loans, CREDICORP credit, 3MTT tech talents, social safety nets"
       />

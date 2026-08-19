@@ -78,7 +78,7 @@ export const NigeriaMapSvg: React.FC<NigeriaMapSvgProps> = ({
               strokeWidth={strokeWidth}
               strokeLinejoin="round"
               strokeLinecap="round"
-              className="cursor-pointer transition-colors duration-150 focus:outline-none"
+              className="cursor-pointer transition-all duration-150 focus:outline-none focus:stroke-[#C5A059] focus:stroke-[3.5px]"
               onMouseEnter={() => onStateHover(statePath.code)}
               onMouseLeave={() => onStateHover(null)}
               onClick={() => onStateSelect(statePath.code)}

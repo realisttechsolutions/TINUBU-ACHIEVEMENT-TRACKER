@@ -11,8 +11,6 @@ import {
   BarChart3,
   ChevronRight
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/ui/hero-section";
 import SectionHeader from "@/components/common/SectionHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -149,9 +147,7 @@ const timelineEvents = [
 
 const Infrastructure = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
+    <div className="min-h-screen flex flex-col font-sans">
       <main className="flex-grow">
         <ScrollReveal>
           <HeroSection 
@@ -349,8 +345,6 @@ const Infrastructure = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </div>
   );
 };

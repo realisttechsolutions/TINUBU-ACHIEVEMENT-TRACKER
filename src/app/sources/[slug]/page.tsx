@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const slug = resolvedParams?.slug || '';
   return {
-    title: `Source Record ${slug} | Tinubu Achievement Tracker`,
+    title: `Source Record ${slug} | President Tinubu Achievement Tracker`,
     description: `Primary evidence and institutional publication details for source record ${slug}.`,
     alternates: {
       canonical: `https://tinubutracker.ng/sources/${slug}`,

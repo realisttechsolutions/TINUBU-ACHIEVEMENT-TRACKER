@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "@/lib/navigation";
@@ -67,7 +67,7 @@ export const SectorDetail: React.FC = () => {
   return (
     <>
       <PageHead
-        title={`${sector.publicLabel} | Tinubu Achievement Tracker`}
+        title={`${sector.publicLabel} | President Tinubu Achievement Tracker`}
         description={sector.summary}
         keywords={`${sector.name}, Nigeria reforms, Tinubu administration, ${sector.parentPublicGroupLabel}`}
       />

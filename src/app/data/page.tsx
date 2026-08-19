@@ -4,7 +4,7 @@ import DataExplorer from '@/views/DataExplorer';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Interactive Data Explorer | Tinubu Achievement Tracker',
+  title: 'Interactive Data Explorer | President Tinubu Achievement Tracker',
   description:
     'Multi-dimensional evidence query tool allowing public search, filtering, and cross-tabulation across sectors, states, institutions, and funding envelopes.',
   alternates: {

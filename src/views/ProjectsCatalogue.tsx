@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
@@ -40,7 +40,7 @@ export const ProjectsCatalogue: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Capital Projects Catalogue | Tinubu Achievement Tracker"
+        title="Capital Projects Catalogue | President Tinubu Achievement Tracker"
         description="Verified inventory of major capital engineering, transport corridors, highways, rail links, power plants, and housing estates under President Bola Ahmed Tinubu's administration."
         keywords="Nigeria capital projects, Lagos Calabar Coastal Highway, Sokoto Badagry Highway, Karsana housing, national infrastructure"
       />

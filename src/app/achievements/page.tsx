@@ -4,7 +4,7 @@ import { AchievementsCatalogue } from '@/views/AchievementsCatalogue';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'National Achievements Catalogue | Tinubu Achievement Tracker',
+  title: 'National Achievements Catalogue | President Tinubu Achievement Tracker',
   description:
     'Comprehensive verified catalogue of achievements, capital projects, statutory policies, and social interventions under President Bola Ahmed Tinubu.',
   alternates: {

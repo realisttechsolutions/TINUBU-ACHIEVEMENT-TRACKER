@@ -4,7 +4,7 @@ import StatesCatalogue from '@/views/StatesCatalogue';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Subnational State Directory | Tinubu Achievement Tracker',
+  title: 'Subnational State Directory | President Tinubu Achievement Tracker',
   description:
     'Explore federal capital investments, infrastructure delivery, and verified beneficiaries across each of Nigerias 36 States and the FCT.',
   alternates: {

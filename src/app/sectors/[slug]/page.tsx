@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ?? dataAdapter.getSectorBySlug(slug);
   if (!sector) {
     return {
-      title: 'Sector Not Found | Tinubu Achievement Tracker',
+      title: 'Sector Not Found | President Tinubu Achievement Tracker',
       description: 'The requested sector could not be found.',
     };
   }
 
   return {
-    title: `${sector.name} Sector | Tinubu Achievement Tracker`,
+    title: `${sector.name} Sector | President Tinubu Achievement Tracker`,
     description: sector.description,
     alternates: {
       canonical: `https://tinubutracker.ng/sectors/${sector.slug}`,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${sector.name} Sector Progress & Evidence`,
       description: sector.description,
       url: `https://tinubutracker.ng/sectors/${sector.slug}`,
-      siteName: 'Tinubu Achievement Tracker',
+      siteName: 'President Tinubu Achievement Tracker',
       locale: 'en_NG',
       type: 'website',
     },

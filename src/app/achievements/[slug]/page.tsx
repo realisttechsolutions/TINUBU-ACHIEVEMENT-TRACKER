@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ?? dataAdapter.getAchievementBySlug(slug);
   if (!achievement) {
     return {
-      title: 'Achievement Not Found | Tinubu Achievement Tracker',
+      title: 'Achievement Not Found | President Tinubu Achievement Tracker',
       description: 'The requested achievement record could not be found.',
     };
   }
 
   return {
-    title: `${achievement.title} | Tinubu Achievement Tracker`,
+    title: `${achievement.title} | President Tinubu Achievement Tracker`,
     description: achievement.summary,
     alternates: {
       canonical: `https://tinubutracker.ng/achievements/${achievement.slug}`,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: achievement.title,
       description: achievement.summary,
       url: `https://tinubutracker.ng/achievements/${achievement.slug}`,
-      siteName: 'Tinubu Achievement Tracker',
+      siteName: 'President Tinubu Achievement Tracker',
       locale: 'en_NG',
       type: 'article',
       publishedTime: achievement.date || '2023-05-29',

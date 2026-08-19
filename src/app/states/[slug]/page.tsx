@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ?? dataAdapter.getStateBySlug(slug);
   if (!state) {
     return {
-      title: 'State Not Found | Tinubu Achievement Tracker',
+      title: 'State Not Found | President Tinubu Achievement Tracker',
       description: 'The requested state profile could not be found.',
     };
   }
 
   return {
-    title: `${state.name} State Impact & Projects | Tinubu Achievement Tracker`,
+    title: `${state.name} State Impact & Projects | President Tinubu Achievement Tracker`,
     description: `Federal capital investments, infrastructure delivery, and verified outcomes in ${state.name} State (${state.geopoliticalZone}).`,
     alternates: {
       canonical: `https://tinubutracker.ng/states/${state.slug}`,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${state.name} State - Federal Achievements & Delivery`,
       description: `Federal capital investments and verified outcomes across ${state.capital} and ${state.name} State.`,
       url: `https://tinubutracker.ng/states/${state.slug}`,
-      siteName: 'Tinubu Achievement Tracker',
+      siteName: 'President Tinubu Achievement Tracker',
       locale: 'en_NG',
       type: 'website',
     },

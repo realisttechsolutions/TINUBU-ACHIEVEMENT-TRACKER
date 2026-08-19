@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ?? dataAdapter.getPolicyBySlug(slug);
   if (!policy) {
     return {
-      title: 'Policy Not Found | Tinubu Achievement Tracker',
+      title: 'Policy Not Found | President Tinubu Achievement Tracker',
       description: 'The requested statutory policy record could not be found.',
     };
   }
 
   return {
-    title: `${policy.title} | Tinubu Achievement Tracker`,
+    title: `${policy.title} | President Tinubu Achievement Tracker`,
     description: policy.summary,
     alternates: {
       canonical: `https://tinubutracker.ng/policies/${policy.slug}`,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: policy.title,
       description: policy.summary,
       url: `https://tinubutracker.ng/policies/${policy.slug}`,
-      siteName: 'Tinubu Achievement Tracker',
+      siteName: 'President Tinubu Achievement Tracker',
       locale: 'en_NG',
       type: 'article',
     },

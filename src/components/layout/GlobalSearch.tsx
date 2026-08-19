@@ -1,6 +1,7 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "@/lib/navigation";
 import { 
   Search, 
@@ -37,7 +38,12 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
     "FX Market Unification",
     "CREDICORP"
   ]);
+  const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Focus input when opened
   useEffect(() => {
@@ -57,11 +63,11 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
       return;
     }
 
-    const searchResults = dataAdapter.searchGlobal(query);
+    const allMatches = dataAdapter.searchGlobal(query);
     if (selectedCategory === "All") {
-      setResults(searchResults);
+      setResults(allMatches.slice(0, 8));
     } else {
-      setResults(searchResults.filter(r => r.category === selectedCategory));
+      setResults(allMatches.filter(r => r.category.toLowerCase() === selectedCategory.toLowerCase()).slice(0, 8));
     }
     setSelectedIndex(0);
   }, [query, selectedCategory]);
@@ -72,10 +78,10 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
       onClose();
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : 0));
+      setSelectedIndex(prev => (prev + 1) % Math.max(results.length, 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex(prev => (prev > 0 ? prev - 1 : results.length - 1));
+      setSelectedIndex(prev => (prev - 1 + results.length) % Math.max(results.length, 1));
     } else if (e.key === "Enter" && results.length > 0) {
       e.preventDefault();
       handleSelectResult(results[selectedIndex]);
@@ -91,7 +97,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
     navigate(item.url);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const categories = ["All", "Achievements", "Projects", "Policies", "Sectors", "States"];
 
@@ -106,7 +112,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4">
       {/* Backdrop */}
       <div 
@@ -265,7 +271,8 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
           </span>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

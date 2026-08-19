@@ -375,9 +375,9 @@ export const latestUpdatesData: UpdateItemConfig[] = [
   {
     id: "update-3",
     date: "February 2025",
-    title: "Gross Foreign Exchange Reserves Reach 36-Month High",
+    title: "Gross Foreign Exchange Reserves Strengthen Following Reforms",
     sector: "Economy",
-    summary: "CBN reports multi-year liquidity increase in gross foreign reserves over 12 months.",
+    summary: "CBN reports continuous liquidity strengthening in gross foreign reserves following FX market harmonization.",
     status: "Outcome Recorded",
     sourceName: "Central Bank of Nigeria",
   },

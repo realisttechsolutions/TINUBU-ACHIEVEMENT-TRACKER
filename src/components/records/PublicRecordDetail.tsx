@@ -7,6 +7,7 @@ import { dataAdapter } from '@/adapters/dataAdapter';
 import StatusBadge from '@/components/common/StatusBadge';
 import SourceBadge from '@/components/common/SourceBadge';
 import DemoWatermark from '@/components/common/DemoWatermark';
+import CitizenImpactSection from '@/components/impact/CitizenImpactSection';
 
 export type PublicRecordKind = 'project' | 'policy' | 'programme';
 
@@ -123,6 +124,9 @@ export function PublicRecordDetail({ kind }: { kind: PublicRecordKind }) {
             ) : null}
           </section>
         ) : null}
+
+        {/* Citizen Impact Foundation ("What This Means for Nigerians") */}
+        <CitizenImpactSection impact={record.citizenImpact} />
 
         <section className="space-y-5 rounded-3xl border-2 border-gov-gold/40 bg-white p-6 shadow-sm dark:bg-gov-darkSurface sm:p-8">
           <div>

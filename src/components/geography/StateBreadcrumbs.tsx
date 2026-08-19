@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
 import { ChevronRight, Share2 } from "lucide-react";
 
@@ -10,7 +10,7 @@ export const StateBreadcrumbs: React.FC<StateBreadcrumbsProps> = ({ stateShortNa
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${stateShortName} State Dashboard | Tinubu Achievement Tracker`,
+        title: `${stateShortName} State Dashboard | President Tinubu Achievement Tracker`,
         url: window.location.href,
       }).catch(() => {});
     } else {

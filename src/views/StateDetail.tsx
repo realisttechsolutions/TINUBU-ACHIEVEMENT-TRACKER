@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from "react";
 import { useParams, Link, useNavigate } from "@/lib/navigation";
@@ -61,7 +61,7 @@ export const StateDetail: React.FC = () => {
   return (
     <>
       <PageHead
-        title={`${state.name} State | Tinubu Achievement Tracker`}
+        title={`${state.name} State | President Tinubu Achievement Tracker`}
         description={`Documented federal capital infrastructure projects, policy implementations, and social programmes in ${state.name} State (${state.geopoliticalZone}).`}
         keywords={`${state.name} State, Nigeria achievements, ${state.capital}, federal projects ${state.name}`}
       />

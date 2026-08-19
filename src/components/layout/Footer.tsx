@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 
 import React from "react";
@@ -39,11 +39,11 @@ const Footer = () => {
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2.5 group transition-transform duration-300 hover:scale-[1.02]">
               <div className="bg-gov-navy text-white font-display font-extrabold text-sm px-2 py-1 rounded shadow-sm border border-gov-gold/40">
-                <span className="text-gov-gold">TAT</span>
+                <span className="text-gov-gold">PTAT</span>
               </div>
               <div className="flex flex-col">
                 <span className="font-display font-bold text-lg text-gov-navy group-hover:text-gov-emerald transition-colors leading-tight">
-                  Tinubu Achievement Tracker
+                  President Tinubu Achievement Tracker
                 </span>
                 <span className="text-[10px] text-gov-slate uppercase tracking-wider font-medium">
                   Renewed Hope Progress Platform

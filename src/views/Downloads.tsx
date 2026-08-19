@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
@@ -57,7 +57,7 @@ export const Downloads: React.FC = () => {
   return (
     <>
       <PageHead
-        title="Download Centre | Tinubu Achievement Tracker"
+        title="Download Centre | President Tinubu Achievement Tracker"
         description="Download structured, machine-readable datasets (CSV, JSON, PDF) of achievements, capital projects, structural reforms, and evidence bibliographies under President Bola Ahmed Tinubu (2023 - 2026)."
         keywords="Nigeria public data download, Tinubu administration datasets, CSV export, JSON download, open government Nigeria"
       />

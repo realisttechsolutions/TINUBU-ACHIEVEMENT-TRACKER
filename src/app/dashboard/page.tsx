@@ -4,7 +4,7 @@ import Dashboard from '@/views/Dashboard';
 import Loading from '../loading';
 
 export const metadata: Metadata = {
-  title: 'Executive Impact Dashboard | Tinubu Achievement Tracker',
+  title: 'Executive Impact Dashboard | President Tinubu Achievement Tracker',
   description:
     'Real-time data visualization, key performance indicators, fiscal metrics, and delivery statistics across all sectors.',
   alternates: {
