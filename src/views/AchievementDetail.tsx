@@ -332,7 +332,7 @@ export const AchievementDetail: React.FC = () => {
                   </div>
 
                   <p className="text-xs sm:text-sm text-gov-navy dark:text-gray-200 font-medium leading-relaxed">
-                    "{claim.claimText}"
+                    "{claim.publicClaimSummary || claim.claimText}"
                   </p>
 
                   {/* Sources attached to this claim */}
@@ -350,7 +350,7 @@ export const AchievementDetail: React.FC = () => {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <SourceBadge level={src.sourceLevel} />
-                              <span className="font-bold text-gov-navy dark:text-white">{src.title}</span>
+                              <span className="font-bold text-gov-navy dark:text-white">{src.displayTitle || src.title}</span>
                             </div>
                             <div className="text-[11px] text-gov-slate">
                               Publisher: <strong>{src.publisher}</strong> • Role: {src.sourceRoleLabel}

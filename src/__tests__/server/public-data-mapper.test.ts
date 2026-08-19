@@ -45,8 +45,12 @@ describe('public data mapping', () => {
     expect(snapshot.achievements[0].financialMetrics?.[0].formattedAmount).toBe('₦900,719,925,474,099,312,345,678.1234');
   });
 
-  it('preserves foreign currency USD internally while formatting public display safely without USD/$ exposure', () => {
+  it('preserves canonical evidence exactly while deriving safe public presentation', () => {
     const exact = '1100000000.0000';
+    const canonicalClaimText = 'Bilateral sovereign credit financing of USD 1.1 billion approved for Green Imperative Agro-mechanization programme';
+    const canonicalSourceTitle = 'FEC approval of USD 1.1 Billion Green Imperative facility';
+    const canonicalEvidenceSummary = 'FEC approval of USD 1.1 Billion facility';
+
     const foreignRecord = {
       ...record,
       id: 'a0000000-0000-4000-8000-000000000008',
@@ -62,19 +66,19 @@ describe('public data mapping', () => {
         {
           record_id: foreignRecord.id,
           claim_id: 'c1',
-          claim_text: 'Bilateral sovereign credit financing of USD 1.1 billion approved',
+          claim_text: canonicalClaimText,
           claim_type: 'financial_value',
           data_value_nature: 'actual',
           source_origin: 'government_reported',
           verification_status: 'source_confirmed',
           source_id: 's1',
-          source_title: 'FEC approval of USD 1.1 Billion Green Imperative facility',
+          source_title: canonicalSourceTitle,
           publisher_name: 'Cabinet Secretariat',
           source_level: 'LEVEL_1',
           source_role: 'primary',
           source_type: 'executive_order',
           original_url: 'https://cabinetoffice.gov.ng',
-          evidence_summary: 'FEC approval of USD 1.1 Billion facility',
+          evidence_summary: canonicalEvidenceSummary,
         }
       ],
       financials: [
@@ -96,23 +100,32 @@ describe('public data mapping', () => {
 
     const mapped = snapshot.achievements[0];
 
-    // Provenance truth preserved:
+    // Canonical provenance truth preserved verbatim:
     expect(mapped.financialMetrics?.[0].amount).toBe(exact);
     expect(mapped.financialMetrics?.[0].currency).toBe('USD');
+    expect(mapped.evidenceClaims[0].claimText).toBe(canonicalClaimText);
+    expect(mapped.evidenceClaims[0].sources[0].title).toBe(canonicalSourceTitle);
+    expect(mapped.evidenceClaims[0].sources[0].summary).toBe(canonicalEvidenceSummary);
 
-    // Public formatted display is safe (no USD or $):
+    // Derived public formatted display is safe (no USD or $):
     expect(mapped.financialMetrics?.[0].formattedAmount).toBe('Bilateral Facility (See Evidence)');
     expect(mapped.financialMetrics?.[0].formattedAmount).not.toMatch(/\$|USD|dollar/i);
 
     // No numerical relabeling ($1.1B is NOT converted to ₦1.1B):
     expect(mapped.financialMetrics?.[0].formattedAmount).not.toContain('₦1.1');
 
-    // Public text sanitized:
+    // Derived public presentation summaries:
+    expect(mapped.summary).toBe('Bilateral financing activation with foreign partners for the Green Imperative Project.');
     expect(mapped.summary).not.toMatch(/\$|USD|dollar/i);
+
+    expect(mapped.description).toBe('Bilateral facilities approved.');
     expect(mapped.description).not.toMatch(/\$|USD|dollar/i);
-    expect(mapped.evidenceClaims[0].claimText).not.toMatch(/\$|USD|dollar/i);
-    expect(mapped.evidenceClaims[0].sources[0].title).not.toMatch(/\$|USD|dollar/i);
-    expect(mapped.evidenceClaims[0].sources[0].summary).not.toMatch(/\$|USD|dollar/i);
+
+    expect(mapped.evidenceClaims[0].publicClaimSummary).toBe('Bilateral sovereign credit financing approved for Green Imperative Agro-mechanization programme');
+    expect(mapped.evidenceClaims[0].publicClaimSummary).not.toMatch(/\$|USD|dollar/i);
+
+    expect(mapped.evidenceClaims[0].sources[0].displayTitle).toBe('FEC approval of Green Imperative facility');
+    expect(mapped.evidenceClaims[0].sources[0].displayTitle).not.toMatch(/\$|USD|dollar/i);
   });
 
   it('rejects invalid decimal text rather than coercing it', () => {

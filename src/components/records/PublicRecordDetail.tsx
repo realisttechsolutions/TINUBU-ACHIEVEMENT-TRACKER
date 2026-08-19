@@ -131,12 +131,12 @@ export function PublicRecordDetail({ kind }: { kind: PublicRecordKind }) {
           </div>
           {record.evidenceClaims.length ? record.evidenceClaims.map((claim, index) => (
             <article key={claim.claimId} className="space-y-3 rounded-2xl border border-gov-border bg-gov-canvas p-5 dark:bg-white/5">
-              <p className="text-sm font-semibold leading-relaxed text-gov-navy dark:text-white">Claim {index + 1}: {claim.claimText}</p>
+              <p className="text-sm font-semibold leading-relaxed text-gov-navy dark:text-white">Claim {index + 1}: {claim.publicClaimSummary || claim.claimText}</p>
               <div className="space-y-2 border-t border-gov-border/60 pt-3">
                 {claim.sources.map((source) => (
                   <div key={source.sourceId} className="flex flex-col justify-between gap-3 rounded-xl border border-gov-border/60 bg-white p-3 text-xs dark:bg-gov-darkSurface sm:flex-row sm:items-center">
                     <div>
-                      <div className="flex flex-wrap items-center gap-2"><SourceBadge level={source.sourceLevel} /><span className="font-bold text-gov-navy dark:text-white">{source.title}</span></div>
+                      <div className="flex flex-wrap items-center gap-2"><SourceBadge level={source.sourceLevel} /><span className="font-bold text-gov-navy dark:text-white">{source.displayTitle || source.title}</span></div>
                       <p className="mt-1 text-gov-slate">Publisher: {source.publisher}{source.evidenceLocation ? ` • ${source.evidenceLocation}` : ''}</p>
                     </div>
                     {source.url ? <a href={source.url} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1 font-bold text-gov-emerald hover:underline">View source <ArrowUpRight className="h-3.5 w-3.5" /></a> : null}

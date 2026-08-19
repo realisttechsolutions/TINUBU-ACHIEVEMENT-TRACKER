@@ -55,6 +55,7 @@ export interface BeneficiaryMetricViewModel {
 export interface SourceCitationViewModel {
   sourceId: string;
   title: string;
+  displayTitle?: string;
   publisher: string;
   sourceLevel: SourceHierarchyLevel;
   sourceRole: string;
@@ -70,6 +71,7 @@ export interface SourceCitationViewModel {
 export interface AtomicClaimViewModel {
   claimId: string;
   claimText: string;
+  publicClaimSummary?: string;
   claimType: string;
   sources: SourceCitationViewModel[];
   dataValueNature: DataValueNature;

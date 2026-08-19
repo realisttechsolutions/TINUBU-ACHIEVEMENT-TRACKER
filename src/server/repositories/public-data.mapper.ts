@@ -56,7 +56,7 @@ export function formatExactDecimal(value: string): string {
 
 export function sanitizePublicPresentationText(text: string | null | undefined): string {
   if (!text) return '';
-  return String(text)
+  const result = String(text)
     .replace(/for the USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*/gi, 'for the ')
     .replace(/of USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*approved/gi, 'approved')
     .replace(/approval of USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*/gi, 'approval of ')
@@ -75,6 +75,8 @@ export function sanitizePublicPresentationText(text: string | null | undefined):
     .replace(/\bdollars?\b/gi, 'foreign exchange')
     .replace(/\s{2,}/g, ' ')
     .trim();
+
+  return result.replace(/^[a-z]/, (char) => char.toUpperCase());
 }
 
 export function formatPublicFinancialAmount(amountExact: string, currencyCode: string, financialType?: string): string {
@@ -128,9 +130,14 @@ function claimsFor(rows: QueryResultRow[]): AtomicClaimViewModel[] {
   const claims = new Map<string, AtomicClaimViewModel>();
   for (const row of rows) {
     const claimId = String(row.claim_id);
+    const rawClaimText = String(row.claim_text);
+    const sanitizedClaim = sanitizePublicPresentationText(rawClaimText);
+    const publicClaimSummary = sanitizedClaim !== rawClaimText ? sanitizedClaim : undefined;
+
     const current = claims.get(claimId) ?? {
       claimId,
-      claimText: sanitizePublicPresentationText(String(row.claim_text)),
+      claimText: rawClaimText,
+      publicClaimSummary,
       claimType: String(row.claim_type),
       sources: [],
       dataValueNature: String(row.data_value_nature) as DataValueNature,
@@ -138,9 +145,14 @@ function claimsFor(rows: QueryResultRow[]): AtomicClaimViewModel[] {
       verificationStatus: String(row.verification_status) as VerificationStatus,
     };
     if (!current.sources.some((source) => source.sourceId === String(row.source_id))) {
+      const rawSourceTitle = String(row.source_title);
+      const sanitizedSourceTitle = sanitizePublicPresentationText(rawSourceTitle);
+      const displayTitle = sanitizedSourceTitle !== rawSourceTitle ? sanitizedSourceTitle : undefined;
+
       current.sources.push({
         sourceId: String(row.source_id),
-        title: sanitizePublicPresentationText(String(row.source_title)),
+        title: rawSourceTitle,
+        displayTitle,
         publisher: String(row.publisher_name ?? ''),
         sourceLevel: String(row.source_level) as SourceHierarchyLevel,
         sourceRole: String(row.source_role),
@@ -149,7 +161,7 @@ function claimsFor(rows: QueryResultRow[]): AtomicClaimViewModel[] {
         url: row.original_url ? String(row.original_url) : undefined,
         evidenceLocation: row.evidence_location ? String(row.evidence_location) : undefined,
         publicationDate: row.publication_date ? isoDate(row.publication_date) : undefined,
-        summary: row.evidence_summary ? sanitizePublicPresentationText(String(row.evidence_summary)) : undefined,
+        summary: row.evidence_summary ? String(row.evidence_summary) : undefined,
       });
     }
     claims.set(claimId, current);
