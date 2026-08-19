@@ -160,7 +160,7 @@ const EconomicReforms = () => {
               icon={<Activity className="h-6 w-6" />}
             />
             <MetricCard
-              title="Exchange Rate (NGN / USD)"
+              title="Official Exchange Rate"
               value="₦1,250"
               description="As of May 2024"
               trend="down"
@@ -197,7 +197,7 @@ const EconomicReforms = () => {
             />
 
             <AreaChart
-              title="Exchange Rate Trend (NGN to USD)"
+              title="Official Exchange Rate Trend"
               data={exchangeRateData}
               dataKey="value"
               color="#2E3192"

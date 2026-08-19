@@ -101,7 +101,7 @@ export const sectorsData: SectorRecord[] = [
         status: "Completed",
         effectiveDate: "June 2023",
         leadAgency: "Central Bank of Nigeria",
-        impactSummary: "Eliminated multi-billion dollar currency arbitrage and restored portfolio inflows."
+        impactSummary: "Eliminated massive foreign exchange arbitrage and restored portfolio inflows."
       },
       {
         id: "pol-subsidy-removal",

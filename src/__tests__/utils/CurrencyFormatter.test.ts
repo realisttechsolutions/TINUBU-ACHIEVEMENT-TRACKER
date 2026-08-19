@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { formatPublicMoney, formatNaira, formatCurrency } from '@/utils/formatters';
 import { DEMO_ACHIEVEMENTS } from '@/adapters/canonicalData';
+import { sectorsData } from '@/data/sectors/sectors.data';
+import { achievementsData } from '@/data/achievements/achievements.data';
 
-describe('PTAT Public Currency Formatter & Presentation Audit (M10J-D2A)', () => {
+describe('PTAT Public Currency Formatter & Presentation Audit (M10J-D2A / M10J-D2B)', () => {
   describe('1. NGN public amount renders ₦ symbol correctly', () => {
     it('formats numbers to Nigerian Naira (₦) with standard full-word denominations', () => {
       expect(formatPublicMoney(1200000000)).toBe('₦1.2 billion');
@@ -98,6 +100,24 @@ describe('PTAT Public Currency Formatter & Presentation Audit (M10J-D2A)', () =>
       // Instead of an unverified conversion (e.g. ₦10.5T or ₦7T), a verified qualitative outcome is presented
       expect(fxFinancial?.formattedAmount).toBe('100% Cleared');
       expect(fxFinancial?.formattedAmount).not.toMatch(/₦\s*\d+/);
+    });
+  });
+
+  describe('6. M10J-D2B Absolute Public USD & Foreign Currency Label Elimination', () => {
+    it('ensures public narrative descriptions in sectors and achievements contain zero dollar references', () => {
+      sectorsData.forEach(sector => {
+        sector.keyPolicies.forEach(kp => {
+          expect(kp.impactSummary).not.toMatch(/\bdollars?\b/i);
+          expect(kp.impactSummary).not.toMatch(/\bUSD\b/);
+          expect(kp.impactSummary).not.toContain('$');
+        });
+      });
+
+      achievementsData.forEach(achievement => {
+        expect(achievement.fullDescription).not.toMatch(/\bdollars?\b/i);
+        expect(achievement.fullDescription).not.toMatch(/\bUSD\b/);
+        expect(achievement.fullDescription).not.toContain('$');
+      });
     });
   });
 });

@@ -151,7 +151,7 @@ export const achievementsData: AchievementRecord[] = [
     achievementType: "policy-reform",
     sector: "economy",
     summary: "Consolidation of multiple official foreign exchange rate windows into a transparent, market-driven willing-buyer, willing-seller framework.",
-    fullDescription: "In June 2023, the Central Bank of Nigeria (CBN) abolished the multiple foreign exchange windows (including the I&E window, official peg, and parallel market distortions) in favor of a single market-determined rate structure. This structural reform eliminated multi-billion dollar currency arbitrage, boosted foreign investor confidence, and enhanced gross external reserves.",
+    fullDescription: "In June 2023, the Central Bank of Nigeria (CBN) abolished the multiple foreign exchange windows (including the I&E window, official peg, and parallel market distortions) in favor of a single market-determined rate structure. This structural reform eliminated massive foreign exchange arbitrage, boosted foreign investor confidence, and enhanced gross external reserves.",
     impactOutcome: "Currency arbitrage eliminated; gross foreign exchange reserves increased to 36-month high liquidity buffer.",
     beneficiariesOrScope: "National Macroeconomic & Financial System",
     status: "Outcome Recorded",
