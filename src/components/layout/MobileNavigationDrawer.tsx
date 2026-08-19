@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "@/lib/navigation";
 import { 
@@ -39,12 +39,30 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   const location = useLocation();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement | null;
+      document.body.style.overflow = "hidden";
+      setTimeout(() => closeButtonRef.current?.focus(), 50);
+    } else {
+      document.body.style.overflow = "";
+      if (previousActiveElement.current && typeof previousActiveElement.current.focus === "function") {
+        previousActiveElement.current.focus();
+      }
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -76,10 +94,11 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         <div className="p-4 border-b border-gov-border flex items-center justify-between bg-gov-navy text-white">
           <BrandLockup compact onClick={onClose} />
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={onClose}
             aria-label="Close navigation drawer"
-            className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+            className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-gov-gold"
           >
             <X className="h-5 w-5" />
           </button>

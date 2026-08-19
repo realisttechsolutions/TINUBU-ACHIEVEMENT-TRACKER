@@ -127,8 +127,8 @@ export const CitizenImpactSection: React.FC<CitizenImpactSectionProps> = ({
               <BookOpen className="h-4 w-4" />
               <span>Everyday Practical Example</span>
             </div>
-            <p className="text-xs sm:text-sm text-gov-slate dark:text-gray-300 leading-relaxed italic">
-              "{impact.practicalExample}"
+            <p className="text-xs sm:text-sm text-gov-slate dark:text-gray-300 leading-relaxed">
+              {impact.practicalExample}
             </p>
           </div>
         )}

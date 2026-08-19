@@ -55,7 +55,7 @@ describe("CitizenImpactSection Component", () => {
     expect(screen.getByText("SMEs")).toBeDefined();
 
     expect(screen.getByText(/Everyday Practical Example/i)).toBeDefined();
-    expect(screen.getByText(/"A teacher can purchase locally assembled electronics/i)).toBeDefined();
+    expect(screen.getByText(/A teacher can purchase locally assembled electronics/i)).toBeDefined();
 
     expect(screen.getByText(/Important Policy Context/i)).toBeDefined();
     expect(screen.getByText(/Initial phase covers federal workforce/i)).toBeDefined();

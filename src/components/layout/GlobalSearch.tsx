@@ -40,20 +40,30 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
   ]);
   const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Focus input when opened
+  // Focus input when opened & restore focus on close
   useEffect(() => {
     if (isOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement | null;
+      document.body.style.overflow = "hidden";
       setTimeout(() => inputRef.current?.focus(), 50);
       setSelectedIndex(0);
     } else {
+      document.body.style.overflow = "";
       setQuery("");
       setResults([]);
+      if (previousActiveElement.current && typeof previousActiveElement.current.focus === "function") {
+        previousActiveElement.current.focus();
+      }
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   // Execute query via dataAdapter
