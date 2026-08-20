@@ -79,6 +79,25 @@ export interface AtomicClaimViewModel {
   verificationStatus: VerificationStatus;
 }
 
+export type GeographicScopeType =
+  | 'nationwide'
+  | 'state_specific'
+  | 'multi_state'
+  | 'project_corridor'
+  | 'fct_specific'
+  | 'regional_zonal';
+
+export interface ScopeDisplayInfo {
+  scope: GeographicScopeType;
+  label: string;
+  badgeClass: string;
+  isNationwide: boolean;
+  isStateSpecific: boolean;
+  isMultiState: boolean;
+  isCorridor: boolean;
+  isFct: boolean;
+}
+
 export type ImpactNature =
   | 'observed_outcome'
   | 'intended_benefit'
@@ -92,6 +111,9 @@ export interface CitizenImpactViewModel {
   practicalExample?: string;
   importantContext?: string;
   impactNature?: ImpactNature;
+  supportingClaims?: string[];
+  supportingSources?: string[];
+  provenanceStatus?: 'CANONICAL_PROVENANCE' | 'RESEARCH_PACKAGE_PROVENANCE';
 }
 
 export interface AchievementViewModel {
@@ -115,6 +137,7 @@ export interface AchievementViewModel {
   leadMda: string;
   statesCovered: string[];
   geographicScope: string;
+  scopeInfo?: ScopeDisplayInfo;
   featured: boolean;
 
   // 4 Separated Classifications

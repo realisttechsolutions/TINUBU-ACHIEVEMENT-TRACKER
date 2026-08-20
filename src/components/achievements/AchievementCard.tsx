@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, Building2, Calendar, Banknote, Users } from "lucide
 import StatusBadge from "../common/StatusBadge";
 import DataClassificationBadge from "../common/DataClassificationBadge";
 import DemoWatermark from "../common/DemoWatermark";
+import ScopeBadge from "../common/ScopeBadge";
 import { AchievementViewModel } from "@/adapters/types";
 
 interface AchievementCardProps {
@@ -33,6 +34,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={status} size="sm" />
             <DataClassificationBadge type="verificationStatus" value={item.verificationStatus || "source_confirmed"} size="sm" />
+            <ScopeBadge scopeInfo={item.scopeInfo} statesCovered={item.statesCovered} size="sm" />
             <span className="text-[10px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2.5 py-0.5 rounded-full">
               {sectorName}
             </span>
@@ -104,6 +106,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-1.5 border-b border-gov-border/60 pb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <StatusBadge status={status} size="sm" />
+            <ScopeBadge scopeInfo={item.scopeInfo} statesCovered={item.statesCovered} size="sm" />
             <span className="text-[10px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2 py-0.5 rounded-md">
               {sectorName.split(' ')[0]}
             </span>

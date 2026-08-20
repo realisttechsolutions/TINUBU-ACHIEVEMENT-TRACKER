@@ -66,11 +66,8 @@ export const getStateImpactSummary = (stateSlug: string): StateImpactSummary | u
   const state = getStateBySlug(stateSlug);
   if (!state) return undefined;
 
-  const achievements = dataAdapter.getAchievements({ state: state.shortName });
-
-  let stateSpecificCount = 0;
-  let multiStateCount = 0;
-  let nationalCount = 0;
+  const breakdown = dataAdapter.getStateRecordBreakdown(state.shortName || state.name);
+  const achievements = dataAdapter.getAchievements({ state: state.shortName || state.name });
 
   const activeSectorsSet = new Set<string>();
   const leadMinistriesSet = new Set<string>();
@@ -78,25 +75,14 @@ export const getStateImpactSummary = (stateSlug: string): StateImpactSummary | u
   achievements.forEach((ach) => {
     activeSectorsSet.add(ach.sectorName);
     leadMinistriesSet.add(ach.leadMda);
-
-    const isNational =
-      ach.statesCovered.some((covered) => covered.toLowerCase() === 'national' || covered.toLowerCase().includes('36 states'));
-
-    if (isNational) {
-      nationalCount++;
-    } else if (ach.statesCovered && ach.statesCovered.length > 1) {
-      multiStateCount++;
-    } else {
-      stateSpecificCount++;
-    }
   });
 
   return {
     state,
-    totalPublishedRecords: achievements.length,
-    stateSpecificRecordsCount: stateSpecificCount,
-    multiStateRecordsCount: multiStateCount,
-    nationalRecordsCount: nationalCount,
+    totalPublishedRecords: breakdown.totalRelevant,
+    stateSpecificRecordsCount: breakdown.stateSpecificCount,
+    multiStateRecordsCount: breakdown.multiStateCount + breakdown.corridorCount,
+    nationalRecordsCount: breakdown.nationwideCount,
     activeSectors: Array.from(activeSectorsSet),
     leadMinistries: Array.from(leadMinistriesSet),
   };

@@ -889,6 +889,627 @@ export const DEMO_ACHIEVEMENTS: AchievementViewModel[] = [
       }
     ],
     isDemo: true
+  },
+  {
+    id: "ACH-DEMO-007",
+    slug: "tudun-biri-community-resettlement",
+    title: "Tudun Biri Community Rebuilding and Housing Resettlement Scheme",
+    summary: "Reconstruction of 120 residential units, solar electrification, clinic, and community school for Tudun Biri victims in Igabi LGA, Kaduna State.",
+    description: "Following the December 2023 incident, the Federal Government in partnership with the Kaduna State Government launched the comprehensive rebuilding of Tudun Biri community in Igabi Local Government Area. The project delivers permanent brick housing units, solar-powered boreholes, an internal access road network, a primary health clinic, and a basic education school complex.",
+    publicNavigationGroup: "infrastructure",
+    publicNavigationGroupLabel: "Infrastructure & Urban Delivery",
+    sectorId: "housing_urban_development",
+    sectorName: "Housing and Urban Development",
+    subsector: "community_resettlement_and_shelter",
+    recordType: "physical_project",
+    recordTypeLabel: "Physical Infrastructure Project",
+    status: "implementation_ongoing",
+    statusLabel: "Ongoing Execution",
+    statusCategory: "execution",
+    date: "2024-03-15",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Housing and Urban Development",
+    statesCovered: ["Kaduna"],
+    geographicScope: "state_specific",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "direct_physical_delivery",
+    evidenceProfileLabel: "Direct Physical Delivery",
+    progressPercentage: 68.0,
+    financialMetrics: [
+      {
+        financialType: "approved_funding",
+        financialTypeLabel: "Federal Resettlement Fund",
+        amount: "3500000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦3.50 Billion",
+        reportingPeriod: "2024-Q1",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Ministry of Housing and Urban Development"
+      }
+    ],
+    beneficiaryMetrics: [
+      {
+        stage: "resettlement_recipient",
+        stageLabel: "Resettled Community Members",
+        count: 1200,
+        formattedCount: "1,200 Residents",
+        beneficiaryType: "households",
+        countBasis: "cumulative_to_date",
+        reportingPeriod: "2024-Q3"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-008",
+        claimText: "Federal Government mobilized contractors for the construction of 120 residential units, clinic, and primary school in Tudun Biri, Kaduna State.",
+        claimType: "physical_asset_count",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-009",
+            title: "Federal Ministry of Housing Tudun Biri Resettlement Progress Inspection",
+            publisher: "Federal Ministry of Housing and Urban Development",
+            sourceLevel: "LEVEL_2",
+            sourceRole: "official_administrative",
+            sourceRoleLabel: "Official Inspection Report",
+            sourceType: "inspection_report",
+            publicationDate: "2024-05-18"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-008",
+    slug: "abuja-light-rail-commercial-operation",
+    title: "Abuja Light Rail Commercial Revitalization and Free Transit Scheme",
+    summary: "Rehabilitation, access road construction, and full commercial commissioning of the 12-station Abuja Light Rail metro line.",
+    description: "The Federal Capital Territory Administration completed the total technical rehabilitation of the 26.5km Abuja Light Rail network (Lot 1B and Lot 2). The system integrates direct rail connection between the Abuja Metro Central Business District and Nnamdi Azikiwe International Airport, supported by feeder access roads and modernized signaling infrastructure.",
+    publicNavigationGroup: "infrastructure",
+    publicNavigationGroupLabel: "Infrastructure & Urban Delivery",
+    sectorId: "infrastructure_transportation",
+    sectorName: "Infrastructure and Transportation",
+    subsector: "urban_rail_mass_transit",
+    recordType: "physical_project",
+    recordTypeLabel: "Physical Infrastructure Project",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2024-05-29",
+    datePrecision: "exact_day",
+    leadMda: "Federal Capital Territory Administration (FCTA)",
+    statesCovered: ["FCT", "Abuja"],
+    geographicScope: "fct_specific",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "direct_physical_delivery",
+    evidenceProfileLabel: "Direct Physical Delivery",
+    progressPercentage: 100.0,
+    contractor: "China Civil Engineering Construction Corporation (CCECC)",
+    financialMetrics: [
+      {
+        financialType: "funding_released",
+        financialTypeLabel: "Access Roads & Revitalization Capital",
+        amount: "21400000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦21.40 Billion",
+        reportingPeriod: "2024-Q2",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Capital Territory Administration"
+      }
+    ],
+    beneficiaryMetrics: [
+      {
+        stage: "daily_commuters",
+        stageLabel: "Daily Rail Commuters",
+        count: 45000,
+        formattedCount: "45,000+ Daily Commuters",
+        beneficiaryType: "commuters",
+        countBasis: "cumulative_to_date",
+        reportingPeriod: "2024-Q3"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-009",
+        claimText: "President Tinubu commissioned the revitalized Abuja Light Rail commercial operation on May 29, 2024, providing free passenger transit across all 12 operational stations.",
+        claimType: "operational_status",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-010",
+            title: "FCTA Commercial Rail Operations Launch Bulletin",
+            publisher: "Federal Capital Territory Administration",
+            sourceLevel: "LEVEL_1",
+            sourceRole: "primary",
+            sourceRoleLabel: "Official Administrative Record",
+            sourceType: "gazette",
+            publicationDate: "2024-05-29"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-009",
+    slug: "pharmaceutical-value-chain-executive-order",
+    title: "Zero Tariffs on Active Pharmaceutical Ingredients (Executive Order 40)",
+    summary: "Suspension of import duties, VAT, and excise levies on critical raw materials and machinery for domestic drug and medical diagnostic manufacturing.",
+    description: "Executive Order 40 establishes a zero-tariff regime on essential raw materials, active pharmaceutical ingredients (APIs), packaging equipment, and medical devices. The policy aims to curtail runaway medicine inflation, incentivize local formulation factories, and lower retail prices of essential antibiotics, antihypertensives, and antimalarials.",
+    publicNavigationGroup: "economy",
+    publicNavigationGroupLabel: "Economic Transformation",
+    sectorId: "healthcare_social_welfare",
+    sectorName: "Healthcare and Social Welfare",
+    subsector: "pharmaceutical_manufacturing",
+    recordType: "policy_reform",
+    recordTypeLabel: "Executive Order & Policy Reform",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2024-06-28",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Health and Social Welfare",
+    statesCovered: ["National", "All 36 States", "FCT"],
+    geographicScope: "national",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "statutory_legal_enactment",
+    evidenceProfileLabel: "Statutory Executive Order",
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-010",
+        claimText: "President Tinubu signed Executive Order 40 introducing zero tariffs, zero VAT, and customs duty exemptions on pharmaceutical raw materials and specialized manufacturing machinery.",
+        claimType: "legal_status",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-011",
+            title: "Federal Republic of Nigeria Official Gazette - Executive Order No. 40",
+            publisher: "Federal Ministry of Information and National Orientation",
+            sourceLevel: "LEVEL_1",
+            sourceRole: "primary",
+            sourceRoleLabel: "Official Gazette",
+            sourceType: "gazette",
+            publicationDate: "2024-06-28"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-010",
+    slug: "electricity-act-2023-implementation",
+    title: "Electricity Act 2023: Subnational Power Market Decentralization",
+    summary: "Devolution of electricity regulatory powers from NERC to State Electricity Regulatory Commissions across 10+ federating states.",
+    description: "Enacted in June 2023 and aggressively operationalized through 2024, the Electricity Act dismantles the monolithic federal power monopoly. State governments are empowered to license independent power generation, build state-level distribution grids, and establish competitive bilateral tariffs for industrial and domestic consumers.",
+    publicNavigationGroup: "economy",
+    publicNavigationGroupLabel: "Economic Transformation",
+    sectorId: "power_energy_transition",
+    sectorName: "Power and Energy Transition",
+    subsector: "power_market_deregulation",
+    recordType: "policy_reform",
+    recordTypeLabel: "Statutory Legislation",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2023-06-09",
+    datePrecision: "exact_day",
+    leadMda: "Nigerian Electricity Regulatory Commission (NERC)",
+    statesCovered: ["National", "Enugu", "Ekiti", "Ondo", "Imo", "Oyo", "Edo", "Lagos"],
+    geographicScope: "national",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "statutory_legal_enactment",
+    evidenceProfileLabel: "Statutory Act of Parliament",
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-011",
+        claimText: "NERC issued transfer orders ceding regulatory oversight of intrastate electricity markets to state electricity regulatory commissions.",
+        claimType: "regulatory_devolution",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-012",
+            title: "NERC State Electricity Market Regulatory Transfer Orders",
+            publisher: "Nigerian Electricity Regulatory Commission",
+            sourceLevel: "LEVEL_1",
+            sourceRole: "primary",
+            sourceRoleLabel: "Regulatory Order",
+            sourceType: "regulatory_ruling",
+            publicationDate: "2024-04-22"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-011",
+    slug: "zungeru-700mw-hydroelectric-commissioning",
+    title: "Zungeru 700MW Hydroelectric Power Plant Commercial Synchronization",
+    summary: "Full commercial integration of the 700MW Zungeru Hydroelectric Power Plant into the National Grid in Niger State.",
+    description: "The 700-megawatt Zungeru Hydroelectric project located on the Kaduna River in Niger State was brought to full commercial operation. The plant contributes approximately 2.64 billion kWh of clean electricity annually to the national grid, reinforcing grid stability and expanding base-load generation capacity for manufacturing industries.",
+    publicNavigationGroup: "infrastructure",
+    publicNavigationGroupLabel: "Infrastructure & Urban Delivery",
+    sectorId: "power_energy_transition",
+    sectorName: "Power and Energy Transition",
+    subsector: "hydroelectric_generation",
+    recordType: "physical_project",
+    recordTypeLabel: "Physical Infrastructure Project",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2024-05-02",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Power",
+    statesCovered: ["Niger"],
+    geographicScope: "state_specific",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "direct_physical_delivery",
+    evidenceProfileLabel: "Direct Physical Delivery",
+    progressPercentage: 100.0,
+    financialMetrics: [
+      {
+        financialType: "capital_investment",
+        financialTypeLabel: "Total Engineering Investment",
+        amount: "1300000000.0000",
+        currency: "USD",
+        formattedAmount: "700MW Capacity",
+        reportingPeriod: "2024-Q2",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Ministry of Power"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-012",
+        claimText: "The 700MW Zungeru Hydroelectric facility achieved full commercial synchronization with the Transmission Company of Nigeria (TCN) 330kV national grid network.",
+        claimType: "physical_delivery",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-013",
+            title: "Transmission Company of Nigeria Grid Influx Report - Zungeru Sync",
+            publisher: "Transmission Company of Nigeria",
+            sourceLevel: "LEVEL_2",
+            sourceRole: "official_statistical",
+            sourceRoleLabel: "Grid Influx Record",
+            sourceType: "statistical_bulletin",
+            publicationDate: "2024-05-02"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-012",
+    slug: "dry-season-wheat-cultivation-initiative",
+    title: "National Dry-Season Wheat Cultivation & Food Security Initiative",
+    summary: "Cultivation of 250,000 hectares of high-yield certified seed wheat across Jigawa, Kano, and Northern farming belts.",
+    description: "Under the National Agricultural Growth Scheme and Agro-Pocket (NAGS-AP), the Federal Government financed inputs, specialized solar pumps, and certified heat-tolerant seeds across Jigawa, Kano, Kebbi, and Katsina states, producing over 600,000 metric tonnes of domestic milling wheat.",
+    publicNavigationGroup: "economy",
+    publicNavigationGroupLabel: "Economic Transformation",
+    sectorId: "agriculture_food_security",
+    sectorName: "Agriculture and Food Security",
+    subsector: "grain_cultivation_and_food_reserves",
+    recordType: "programme",
+    recordTypeLabel: "Agricultural Input Scheme",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2024-04-10",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Agriculture and Food Security",
+    statesCovered: ["Jigawa", "Kano", "Kebbi", "Katsina"],
+    geographicScope: "multi_state",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "verified_administrative_disbursement",
+    evidenceProfileLabel: "Verified Input Distribution",
+    financialMetrics: [
+      {
+        financialType: "funding_released",
+        financialTypeLabel: "Agro-Pocket Subsidy Support",
+        amount: "45000000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦45.00 Billion",
+        reportingPeriod: "2024-Q1",
+        aggregationBasis: "period",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Ministry of Agriculture and Food Security"
+      }
+    ],
+    beneficiaryMetrics: [
+      {
+        stage: "farmer_beneficiaries",
+        stageLabel: "Verified Smallholder Farmers",
+        count: 150000,
+        formattedCount: "150,000+ Farmers",
+        beneficiaryType: "farmers",
+        countBasis: "cumulative_to_date",
+        reportingPeriod: "2024-Q2"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-013",
+        claimText: "Over 150,000 farmers received 50% subsidized inputs and heat-tolerant seeds for the 2023/2024 dry-season wheat farming cycle.",
+        claimType: "agricultural_output",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-014",
+            title: "NAGS-AP Dry Season Wheat Harvest Evaluation Report",
+            publisher: "Federal Ministry of Agriculture and Food Security",
+            sourceLevel: "LEVEL_2",
+            sourceRole: "official_statistical",
+            sourceRoleLabel: "Statistical Harvest Bulletin",
+            sourceType: "statistical_bulletin",
+            publicationDate: "2024-04-10"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-013",
+    slug: "lagos-rail-mass-transit-red-line",
+    title: "Lagos Rail Mass Transit (LRMT) Red Line Infrastructure Commissioning",
+    summary: "Presidential commissioning and passenger operations of the 27km Red Line rail corridor (Agbado to Oyingbo).",
+    description: "President Bola Tinubu commissioned the 27-kilometer first phase of the Lagos Rail Mass Transit Red Line connecting Agbado in Ogun/Lagos border to Oyingbo on Lagos Mainland. Built with modern overpasses, grade-separated tracks, and intermodal connectivity with bus rapid transit terminals, the line has a design capacity for 500,000 daily passengers.",
+    publicNavigationGroup: "infrastructure",
+    publicNavigationGroupLabel: "Infrastructure & Urban Delivery",
+    sectorId: "infrastructure_transportation",
+    sectorName: "Infrastructure and Transportation",
+    subsector: "urban_rail_mass_transit",
+    recordType: "physical_project",
+    recordTypeLabel: "Physical Infrastructure Project",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2024-02-29",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Transportation / LAMATA",
+    statesCovered: ["Lagos", "Ogun"],
+    geographicScope: "state_specific",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "direct_physical_delivery",
+    evidenceProfileLabel: "Direct Physical Delivery",
+    progressPercentage: 100.0,
+    financialMetrics: [
+      {
+        financialType: "capital_investment",
+        financialTypeLabel: "Corridor Construction Investment",
+        amount: "135000000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦135.00 Billion",
+        reportingPeriod: "2024-Q1",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Lagos State Government / Federal Ministry of Transportation"
+      }
+    ],
+    beneficiaryMetrics: [
+      {
+        stage: "daily_passengers",
+        stageLabel: "Commuter Design Capacity",
+        count: 500000,
+        formattedCount: "500,000 Daily Passengers",
+        beneficiaryType: "commuters",
+        countBasis: "target_capacity",
+        reportingPeriod: "2024-Q1"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-014",
+        claimText: "President Bola Ahmed Tinubu commissioned the 27km Phase 1 of the Lagos Rail Mass Transit Red Line on 29 February 2024.",
+        claimType: "physical_delivery",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-015",
+            title: "LAMATA Red Line Phase 1 Commissioning Official Brochure",
+            publisher: "Lagos Metropolitan Area Transport Authority",
+            sourceLevel: "LEVEL_1",
+            sourceRole: "primary",
+            sourceRoleLabel: "Official Commissioning Document",
+            sourceType: "gazette",
+            publicationDate: "2024-02-29"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-014",
+    slug: "second-niger-bridge-access-roads",
+    title: "Second Niger Bridge Interchange & Access Corridors (Phase 2A/2B)",
+    summary: "Asphalt paving of the 17.5km Asaba-Oko interchange and 10.3km Onitsha approach bypass roads connecting Delta and Anambra.",
+    description: "The Federal Ministry of Works executed emergency fast-tracked funding for the permanent dual-carriageway approach corridors (Phase 2A in Delta and Phase 2B in Anambra). The bypass eliminates multi-hour traffic bottlenecks around the Onitsha commercial axis and delivers direct highway access for industrial transport.",
+    publicNavigationGroup: "infrastructure",
+    publicNavigationGroupLabel: "Infrastructure & Urban Delivery",
+    sectorId: "infrastructure_transportation",
+    sectorName: "Infrastructure and Transportation",
+    subsector: "bridge_and_interchange_corridors",
+    recordType: "physical_project",
+    recordTypeLabel: "Physical Infrastructure Project",
+    status: "implementation_ongoing",
+    statusLabel: "Ongoing Execution",
+    statusCategory: "execution",
+    date: "2024-01-20",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Works",
+    statesCovered: ["Anambra", "Delta"],
+    geographicScope: "corridor",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "direct_physical_delivery",
+    evidenceProfileLabel: "Direct Physical Delivery",
+    progressPercentage: 82.0,
+    contractor: "Julius Berger Nigeria Plc",
+    financialMetrics: [
+      {
+        financialType: "funding_released",
+        financialTypeLabel: "Access Corridor Special Capital Allocation",
+        amount: "48000000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦48.00 Billion",
+        reportingPeriod: "2024-Q1",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Ministry of Works"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-015",
+        claimText: "Federal Ministry of Works mobilized contractors for the completion of Phase 2A (Asaba) and Phase 2B (Onitsha) bypass links to the Second Niger Bridge.",
+        claimType: "physical_delivery",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-016",
+            title: "Federal Ministry of Works Special Infrastructure Corridor Audit",
+            publisher: "Federal Ministry of Works",
+            sourceLevel: "LEVEL_2",
+            sourceRole: "official_administrative",
+            sourceRoleLabel: "Official Audit Report",
+            sourceType: "inspection_report",
+            publicationDate: "2024-03-20"
+          }
+        ]
+      }
+    ],
+    isDemo: true
+  },
+  {
+    id: "ACH-DEMO-015",
+    slug: "national-social-safety-net-cash-transfers",
+    title: "National Social Safety Net Direct Digital Cash Transfer Scale-Up",
+    summary: "Direct biometric digital cash transfers of ₦25,000 monthly delivered to 5 million vulnerable Nigerian households.",
+    description: "Following a comprehensive overhaul and verification of the National Social Register using National Identity Numbers (NIN) and Bank Verification Numbers (BVN), the Federal Government resumed biometric digital cash disbursements. Each verified household receives ₦25,000 per month for three consecutive months directly into individual bank accounts.",
+    publicNavigationGroup: "social_services",
+    publicNavigationGroupLabel: "Social Investment & Capital",
+    sectorId: "social_protection_human_development",
+    sectorName: "Social Protection and Human Development",
+    subsector: "direct_cash_transfers",
+    recordType: "programme",
+    recordTypeLabel: "Social Intervention Scheme",
+    status: "operational",
+    statusLabel: "Operational",
+    statusCategory: "delivered",
+    date: "2023-10-17",
+    datePrecision: "exact_day",
+    leadMda: "Federal Ministry of Humanitarian Affairs and Poverty Reduction",
+    statesCovered: ["National", "All 36 States", "FCT"],
+    geographicScope: "national",
+    featured: true,
+    dataValueNature: "actual",
+    sourceOrigin: "government_reported",
+    verificationStatus: "source_confirmed",
+    publicationStatus: "published",
+    evidenceProfile: "verified_administrative_disbursement",
+    evidenceProfileLabel: "Verified Biometric Disbursement",
+    financialMetrics: [
+      {
+        financialType: "funding_released",
+        financialTypeLabel: "Direct Household Disbursements",
+        amount: "375000000000.0000",
+        currency: "NGN",
+        formattedAmount: "₦375.00 Billion",
+        reportingPeriod: "2024-Q2",
+        aggregationBasis: "cumulative",
+        nominalOrReal: "nominal",
+        sourceInstitution: "Federal Ministry of Finance"
+      }
+    ],
+    beneficiaryMetrics: [
+      {
+        stage: "cash_transfer_recipient",
+        stageLabel: "Verified Vulnerable Households",
+        count: 5000000,
+        formattedCount: "5,000,000 Households",
+        beneficiaryType: "households",
+        countBasis: "cumulative_to_date",
+        reportingPeriod: "2024-Q3"
+      }
+    ],
+    evidenceClaims: [
+      {
+        claimId: "CLM-DEMO-016",
+        claimText: "5 million vulnerable households received ₦25,000 monthly digital transfers validated against NIN and BVN records.",
+        claimType: "social_welfare_benefit",
+        dataValueNature: "actual",
+        sourceOrigin: "government_reported",
+        verificationStatus: "source_confirmed",
+        sources: [
+          {
+            sourceId: "SRC-DEMO-017",
+            title: "National Social Safety Net Project (NASSP) Verification Bulletin",
+            publisher: "Federal Ministry of Humanitarian Affairs and Poverty Reduction",
+            sourceLevel: "LEVEL_2",
+            sourceRole: "official_statistical",
+            sourceRoleLabel: "Official Disbursement Bulletin",
+            sourceType: "statistical_bulletin",
+            publicationDate: "2024-06-15"
+          }
+        ]
+      }
+    ],
+    isDemo: true
   }
 ];
 

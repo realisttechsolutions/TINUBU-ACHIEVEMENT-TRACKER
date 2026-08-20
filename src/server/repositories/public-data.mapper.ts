@@ -1,6 +1,8 @@
 import type { QueryResultRow } from 'pg';
 import { CANONICAL_SECTORS, DEMO_NIGERIA_STATES } from '@/adapters/canonicalData';
 import type { PublicDataSnapshot } from '@/adapters/runtimeData';
+import { deriveGeographicScope } from '@/utils/geographyScope';
+import { getCitizenImpactForRecord } from '@/data/impact/citizenImpactData';
 import type {
   AchievementViewModel,
   AtomicClaimViewModel,
@@ -249,6 +251,9 @@ function achievementModel(record: QueryResultRow, evidence: QueryResultRow[], fi
   const base = baseRecord(record, evidence);
   const sector = primarySector(record);
   const claims = base.evidenceClaims;
+  const scopeInfo = deriveGeographicScope(base);
+  const citizenImpact = getCitizenImpactForRecord(base.slug || base.id);
+
   return {
     ...base,
     publicNavigationGroup: String(sector.publicGroupCode ?? 'governance') as AchievementViewModel['publicNavigationGroup'],
@@ -257,7 +262,9 @@ function achievementModel(record: QueryResultRow, evidence: QueryResultRow[], fi
     recordType: String(record.record_type),
     recordTypeLabel: label(record.record_type),
     statusCategory: statusCategory(base.status),
-    geographicScope: base.statesCovered.includes('National') ? 'national' : 'multi_state',
+    geographicScope: scopeInfo.scope,
+    scopeInfo,
+    citizenImpact,
     featured: Number(record.display_priority ?? 0) > 0,
     dataValueNature: claims[0]?.dataValueNature ?? 'actual',
     sourceOrigin: claims[0]?.sourceOrigin ?? 'unknown',

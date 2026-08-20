@@ -7,6 +7,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import DataClassificationBadge from "@/components/common/DataClassificationBadge";
 import SourceBadge from "@/components/common/SourceBadge";
 import DemoWatermark from "@/components/common/DemoWatermark";
+import ScopeBadge from "@/components/common/ScopeBadge";
 import CitizenImpactSection from "@/components/impact/CitizenImpactSection";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import {
@@ -101,22 +102,22 @@ export const AchievementDetail: React.FC = () => {
       <PageHead
         title={`${achievement.title} | President Tinubu Achievement Tracker`}
         description={achievement.summary}
-        keywords={`${achievement.title}, ${achievement.sectorName}, Tinubu administration, Nigeria verified progress`}
+        keywords={`Nigeria, ${achievement.sectorName}, ${achievement.leadMda}, President Bola Ahmed Tinubu, achievement record`}
       />
 
-      <div className="bg-gov-canvas dark:bg-gov-navy/10 min-h-screen py-8 sm:py-12 font-sans">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          {/* Breadcrumb & Navigation */}
-          <div className="flex items-center justify-between">
+      <div className="bg-gov-canvas dark:bg-gov-navy/10 min-h-screen py-8 sm:py-12 font-sans space-y-8">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Top Actions & Breadcrumbs */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <Link
               to="/achievements"
               className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-gov-navy dark:text-gov-gold hover:text-gov-emerald transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Back to Achievements Explorer</span>
+              <span>Back to Public Achievements</span>
             </Link>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -158,6 +159,7 @@ export const AchievementDetail: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border/60 pb-4">
               <div className="flex flex-wrap items-center gap-2">
                 <StatusBadge status={achievement.status} size="md" />
+                <ScopeBadge scopeInfo={achievement.scopeInfo} statesCovered={achievement.statesCovered} size="md" />
                 <DataClassificationBadge type="verificationStatus" value={achievement.verificationStatus} size="md" />
                 <DataClassificationBadge type="valueNature" value={achievement.dataValueNature} size="md" />
               </div>

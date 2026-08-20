@@ -7,6 +7,7 @@ import { dataAdapter } from '@/adapters/dataAdapter';
 import StatusBadge from '@/components/common/StatusBadge';
 import SourceBadge from '@/components/common/SourceBadge';
 import DemoWatermark from '@/components/common/DemoWatermark';
+import ScopeBadge from '@/components/common/ScopeBadge';
 import CitizenImpactSection from '@/components/impact/CitizenImpactSection';
 
 export type PublicRecordKind = 'project' | 'policy' | 'programme';
@@ -74,6 +75,7 @@ export function PublicRecordDetail({ kind }: { kind: PublicRecordKind }) {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border/60 pb-4">
             <div className="flex flex-wrap items-center gap-2">
               <StatusBadge status={record.status} size="md" />
+              <ScopeBadge statesCovered={states} title={record.title} summary={record.summary} size="md" />
               <span className="rounded-full bg-gov-navy px-3 py-1 text-xs font-bold uppercase tracking-wide text-gov-gold">{typeLabel}</span>
             </div>
             <Link to={`/sectors/${record.sectorId}`} className="text-xs font-bold text-gov-emerald hover:underline">{record.sectorName}</Link>

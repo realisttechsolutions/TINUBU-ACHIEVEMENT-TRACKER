@@ -29,6 +29,9 @@ import {
 } from "./canonicalData";
 import type { PublicDataSnapshot } from './runtimeData';
 
+import { deriveGeographicScope, getGeographicRelevanceRank } from "@/utils/geographyScope";
+import { getCitizenImpactForRecord } from "@/data/impact/citizenImpactData";
+
 let runtimeData: PublicDataSnapshot | null = null;
 
 export function hydrateDataAdapter(snapshot: PublicDataSnapshot | null) {
@@ -53,8 +56,9 @@ export interface AchievementFilterOptions {
   verificationStatus?: string | 'all';
   evidenceProfile?: string | 'all';
   state?: string | 'all';
+  scopeType?: string | 'all';
   year?: string | 'all';
-  sortBy?: 'newest' | 'oldest' | 'title' | 'status';
+  sortBy?: 'newest' | 'oldest' | 'title' | 'status' | 'geographic';
 }
 
 export interface TimelineFilterOptions {
@@ -98,7 +102,18 @@ export const dataAdapter = {
 
   // Achievements
   getAchievements(filters?: AchievementFilterOptions): AchievementViewModel[] {
-    let results = [...achievements()];
+    const rawList = achievements();
+    const selectedState = filters?.state && filters.state !== 'all' ? filters.state : undefined;
+
+    let results = rawList.map(a => {
+      const scopeInfo = deriveGeographicScope(a, selectedState);
+      const citizenImpact = a.citizenImpact || getCitizenImpactForRecord(a.slug || a.id);
+      return {
+        ...a,
+        scopeInfo,
+        citizenImpact,
+      };
+    });
 
     if (filters) {
       if (filters.searchQuery && filters.searchQuery.trim() !== '') {
@@ -138,14 +153,39 @@ export const dataAdapter = {
       }
 
       if (filters.state && filters.state !== 'all') {
-        results = results.filter(a => a.statesCovered.includes(filters.state!) || a.statesCovered.includes('National') || a.statesCovered.includes('All 36 States'));
+        const targetStateLower = filters.state.toLowerCase();
+        results = results.filter(a => {
+          const directMatch = a.statesCovered.some(s => s.toLowerCase().includes(targetStateLower));
+          const textMatch = a.title.toLowerCase().includes(targetStateLower) || a.summary.toLowerCase().includes(targetStateLower);
+          const nationalMatch = a.statesCovered.some(s => s.toLowerCase() === 'national' || s.toLowerCase().includes('36 states') || s.toLowerCase().includes('nationwide'));
+          return directMatch || textMatch || nationalMatch;
+        });
+
+        // Sort by geographic relevance rank when filtering by state (unless an explicit sort is set)
+        if (!filters.sortBy || filters.sortBy === 'geographic') {
+          results.sort((a, b) => {
+            const rankA = a.scopeInfo ? getGeographicRelevanceRank(a.scopeInfo) : 4;
+            const rankB = b.scopeInfo ? getGeographicRelevanceRank(b.scopeInfo) : 4;
+            if (rankA !== rankB) return rankA - rankB;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+        }
+      }
+
+      if (filters.scopeType && filters.scopeType !== 'all') {
+        results = results.filter(a => {
+          if (filters.scopeType === 'state_specific') return a.scopeInfo?.isStateSpecific;
+          if (filters.scopeType === 'multi_state') return a.scopeInfo?.isMultiState || a.scopeInfo?.isCorridor;
+          if (filters.scopeType === 'nationwide') return a.scopeInfo?.isNationwide;
+          return a.scopeInfo?.scope === filters.scopeType;
+        });
       }
 
       if (filters.year && filters.year !== 'all') {
         results = results.filter(a => a.date.startsWith(filters.year!));
       }
 
-      if (filters.sortBy) {
+      if (filters.sortBy && filters.sortBy !== 'geographic') {
         if (filters.sortBy === 'newest') {
           results.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         } else if (filters.sortBy === 'oldest') {
@@ -161,8 +201,61 @@ export const dataAdapter = {
     return results;
   },
 
+  getStateRecordBreakdown(stateName: string) {
+    const allStateAchievements = this.getAchievements({ state: stateName });
+    let stateSpecificCount = 0;
+    let multiStateCount = 0;
+    let corridorCount = 0;
+    let nationwideCount = 0;
+    let regionalCount = 0;
+
+    const stateSpecificRecords: AchievementViewModel[] = [];
+    const multiStateRecords: AchievementViewModel[] = [];
+    const nationwideRecords: AchievementViewModel[] = [];
+
+    allStateAchievements.forEach(a => {
+      const scope = a.scopeInfo?.scope || 'nationwide';
+      if (scope === 'state_specific' || scope === 'fct_specific') {
+        stateSpecificCount++;
+        stateSpecificRecords.push(a);
+      } else if (scope === 'project_corridor') {
+        corridorCount++;
+        multiStateRecords.push(a);
+      } else if (scope === 'multi_state') {
+        multiStateCount++;
+        multiStateRecords.push(a);
+      } else if (scope === 'regional_zonal') {
+        regionalCount++;
+        multiStateRecords.push(a);
+      } else {
+        nationwideCount++;
+        nationwideRecords.push(a);
+      }
+    });
+
+    return {
+      totalRelevant: allStateAchievements.length,
+      stateSpecificCount,
+      multiStateCount,
+      corridorCount,
+      nationwideCount,
+      regionalCount,
+      stateSpecificRecords,
+      multiStateRecords,
+      nationwideRecords,
+    };
+  },
+
   getAchievementBySlug(slug: string): AchievementViewModel | undefined {
-    return achievements().find(a => a.slug === slug || a.id === slug);
+    const ach = achievements().find(a => a.slug === slug || a.id === slug);
+    if (!ach) return undefined;
+    const scopeInfo = deriveGeographicScope(ach);
+    const citizenImpact = ach.citizenImpact || getCitizenImpactForRecord(ach.slug || ach.id);
+    return {
+      ...ach,
+      scopeInfo,
+      citizenImpact,
+    };
   },
 
   getFeaturedAchievements(): AchievementViewModel[] {

@@ -1,9 +1,10 @@
 'use client';
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "@/lib/navigation";
 import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
+import ScopeBadge from "@/components/common/ScopeBadge";
 import AchievementCard from "@/components/achievements/AchievementCard";
 import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
@@ -16,15 +17,45 @@ import {
   ShieldCheck, 
   Download,
   ChevronRight,
-  Layers
+  Layers,
+  Globe,
+  Navigation,
+  Sparkles,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const StateDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [selectedScopeTab, setSelectedScopeTab] = useState<'all' | 'state_specific' | 'multi_state' | 'nationwide'>('all');
 
   const state = dataAdapter.getStateBySlug(slug || "");
+
+  const breakdown = useMemo(() => {
+    if (!state) {
+      return {
+        totalRelevant: 0,
+        stateSpecificCount: 0,
+        multiStateCount: 0,
+        corridorCount: 0,
+        nationwideCount: 0,
+        regionalCount: 0,
+        stateSpecificRecords: [],
+        multiStateRecords: [],
+        nationwideRecords: [],
+      };
+    }
+    return dataAdapter.getStateRecordBreakdown(state.name);
+  }, [state]);
+
+  const stateAchievements = useMemo(() => {
+    if (!state) return [];
+    return dataAdapter.getAchievements({
+      state: state.name,
+      scopeType: selectedScopeTab === 'all' ? 'all' : selectedScopeTab,
+    });
+  }, [state, selectedScopeTab]);
 
   if (!state) {
     return (
@@ -40,13 +71,12 @@ export const StateDetail: React.FC = () => {
     );
   }
 
-  const stateAchievements = dataAdapter.getAchievements({ state: state.name });
-
   const handleExportStateCsv = () => {
     dataAdapter.exportToCsv(
       stateAchievements.map(a => ({
         id: a.id,
         title: a.title,
+        scope: a.scopeInfo?.label || a.geographicScope,
         sector: a.sectorName,
         status: a.statusLabel,
         verification_status: a.verificationStatus,
@@ -62,13 +92,13 @@ export const StateDetail: React.FC = () => {
     <>
       <PageHead
         title={`${state.name} State | President Tinubu Achievement Tracker`}
-        description={`Documented federal capital infrastructure projects, policy implementations, and social programmes in ${state.name} State (${state.geopoliticalZone}).`}
+        description={`Documented federal capital infrastructure projects, state-specific initiatives, and nationwide programmes relevant to ${state.name} State (${state.geopoliticalZone}).`}
         keywords={`${state.name} State, Nigeria achievements, ${state.capital}, federal projects ${state.name}`}
       />
 
       <div className="bg-gov-canvas dark:bg-gov-navy/10 min-h-screen py-8 sm:py-12 font-sans space-y-8">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          {/* Top Breadcrumbs */}
+          {/* Top Breadcrumbs & Export */}
           <div className="flex items-center justify-between">
             <Link
               to="/impact-map"
@@ -105,31 +135,41 @@ export const StateDetail: React.FC = () => {
                   {state.name} State
                 </h1>
 
-                <div className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal flex flex-wrap items-center gap-2">
-                  <span>State Capital:</span>
-                  <span className="text-white font-bold">{state.capital}</span>
-                  <span>• State Code:</span>
-                  <span className="text-gov-gold font-bold">{state.code}</span>
+                <div className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal flex flex-wrap items-center gap-3">
+                  <span>State Capital: <strong className="text-white">{state.capital}</strong></span>
+                  <span>•</span>
+                  <span>State Code: <strong className="text-gov-gold">{state.code}</strong></span>
+                  <span>•</span>
+                  <span>Total Relevant Records: <strong className="text-emerald-400">{breakdown.totalRelevant}</strong></span>
                 </div>
               </div>
 
-              {/* Stats Box */}
-              <div className="grid grid-cols-2 gap-3 shrink-0">
-                <div className="p-4 rounded-2xl bg-gov-darkSurface border border-gov-gold/30 text-center space-y-0.5 min-w-[120px]">
-                  <div className="text-2xl font-black text-gov-gold tabular-nums">
-                    {state.projectCount}
+              {/* Geographic Relevance Breakdown Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 shrink-0">
+                <div className="p-3.5 rounded-2xl bg-gov-darkSurface/90 border border-emerald-500/30 text-center space-y-0.5 min-w-[105px]">
+                  <div className="text-xl sm:text-2xl font-black text-emerald-400 tabular-nums">
+                    {breakdown.stateSpecificCount}
                   </div>
-                  <div className="text-[11px] text-gray-400 font-medium uppercase">
-                    Projects Active
+                  <div className="text-[10px] text-gray-300 font-semibold uppercase tracking-wider">
+                    {state.name.split(' ')[0]} Specific
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-gov-darkSurface border border-gov-gold/30 text-center space-y-0.5 min-w-[120px]">
-                  <div className="text-2xl font-black text-gov-emerald tabular-nums">
-                    {state.programmeCount}
+                <div className="p-3.5 rounded-2xl bg-gov-darkSurface/90 border border-blue-500/30 text-center space-y-0.5 min-w-[105px]">
+                  <div className="text-xl sm:text-2xl font-black text-blue-400 tabular-nums">
+                    {breakdown.multiStateCount + breakdown.corridorCount}
                   </div>
-                  <div className="text-[11px] text-gray-400 font-medium uppercase">
-                    Social Schemes
+                  <div className="text-[10px] text-gray-300 font-semibold uppercase tracking-wider">
+                    Corridor / Multi
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-gov-darkSurface/90 border border-gov-gold/30 text-center space-y-0.5 min-w-[105px] col-span-2 sm:col-span-1">
+                  <div className="text-xl sm:text-2xl font-black text-gov-gold tabular-nums">
+                    {breakdown.nationwideCount}
+                  </div>
+                  <div className="text-[10px] text-gray-300 font-semibold uppercase tracking-wider">
+                    Nationwide
                   </div>
                 </div>
               </div>
@@ -139,7 +179,7 @@ export const StateDetail: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6 border-t border-white/10 text-xs">
               <div className="space-y-1.5">
                 <div className="text-[11px] font-bold text-gov-gold uppercase tracking-wider">
-                  Priority Active Sectors
+                  Priority Active Sectors in {state.name}
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {state.sectorsActive.map((sec, i) => (
@@ -161,14 +201,77 @@ export const StateDetail: React.FC = () => {
             </div>
           </div>
 
-          {/* Documented Achievements for State */}
+          {/* Geographic Scope Explanation Banner */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-gov-darkSurface border border-gov-border flex items-start gap-3 text-xs text-gov-slate">
+            <Info className="h-4 w-4 text-gov-emerald shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-gov-navy dark:text-white">Geographic Scope Presentation Rule: </span>
+              Achievements specifically anchored in {state.name} State appear first, followed by multi-state transport/energy corridors traversing {state.name}, and nationwide policies (e.g. NELFUND, Tax Modernization, FX Unification) that deliver universal benefits to citizens across all 36 States + FCT.
+            </div>
+          </div>
+
+          {/* Scope Filter Tabs */}
+          <div className="flex flex-wrap items-center gap-2 border-b border-gov-border pb-3">
+            <button
+              onClick={() => setSelectedScopeTab('all')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                selectedScopeTab === 'all'
+                  ? 'bg-gov-navy text-white shadow-sm'
+                  : 'bg-white dark:bg-gov-darkSurface text-gov-slate hover:text-gov-navy border border-gov-border'
+              }`}
+            >
+              <Globe className="h-3.5 w-3.5" />
+              <span>All Relevant Records ({breakdown.totalRelevant})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedScopeTab('state_specific')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                selectedScopeTab === 'state_specific'
+                  ? 'bg-emerald-700 text-white shadow-sm'
+                  : 'bg-white dark:bg-gov-darkSurface text-gov-slate hover:text-emerald-700 border border-gov-border'
+              }`}
+            >
+              <MapPin className="h-3.5 w-3.5 text-emerald-500" />
+              <span>{state.name}-Specific ({breakdown.stateSpecificCount})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedScopeTab('multi_state')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                selectedScopeTab === 'multi_state'
+                  ? 'bg-blue-700 text-white shadow-sm'
+                  : 'bg-white dark:bg-gov-darkSurface text-gov-slate hover:text-blue-700 border border-gov-border'
+              }`}
+            >
+              <Navigation className="h-3.5 w-3.5 text-blue-500" />
+              <span>Corridors & Multi-State ({breakdown.multiStateCount + breakdown.corridorCount})</span>
+            </button>
+
+            <button
+              onClick={() => setSelectedScopeTab('nationwide')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                selectedScopeTab === 'nationwide'
+                  ? 'bg-amber-700 text-white shadow-sm'
+                  : 'bg-white dark:bg-gov-darkSurface text-gov-slate hover:text-amber-700 border border-gov-border'
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+              <span>Nationwide Scope ({breakdown.nationwideCount})</span>
+            </button>
+          </div>
+
+          {/* Documented Achievements for State Feed */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold font-display text-gov-navy dark:text-white">
-                Documented Achievements & Initiatives in {state.name} State
+                {selectedScopeTab === 'all' && `All Records Relevant to ${state.name} State`}
+                {selectedScopeTab === 'state_specific' && `${state.name}-Specific Verified Records`}
+                {selectedScopeTab === 'multi_state' && `Multi-State & Corridor Projects Involving ${state.name}`}
+                {selectedScopeTab === 'nationwide' && `Nationwide Programmes Active in ${state.name}`}
               </h2>
               <span className="text-xs font-semibold text-gov-slate">
-                {stateAchievements.length} Record{stateAchievements.length === 1 ? "" : "s"} Indexed
+                Showing {stateAchievements.length} of {breakdown.totalRelevant} records
               </span>
             </div>
 
@@ -179,8 +282,13 @@ export const StateDetail: React.FC = () => {
             </div>
 
             {stateAchievements.length === 0 && (
-              <div className="p-12 text-center text-xs text-gov-slate bg-white dark:bg-gov-darkSurface rounded-2xl border">
-                State-specific standalone records are currently undergoing verification before public indexation.
+              <div className="p-12 text-center text-xs text-gov-slate bg-white dark:bg-gov-darkSurface rounded-2xl border space-y-2">
+                <p className="font-semibold text-sm text-gov-navy dark:text-white">
+                  No records match the selected scope filter for {state.name} State.
+                </p>
+                <p>
+                  Try selecting "All Relevant Records" to view all nationwide and corridor initiatives delivering value to {state.name}.
+                </p>
               </div>
             )}
           </div>
