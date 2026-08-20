@@ -1,32 +1,57 @@
 import { format } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
-import { 
-  enUS, es, fr, ar, 
-  enGB, // for English
+import {
+  enUS, es, fr, ar,
+  enGB, de, it, nl, pt, hi
 } from 'date-fns/locale';
 
-// Language-specific locales mapping
-const localeMap = {
-  'en': enUS,
-  'es': es,
-  'fr': fr,
-  'ar': ar,
-  'ha': enGB, // Fallback to English for Nigerian languages
+// Language-specific locales mapping for all 15 supported languages
+const localeMap: Record<string, any> = {
+  'en': enGB,
+  'ha': enGB, // Nigerian English fallback
   'yo': enGB,
   'ig': enGB,
   'pcm': enGB,
-  'zh': enGB, // Add Chinese support later
-  'pt': enGB, // Add Portuguese support later
-  'de': enGB, // Add German support later
-  'ru': enGB, // Add Russian support later
-  'hi': enGB, // Add Hindi support later
-  'ja': enGB, // Add Japanese support later
-  'it': enGB, // Add Italian support later
+  'fr': fr,
+  'ar': ar,
+  'zh-CN': enGB,
+  'zh': enGB,
+  'es': es,
+  'pt': pt,
+  'de': de,
+  'it': it,
+  'nl': nl,
+  'hi': hi,
+  'sw': enGB,
+};
+
+// Helper function to get locale string for Intl APIs
+const getLocaleString = (language: string): string => {
+  const localeStrings: Record<string, string> = {
+    'en': 'en-NG',
+    'ha': 'ha-NG',
+    'yo': 'yo-NG',
+    'ig': 'ig-NG',
+    'pcm': 'en-NG',
+    'fr': 'fr-FR',
+    'ar': 'ar-SA',
+    'zh-CN': 'zh-CN',
+    'zh': 'zh-CN',
+    'es': 'es-ES',
+    'pt': 'pt-PT',
+    'de': 'de-DE',
+    'it': 'it-IT',
+    'nl': 'nl-NL',
+    'hi': 'hi-IN',
+    'sw': 'sw-KE',
+  };
+
+  return localeStrings[language] || 'en-NG';
 };
 
 // Number formatting with locale support
 export const formatNumber = (
-  value: number, 
+  value: number,
   language: string = 'en',
   options: Intl.NumberFormatOptions = {}
 ): string => {
@@ -36,7 +61,7 @@ export const formatNumber = (
 
 // Currency formatting
 export const formatCurrency = (
-  value: number, 
+  value: number,
   language: string = 'en',
   currency: string = 'NGN'
 ): string => {
@@ -51,7 +76,7 @@ export const formatCurrency = (
 
 // Percentage formatting
 export const formatPercentage = (
-  value: number, 
+  value: number,
   language: string = 'en',
   decimalPlaces: number = 1
 ): string => {
@@ -72,7 +97,7 @@ export const formatDate = (
 ): string => {
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
   const locale = localeMap[language] || localeMap['en'];
-  
+
   try {
     return formatInTimeZone(dateObj, timeZone, formatString, { locale });
   } catch (error) {
@@ -83,11 +108,9 @@ export const formatDate = (
 
 // Large number formatting (e.g., 1.5K, 2.3M, 4.2B, 1.1T)
 export const formatLargeNumber = (
-  value: number, 
+  value: number,
   language: string = 'en'
 ): string => {
-  const locale = getLocaleString(language);
-  
   if (value >= 1e12) {
     return formatNumber(value / 1e12, language, { maximumFractionDigits: 1 }) + 'T';
   } else if (value >= 1e9) {
@@ -97,7 +120,7 @@ export const formatLargeNumber = (
   } else if (value >= 1e3) {
     return formatNumber(value / 1e3, language, { maximumFractionDigits: 1 }) + 'K';
   }
-  
+
   return formatNumber(value, language);
 };
 
@@ -107,7 +130,6 @@ export const formatNaira = (
   language: string = 'en',
   compact: boolean = false
 ): string => {
-
   const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]+/g, '')) : value;
   if (isNaN(num) || num === 0) return '₦0';
   if (compact) {
@@ -118,6 +140,8 @@ export const formatNaira = (
   return `${sign}₦${formatNumber(absNum, language, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
 
+// Alias for formatNaira
+export const formatCurrencyNaira = formatNaira;
 
 /**
  * Canonical PTAT Public Currency Formatter (Section 16)
@@ -159,30 +183,6 @@ export const formatPublicMoney = (
   return formatNaira(num, language, compact);
 };
 
-
-// Helper function to get locale string for Intl APIs
-const getLocaleString = (language: string): string => {
-  const localeStrings = {
-    'en': 'en-US',
-    'es': 'es-ES',
-    'fr': 'fr-FR',
-    'ar': 'ar-SA',
-    'ha': 'en-NG', // Nigerian English for Hausa
-    'yo': 'en-NG', // Nigerian English for Yoruba
-    'ig': 'en-NG', // Nigerian English for Igbo
-    'pcm': 'en-NG', // Nigerian English for Pidgin
-    'zh': 'zh-CN',
-    'pt': 'pt-BR',
-    'de': 'de-DE',
-    'ru': 'ru-RU',
-    'hi': 'hi-IN',
-    'ja': 'ja-JP',
-    'it': 'it-IT',
-  };
-  
-  return localeStrings[language] || 'en-US';
-};
-
 // Relative time formatting
 export const formatRelativeTime = (
   date: Date | string | number,
@@ -191,10 +191,10 @@ export const formatRelativeTime = (
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
-  
+
   const locale = getLocaleString(language);
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-  
+
   if (diffInSeconds < 60) {
     return rtf.format(-diffInSeconds, 'second');
   } else if (diffInSeconds < 3600) {
@@ -214,7 +214,7 @@ export const formatRelativeTime = (
 
 // Format quarter display
 export const formatQuarter = (quarter: number, year: number, language: string = 'en'): string => {
-  const quarterMap = {
+  const quarterMap: Record<string, string> = {
     'en': 'Q',
     'es': 'T', // Trimestre
     'fr': 'T', // Trimestre
@@ -224,7 +224,7 @@ export const formatQuarter = (quarter: number, year: number, language: string = 
     'ig': 'Q', // Quarter (English fallback)
     'pcm': 'Q', // Quarter (English fallback)
   };
-  
+
   const prefix = quarterMap[language] || 'Q';
   return `${prefix}${quarter} ${year}`;
 };

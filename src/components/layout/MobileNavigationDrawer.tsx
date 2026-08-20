@@ -18,12 +18,13 @@ import {
   Download, 
   ShieldCheck, 
   LayoutDashboard,
-  Layers,
-  MapPin
+  Globe
 } from "lucide-react";
 import BrandLockup from "./BrandLockup";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { CANONICAL_PUBLIC_GROUPS, CANONICAL_SECTORS } from "@/adapters/canonicalData";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -37,6 +38,8 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   onOpenSearch,
 }) => {
   const location = useLocation();
+  const { currentLanguage, currentLanguageOption, changeLanguage, availableLanguages } = useLanguage();
+  const { t } = useTranslation();
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -87,7 +90,6 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         aria-hidden="true"
       />
 
-
       {/* Drawer Panel */}
       <div className="relative ml-0 mr-auto w-full max-w-sm h-full bg-white dark:bg-gov-darkSurface shadow-2xl flex flex-col z-10 animate-slide-in-right overflow-y-auto">
         {/* Header */}
@@ -97,7 +99,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label="Close navigation drawer"
+            aria-label={t('accessibility.closeMenu')}
             className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-gov-gold"
           >
             <X className="h-5 w-5" />
@@ -116,7 +118,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           >
             <span className="flex items-center gap-2">
               <Search className="h-4 w-4 text-gov-gold" />
-              <span>Search achievements, sectors, states...</span>
+              <span>{t('navigation.searchPlaceholder')}</span>
             </span>
             <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">⌘K</kbd>
           </button>
@@ -137,7 +139,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 isActive("/") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
               }`}
             >
-              <span>Home Overview</span>
+              <span>{t('navigation.home')}</span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
 
@@ -150,7 +152,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Award className="h-4 w-4 text-gov-gold" />
-                <span>Achievements Explorer</span>
+                <span>{t('navigation.achievements')}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -164,7 +166,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Compass className="h-4 w-4 text-gov-emerald" />
-                <span>Nigeria Impact Map</span>
+                <span>{t('navigation.impactMap')}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -178,7 +180,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Clock className="h-4 w-4 text-gov-gold" />
-                <span>Administration Timeline</span>
+                <span>{t('navigation.timeline')}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -199,7 +201,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Building2 className="h-4 w-4 text-blue-600" />
-                <span>Capital Infrastructure Projects</span>
+                <span>{t('navigation.projects')}</span>
               </span>
             </Link>
 
@@ -212,7 +214,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <FileText className="h-4 w-4 text-indigo-600" />
-                <span>Policies & Structural Reforms</span>
+                <span>{t('navigation.policies')}</span>
               </span>
             </Link>
 
@@ -225,7 +227,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Users className="h-4 w-4 text-emerald-600" />
-                <span>Social Intervention Programmes</span>
+                <span>{t('navigation.programmes')}</span>
               </span>
             </Link>
           </div>
@@ -241,7 +243,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 onClick={onClose}
                 className="text-xs font-semibold text-gov-emerald hover:underline"
               >
-                All Sectors
+                {t('navigation.allSectors')}
               </Link>
             </div>
 
@@ -293,7 +295,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <Database className="h-4 w-4 text-emerald-600" />
-              <span>Interactive Data Explorer</span>
+              <span>{t('navigation.data')}</span>
             </Link>
 
             <Link
@@ -302,7 +304,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <ShieldCheck className="h-4 w-4 text-amber-600" />
-              <span>Sources & Evidence Standards</span>
+              <span>{t('navigation.dataSources')}</span>
             </Link>
 
             <Link
@@ -311,7 +313,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <Download className="h-4 w-4 text-purple-600" />
-              <span>Download Centre (CSV / JSON)</span>
+              <span>{t('navigation.downloads')}</span>
             </Link>
 
             <Link
@@ -320,8 +322,69 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <LayoutDashboard className="h-4 w-4 text-blue-600" />
-              <span>Macro Analytics Dashboard</span>
+              <span>{t('navigation.dashboard')}</span>
             </Link>
+          </div>
+
+          {/* Mobile Drawer Language Switcher Section */}
+          <div className="space-y-2 pt-3 border-t border-gov-border/60 dark:border-white/10">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider flex items-center gap-1.5">
+                <Globe className="h-3.5 w-3.5 text-gov-gold" />
+                <span>{t('language.switchLanguage')}</span>
+              </span>
+              <span className="text-xs font-semibold text-gov-emerald">
+                {currentLanguageOption?.nativeName || 'English'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-1.5 px-1">
+              {availableLanguages.slice(0, 6).map((lang) => (
+                <button
+                  key={lang.code}
+                  type="button"
+                  onClick={() => changeLanguage(lang.code)}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-medium text-left flex items-center justify-between border transition-all ${
+                    currentLanguage === lang.code
+                      ? 'bg-gov-gold/15 border-gov-gold text-gov-navy dark:text-gov-gold font-bold'
+                      : 'border-gov-border bg-gov-canvas dark:bg-white/5 text-gov-slate hover:text-gov-navy dark:hover:text-white'
+                  }`}
+                >
+                  <span>{lang.nativeName}</span>
+                  {currentLanguage === lang.code && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-gov-emerald" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="px-1 pt-1">
+              <select
+                aria-label={t('language.selectLanguage')}
+                value={currentLanguage}
+                onChange={(e) => changeLanguage(e.target.value)}
+                className="w-full h-9 px-3 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs font-semibold text-gov-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-gov-gold"
+              >
+                <optgroup label="Nigerian Languages">
+                  {availableLanguages
+                    .filter((l) => l.region === 'nigeria')
+                    .map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.nativeName} ({lang.name})
+                      </option>
+                    ))}
+                </optgroup>
+                <optgroup label="International Languages">
+                  {availableLanguages
+                    .filter((l) => l.region === 'global')
+                    .map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.nativeName} ({lang.name})
+                      </option>
+                    ))}
+                </optgroup>
+              </select>
+            </div>
           </div>
         </div>
 

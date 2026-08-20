@@ -4,7 +4,7 @@
     "error": "Erreur",
     "retry": "Réessayer",
     "cancel": "Annuler",
-    "save": "Sauvegarder",
+    "save": "Enregistrer",
     "close": "Fermer",
     "edit": "Modifier",
     "delete": "Supprimer",
@@ -43,39 +43,145 @@
     "validation": "Validation",
     "implementation": "Mise en œuvre",
     "launched": "Lancé",
-    "completed": "Terminé",
+    "completed": "Achevé",
     "ongoing": "En cours",
     "planned": "Planifié"
   },
   "navigation": {
+    "home": "Accueil",
+    "achievements": "Réalisations",
+    "impactMap": "Carte d'Impact",
+    "timeline": "Chronologie",
+    "projects": "Grands Projets",
+    "policies": "Politiques & Réformes",
+    "programmes": "Programmes Sociaux",
+    "sectors": "Secteurs",
+    "allSectors": "Tous les Secteurs",
+    "data": "Explorateur de Données",
+    "dataSources": "Sources de Données",
+    "downloads": "Téléchargements",
     "dashboard": "Tableau de Bord",
+    "searchPlaceholder": "Rechercher réalisations, secteurs, états...",
+    "searchKbd": "⌘K",
     "economicReforms": "Réformes Économiques",
     "securityProgress": "Progrès Sécuritaire",
-    "dataSources": "Sources de Données",
-    "infrastructure": "Infrastructure",
-    "socialServices": "Services Sociaux",
-    "downloads": "Téléchargements"
+    "infrastructure": "Infrastructures",
+    "socialServices": "Services Sociaux"
+  },
+  "contextBar": {
+    "location": "Abuja, Nigéria",
+    "liveTime": "WAT",
+    "wat": "WAT",
+    "weather": "Météo",
+    "weatherAbuja": "Météo à Abuja",
+    "weatherUnavailable": "Météo temporairement indisponible",
+    "partlyCloudy": "Partiellement nuageux",
+    "sunny": "Ensoleillé",
+    "clear": "Dégagé",
+    "cloudy": "Nuageux",
+    "rainy": "Pluie",
+    "thunderstorm": "Orage",
+    "drizzle": "Bruine",
+    "overcast": "Couvert",
+    "feelsLike": "Ressenti",
+    "loadingWeather": "Chargement de la météo..."
   },
   "hero": {
-    "title": "Tracker des Réalisations de l'Espoir Renouvelé",
-    "subtitle": "Un hub de données complet présentant les politiques et réalisations du Président Bola Ahmed Tinubu dans les secteurs économique, sécuritaire, social et infrastructurel depuis mai 2023.",
+    "title": "Suivi des Réalisations du Président Tinubu",
+    "subtitle": "Plateforme nationale d'intelligence factuelle documentant les réalisations vérifiées, les infrastructures majeures et les réformes structurelles du Président Bola Ahmed Tinubu (2023 — 2026).",
     "exploreProgress": "Explorer les Progrès",
     "viewTimeline": "Voir la Chronologie",
     "stats": {
-      "annualSavings": "Économies Annuelles des Réformes",
-      "studentBeneficiaries": "Bénéficiaires de Prêts Étudiants",
-      "gdpGrowth": "Croissance PIB Projetée d'ici 2026"
+      "annualSavings": "Économies annuelles issues des réformes",
+      "studentBeneficiaries": "Bénéficiaires du prêt étudiant",
+      "gdpGrowth": "Croissance projetée du PIB d'ici 2026"
     }
-  },
-  "footer": {
-    "description": "Un hub de progrès basé sur les données présentant les politiques et réalisations du Président Bola Tinubu dans les secteurs économique, sécuritaire, social et infrastructurel depuis mai 2023.",
-    "copyright": "Tinubu Progress Watch. Tous droits réservés."
   },
   "language": {
     "switchLanguage": "Changer de Langue",
-    "nigerian": "Nigérian",
-    "global": "Global",
+    "chooseLanguage": "Choisissez votre langue préférée",
+    "selectLanguage": "Sélectionner la Langue",
+    "nigerian": "Langues Nigérianes",
+    "global": "Langues Internationales",
+    "nigerianLanguages": "Langues Nigérianes",
+    "internationalLanguages": "Langues Internationales",
     "switching": "Changement de langue...",
-    "poweredBy": "Alimenté par la Traduction IA"
+    "poweredBy": "Plateforme Nationale PTAT",
+    "close": "Fermer le menu langue"
+  },
+  "impactMap": {
+    "title": "Carte d'Impact et Déploiement Géopolitique au Nigéria",
+    "subtitle": "Intelligence géospatiale interactive à travers les 36 États et le Territoire de la Capitale Fédérale (FCT).",
+    "statesAndFct": "36 États + FCT",
+    "geoZones": "6 Zones Géopolitiques",
+    "administrativeUnits": "37 Unités Administratives",
+    "mappedBoundaries": "Frontières Cartographiées",
+    "nairaFirst": "Données en Naira",
+    "searchPlaceholder": "Rechercher un État ou une zone...",
+    "mapView": "Vue Carte",
+    "tableView": "Vue Tableau",
+    "noStatesFound": "Aucun État trouvé",
+    "selectState": "Sélectionnez un État pour voir les détails"
+  },
+  "citizenImpact": {
+    "title": "Impact Vérifié sur les Citoyens",
+    "primaryDirectBeneficiary": "Bénéficiaire Direct Principal",
+    "directBeneficiaries": "Bénéficiaires Directs",
+    "householdImpact": "Impact sur les Ménages",
+    "evidenceAnchor": "Ancrage de Preuve Primaire",
+    "verificationStandard": "Norme de Vérification",
+    "noImpactRecorded": "Aucun impact citoyen direct enregistré pour cette entrée."
+  },
+  "sections": {
+    "trackingProgress": "Suivi des Progrès Tangibles",
+    "downloadReport": "Télécharger le Rapport Complet",
+    "economicHighlights": "Faits Économiques Marquants de 2025",
+    "keyMilestones": "Principaux jalons atteints au premier trimestre 2025",
+    "gdpGrowthLabel": "Croissance du PIB",
+    "fdiInflowLabel": "Flux d'IDE",
+    "updated": "Mis à jour",
+    "current": "Actuel",
+    "source": "Source",
+    "policyTimeline": "Chronologie des Politiques",
+    "policyDescription": "Enregistrement chronologique des réformes et initiatives majeures"
+  },
+  "footer": {
+    "description": "Plateforme nationale fondée sur des preuves documentant les réalisations vérifiées de l'administration du Président Bola Ahmed Tinubu (29 mai 2023 — août 2026).",
+    "explorePlatform": "Explorer la Plateforme",
+    "publicGroups": "5 Groupes Sectoriels Publics",
+    "evidenceData": "Preuves & Données Ouvertes",
+    "governingStandard": "Norme de Gouvernance: Contrat de Recherche v1.1.2",
+    "editorialTrust": "Norme de Vérité Éditoriale: Régie par 18 garanties d'intégrité immuables. Les déclarations n'excèdent jamais les preuves primaires vérifiées.",
+    "copyright": "Suivi des Réalisations du Président Tinubu (PTAT) • Espoir Renouvelé",
+    "methodology": "Méthodologie & Sources",
+    "datasets": "Jeux de Données Publics",
+    "focusAreas": "Domaines d'Action",
+    "resources": "Ressources"
+  },
+  "accessibility": {
+    "skipToContent": "Passer au contenu principal",
+    "openMenu": "Ouvrir le menu mobile",
+    "closeMenu": "Fermer le menu mobile",
+    "openSearch": "Ouvrir la recherche",
+    "closeSearch": "Fermer la recherche",
+    "switchTheme": "Changer de thème",
+    "selectLanguage": "Choisir la langue de la plateforme"
+  },
+  "dashboard": {
+    "title": "Transformer le Nigéria : La Vue Complète",
+    "subtitle": "Centre de données complet présentant les progrès à travers l'économie, la sécurité, l'agriculture, la santé, l'éducation et les infrastructures depuis mai 2023.",
+    "exploreAction": "Explorer les Secteurs",
+    "timelineAction": "Voir la Chronologie",
+    "progressTitle": "Tableau de Bord Multisectoriel",
+    "progressDesc": "Visualisation globale des indicateurs de développement."
+  },
+  "downloads": {
+    "title": "Téléchargements de Publications",
+    "description": "Accédez aux rapports officiels et jeux de données de l'Agenda de l'Espoir Renouvelé",
+    "searchPlaceholder": "Rechercher rapports et données...",
+    "filterCategory": "Filtrer par catégorie",
+    "clear": "Effacer",
+    "reports": "Rapports & Publications",
+    "datasets": "Jeux de Données Statistiques"
   }
 }
