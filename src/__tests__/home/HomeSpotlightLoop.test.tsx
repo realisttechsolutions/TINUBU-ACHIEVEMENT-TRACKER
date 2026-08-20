@@ -4,6 +4,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import HomeHero from '@/components/home/HomeHero';
 import { MOTION_TOKENS } from '@/lib/animations';
 import { dataAdapter } from '@/adapters/dataAdapter';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 // Mock navigation
 vi.mock('@/lib/navigation', () => ({
@@ -39,6 +40,14 @@ vi.mock('@/lib/animations', () => ({
   prefersReducedMotion: () => false,
 }));
 
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <LanguageProvider>
+      {ui}
+    </LanguageProvider>
+  );
+};
+
 describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -53,7 +62,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   });
 
   it('loads a substantial eligible pool of published achievements (> 4 records)', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     const totalAchievements = dataAdapter.getAchievements();
     expect(totalAchievements.length).toBeGreaterThan(4);
     
@@ -62,7 +71,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   });
 
   it('executes a continuous forever loop advancing every 5000ms', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     const totalCount = dataAdapter.getAchievements().length;
 
     expect(screen.getByText(new RegExp(`1/${totalCount}`))).toBeDefined();
@@ -81,7 +90,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   });
 
   it('seamlessly wraps from the last eligible record back to the first record', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     const totalCount = dataAdapter.getAchievements().length;
 
     // Fast forward through all items to reach the end and wrap
@@ -92,7 +101,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   });
 
   it('supports manual Next and Previous navigation with clean wrapping', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     const totalCount = dataAdapter.getAchievements().length;
 
     const nextButton = screen.getByRole('button', { name: /Next achievement spotlight/i });
@@ -118,7 +127,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   });
 
   it('pauses auto-rotation on hover and focus to protect user inspection', () => {
-    const { container } = render(<HomeHero />);
+    const { container } = renderWithProviders(<HomeHero />);
     const section = container.querySelector('section');
     const totalCount = dataAdapter.getAchievements().length;
 
@@ -145,4 +154,3 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
     expect(screen.getByText(new RegExp(`2/${totalCount}`))).toBeDefined();
   });
 });
-

@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
+import "@/i18n/i18n";
 
 // Mock server-only so server code can be tested in JSDOM environment
 vi.mock("server-only", () => ({}));

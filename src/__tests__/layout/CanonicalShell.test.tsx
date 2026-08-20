@@ -19,14 +19,6 @@ vi.mock('@/lib/navigation', () => ({
   useSearchParams: () => [new URLSearchParams(), vi.fn()],
 }));
 
-// Mock translation hook
-vi.mock('@/hooks/useTranslation', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    currentLanguage: 'en',
-  }),
-}));
-
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <LanguageProvider>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import NationalImpactPreview from '@/components/home/NationalImpactPreview';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 const mockNavigate = vi.fn();
 
@@ -14,19 +14,27 @@ vi.mock('@/lib/navigation', () => ({
   useSearchParams: () => [new URLSearchParams(), vi.fn()],
 }));
 
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <LanguageProvider>
+      {ui}
+    </LanguageProvider>
+  );
+};
+
 describe('NationalImpactPreview Homepage Map Gateway', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
   });
 
   it('renders interactive Nigeria ADM1 vector map with 37 state paths', () => {
-    const { container } = render(<NationalImpactPreview />);
+    const { container } = renderWithProviders(<NationalImpactPreview />);
     const buttons = container.querySelectorAll('path[role="button"]');
     expect(buttons.length).toBe(37);
   });
 
   it('displays state name and geopolitical zone when a state is hovered', () => {
-    render(<NationalImpactPreview />);
+    renderWithProviders(<NationalImpactPreview />);
     const lagosPath = screen.getByRole('button', { name: /Lagos State.*South-West/i });
     
     fireEvent.mouseEnter(lagosPath);
@@ -35,7 +43,7 @@ describe('NationalImpactPreview Homepage Map Gateway', () => {
   });
 
   it('navigates to /impact-map?state=lagos when Lagos State is clicked', () => {
-    render(<NationalImpactPreview />);
+    renderWithProviders(<NationalImpactPreview />);
     const lagosPath = screen.getByRole('button', { name: /Lagos State.*South-West/i });
     
     fireEvent.click(lagosPath);
@@ -43,7 +51,7 @@ describe('NationalImpactPreview Homepage Map Gateway', () => {
   });
 
   it('navigates to /impact-map?state=kaduna when Kaduna State is activated via keyboard', () => {
-    render(<NationalImpactPreview />);
+    renderWithProviders(<NationalImpactPreview />);
     const kadunaPath = screen.getByRole('button', { name: /Kaduna State.*North-West/i });
     
     fireEvent.keyDown(kadunaPath, { key: 'Enter' });
@@ -51,7 +59,7 @@ describe('NationalImpactPreview Homepage Map Gateway', () => {
   });
 
   it('navigates to /impact-map?state=fct-abuja when FCT (Abuja) is clicked', () => {
-    render(<NationalImpactPreview />);
+    renderWithProviders(<NationalImpactPreview />);
     const fctPath = screen.getByRole('button', { name: /FCT \(Abuja\)/i });
     
     fireEvent.click(fctPath);

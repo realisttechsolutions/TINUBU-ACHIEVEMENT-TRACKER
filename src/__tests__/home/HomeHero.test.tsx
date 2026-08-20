@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import HomeHero from '@/components/home/HomeHero';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 // Mock navigation
 vi.mock('@/lib/navigation', () => ({
@@ -36,6 +37,14 @@ vi.mock('@/lib/animations', () => ({
   prefersReducedMotion: () => false,
 }));
 
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <LanguageProvider>
+      {ui}
+    </LanguageProvider>
+  );
+};
+
 describe('PTAT HomeHero Component', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -46,13 +55,13 @@ describe('PTAT HomeHero Component', () => {
   });
 
   it('renders stable H1 and official mandate eyebrow pill', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     expect(screen.getByRole('heading', { level: 1, name: /National Achievements & Evidence Intelligence/i })).toBeDefined();
     expect(screen.getByText(/Official Progress Record • 29 May 2023 — August 2026/i)).toBeDefined();
   });
 
   it('renders all three CTAs with visible labels and correct destination links', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     
     // Primary CTA
     const primaryCta = screen.getByRole('link', { name: /Explore Achievements/i });
@@ -72,7 +81,7 @@ describe('PTAT HomeHero Component', () => {
   });
 
   it('renders rotating supporting intelligence line with aria-live="off" to prevent screen reader noise', () => {
-    const { container } = render(<HomeHero />);
+    const { container } = renderWithProviders(<HomeHero />);
     const liveContainer = container.querySelector('[aria-live="off"]');
     expect(liveContainer).toBeDefined();
     expect(screen.getByText(/See verifiable primary evidence behind national progress/i)).toBeDefined();
@@ -85,7 +94,7 @@ describe('PTAT HomeHero Component', () => {
   });
 
   it('renders interactive achievement spotlight with manual navigation controls', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     
     // Initial active spotlight: NELFUND
     expect(screen.getByText(/NELFUND/i)).toBeDefined();
@@ -112,10 +121,8 @@ describe('PTAT HomeHero Component', () => {
     expect(screen.getByText(/1\/\d+/)).toBeDefined();
   });
 
-
-
   it('renders certified macro truth counters without unverified absolute claims', () => {
-    render(<HomeHero />);
+    renderWithProviders(<HomeHero />);
     expect(screen.getByText('15')).toBeDefined();
     expect(screen.getByText('Canonical Sectors')).toBeDefined();
     expect(screen.getByText('36 + FCT')).toBeDefined();
