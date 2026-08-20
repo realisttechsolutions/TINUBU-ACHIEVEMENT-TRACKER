@@ -1,10 +1,12 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
-import { Award, ArrowRight, Sparkles } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { ArrowRight, Sparkles } from "lucide-react";
 import AchievementCard from "@/components/achievements/AchievementCard";
 import { dataAdapter } from "@/adapters/dataAdapter";
 
 export const FeaturedAchievements: React.FC = () => {
+  const { t } = useTranslation();
   const featured = dataAdapter.getFeaturedAchievements().slice(0, 3);
 
   return (
@@ -14,13 +16,13 @@ export const FeaturedAchievements: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <Sparkles className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>Priority National Milestones</span>
+              <span>{t("featuredAchievements.eyebrow", { defaultValue: "Verified National Progress Highlights" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gov-navy dark:text-white font-display">
-              Featured Verified Achievements
+              {t("featuredAchievements.title", { defaultValue: "Featured Achievement Stories" })}
             </h2>
             <p className="text-sm text-gov-slate leading-relaxed">
-              Major policy reforms, strategic transport superhighways, and transformative student financing initiatives with verified primary legal and administrative citations.
+              {t("featuredAchievements.subtitle", { defaultValue: "Major policy reforms, strategic transport superhighways, and transformative student financing initiatives with verified primary legal and administrative citations." })}
             </p>
           </div>
 
@@ -28,7 +30,7 @@ export const FeaturedAchievements: React.FC = () => {
             to="/achievements"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-gov-emerald hover:text-emerald-700 transition-colors shrink-0"
           >
-            <span>Browse Full Catalogue</span>
+            <span>{t("featuredAchievements.viewAll", { defaultValue: "Explore All 42+ Achievements →" })}</span>
             <ArrowRight className="h-4 w-4 text-gov-gold" />
           </Link>
         </div>

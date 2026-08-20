@@ -2,26 +2,22 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "@/lib/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 import { 
   ChevronDown, 
-  Award, 
-  Clock, 
-  Compass, 
   Building2, 
   FileText, 
   Users, 
   Database, 
   Download, 
   ShieldCheck, 
-  TrendingUp, 
-  LayoutDashboard,
-  Layers,
-  MapPin
+  LayoutDashboard
 } from "lucide-react";
 import { CANONICAL_SECTORS, CANONICAL_PUBLIC_GROUPS } from "@/adapters/canonicalData";
 
 export const DesktopNavigation: React.FC = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +56,7 @@ export const DesktopNavigation: React.FC = () => {
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
         }`}
       >
-        Achievements
+        {t("navigation.achievements", { defaultValue: "Achievements" })}
       </Link>
 
 
@@ -77,7 +73,7 @@ export const DesktopNavigation: React.FC = () => {
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
           }`}
         >
-          <span>Sectors</span>
+          <span>{t("navigation.sectors", { defaultValue: "Sectors" })}</span>
           <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${openMenu === "sectors" ? "rotate-180 text-gov-gold" : ""}`} />
         </button>
 
@@ -89,10 +85,10 @@ export const DesktopNavigation: React.FC = () => {
             <div className="flex items-center justify-between border-b border-gov-border pb-3 mb-4">
               <div>
                 <h3 className="text-sm font-bold text-gov-navy dark:text-white uppercase tracking-wider">
-                  15 Canonical Research Sectors
+                  {t("navigation.canonicalResearchSectors", { defaultValue: "15 Canonical Research Sectors" })}
                 </h3>
                 <p className="text-xs text-gov-slate mt-0.5">
-                  Organized under 5 Public Navigation Groups (Contract v1.1.2)
+                  {t("navigation.organizedUnderGroups", { defaultValue: "Organized under 5 Public Navigation Groups" })}
                 </p>
               </div>
               <Link
@@ -100,7 +96,7 @@ export const DesktopNavigation: React.FC = () => {
                 onClick={() => setOpenMenu(null)}
                 className="text-xs font-semibold text-gov-emerald hover:underline"
               >
-                View Sectors Directory →
+                {t("navigation.viewSectorsDirectory", { defaultValue: "View Sectors Directory →" })}
               </Link>
             </div>
 
@@ -151,7 +147,7 @@ export const DesktopNavigation: React.FC = () => {
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
           }`}
         >
-          <span>Initiatives</span>
+          <span>{t("navigation.initiatives", { defaultValue: "Initiatives" })}</span>
           <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${openMenu === "initiatives" ? "rotate-180 text-gov-gold" : ""}`} />
         </button>
 
@@ -170,8 +166,12 @@ export const DesktopNavigation: React.FC = () => {
                   <Building2 className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Capital Projects</div>
-                  <div className="text-[11px] text-gov-slate">Highways, rail, ports & housing</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.capitalProjects", { defaultValue: "Capital Projects" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.capitalProjectsDesc", { defaultValue: "Highways, rail, ports & housing" })}
+                  </div>
                 </div>
               </Link>
 
@@ -184,8 +184,12 @@ export const DesktopNavigation: React.FC = () => {
                   <FileText className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Policies & Reforms</div>
-                  <div className="text-[11px] text-gov-slate">Gazettes, acts & executive orders</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.policiesReforms", { defaultValue: "Policies & Reforms" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.policiesReformsDesc", { defaultValue: "Gazettes, acts & executive orders" })}
+                  </div>
                 </div>
               </Link>
 
@@ -198,8 +202,12 @@ export const DesktopNavigation: React.FC = () => {
                   <Users className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Social Programmes</div>
-                  <div className="text-[11px] text-gov-slate">Student aid, credit & welfare</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.socialProgrammes", { defaultValue: "Social Programmes" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.socialProgrammesDesc", { defaultValue: "Student aid, credit & welfare" })}
+                  </div>
                 </div>
               </Link>
             </div>
@@ -216,7 +224,7 @@ export const DesktopNavigation: React.FC = () => {
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
         }`}
       >
-        Nigeria Map
+        {t("navigation.impactMap", { defaultValue: "Nigeria Map" })}
       </Link>
 
       {/* 5. Timeline */}
@@ -228,7 +236,7 @@ export const DesktopNavigation: React.FC = () => {
             : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
         }`}
       >
-        Timeline
+        {t("navigation.timeline", { defaultValue: "Timeline" })}
       </Link>
 
       {/* 6. Data & Evidence Dropdown */}
@@ -244,7 +252,7 @@ export const DesktopNavigation: React.FC = () => {
               : "text-gov-slate hover:text-gov-navy dark:hover:text-white"
           }`}
         >
-          <span>Evidence & Data</span>
+          <span>{t("navigation.evidenceAndData", { defaultValue: "Evidence & Data" })}</span>
           <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${openMenu === "data" ? "rotate-180 text-gov-gold" : ""}`} />
         </button>
 
@@ -263,8 +271,12 @@ export const DesktopNavigation: React.FC = () => {
                   <Database className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Data Explorer</div>
-                  <div className="text-[11px] text-gov-slate">Interactive multi-filter queries</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.data", { defaultValue: "Data Explorer" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.dataExplorerDesc", { defaultValue: "Interactive multi-filter queries" })}
+                  </div>
                 </div>
               </Link>
 
@@ -277,8 +289,12 @@ export const DesktopNavigation: React.FC = () => {
                   <ShieldCheck className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Sources & Hierarchy</div>
-                  <div className="text-[11px] text-gov-slate">6-tier primary evidence registry</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.dataSources", { defaultValue: "Sources & Hierarchy" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.dataSourcesDesc", { defaultValue: "6-tier primary evidence registry" })}
+                  </div>
                 </div>
               </Link>
 
@@ -291,8 +307,12 @@ export const DesktopNavigation: React.FC = () => {
                   <Download className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Download Centre</div>
-                  <div className="text-[11px] text-gov-slate">CSV, JSON & PDF datasets</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.downloads", { defaultValue: "Download Centre" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.downloadsDesc", { defaultValue: "CSV, JSON & PDF datasets" })}
+                  </div>
                 </div>
               </Link>
 
@@ -305,8 +325,12 @@ export const DesktopNavigation: React.FC = () => {
                   <LayoutDashboard className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">Macro Dashboard</div>
-                  <div className="text-[11px] text-gov-slate">Progress analytics & funnels</div>
+                  <div className="text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors">
+                    {t("navigation.dashboard", { defaultValue: "Macro Dashboard" })}
+                  </div>
+                  <div className="text-[11px] text-gov-slate">
+                    {t("navigation.dashboardDesc", { defaultValue: "Progress analytics & funnels" })}
+                  </div>
                 </div>
               </Link>
             </div>

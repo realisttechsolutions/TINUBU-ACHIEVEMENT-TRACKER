@@ -82,7 +82,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
   const isActive = (path: string) => location.pathname === path;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 xl:hidden flex" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+    <div className="fixed inset-0 z-50 xl:hidden flex" role="dialog" aria-modal="true" aria-label={t('accessibility.openMenu', { defaultValue: "Mobile Navigation Menu" })}>
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in"
@@ -99,7 +99,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label={t('accessibility.closeMenu')}
+            aria-label={t('accessibility.closeMenu', { defaultValue: "Close navigation drawer" })}
             className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-gov-gold"
           >
             <X className="h-5 w-5" />
@@ -118,7 +118,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           >
             <span className="flex items-center gap-2">
               <Search className="h-4 w-4 text-gov-gold" />
-              <span>{t('navigation.searchPlaceholder')}</span>
+              <span>{t('navigation.searchPlaceholder', { defaultValue: "Search achievements, sectors, states..." })}</span>
             </span>
             <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">⌘K</kbd>
           </button>
@@ -129,7 +129,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           {/* Main Core Links */}
           <div className="space-y-1">
             <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
-              Core Platform
+              {t('footer.explorePlatform', { defaultValue: "Core Platform" })}
             </div>
             
             <Link
@@ -139,7 +139,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                 isActive("/") ? "bg-gov-navy text-white" : "text-gov-navy dark:text-white hover:bg-gov-canvas"
               }`}
             >
-              <span>{t('navigation.home')}</span>
+              <span>{t('navigation.home', { defaultValue: "Home" })}</span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
 
@@ -152,7 +152,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Award className="h-4 w-4 text-gov-gold" />
-                <span>{t('navigation.achievements')}</span>
+                <span>{t('navigation.achievements', { defaultValue: "Achievements" })}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -166,7 +166,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Compass className="h-4 w-4 text-gov-emerald" />
-                <span>{t('navigation.impactMap')}</span>
+                <span>{t('navigation.impactMap', { defaultValue: "Nigeria Map" })}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -180,7 +180,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Clock className="h-4 w-4 text-gov-gold" />
-                <span>{t('navigation.timeline')}</span>
+                <span>{t('navigation.timeline', { defaultValue: "Timeline" })}</span>
               </span>
               <ChevronRight className="h-4 w-4 opacity-50" />
             </Link>
@@ -189,7 +189,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           {/* Initiatives Group */}
           <div className="space-y-1">
             <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
-              Documented Initiatives
+              {t('navigation.initiatives', { defaultValue: "Initiatives" })}
             </div>
 
             <Link
@@ -201,7 +201,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Building2 className="h-4 w-4 text-blue-600" />
-                <span>{t('navigation.projects')}</span>
+                <span>{t('navigation.projects', { defaultValue: "Capital Projects" })}</span>
               </span>
             </Link>
 
@@ -214,7 +214,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <FileText className="h-4 w-4 text-indigo-600" />
-                <span>{t('navigation.policies')}</span>
+                <span>{t('navigation.policies', { defaultValue: "Policies & Reforms" })}</span>
               </span>
             </Link>
 
@@ -227,7 +227,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             >
               <span className="flex items-center gap-2.5">
                 <Users className="h-4 w-4 text-emerald-600" />
-                <span>{t('navigation.programmes')}</span>
+                <span>{t('navigation.programmes', { defaultValue: "Social Programmes" })}</span>
               </span>
             </Link>
           </div>
@@ -236,14 +236,14 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between px-2">
               <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider">
-                15 Canonical Sectors
+                {t('navigation.canonicalResearchSectors', { defaultValue: "15 Canonical Sectors" })}
               </span>
               <Link
                 to="/sectors"
                 onClick={onClose}
                 className="text-xs font-semibold text-gov-emerald hover:underline"
               >
-                {t('navigation.allSectors')}
+                {t('navigation.allSectors', { defaultValue: "All Sectors" })}
               </Link>
             </div>
 
@@ -286,7 +286,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
           {/* Evidence & Data Resources */}
           <div className="space-y-1">
             <div className="text-[11px] font-bold text-gov-slate uppercase tracking-wider px-2 mb-1">
-              Evidence & Public Data
+              {t('navigation.evidenceAndData', { defaultValue: "Evidence & Public Data" })}
             </div>
 
             <Link
@@ -295,7 +295,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <Database className="h-4 w-4 text-emerald-600" />
-              <span>{t('navigation.data')}</span>
+              <span>{t('navigation.data', { defaultValue: "Data Explorer" })}</span>
             </Link>
 
             <Link
@@ -304,7 +304,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <ShieldCheck className="h-4 w-4 text-amber-600" />
-              <span>{t('navigation.dataSources')}</span>
+              <span>{t('navigation.dataSources', { defaultValue: "Sources & Hierarchy" })}</span>
             </Link>
 
             <Link
@@ -313,7 +313,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <Download className="h-4 w-4 text-purple-600" />
-              <span>{t('navigation.downloads')}</span>
+              <span>{t('navigation.downloads', { defaultValue: "Download Centre" })}</span>
             </Link>
 
             <Link
@@ -322,7 +322,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gov-slate hover:text-gov-navy hover:bg-gov-canvas"
             >
               <LayoutDashboard className="h-4 w-4 text-blue-600" />
-              <span>{t('navigation.dashboard')}</span>
+              <span>{t('navigation.dashboard', { defaultValue: "Macro Dashboard" })}</span>
             </Link>
           </div>
 
@@ -331,7 +331,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             <div className="flex items-center justify-between px-2">
               <span className="text-[11px] font-bold text-gov-slate uppercase tracking-wider flex items-center gap-1.5">
                 <Globe className="h-3.5 w-3.5 text-gov-gold" />
-                <span>{t('language.switchLanguage')}</span>
+                <span>{t('language.switchLanguage', { defaultValue: "Switch Language" })}</span>
               </span>
               <span className="text-xs font-semibold text-gov-emerald">
                 {currentLanguageOption?.nativeName || 'English'}
@@ -360,12 +360,12 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
 
             <div className="px-1 pt-1">
               <select
-                aria-label={t('language.selectLanguage')}
+                aria-label={t('language.selectLanguage', { defaultValue: "Select Language" })}
                 value={currentLanguage}
                 onChange={(e) => changeLanguage(e.target.value)}
                 className="w-full h-9 px-3 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs font-semibold text-gov-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-gov-gold"
               >
-                <optgroup label="Nigerian Languages">
+                <optgroup label={t('language.nigerianLanguages', { defaultValue: "Nigerian Languages" })}>
                   {availableLanguages
                     .filter((l) => l.region === 'nigeria')
                     .map((lang) => (
@@ -374,7 +374,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
                       </option>
                     ))}
                 </optgroup>
-                <optgroup label="International Languages">
+                <optgroup label={t('language.internationalLanguages', { defaultValue: "International Languages" })}>
                   {availableLanguages
                     .filter((l) => l.region === 'global')
                     .map((lang) => (
@@ -391,7 +391,7 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
         {/* Footer in Drawer */}
         <div className="p-4 border-t border-gov-border bg-gov-canvas dark:bg-gov-darkSurface flex items-center justify-between">
           <div className="text-[11px] text-gov-slate">
-            <span>Mandate: 2023 — 2026</span>
+            <span>{t('brand.mandate', { defaultValue: "Mandate: 2023 — 2026" })}</span>
           </div>
           <ThemeToggle />
         </div>

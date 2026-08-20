@@ -1,4 +1,9 @@
 {
+  "brand": {
+    "title": "Bibiyar Nasarorin Shugaba Tinubu",
+    "tagline": "Bibiyar Shirin Sabunta Fata",
+    "mandate": "Wa'adin Aiki: 2023 — 2026"
+  },
   "common": {
     "loading": "Ana lodawa...",
     "error": "Kuskure",
@@ -49,20 +54,39 @@
   },
   "navigation": {
     "home": "Gida",
+    "homeOverview": "Bayanin Gida",
     "achievements": "Nasarori",
+    "achievementsExplorer": "Binciken Nasarori",
     "impactMap": "Taswirar Tasiri",
     "timeline": "Jadawalin Lokaci",
     "projects": "Ayyukan Kasa",
-    "policies": "Tsare-tsare",
-    "programmes": "Shirye-shirye",
+    "policies": "Tsare-tsare & Sauye-sauye",
+    "programmes": "Shirye-shiryen Jin Dadi",
     "sectors": "Bangorori",
     "allSectors": "Duk Bangorori",
+    "viewSectorsDirectory": "Duba Dukkan Bangorori →",
+    "canonicalResearchSectors": "Bangorori 15 na Bincike",
+    "organizedUnderGroups": "An tsara karkashin Rukunan Gwamnati 5",
+    "initiatives": "Manyan Ayyuka",
+    "documentedInitiatives": "Ayyukan da Aka Rubuta",
+    "capitalProjects": "Manyan Ayyuka",
+    "capitalProjectsDesc": "Hanyoyi, layin dogo, tashoshin ruwa & gidaje",
+    "policiesReforms": "Manufofi & Sauye-sauye",
+    "policiesReformsDesc": "Dokoki, takardu & umarnin zartarwa",
+    "socialProgrammes": "Shirye-shiryen Al'umma",
+    "socialProgrammesDesc": "Lamunin dalibai, bashi & jin dadin jama'a",
+    "evidenceAndData": "Hujjoji & Bayanan Kasa",
     "data": "Binciken Bayanai",
+    "dataExplorerDesc": "Tace bayanai ta fannoni daban-daban",
     "dataSources": "Tushen Bayanai",
+    "dataSourcesDesc": "Jerin tushen hujjoji na matakai 6",
     "downloads": "Sauke Takardu",
+    "downloadsDesc": "Bayanai a CSV, JSON & PDF",
     "dashboard": "Babban Shafin Bayanai",
+    "dashboardDesc": "Taswirar ci gaba da kididdiga",
     "searchPlaceholder": "Bincika nasarori, bangorori, jihohi...",
     "searchKbd": "⌘K",
+    "reports": "Rahotanni",
     "economicReforms": "Gyaran Tattalin Arziki",
     "securityProgress": "Ci gaban Tsaro",
     "infrastructure": "Kayayyakin More Rayuwa",
@@ -70,6 +94,7 @@
   },
   "contextBar": {
     "location": "Abuja, Najeriya",
+    "seatOfGovernment": "Hedikwatar Gwamnati",
     "liveTime": "WAT",
     "wat": "WAT",
     "weather": "Yanayi",
@@ -87,15 +112,111 @@
     "loadingWeather": "Ana loda yanayi..."
   },
   "hero": {
-    "title": "Bibiyar Nasarorin Shugaba Tinubu",
-    "subtitle": "Dandalin kasa mai bayar da hujjoji na gaskiya da ke nuna ayyuka, sauye-sauye da ci gaban da Shugaba Bola Ahmed Tinubu ya kawo (2023 — 2026).",
-    "exploreProgress": "Duba Ci Gaba",
-    "viewTimeline": "Duba Jadawalin Lokaci",
-    "stats": {
-      "annualSavings": "Kudin da aka tara daga gyare-gyare",
-      "studentBeneficiaries": "Daliban da suka ci gajiyar lamuni",
-      "gdpGrowth": "Hasashen ci gaban GDP nan da 2026"
-    }
+    "eyebrow": "Rubutaccen Tarihin Ci Gaba • 29 Mayu 2023 — Agusta 2026",
+    "title": "Nasarorin Kasa da Hujjojin Bincike",
+    "subtitle": "Dandalin kasa mai bayar da hujjoji na gaskiya da ke nuna ayyuka, sauye-sauye da ci gaban da gwamnatin Shugaba Bola Ahmed Tinubu ta kawo.",
+    "statement1": "Duba sahihan hujjoji a bayan ci gaban kasa.",
+    "statement2": "Bibiyar sauye-sauyen manufofi daga sanarwa zuwa aiki na zahiri.",
+    "statement3": "Bincika manyan ayyuka, shirye-shiryen al'umma da dokokin kasa a Najeriya.",
+    "statement4": "Duba bayanan da ke da alaka da asalin tushen hujjoji.",
+    "statement5": "Tarihin ci gaban kasa. Mai bincike. Mai bin sawu. Mai hujjoji.",
+    "exploreAchievements": "Duba Nasarori",
+    "impactMap": "Taswirar Tasirin Najeriya",
+    "dataExplorer": "Binciken Bayanai",
+    "canonicalSectors": "Bangororin Kasa",
+    "subNationalScope": "Fadin Kasa (Jihohi)",
+    "sourceCitations": "Tushen Hujjoji",
+    "spotlightTitle": "Nasarar da Aka Zaba",
+    "impactMetric": "Kayan Aiki / Tasiri:",
+    "inspectAuditedRecord": "Duba Cikakken Bayanin Hujja →"
+  },
+  "trustRail": {
+    "sourcesCited": "An Ambaci Tushe",
+    "sourcesCitedDesc": "Dokokin gwamnati, sanarwar hukuma, NBS, CBN da hukumomin duniya.",
+    "reportingPeriods": "An Bayyana Lokaci",
+    "reportingPeriodsDesc": "Alkaluma sun dogara ne a kan takamaiman lokutan kasafin kudi.",
+    "statusClassified": "An Rarraba Matsayi",
+    "statusClassifiedDesc": "An raba tsakanin sanarwa da aikin da ake aiwatarwa a zahiri.",
+    "updatesDocumented": "Ana Sabuntawa Kullum",
+    "updatesDocumentedDesc": "Tabbatarwa akai-akai yayin da sabbin rahotanni ke fitowa."
+  },
+  "progressOverview": {
+    "eyebrow": "Muhimman Nasarorin Gwamnati",
+    "title": "Takaitaccen Ci Gaban Kasa",
+    "viewDashboard": "Duba Babban Shafin Kididdiga →",
+    "revenueTitle": "Kudin Shiga Wanda Ba na Mai Ba",
+    "revenueValue": "₦19.8 Tiriliyan",
+    "revenueSubtext": "Tattara haraji ta hanyar zamani da kudin shiga mafi yawa a tarihi",
+    "revenueMda": "Hukumar Haraji ta Kasa (FIRS)",
+    "loanTitle": "Rarraba Lamunin Dalibai",
+    "loanValue": "Dalibai 350,000+",
+    "loanSubtext": "Biyan kudin makaranta da kudin alawus a manyan makarantu sama da 120",
+    "loanMda": "NELFUND",
+    "highwayTitle": "Manyan Hanyoyin da Ake Aiki",
+    "highwayValue": "Kilomita 2,400+",
+    "highwaySubtext": "Lagos-Calabar, Sokoto-Badagry da sauran manyan hanyoyin jihohi",
+    "highwayMda": "Ma'aikatar Ayyuka ta Kasa",
+    "lgaTitle": "Yancin Kananan Hukumomi",
+    "lgaValue": "Kananan Hukumomi 774",
+    "lgaSubtext": "Tura kudaden kasa kai tsaye bayan hukuncin Kotun Koli",
+    "lgaMda": "Ma'aikatar Shari'a ta Kasa"
+  },
+  "featuredAchievements": {
+    "eyebrow": "Muhimman Nasarorin Kasa",
+    "title": "Fitattun Labaran Nasarori",
+    "viewAll": "Duba Dukkan Nasarori 42+ →",
+    "allSectors": "Duk Bangorori",
+    "filterByGroup": "Tace ta Rukuni:",
+    "inspectRecord": "Duba Hujjar Nasara →"
+  },
+  "sectorExplorer": {
+    "eyebrow": "Bangorori 15 na Bincike",
+    "title": "Bincika Ci Gaba ta Bangare",
+    "subtitle": "Cikakkun bayanan bincike da aka tsara karkashin rukunan gwamnati 5.",
+    "viewDirectory": "Duba Dukkan Bangorori →",
+    "viewSector": "Duba Ci Gaban Bangaren →"
+  },
+  "impactPreview": {
+    "eyebrow": "Taswirar Kasa da Ayyuka",
+    "title": "Taswirar Tasirin Najeriya da Rarraba Ayyuka",
+    "subtitle": "Bibiyar nasarori, manyan ayyuka, da kudaden da aka tura a fadin Jihohi 36 da Birnin Tarayya Abuja.",
+    "launchMap": "Bude Cikakkiyar Taswira →",
+    "statesAndFct": "Jihohi 36 + FCT",
+    "geoZones": "Yankuna 6 na Kasa",
+    "administrativeUnits": "Yankunan Gudanarwa 37",
+    "mappedBoundaries": "Iyakokin da aka tsara",
+    "nairaFirst": "Hujjoji a Naira",
+    "selectState": "Zabi jiha don duba cikakken bayani"
+  },
+  "timelineSection": {
+    "eyebrow": "Tarihin Aiwatar da Manufofi",
+    "title": "Daga Manufofi Zuwa Zahiri",
+    "subtitle": "Bibiyar shawarwari daga sanarwar farko ta shugaban kasa zuwa aikin zahiri.",
+    "viewTimeline": "Duba Jadawalin Lokaci →"
+  },
+  "evidenceStory": {
+    "eyebrow": "Ka'idar Gaskiya da Hujjoji",
+    "title": "Bayanan Kasa Masu Dogaro da Hujja",
+    "subtitle": "Kowane bayani yana da alaka da asalin dokoki, sanarwa da bayanan gwamnati.",
+    "viewSources": "Duba Jerin Tushen Hujjoji →"
+  },
+  "latestUpdates": {
+    "eyebrow": "Sabbin Rahotanni da Ayyuka",
+    "title": "Sabbin Labarai da Aka Tabbatar",
+    "viewAll": "Duba Dukkan Sabbin Labarai →"
+  },
+  "methodologyTrust": {
+    "eyebrow": "Ka'idojin Gaskiya 18 na Bincike",
+    "title": "Hanyar Bincike da Tabbatar da Hujja",
+    "subtitle": "PTAT yana aiki ne bisa tsarin gaskiya wanda ba ya wuce ainihin hujjojin da aka tabbatar.",
+    "viewContract": "Karanta Yarjejeniyar Bincike →"
+  },
+  "reportsCta": {
+    "eyebrow": "Rumbun Hujjoji da Takardu",
+    "title": "Rahotanni, Bayanai da Sauke Takardun Bincike",
+    "subtitle": "Sauke takardun alkaluma, kwafin dokokin gwamnati da bayanan ci gaba a CSV da JSON.",
+    "downloadButton": "Je Zuwa Dandalin Sauke Takardu",
+    "dashboardButton": "Bude Babban Shafin Bayanai"
   },
   "language": {
     "switchLanguage": "Canza Harshe",
@@ -109,42 +230,6 @@
     "poweredBy": "Dandalin PTAT na Bayanan Kasa",
     "close": "Rufe zabin harshe"
   },
-  "impactMap": {
-    "title": "Taswirar Tasirin Najeriya da Rarraba Ayyuka",
-    "subtitle": "Binciken taswirar kasa a dukkan Jihohi 36 da Babban Birnin Tarayya (FCT).",
-    "statesAndFct": "Jihohi 36 + FCT",
-    "geoZones": "Yankuna 6 na Kasa",
-    "administrativeUnits": "Yankunan Gudanarwa 37",
-    "mappedBoundaries": "Iyakokin da aka tsara",
-    "nairaFirst": "Hujjoji a Naira",
-    "searchPlaceholder": "Bincika jiha ko yanki...",
-    "mapView": "Taswira",
-    "tableView": "Tebur",
-    "noStatesFound": "Ba a sami jiha ba",
-    "selectState": "Zabi jiha don duba cikakken bayani"
-  },
-  "citizenImpact": {
-    "title": "Tabbataccen Tasiri Ga Al'umma",
-    "primaryDirectBeneficiary": "Wadanda Suka Ci Gajiyar Kai Tsaye",
-    "directBeneficiaries": "Masu Cin Gajiya",
-    "householdImpact": "Tasiri Ga Iyali",
-    "evidenceAnchor": "Tushen Hujja na Farko",
-    "verificationStandard": "Ka'idar Tabbatarwa",
-    "noImpactRecorded": "Babu wani tasirin al'umma da aka rubuta a nan."
-  },
-  "sections": {
-    "trackingProgress": "Bibiyar Ci Gaban Zahiri",
-    "downloadReport": "Sauke Cikakken Rahoto",
-    "economicHighlights": "Muhimman Abubuwan Tattalin Arziki na 2025",
-    "keyMilestones": "Muhimman nasarorin da aka samu a kwata na farko na 2025",
-    "gdpGrowthLabel": "Ci gaban GDP",
-    "fdiInflowLabel": "Zuba Jari Daga Kasashen Waje",
-    "updated": "An sabunta",
-    "current": "Na yanzu",
-    "source": "Tushe",
-    "policyTimeline": "Jadawalin Aiwatar da Manufofi",
-    "policyDescription": "Cikakken tarihin muhimman tsare-tsare da ayyukan da gwamnatin Shugaba Tinubu ta aiwatar"
-  },
   "footer": {
     "description": "Dandalin kasa mai dogaro da hujjoji wanda ke nuna nasarori, ayyukan more rayuwa, da sauye-sauyen gwamnatin Shugaba Bola Ahmed Tinubu (29 Mayu 2023 — Agusta 2026).",
     "explorePlatform": "Duba Dandalin",
@@ -155,6 +240,7 @@
     "copyright": "Bibiyar Nasarorin Shugaba Tinubu (PTAT) • Shirin Sabunta Fata",
     "methodology": "Hanyar Bincike da Tushe",
     "datasets": "Rumbun Bayanai",
+    "version": "Shafi na 2.0 (Bugun 2026)",
     "focusAreas": "Bangororin Aiki",
     "resources": "Albarkatu"
   },
@@ -168,20 +254,20 @@
     "selectLanguage": "Zabi harshen dandalin"
   },
   "dashboard": {
-    "title": "Sauya Najeriya: Cikakken Hoton Ayyuka",
-    "subtitle": "Babban dandalin bayanai mai nuna ci gaba a tattalin arziki, tsaro, noma, lafiya, ilimi da manyan ayyuka tun daga Mayu 2023.",
-    "exploreAction": "Duba Bangorori",
-    "timelineAction": "Duba Jadawalin Lokaci",
-    "progressTitle": "Taswirar Ci Gaban Kasa a Bangorori Daban-Daban",
-    "progressDesc": "Cikakken bayanin ci gaban kasa da tasirin sauye-sauye."
+    "title": "Transforming Nigeria: The Complete Picture",
+    "subtitle": "A comprehensive data hub showcasing progress across economic, security, agriculture, health, education and infrastructure sectors since May 2023.",
+    "exploreAction": "Explore Sectors",
+    "timelineAction": "View Timeline",
+    "progressTitle": "Multi-Sectoral Progress Dashboard",
+    "progressDesc": "Comprehensive data visualization across key development sectors showing measurable progress and transformative impacts."
   },
   "downloads": {
-    "title": "Sauke Takardun Rahoto",
-    "description": "Samu kuma sauke rahotanni, wallafe-wallafe, da bayanan da suka shafi nasarorin Sabunta Fata",
-    "searchPlaceholder": "Bincika rahotanni da bayanai...",
-    "filterCategory": "Tace ta rukuni",
-    "clear": "Share",
-    "reports": "Rahotanni da Wallafe-wallafe",
-    "datasets": "Teburin Bayanai"
+    "title": "Publication Downloads",
+    "description": "Access and download official reports, publications, and datasets related to the Renewed Hope Agenda achievements",
+    "searchPlaceholder": "Search reports and datasets...",
+    "filterCategory": "Filter by category",
+    "clear": "Clear",
+    "reports": "Reports & Publications",
+    "datasets": "Statistical Datasets"
   }
 }

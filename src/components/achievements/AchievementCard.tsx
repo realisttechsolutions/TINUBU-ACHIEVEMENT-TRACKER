@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "@/lib/navigation";
-import { ArrowRight, MapPin, Building2, Calendar, ShieldCheck, CheckCircle2, Banknote, Users } from "lucide-react";
-
-
+import { useTranslation } from "@/hooks/useTranslation";
+import { ArrowRight, MapPin, Building2, Calendar, Banknote, Users } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import DataClassificationBadge from "../common/DataClassificationBadge";
-import SourceBadge from "../common/SourceBadge";
 import DemoWatermark from "../common/DemoWatermark";
 import { AchievementViewModel } from "@/adapters/types";
 
@@ -18,6 +16,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
   item,
   viewMode = "grid",
 }) => {
+  const { t } = useTranslation();
   const isList = viewMode === "list";
   const slug = item.slug || item.id;
   const status = item.status || "operational";
@@ -89,7 +88,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
             to={`/achievements/${slug}`}
             className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors"
           >
-            <span>View Verified Record</span>
+            <span>{t("featuredAchievements.inspectRecord", { defaultValue: "Inspect Evidence Record →" })}</span>
             <ArrowRight className="h-3.5 w-3.5 text-gov-gold group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -156,7 +155,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
           to={`/achievements/${slug}`}
           className="flex items-center justify-between text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors pt-1"
         >
-          <span>Inspect Evidence Record</span>
+          <span>{t("featuredAchievements.inspectRecord", { defaultValue: "Inspect Evidence Record →" })}</span>
           <ArrowRight className="h-3.5 w-3.5 text-gov-gold group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>

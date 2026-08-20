@@ -1,27 +1,30 @@
 import React from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 import { FileText, Calendar, CheckSquare, RefreshCw } from "lucide-react";
 
 export const HomeTrustRail: React.FC = () => {
+  const { t } = useTranslation();
+
   const trustItems = [
     {
       icon: FileText,
-      title: "Sources Cited",
-      description: "Official legislation, gazettes, NBS, CBN & international bodies.",
+      title: t("trustRail.sourcesCited", { defaultValue: "Sources Cited" }),
+      description: t("trustRail.sourcesCitedDesc", { defaultValue: "Official legislation, gazettes, NBS, CBN & international bodies." }),
     },
     {
       icon: Calendar,
-      title: "Reporting Periods Stated",
-      description: "Figures clearly anchored to specific fiscal periods and dates.",
+      title: t("trustRail.reportingPeriods", { defaultValue: "Reporting Periods Stated" }),
+      description: t("trustRail.reportingPeriodsDesc", { defaultValue: "Figures clearly anchored to specific fiscal periods and dates." }),
     },
     {
       icon: CheckSquare,
-      title: "Status Classified",
-      description: "Announcements distinguished from ongoing implementation and delivery.",
+      title: t("trustRail.statusClassified", { defaultValue: "Status Classified" }),
+      description: t("trustRail.statusClassifiedDesc", { defaultValue: "Announcements distinguished from ongoing implementation and delivery." }),
     },
     {
       icon: RefreshCw,
-      title: "Updates Documented",
-      description: "Continuous verification as official reports and data are released.",
+      title: t("trustRail.updatesDocumented", { defaultValue: "Updates Documented" }),
+      description: t("trustRail.updatesDocumentedDesc", { defaultValue: "Continuous verification as official reports and data are released." }),
     },
   ];
 

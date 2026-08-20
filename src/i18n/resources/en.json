@@ -1,4 +1,9 @@
 {
+  "brand": {
+    "title": "President Tinubu Achievement Tracker",
+    "tagline": "Tracking the Renewed Hope Agenda",
+    "mandate": "Mandate: 2023 — 2026"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -49,20 +54,39 @@
   },
   "navigation": {
     "home": "Home",
+    "homeOverview": "Home Overview",
     "achievements": "Achievements",
-    "impactMap": "Impact Map",
-    "timeline": "Timeline",
-    "projects": "Projects",
-    "policies": "Policies",
-    "programmes": "Programmes",
+    "achievementsExplorer": "Achievements Explorer",
+    "impactMap": "Nigeria Impact Map",
+    "timeline": "Administration Timeline",
+    "projects": "Capital Projects",
+    "policies": "Policies & Reforms",
+    "programmes": "Social Programmes",
     "sectors": "Sectors",
     "allSectors": "All Sectors",
+    "viewSectorsDirectory": "View Sectors Directory →",
+    "canonicalResearchSectors": "15 Canonical Research Sectors",
+    "organizedUnderGroups": "Organized under 5 Public Navigation Groups (Contract v1.1.2)",
+    "initiatives": "Initiatives",
+    "documentedInitiatives": "Documented Initiatives",
+    "capitalProjects": "Capital Projects",
+    "capitalProjectsDesc": "Highways, rail, ports & housing",
+    "policiesReforms": "Policies & Reforms",
+    "policiesReformsDesc": "Gazettes, acts & executive orders",
+    "socialProgrammes": "Social Programmes",
+    "socialProgrammesDesc": "Student aid, credit & welfare",
+    "evidenceAndData": "Evidence & Public Data",
     "data": "Data Explorer",
-    "dataSources": "Sources",
-    "downloads": "Downloads",
-    "dashboard": "Dashboard",
+    "dataExplorerDesc": "Interactive multi-filter queries",
+    "dataSources": "Sources & Hierarchy",
+    "dataSourcesDesc": "6-tier primary evidence registry",
+    "downloads": "Download Centre",
+    "downloadsDesc": "CSV, JSON & PDF datasets",
+    "dashboard": "Macro Dashboard",
+    "dashboardDesc": "Progress analytics & funnels",
     "searchPlaceholder": "Search achievements, sectors, states...",
     "searchKbd": "⌘K",
+    "reports": "Reports",
     "economicReforms": "Economic Reforms",
     "securityProgress": "Security Progress",
     "infrastructure": "Infrastructure",
@@ -70,6 +94,7 @@
   },
   "contextBar": {
     "location": "Abuja, Nigeria",
+    "seatOfGovernment": "Seat of Government",
     "liveTime": "WAT",
     "wat": "WAT",
     "weather": "Weather",
@@ -87,15 +112,111 @@
     "loadingWeather": "Loading weather..."
   },
   "hero": {
-    "title": "President Tinubu Achievement Tracker",
-    "subtitle": "An empirical evidence-driven national progress platform documenting verified achievements, capital infrastructure delivery, and statutory policies of President Bola Ahmed Tinubu (2023 — 2026).",
-    "exploreProgress": "Explore Progress",
-    "viewTimeline": "View Timeline",
-    "stats": {
-      "annualSavings": "Annual Savings from Reforms",
-      "studentBeneficiaries": "Student Loan Beneficiaries",
-      "gdpGrowth": "Projected GDP Growth by 2026"
-    }
+    "eyebrow": "Official Progress Record • 29 May 2023 — August 2026",
+    "title": "National Achievements & Evidence Intelligence",
+    "subtitle": "An open, evidence-driven public platform documenting verified policy reforms, physical infrastructure projects, and measurable outcomes of President Bola Ahmed Tinubu's administration.",
+    "statement1": "See verifiable primary evidence behind national progress.",
+    "statement2": "Follow policy reforms from gazette announcement to measurable impact.",
+    "statement3": "Explore capital projects, social programmes, and statutory acts across Nigeria.",
+    "statement4": "Explore source-linked records across projects, policies and programmes.",
+    "statement5": "A national progress record. Searchable. Traceable. Evidence-backed.",
+    "exploreAchievements": "Explore Achievements",
+    "impactMap": "Nigeria Impact Map",
+    "dataExplorer": "Data Explorer",
+    "canonicalSectors": "Canonical Sectors",
+    "subNationalScope": "Sub-National Scope",
+    "sourceCitations": "Source Citations",
+    "spotlightTitle": "Spotlight Intelligence",
+    "impactMetric": "Impact Metric:",
+    "inspectAuditedRecord": "Inspect Audited Evidence Record →"
+  },
+  "trustRail": {
+    "sourcesCited": "Sources Cited",
+    "sourcesCitedDesc": "Official legislation, gazettes, NBS, CBN & international bodies.",
+    "reportingPeriods": "Reporting Periods Stated",
+    "reportingPeriodsDesc": "Figures clearly anchored to specific fiscal periods and dates.",
+    "statusClassified": "Status Classified",
+    "statusClassifiedDesc": "Announcements distinguished from ongoing implementation and delivery.",
+    "updatesDocumented": "Updates Documented",
+    "updatesDocumentedDesc": "Continuous verification as official reports and data are released."
+  },
+  "progressOverview": {
+    "eyebrow": "Measurable Administration Milestones",
+    "title": "National Progress at a Glance",
+    "viewDashboard": "View Full Macro Analytics Dashboard →",
+    "revenueTitle": "Non-Oil Federal Revenue",
+    "revenueValue": "₦19.8 Trillion",
+    "revenueSubtext": "Automated tax compliance & historic statutory collection record",
+    "revenueMda": "Federal Inland Revenue Service",
+    "loanTitle": "Student Loan Disbursements",
+    "loanValue": "350,000+ Students",
+    "loanSubtext": "Tuition and upkeep funded directly across 120+ tertiary institutions",
+    "loanMda": "NELFUND",
+    "highwayTitle": "Active Highway Corridors",
+    "highwayValue": "2,400+ Kilometers",
+    "highwaySubtext": "Lagos-Calabar, Sokoto-Badagry, and regional arterial dualization",
+    "highwayMda": "Federal Ministry of Works",
+    "lgaTitle": "LGA Direct Autonomy",
+    "lgaValue": "774 Councils",
+    "lgaSubtext": "Direct statutory federation allocations enforced by Supreme Court ruling",
+    "lgaMda": "Federal Ministry of Justice"
+  },
+  "featuredAchievements": {
+    "eyebrow": "Verified National Progress Highlights",
+    "title": "Featured Achievement Stories",
+    "viewAll": "Explore All 42+ Achievements →",
+    "allSectors": "All Sectors",
+    "filterByGroup": "Filter by Focus Group:",
+    "inspectRecord": "Inspect Evidence Record →"
+  },
+  "sectorExplorer": {
+    "eyebrow": "15 Canonical Research Sectors",
+    "title": "Explore Progress by Sector",
+    "subtitle": "Structured empirical records organized under 5 Public Navigation Groups.",
+    "viewDirectory": "View Complete Sectors Directory →",
+    "viewSector": "Explore Sector Progress →"
+  },
+  "impactPreview": {
+    "eyebrow": "Interactive Geospatial Intelligence",
+    "title": "Nigeria Impact & Geopolitical Delivery Map",
+    "subtitle": "Track achievements, capital projects, and sub-national disbursements across all 36 States and the Federal Capital Territory.",
+    "launchMap": "Launch Full Interactive Map Explorer →",
+    "statesAndFct": "36 States + FCT",
+    "geoZones": "6 Geopolitical Zones",
+    "administrativeUnits": "37 Administrative Units",
+    "mappedBoundaries": "Mapped Boundaries",
+    "nairaFirst": "Naira-First Evidence",
+    "selectState": "Select a state to inspect metrics"
+  },
+  "timelineSection": {
+    "eyebrow": "Chronological Policy Delivery",
+    "title": "From Policy to Impact",
+    "subtitle": "Tracing structural decisions from initial presidential gazette to verified on-the-ground outcomes.",
+    "viewTimeline": "Explore Full Administration Timeline →"
+  },
+  "evidenceStory": {
+    "eyebrow": "Empirical Truth Discipline",
+    "title": "Evidence-Led Data Intelligence",
+    "subtitle": "Every metric is tied to primary sources, published gazettes, and verifiable institutional records.",
+    "viewSources": "Explore Source Hierarchy Registry →"
+  },
+  "latestUpdates": {
+    "eyebrow": "Recent Publications & Deliverables",
+    "title": "Latest Verified Updates",
+    "viewAll": "View All Recent Updates →"
+  },
+  "methodologyTrust": {
+    "eyebrow": "18 Immutable Editorial Truth Safeguards",
+    "title": "Research & Evidence Methodology",
+    "subtitle": "PTAT operates an evidence-first standard ensuring claims never exceed underlying verifiable primary evidence.",
+    "viewContract": "Read Research Contract Standard →"
+  },
+  "reportsCta": {
+    "eyebrow": "Comprehensive Evidence Archive",
+    "title": "Reports, Datasets & Public Research Downloads",
+    "subtitle": "Download audited spreadsheets, official gazette copies, and national progress summaries in CSV and JSON formats.",
+    "downloadButton": "Go to Download Centre",
+    "dashboardButton": "Open Macro Dashboard"
   },
   "language": {
     "switchLanguage": "Switch Language",
@@ -109,42 +230,6 @@
     "poweredBy": "PTAT National Intelligence Platform",
     "close": "Close language menu"
   },
-  "impactMap": {
-    "title": "Nigeria Impact & Geopolitical Delivery Map",
-    "subtitle": "Interactive geospatial intelligence across all 36 States and the Federal Capital Territory.",
-    "statesAndFct": "36 States + FCT",
-    "geoZones": "6 Geopolitical Zones",
-    "administrativeUnits": "37 Administrative Units",
-    "mappedBoundaries": "Mapped Boundaries",
-    "nairaFirst": "Naira-First Evidence",
-    "searchPlaceholder": "Search state or zone...",
-    "mapView": "Map View",
-    "tableView": "Table View",
-    "noStatesFound": "No states found matching query",
-    "selectState": "Select a state to inspect metrics"
-  },
-  "citizenImpact": {
-    "title": "Verified Citizen Impact",
-    "primaryDirectBeneficiary": "Primary Direct Beneficiary",
-    "directBeneficiaries": "Direct Beneficiaries",
-    "householdImpact": "Household Impact",
-    "evidenceAnchor": "Primary Evidence Anchor",
-    "verificationStandard": "Verification Standard",
-    "noImpactRecorded": "No direct citizen impact recorded for this entry."
-  },
-  "sections": {
-    "trackingProgress": "Tracking Tangible Progress",
-    "downloadReport": "Download Full Report",
-    "economicHighlights": "2025 Economic Progress Highlights",
-    "keyMilestones": "Key milestones achieved in the first quarter of 2025",
-    "gdpGrowthLabel": "GDP Growth",
-    "fdiInflowLabel": "FDI Inflow",
-    "updated": "Updated",
-    "current": "Current",
-    "source": "Source",
-    "policyTimeline": "Policy Implementation Timeline",
-    "policyDescription": "Chronological record of key policies, initiatives and reforms implemented under President Tinubu's administration"
-  },
   "footer": {
     "description": "An evidence-driven national progress platform documenting, explaining, and visualising the verified achievements, capital infrastructure projects, structural reforms, and measurable public outcomes of President Bola Ahmed Tinubu's administration (29 May 2023 — August 2026).",
     "explorePlatform": "Explore Platform",
@@ -155,6 +240,7 @@
     "copyright": "President Tinubu Achievement Tracker (PTAT) • Renewed Hope Progress Intelligence",
     "methodology": "Methodology & Sources",
     "datasets": "Public Datasets",
+    "version": "Version 2.0 (2026 Edition)",
     "focusAreas": "Focus Areas",
     "resources": "Resources"
   },

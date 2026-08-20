@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "@/lib/navigation";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   ArrowRight,
   ShieldCheck,
@@ -10,25 +11,28 @@ import {
   Compass,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
-  TrendingUp,
-  ExternalLink,
-  Pause,
-  Play
+  Sparkles
 } from "lucide-react";
 
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { gsap, MOTION_TOKENS, prefersReducedMotion } from "@/lib/animations";
 
-// Truthful, platform-oriented rotating supporting statements (Section 7, M10J-C1 truth audit)
-const SUPPORTING_STATEMENTS = [
+// Truthful, platform-oriented rotating supporting statement keys
+const SUPPORTING_STATEMENT_KEYS = [
+  "hero.statement1",
+  "hero.statement2",
+  "hero.statement3",
+  "hero.statement4",
+  "hero.statement5"
+];
+
+const DEFAULT_SUPPORTING_STATEMENTS = [
   "See verifiable primary evidence behind national progress.",
   "Follow policy reforms from gazette announcement to measurable impact.",
   "Explore capital projects, social programmes, and statutory acts across Nigeria.",
   "Explore source-linked records across projects, policies and programmes.",
   "A national progress record. Searchable. Traceable. Evidence-backed."
 ];
-
 
 // Helper function to build a data-driven, verified spotlight pool from published records (Section 6)
 interface SpotlightItem {
@@ -109,6 +113,7 @@ function getEligibleSpotlightAchievements(): SpotlightItem[] {
 }
 
 export const HomeHero: React.FC = () => {
+  const { t } = useTranslation();
   const macroCounters = dataAdapter.getMacroCounters();
   const spotlightAchievements = getEligibleSpotlightAchievements();
 
@@ -134,7 +139,7 @@ export const HomeHero: React.FC = () => {
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
-      setStatementIndex((prev) => (prev + 1) % SUPPORTING_STATEMENTS.length);
+      setStatementIndex((prev) => (prev + 1) % SUPPORTING_STATEMENT_KEYS.length);
     }, MOTION_TOKENS.ROTATION_INTERVAL);
     return () => clearInterval(interval);
   }, [isPaused]);
@@ -209,7 +214,6 @@ export const HomeHero: React.FC = () => {
 
   const currentSpotlight = spotlightAchievements[spotlightIndex] || spotlightAchievements[0];
 
-
   return (
     <section
       ref={heroRef}
@@ -233,15 +237,15 @@ export const HomeHero: React.FC = () => {
               className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-[11px] sm:text-xs font-bold uppercase tracking-wider backdrop-blur-sm"
             >
               <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gov-emerald shrink-0" />
-              <span>Official Progress Record • 29 May 2023 — August 2026</span>
+              <span>{t("hero.eyebrow", { defaultValue: "Official Progress Record • 29 May 2023 — August 2026" })}</span>
             </div>
 
-            {/* Main Headline (H1 - Stable, Non-Rotating for SEO/Accessibility) */}
+            {/* Main Headline */}
             <h1
               ref={headlineRef}
               className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black font-display leading-[1.15] sm:leading-[1.1] tracking-tight text-white"
             >
-              National Achievements & Evidence Intelligence
+              {t("hero.title", { defaultValue: "National Achievements & Evidence Intelligence" })}
             </h1>
 
             {/* Subheadline Copy */}
@@ -249,10 +253,10 @@ export const HomeHero: React.FC = () => {
               ref={subheadlineRef}
               className="text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed max-w-2xl font-normal"
             >
-              An open, evidence-driven public platform documenting verified policy reforms, physical infrastructure projects, and measurable outcomes of President Bola Ahmed Tinubu's administration.
+              {t("hero.subtitle", { defaultValue: "An open, evidence-driven public platform documenting verified policy reforms, physical infrastructure projects, and measurable outcomes of President Bola Ahmed Tinubu's administration." })}
             </p>
 
-            {/* Rotating Supporting Intelligence Line (Section 7, M10J-C1 accessibility hardening) */}
+            {/* Rotating Supporting Intelligence Line */}
             <div className="h-7 sm:h-8 flex items-center">
               <div
                 ref={statementRef}
@@ -260,28 +264,30 @@ export const HomeHero: React.FC = () => {
                 aria-live="off"
               >
                 <Sparkles className="h-3.5 w-3.5 text-gov-gold shrink-0 animate-pulse" />
-                <span className="truncate">{SUPPORTING_STATEMENTS[statementIndex]}</span>
+                <span className="truncate">
+                  {t(SUPPORTING_STATEMENT_KEYS[statementIndex], { defaultValue: DEFAULT_SUPPORTING_STATEMENTS[statementIndex] })}
+                </span>
               </div>
             </div>
 
-            {/* Primary, Secondary & Tertiary Action CTAs (Section 4 & 5) */}
+            {/* Primary, Secondary & Tertiary Action CTAs */}
             <div
               ref={ctaGroupRef}
               className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
             >
-              {/* Primary CTA: Solid Green */}
+              {/* Primary CTA */}
               <Button
                 size="lg"
                 className="bg-gov-emerald hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 h-12 shadow-lg transition-all gap-2 gold-ring-focus rounded-xl shrink-0"
                 asChild
               >
                 <Link to="/achievements">
-                  <span>Explore Achievements</span>
+                  <span>{t("hero.exploreAchievements", { defaultValue: "Explore Achievements" })}</span>
                   <ArrowRight className="h-4 w-4 text-gov-gold" />
                 </Link>
               </Button>
 
-              {/* Secondary CTA: Translucent Glass with Visible White Text & Gold Icon */}
+              {/* Secondary CTA */}
               <Button
                 size="lg"
                 className="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs sm:text-sm px-6 py-3 h-12 gap-2 rounded-xl backdrop-blur-sm transition-all focus:ring-2 focus:ring-gov-gold shrink-0"
@@ -289,11 +295,11 @@ export const HomeHero: React.FC = () => {
               >
                 <Link to="/impact-map">
                   <Compass className="h-4 w-4 text-gov-gold" />
-                  <span className="text-white font-semibold">Nigeria Impact Map</span>
+                  <span className="text-white font-semibold">{t("hero.impactMap", { defaultValue: "Nigeria Impact Map" })}</span>
                 </Link>
               </Button>
 
-              {/* Tertiary CTA: Ghost */}
+              {/* Tertiary CTA */}
               <Button
                 size="lg"
                 variant="ghost"
@@ -302,12 +308,12 @@ export const HomeHero: React.FC = () => {
               >
                 <Link to="/data">
                   <Database className="h-4 w-4 text-gov-emerald" />
-                  <span>Data Explorer</span>
+                  <span>{t("hero.dataExplorer", { defaultValue: "Data Explorer" })}</span>
                 </Link>
               </Button>
             </div>
 
-            {/* High-Level Non-Overwhelming Key Counters (Section 13, 14, 15, M10J-C1 truth audit) */}
+            {/* High-Level Non-Overwhelming Key Counters */}
             <div
               ref={metricsRef}
               className="pt-6 border-t border-white/15 grid grid-cols-3 gap-2 sm:gap-4 text-xs"
@@ -317,7 +323,7 @@ export const HomeHero: React.FC = () => {
                   {macroCounters.canonicalSectors}
                 </div>
                 <div className="text-gray-300 font-medium text-[11px] sm:text-xs">
-                  Canonical Sectors
+                  {t("hero.canonicalSectors", { defaultValue: "Canonical Sectors" })}
                 </div>
               </div>
 
@@ -326,7 +332,7 @@ export const HomeHero: React.FC = () => {
                   36 + FCT
                 </div>
                 <div className="text-gray-300 font-medium text-[11px] sm:text-xs">
-                  Sub-National Scope
+                  {t("hero.subNationalScope", { defaultValue: "Sub-National Scope" })}
                 </div>
               </div>
 
@@ -335,14 +341,14 @@ export const HomeHero: React.FC = () => {
                   Primary
                 </div>
                 <div className="text-gray-300 font-medium text-[11px] sm:text-xs">
-                  Source Citations
+                  {t("hero.sourceCitations", { defaultValue: "Source Citations" })}
                 </div>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Controlled Premium Achievement Spotlight (Section 8) */}
+          {/* Right Column: Controlled Premium Achievement Spotlight */}
           <div
             ref={spotlightContainerRef}
             className="lg:col-span-5 relative w-full min-w-0 max-w-full"
@@ -353,7 +359,7 @@ export const HomeHero: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-gov-emerald animate-pulse" />
                   <span className="text-xs font-bold text-gov-gold uppercase tracking-wider">
-                    Spotlight Intelligence
+                    {t("hero.spotlightTitle", { defaultValue: "Spotlight Intelligence" })}
                   </span>
                 </div>
 
@@ -366,7 +372,6 @@ export const HomeHero: React.FC = () => {
                     className="p-1 rounded-md bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
                   >
                     <ChevronLeft className="h-4 w-4" />
-
                   </button>
                   <span className="text-[11px] font-mono text-gray-400 px-1">
                     {spotlightIndex + 1}/{spotlightAchievements.length}
@@ -404,7 +409,7 @@ export const HomeHero: React.FC = () => {
                   </p>
 
                   <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                    <span className="text-gray-400">Impact Metric:</span>
+                    <span className="text-gray-400">{t("hero.impactMetric", { defaultValue: "Impact Metric:" })}</span>
                     <span className="font-bold text-gov-gold">
                       {currentSpotlight.keyStat} <span className="text-[11px] font-normal text-gray-300">({currentSpotlight.keyStatLabel})</span>
                     </span>
@@ -427,13 +432,12 @@ export const HomeHero: React.FC = () => {
                 ))}
               </div>
 
-
               {/* Direct Action Link to Selected Achievement */}
               <Link
                 to={`/achievements/${currentSpotlight.slug}`}
                 className="block text-center w-full py-2.5 rounded-xl bg-gov-canvas/10 hover:bg-gov-canvas/20 text-xs font-bold text-gov-gold hover:text-white transition-colors border border-gov-gold/20"
               >
-                Inspect Audited Evidence Record →
+                {t("hero.inspectAuditedRecord", { defaultValue: "Inspect Audited Evidence Record →" })}
               </Link>
             </div>
           </div>

@@ -1,7 +1,8 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 import { 
   TrendingUp, 
   ShieldCheck, 
@@ -10,13 +11,13 @@ import {
   Landmark, 
   ArrowRight, 
   Layers, 
-  Award,
   ChevronRight
 } from "lucide-react";
 import { CANONICAL_PUBLIC_GROUPS, CANONICAL_SECTORS } from "@/adapters/canonicalData";
 import { PublicNavigationGroupId } from "@/adapters/types";
 
 export const SectorExplorer: React.FC = () => {
+  const { t } = useTranslation();
   const [activeGroup, setActiveGroup] = useState<PublicNavigationGroupId>("economy");
 
   const filteredSectors = CANONICAL_SECTORS.filter(s => s.parentPublicGroup === activeGroup);
@@ -40,13 +41,13 @@ export const SectorExplorer: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <Layers className="h-3.5 w-3.5" />
-              <span>Hierarchical Research Architecture</span>
+              <span>{t("sectorExplorer.eyebrow", { defaultValue: "15 Canonical Research Sectors" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gov-navy dark:text-white font-display">
-              Explore 15 Canonical Sectors
+              {t("sectorExplorer.title", { defaultValue: "Explore Progress by Sector" })}
             </h2>
             <p className="text-sm text-gov-slate leading-relaxed">
-              Research is organized into 15 foundational sectors under 5 public navigation groups, enabling granular tracking of policies, capital projects, and verified outcomes.
+              {t("sectorExplorer.subtitle", { defaultValue: "Structured empirical records organized under 5 Public Navigation Groups." })}
             </p>
           </div>
 
@@ -54,7 +55,7 @@ export const SectorExplorer: React.FC = () => {
             to="/sectors"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-gov-emerald hover:text-emerald-700 transition-colors shrink-0"
           >
-            <span>View All Sectors</span>
+            <span>{t("sectorExplorer.viewDirectory", { defaultValue: "View Complete Sectors Directory →" })}</span>
             <ArrowRight className="h-4 w-4 text-gov-gold" />
           </Link>
         </div>
@@ -97,7 +98,7 @@ export const SectorExplorer: React.FC = () => {
                     {sector.parentPublicGroupLabel.split('&')[0]}
                   </span>
                   <span className="text-xs font-semibold text-gov-slate">
-                    {sector.achievementCount} Records
+                    {sector.achievementCount} {t("common.achievement", { defaultValue: "Records" })}
                   </span>
                 </div>
 
@@ -130,7 +131,7 @@ export const SectorExplorer: React.FC = () => {
                   to={`/sectors/${sector.slug}`}
                   className="flex items-center justify-between text-xs font-bold text-gov-navy dark:text-white group-hover:text-gov-emerald transition-colors pt-1"
                 >
-                  <span>Explore Sector Intelligence</span>
+                  <span>{t("sectorExplorer.viewSector", { defaultValue: "Explore Sector Progress →" })}</span>
                   <ChevronRight className="h-4 w-4 text-gov-gold group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "@/lib/navigation";
-import { Compass, MapPin, ArrowRight, Layers, Building2, ExternalLink } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Compass, MapPin, ArrowRight, ExternalLink } from "lucide-react";
 import NigeriaMapSvg from "@/components/geography/NigeriaMapSvg";
 import { DEMO_NIGERIA_STATES } from "@/adapters/canonicalData";
 import { getStateByCode } from "@/services/geographyService";
 import { getStateSlug } from "@/lib/geography/nigeria-state-mapping";
 
 export const NationalImpactPreview: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [hoveredStateCode, setHoveredStateCode] = useState<string | null>(null);
   const [selectedStateCode, setSelectedStateCode] = useState<string | null>(null);
@@ -34,13 +36,13 @@ export const NationalImpactPreview: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
               <Compass className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>36 States & Federal Capital Territory</span>
+              <span>{t("impactPreview.statesAndFct", { defaultValue: "36 States & Federal Capital Territory" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display leading-tight text-white">
-              National Impact & Geographic Footprint
+              {t("impactPreview.title", { defaultValue: "Nigeria Impact & Geopolitical Delivery Map" })}
             </h2>
             <p className="text-sm text-gray-300 leading-relaxed">
-              Every region benefits from coordinated federal investments. Explore documented infrastructure corridors, social interventions, and institutional reforms state-by-state.
+              {t("impactPreview.subtitle", { defaultValue: "Track achievements, capital projects, and sub-national disbursements across all 36 States and the Federal Capital Territory." })}
             </p>
           </div>
 
@@ -48,7 +50,7 @@ export const NationalImpactPreview: React.FC = () => {
             to="/impact-map"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gov-emerald hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm transition-colors shrink-0 shadow-lg"
           >
-            <span>Open Full Interactive Map</span>
+            <span>{t("impactPreview.launchMap", { defaultValue: "Open Full Interactive Map" })}</span>
             <ArrowRight className="h-4 w-4 text-gov-gold" />
           </Link>
         </div>
@@ -61,11 +63,11 @@ export const NationalImpactPreview: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-gov-emerald animate-pulse" />
                 <span className="text-xs font-bold uppercase tracking-wider text-gov-gold">
-                  Interactive Geographic Gateway
+                  {t("impactPreview.eyebrow", { defaultValue: "Interactive Geospatial Intelligence" })}
                 </span>
               </div>
               <span className="text-[11px] text-gray-400">
-                Click any state to explore verified interventions
+                {t("impactPreview.selectState", { defaultValue: "Click any state to explore verified interventions" })}
               </span>
             </div>
 
@@ -83,7 +85,7 @@ export const NationalImpactPreview: React.FC = () => {
                 </div>
               ) : (
                 <span className="text-gray-400 text-[11px]">
-                  Hover or select any state polygon to inspect regional scope
+                  {t("impactPreview.selectState", { defaultValue: "Hover or select any state polygon to inspect regional scope" })}
                 </span>
               )}
             </div>
@@ -111,7 +113,7 @@ export const NationalImpactPreview: React.FC = () => {
                 to="/impact-map"
                 className="text-[11px] font-bold text-gov-gold hover:underline inline-flex items-center gap-1"
               >
-                Launch National Impact Map <ExternalLink className="h-3 w-3" />
+                {t("impactPreview.launchMap", { defaultValue: "Launch National Impact Map" })} <ExternalLink className="h-3 w-3" />
               </Link>
             </div>
           </div>
@@ -119,7 +121,7 @@ export const NationalImpactPreview: React.FC = () => {
           {/* Right Column: State Impact Spotlight Cards */}
           <div className="lg:col-span-5 space-y-3">
             <div className="text-xs font-bold text-gov-gold uppercase tracking-wider px-1">
-              Sub-National Highlights
+              {t("hero.subNationalScope", { defaultValue: "Sub-National Highlights" })}
             </div>
 
             <div className="space-y-2.5">
@@ -159,7 +161,7 @@ export const NationalImpactPreview: React.FC = () => {
               to="/states"
               className="block text-center w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-gray-300 hover:text-white transition-colors border border-white/10"
             >
-              View Directory of All 36 States & FCT →
+              {t("navigation.states", { defaultValue: "View Directory of All 36 States & FCT →" })}
             </Link>
           </div>
         </div>

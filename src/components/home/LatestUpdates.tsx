@@ -1,11 +1,14 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 import { RefreshCw, ArrowRight } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import SourceBadge from "../common/SourceBadge";
 import { latestUpdatesData } from "@/data/home/homepage.config";
 
 export const LatestUpdates: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-12 md:py-16 bg-white dark:bg-gov-darkSurface border-b border-gov-border font-sans">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -13,13 +16,13 @@ export const LatestUpdates: React.FC = () => {
         <div className="space-y-1 max-w-2xl border-b border-gov-border/60 pb-6">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-emerald uppercase tracking-wider">
             <RefreshCw className="h-4 w-4 text-gov-gold" />
-            <span>Editorial Feed</span>
+            <span>{t("latestUpdates.eyebrow", { defaultValue: "Recent Publications & Deliverables" })}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold font-display text-gov-navy dark:text-white tracking-tight">
-            Latest Verified Updates
+            {t("latestUpdates.title", { defaultValue: "Latest Verified Updates" })}
           </h2>
           <p className="text-sm text-gov-slate">
-            Recently added or revised information across policies, projects and national indicators.
+            {t("latestUpdates.subtitle", { defaultValue: "Recently added or revised information across policies, projects and national indicators." })}
           </p>
         </div>
 
@@ -53,7 +56,7 @@ export const LatestUpdates: React.FC = () => {
                   to="/data-sources"
                   className="inline-flex items-center gap-1 font-bold text-gov-navy hover:text-gov-emerald text-xs"
                 >
-                  <span>Verification Log</span>
+                  <span>{t("dataSources.title", { defaultValue: "Verification Log" })}</span>
                   <ArrowRight className="h-3 w-3 text-gov-gold" />
                 </Link>
               </div>

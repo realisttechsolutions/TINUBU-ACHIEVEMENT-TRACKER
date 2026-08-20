@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@/lib/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface BrandLockupProps {
   compact?: boolean;
@@ -12,6 +13,8 @@ export const BrandLockup: React.FC<BrandLockupProps> = ({
   className = "",
   onClick,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Link
       to="/"
@@ -27,11 +30,11 @@ export const BrandLockup: React.FC<BrandLockupProps> = ({
       {/* Typographic Lockup */}
       <div className="flex flex-col min-w-0 justify-center">
         <span className="font-display font-extrabold text-xs sm:text-sm md:text-sm lg:text-sm xl:text-[14px] 2xl:text-lg text-gov-navy dark:text-white leading-tight tracking-tight whitespace-nowrap">
-          President Tinubu Achievement Tracker
+          {t("brand.title", { defaultValue: "President Tinubu Achievement Tracker" })}
         </span>
         {!compact && (
           <span className="text-[10px] sm:text-[11px] text-gov-slate uppercase tracking-wider font-semibold truncate hidden sm:block">
-            Tracking the Renewed Hope Agenda
+            {t("brand.tagline", { defaultValue: "Tracking the Renewed Hope Agenda" })}
           </span>
         )}
       </div>

@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "@/lib/navigation";
 import BrandLockup from "./BrandLockup";
-import { ShieldCheck, Info, FileSpreadsheet, Download, Database, Compass, Award, ExternalLink } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { ShieldCheck, Info, Download, Database, Compass } from "lucide-react";
 import { CANONICAL_PUBLIC_GROUPS } from "@/adapters/canonicalData";
 
 export const GlobalFooter: React.FC = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -16,48 +18,48 @@ export const GlobalFooter: React.FC = () => {
           <div className="lg:col-span-4 space-y-4">
             <BrandLockup />
             <p className="text-xs text-gray-300 leading-relaxed pt-2">
-              An evidence-driven national progress platform documenting, explaining, and visualising the verified achievements, capital infrastructure projects, structural reforms, and measurable public outcomes of President Bola Ahmed Tinubu's administration (29 May 2023 — August 2026).
+              {t("footer.description", { defaultValue: "An evidence-driven national progress platform documenting, explaining, and visualising the verified achievements, capital infrastructure projects, structural reforms, and measurable public outcomes of President Bola Ahmed Tinubu's administration (29 May 2023 — August 2026)." })}
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 border border-gov-gold/40 text-xs text-gov-gold font-bold">
               <ShieldCheck className="h-4 w-4 shrink-0 text-gov-emerald" />
-              <span>Governing Standard: Research Contract v1.1.2</span>
+              <span>{t("footer.governingStandard", { defaultValue: "Governing Standard: Research Contract v1.1.2" })}</span>
             </div>
           </div>
 
           {/* Column 2: Core Explorers (2 cols) */}
           <div className="lg:col-span-2 space-y-3">
             <h3 className="font-display text-xs font-bold uppercase tracking-wider text-gov-gold">
-              Explore Platform
+              {t("footer.explorePlatform", { defaultValue: "Explore Platform" })}
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link to="/achievements" className="text-gray-300 hover:text-white transition-colors">
-                  Achievements Explorer
+                  {t("navigation.achievements", { defaultValue: "Achievements Explorer" })}
                 </Link>
               </li>
               <li>
                 <Link to="/projects" className="text-gray-300 hover:text-white transition-colors">
-                  Capital Projects
+                  {t("navigation.capitalProjects", { defaultValue: "Capital Projects" })}
                 </Link>
               </li>
               <li>
                 <Link to="/policies" className="text-gray-300 hover:text-white transition-colors">
-                  Policies & Reforms
+                  {t("navigation.policiesReforms", { defaultValue: "Policies & Reforms" })}
                 </Link>
               </li>
               <li>
                 <Link to="/programmes" className="text-gray-300 hover:text-white transition-colors">
-                  Social Programmes
+                  {t("navigation.socialProgrammes", { defaultValue: "Social Programmes" })}
                 </Link>
               </li>
               <li>
                 <Link to="/impact-map" className="text-gray-300 hover:text-white transition-colors">
-                  Nigeria Impact Map
+                  {t("navigation.impactMap", { defaultValue: "Nigeria Impact Map" })}
                 </Link>
               </li>
               <li>
                 <Link to="/timeline" className="text-gray-300 hover:text-white transition-colors">
-                  Administration Timeline
+                  {t("navigation.timeline", { defaultValue: "Administration Timeline" })}
                 </Link>
               </li>
             </ul>
@@ -66,7 +68,7 @@ export const GlobalFooter: React.FC = () => {
           {/* Column 3: 5 Sector Umbrella Groups (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="font-display text-xs font-bold uppercase tracking-wider text-gov-gold">
-              5 Public Sector Groups
+              {t("footer.publicGroups", { defaultValue: "5 Public Sector Groups" })}
             </h3>
             <ul className="space-y-2 text-xs">
               {CANONICAL_PUBLIC_GROUPS.map((group) => (
@@ -81,7 +83,7 @@ export const GlobalFooter: React.FC = () => {
               ))}
               <li className="pt-1">
                 <Link to="/sectors" className="text-gov-emerald font-bold hover:underline">
-                  View All 15 Canonical Sectors →
+                  {t("navigation.viewSectorsDirectory", { defaultValue: "View All 15 Canonical Sectors →" })}
                 </Link>
               </li>
             </ul>
@@ -90,31 +92,31 @@ export const GlobalFooter: React.FC = () => {
           {/* Column 4: Evidence & Open Data (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
             <h3 className="font-display text-xs font-bold uppercase tracking-wider text-gov-gold">
-              Evidence & Open Data
+              {t("footer.evidenceData", { defaultValue: "Evidence & Open Data" })}
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link to="/data" className="text-gray-300 hover:text-white transition-colors flex items-center gap-1.5">
                   <Database className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Interactive Data Explorer</span>
+                  <span>{t("navigation.data", { defaultValue: "Interactive Data Explorer" })}</span>
                 </Link>
               </li>
               <li>
                 <Link to="/data-sources" className="text-gray-300 hover:text-white transition-colors flex items-center gap-1.5">
                   <ShieldCheck className="h-3.5 w-3.5 text-gov-gold" />
-                  <span>6-Tier Source Hierarchy</span>
+                  <span>{t("navigation.dataSources", { defaultValue: "6-Tier Source Hierarchy" })}</span>
                 </Link>
               </li>
               <li>
                 <Link to="/downloads" className="text-gray-300 hover:text-white transition-colors flex items-center gap-1.5">
                   <Download className="h-3.5 w-3.5 text-purple-400" />
-                  <span>Dataset Download Centre</span>
+                  <span>{t("navigation.downloads", { defaultValue: "Dataset Download Centre" })}</span>
                 </Link>
               </li>
               <li>
                 <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors flex items-center gap-1.5">
                   <Compass className="h-3.5 w-3.5 text-blue-400" />
-                  <span>Macro Analytics Dashboard</span>
+                  <span>{t("navigation.dashboard", { defaultValue: "Macro Analytics Dashboard" })}</span>
                 </Link>
               </li>
             </ul>
@@ -125,26 +127,26 @@ export const GlobalFooter: React.FC = () => {
         <div className="p-4 rounded-xl bg-gov-darkSurface border border-gov-gold/20 flex items-start gap-3 text-xs text-gray-300">
           <Info className="h-4 w-4 text-gov-gold shrink-0 mt-0.5" />
           <p className="leading-relaxed">
-            <strong className="text-white">Editorial & Truth Standard:</strong> The President Tinubu Achievement Tracker (PTAT) operates an achievements-focused editorial mandate governed by 18 immutable truth safeguards. Presentation is positive and confident, but claims never exceed underlying verifiable primary evidence. Financial metrics declare exact value types and are never improperly aggregated across incompatible categories.
+            <strong className="text-white">{t("footer.editorialTrust", { defaultValue: "Editorial & Truth Standard: The President Tinubu Achievement Tracker (PTAT) operates an achievements-focused editorial mandate governed by 18 immutable truth safeguards. Presentation is positive and confident, but claims never exceed underlying verifiable primary evidence." })}</strong>
           </p>
         </div>
 
         {/* Bottom Bar: Copyright & Standards */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gov-slate">
           <div>
-            © {currentYear} President Tinubu Achievement Tracker (PTAT) • Renewed Hope Progress Intelligence
+            © {currentYear} {t("footer.copyright", { defaultValue: "President Tinubu Achievement Tracker (PTAT) • Renewed Hope Progress Intelligence" })}
           </div>
 
           <div className="flex items-center gap-4 text-gray-400">
             <Link to="/data-sources" className="hover:text-white transition-colors">
-              Methodology & Sources
+              {t("footer.methodology", { defaultValue: "Methodology & Sources" })}
             </Link>
             <span>•</span>
             <Link to="/downloads" className="hover:text-white transition-colors">
-              Public Datasets
+              {t("footer.datasets", { defaultValue: "Public Datasets" })}
             </Link>
             <span>•</span>
-            <span>Version 2.0 (2026 Edition)</span>
+            <span>{t("footer.version", { defaultValue: "Version 2.0 (2026 Edition)" })}</span>
           </div>
         </div>
       </div>

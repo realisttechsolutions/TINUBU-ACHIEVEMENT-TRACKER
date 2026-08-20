@@ -1,8 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
-import { ShieldCheck, Database, FileText, Globe, CheckCircle2, ArrowRight, BookOpen, AlertTriangle } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { ShieldCheck, Database, FileText, Globe, CheckCircle2, ArrowRight } from "lucide-react";
 
 export const EvidenceDataStory: React.FC = () => {
+  const { t } = useTranslation();
+
   const levels = [
     {
       level: "Level 1",
@@ -42,13 +45,13 @@ export const EvidenceDataStory: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <ShieldCheck className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>Evidentiary Governance & Verification Standards</span>
+              <span>{t("evidenceStory.eyebrow", { defaultValue: "Empirical Truth Discipline" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-gov-navy dark:text-white">
-              The 6-Tier Evidence Architecture
+              {t("evidenceStory.title", { defaultValue: "Evidence-Led Data Intelligence" })}
             </h2>
             <p className="text-sm text-gov-slate leading-relaxed">
-              Every achievement record links directly to verifiable primary documents. Positive presentation is paired with 18 immutable truth safeguards.
+              {t("evidenceStory.subtitle", { defaultValue: "Every metric is tied to primary sources, published gazettes, and verifiable institutional records." })}
             </p>
           </div>
 
@@ -56,7 +59,7 @@ export const EvidenceDataStory: React.FC = () => {
             to="/data-sources"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-gov-emerald hover:text-emerald-700 transition-colors shrink-0"
           >
-            <span>Learn About Verification Standards</span>
+            <span>{t("evidenceStory.viewSources", { defaultValue: "Explore Source Hierarchy Registry →" })}</span>
             <ArrowRight className="h-4 w-4 text-gov-gold" />
           </Link>
         </div>
@@ -94,7 +97,7 @@ export const EvidenceDataStory: React.FC = () => {
           <div className="space-y-1.5 max-w-3xl">
             <div className="flex items-center gap-2 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <CheckCircle2 className="h-4 w-4 text-gov-emerald" />
-              <span>Core Truth Invariant</span>
+              <span>{t("footer.governingStandard", { defaultValue: "Governing Standard: Research Contract v1.1.2" })}</span>
             </div>
             <h4 className="text-base sm:text-lg font-bold font-display text-white">
               "Positive selection must never weaken factual accuracy."
@@ -108,7 +111,7 @@ export const EvidenceDataStory: React.FC = () => {
             to="/data-sources"
             className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors shrink-0 border border-white/20"
           >
-            Read Methodology →
+            {t("footer.methodology", { defaultValue: "Read Methodology →" })}
           </Link>
         </div>
       </div>

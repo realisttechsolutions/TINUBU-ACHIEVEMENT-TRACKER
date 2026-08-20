@@ -1,51 +1,52 @@
 import React from "react";
 import { Link } from "@/lib/navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 import { TrendingUp, GraduationCap, Building2, Landmark, ArrowRight, ShieldCheck } from "lucide-react";
-import { dataAdapter } from "@/adapters/dataAdapter";
 
 export const NationalProgressOverview: React.FC = () => {
+  const { t } = useTranslation();
+
   const cards = [
     {
       id: "metric-1",
-      title: "Non-Oil Federal Revenue",
-      value: "₦19.8 Trillion",
-      subtext: "Automated tax compliance & historic statutory collection record",
-      sector: "Economy & Fiscal Reforms",
-      leadMda: "Federal Inland Revenue Service",
+      title: t("progressOverview.revenueTitle", { defaultValue: "Non-Oil Federal Revenue" }),
+      value: t("progressOverview.revenueValue", { defaultValue: "₦19.8 Trillion" }),
+      subtext: t("progressOverview.revenueSubtext", { defaultValue: "Automated tax compliance & historic statutory collection record" }),
+      sector: t("navigation.economicReforms", { defaultValue: "Economy & Fiscal Reforms" }),
+      leadMda: t("progressOverview.revenueMda", { defaultValue: "Federal Inland Revenue Service" }),
       icon: TrendingUp,
       badgeColor: "emerald",
       url: "/sectors/economy-fiscal-reforms"
     },
-
     {
       id: "metric-2",
-      title: "Student Loan Disbursements",
-      value: "350,000+ Students",
-      subtext: "Tuition and upkeep funded directly across 120+ tertiary institutions",
-      sector: "Education & Human Capital",
-      leadMda: "NELFUND",
+      title: t("progressOverview.loanTitle", { defaultValue: "Student Loan Disbursements" }),
+      value: t("progressOverview.loanValue", { defaultValue: "350,000+ Students" }),
+      subtext: t("progressOverview.loanSubtext", { defaultValue: "Tuition and upkeep funded directly across 120+ tertiary institutions" }),
+      sector: t("navigation.socialServices", { defaultValue: "Education & Human Capital" }),
+      leadMda: t("progressOverview.loanMda", { defaultValue: "NELFUND" }),
       icon: GraduationCap,
       badgeColor: "gold",
       url: "/achievements/nelfund-student-loan-disbursement"
     },
     {
       id: "metric-3",
-      title: "Active Highway Corridors",
-      value: "2,400+ Kilometers",
-      subtext: "Lagos-Calabar, Sokoto-Badagry, and regional arterial dualization",
-      sector: "Infrastructure & Transport",
-      leadMda: "Federal Ministry of Works",
+      title: t("progressOverview.highwayTitle", { defaultValue: "Active Highway Corridors" }),
+      value: t("progressOverview.highwayValue", { defaultValue: "2,400+ Kilometers" }),
+      subtext: t("progressOverview.highwaySubtext", { defaultValue: "Lagos-Calabar, Sokoto-Badagry, and regional arterial dualization" }),
+      sector: t("navigation.infrastructure", { defaultValue: "Infrastructure & Transport" }),
+      leadMda: t("progressOverview.highwayMda", { defaultValue: "Federal Ministry of Works" }),
       icon: Building2,
       badgeColor: "blue",
       url: "/projects"
     },
     {
       id: "metric-4",
-      title: "LGA Direct Autonomy",
-      value: "774 Councils",
-      subtext: "Direct statutory federation allocations enforced by Supreme Court ruling",
-      sector: "Governance & Public Service",
-      leadMda: "Federal Ministry of Justice",
+      title: t("progressOverview.lgaTitle", { defaultValue: "LGA Direct Autonomy" }),
+      value: t("progressOverview.lgaValue", { defaultValue: "774 Councils" }),
+      subtext: t("progressOverview.lgaSubtext", { defaultValue: "Direct statutory federation allocations enforced by Supreme Court ruling" }),
+      sector: t("navigation.governance", { defaultValue: "Governance & Public Service" }),
+      leadMda: t("progressOverview.lgaMda", { defaultValue: "Federal Ministry of Justice" }),
       icon: Landmark,
       badgeColor: "purple",
       url: "/achievements/local-government-financial-autonomy"
@@ -59,17 +60,17 @@ export const NationalProgressOverview: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider mb-1">
               <ShieldCheck className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>Measurable Administration Milestones</span>
+              <span>{t("progressOverview.eyebrow", { defaultValue: "Measurable Administration Milestones" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-gov-navy dark:text-white font-display">
-              National Progress at a Glance
+              {t("progressOverview.title", { defaultValue: "National Progress at a Glance" })}
             </h2>
           </div>
           <Link
             to="/dashboard"
             className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-gov-emerald hover:underline"
           >
-            <span>View Full Macro Analytics Dashboard</span>
+            <span>{t("progressOverview.viewDashboard", { defaultValue: "View Full Macro Analytics Dashboard →" })}</span>
             <ArrowRight className="h-3.5 w-3.5 text-gov-gold" />
           </Link>
         </div>

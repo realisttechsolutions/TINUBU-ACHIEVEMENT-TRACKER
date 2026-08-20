@@ -1,10 +1,12 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
-import { Database, Download, FileSpreadsheet, ArrowRight, ShieldCheck } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Database, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { dataAdapter } from "@/adapters/dataAdapter";
 
 export const ReportsResearchCTA: React.FC = () => {
+  const { t } = useTranslation();
   const datasets = dataAdapter.getDatasets().slice(0, 3);
 
   const handleDownloadDemoCsv = (dsTitle: string) => {
@@ -29,15 +31,15 @@ export const ReportsResearchCTA: React.FC = () => {
             <div className="lg:col-span-7 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                 <Database className="h-3.5 w-3.5 text-gov-emerald" />
-                <span>Open Data & Research Access</span>
+                <span>{t("reportsCta.eyebrow", { defaultValue: "Comprehensive Evidence Archive" })}</span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display leading-tight text-white">
-                Empowering Public Fact-Checkers, Analysts & Citizens
+                {t("reportsCta.title", { defaultValue: "Reports, Datasets & Public Research Downloads" })}
               </h2>
 
               <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-                Access structured research datasets across all 15 canonical sectors, 36 states, and 6 geopolitical zones. Build custom queries or download complete research exports in CSV, JSON, and PDF formats.
+                {t("reportsCta.subtitle", { defaultValue: "Download audited spreadsheets, official gazette copies, and national progress summaries in CSV and JSON formats." })}
               </p>
 
               <div className="pt-2 flex flex-wrap gap-4">
@@ -48,7 +50,7 @@ export const ReportsResearchCTA: React.FC = () => {
                 >
                   <Link to="/data">
                     <Database className="h-4 w-4 text-gov-gold" />
-                    <span>Launch Data Explorer</span>
+                    <span>{t("hero.dataExplorer", { defaultValue: "Launch Data Explorer" })}</span>
                   </Link>
                 </Button>
 
@@ -60,7 +62,7 @@ export const ReportsResearchCTA: React.FC = () => {
                 >
                   <Link to="/downloads">
                     <Download className="h-4 w-4 text-purple-400" />
-                    <span>Visit Download Centre</span>
+                    <span>{t("reportsCta.downloadButton", { defaultValue: "Visit Download Centre" })}</span>
                   </Link>
                 </Button>
               </div>
@@ -69,7 +71,7 @@ export const ReportsResearchCTA: React.FC = () => {
             {/* Right Column: Dataset Download Cards */}
             <div className="lg:col-span-5 space-y-3">
               <div className="text-xs font-bold text-gov-gold uppercase tracking-wider px-1">
-                Featured Dataset Packages
+                {t("downloads.datasets", { defaultValue: "Statistical Datasets" })}
               </div>
 
               <div className="space-y-2.5">
@@ -83,7 +85,7 @@ export const ReportsResearchCTA: React.FC = () => {
                         {ds.title}
                       </div>
                       <div className="text-[11px] text-gray-400">
-                        {ds.recordCount} Records • {ds.periodCovered}
+                        {ds.recordCount} {t("common.achievement", { defaultValue: "Records" })} • {ds.periodCovered}
                       </div>
                     </div>
 

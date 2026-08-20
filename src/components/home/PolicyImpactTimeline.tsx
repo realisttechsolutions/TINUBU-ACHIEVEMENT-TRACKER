@@ -1,10 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
-import { Clock, ArrowRight, ShieldCheck, ChevronRight } from "lucide-react";
-import StatusBadge from "../common/StatusBadge";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Clock, ArrowRight, ChevronRight } from "lucide-react";
 import { dataAdapter } from "@/adapters/dataAdapter";
 
 export const PolicyImpactTimeline: React.FC = () => {
+  const { t } = useTranslation();
   const events = dataAdapter.getTimelineEvents().slice(0, 4);
 
   return (
@@ -15,13 +16,13 @@ export const PolicyImpactTimeline: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <Clock className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>Chronological Milestones (May 2023 — August 2026)</span>
+              <span>{t("timelineSection.eyebrow", { defaultValue: "Chronological Policy Delivery" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-gov-navy dark:text-white">
-              From Policy Enactment to Verified Delivery
+              {t("timelineSection.title", { defaultValue: "From Policy to Impact" })}
             </h2>
             <p className="text-sm text-gov-slate leading-relaxed">
-              Track how major presidential directives and National Assembly acts transition through statutory Gazettes, cash release warrants, procurement, and physical commissioning.
+              {t("timelineSection.subtitle", { defaultValue: "Tracing structural decisions from initial presidential gazette to verified on-the-ground outcomes." })}
             </p>
           </div>
 
@@ -29,7 +30,7 @@ export const PolicyImpactTimeline: React.FC = () => {
             to="/timeline"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-gov-emerald hover:text-emerald-700 transition-colors shrink-0"
           >
-            <span>Explore Full National Timeline</span>
+            <span>{t("timelineSection.viewTimeline", { defaultValue: "Explore Full Administration Timeline →" })}</span>
             <ArrowRight className="h-4 w-4 text-gov-gold" />
           </Link>
         </div>
@@ -70,7 +71,7 @@ export const PolicyImpactTimeline: React.FC = () => {
                     to="/timeline"
                     className="inline-flex items-center gap-1 font-bold text-gov-navy dark:text-gov-gold hover:text-gov-emerald transition-colors"
                   >
-                    <span>View Timeline Stream</span>
+                    <span>{t("common.view", { defaultValue: "View" })} →</span>
                     <ChevronRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
