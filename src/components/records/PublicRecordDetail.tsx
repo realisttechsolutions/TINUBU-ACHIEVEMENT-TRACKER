@@ -6,7 +6,6 @@ import { Link, useParams } from '@/lib/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import StatusBadge from '@/components/common/StatusBadge';
 import SourceBadge from '@/components/common/SourceBadge';
-import DemoWatermark from '@/components/common/DemoWatermark';
 import ScopeBadge from '@/components/common/ScopeBadge';
 import CitizenImpactSection from '@/components/impact/CitizenImpactSection';
 
@@ -68,8 +67,6 @@ export function PublicRecordDetail({ kind }: { kind: PublicRecordKind }) {
           <ArrowLeft className="h-4 w-4" />
           Back to {copy.collection}
         </Link>
-
-        {record.isDemo ? <DemoWatermark /> : null}
 
         <section className="space-y-5 rounded-3xl border border-gov-border bg-white p-6 shadow-sm dark:bg-gov-darkSurface sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gov-border/60 pb-4">

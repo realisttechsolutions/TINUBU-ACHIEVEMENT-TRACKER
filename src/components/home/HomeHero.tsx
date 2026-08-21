@@ -54,19 +54,7 @@ function getEligibleSpotlightAchievements(): SpotlightItem[] {
   );
 
   if (eligible.length === 0) {
-    return [
-      {
-        id: "nelfund",
-        sector: "Education & Human Capital",
-        badgeColor: "text-emerald-400 bg-emerald-950/60 border-emerald-500/40",
-        statusText: "Verified Operational",
-        title: "NELFUND Tertiary Student Loan & Upkeep Scheme",
-        summary: "Over 350,000 tertiary students funded with direct institutional tuition disbursements and monthly upkeep stipends.",
-        slug: "nelfund-student-loan-disbursement",
-        keyStat: "350,000+",
-        keyStatLabel: "Funded Students"
-      }
-    ];
+    return [];
   }
 
   return eligible.map((a) => {
@@ -81,8 +69,8 @@ function getEligibleSpotlightAchievements(): SpotlightItem[] {
       badgeColor = "text-purple-400 bg-purple-950/60 border-purple-500/40";
     }
 
-    let keyStat = "Verified";
-    let keyStatLabel = "Evidence Profile";
+    let keyStat = "Active";
+    let keyStatLabel = "Delivery Status";
 
     if (a.beneficiaryMetrics && a.beneficiaryMetrics.length > 0) {
       keyStat = a.beneficiaryMetrics[0].formattedCount;
@@ -102,7 +90,7 @@ function getEligibleSpotlightAchievements(): SpotlightItem[] {
       id: a.id,
       sector: a.sectorName || a.publicNavigationGroupLabel || "National Reform",
       badgeColor,
-      statusText: a.statusLabel || "Verified Record",
+      statusText: a.statusLabel || "Published Record",
       title: a.title,
       summary: a.summary,
       slug: a.slug,
@@ -156,7 +144,7 @@ export const HomeHero: React.FC = () => {
 
   // Advance spotlight in a continuous forever loop every 5s (Section 5)
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || spotlightAchievements.length <= 1) return;
     const interval = setInterval(() => {
       setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
     }, MOTION_TOKENS.SPOTLIGHT_INTERVAL);
@@ -205,14 +193,28 @@ export const HomeHero: React.FC = () => {
   }, []);
 
   const handleNextSpotlight = useCallback(() => {
+    if (spotlightAchievements.length <= 1) return;
     setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
   }, [spotlightAchievements.length]);
 
   const handlePrevSpotlight = useCallback(() => {
+    if (spotlightAchievements.length <= 1) return;
     setSpotlightIndex((prev) => (prev - 1 + spotlightAchievements.length) % spotlightAchievements.length);
   }, [spotlightAchievements.length]);
 
-  const currentSpotlight = spotlightAchievements[spotlightIndex] || spotlightAchievements[0];
+  const defaultSpotlight: SpotlightItem = {
+    id: "overview",
+    sector: "National Progress",
+    badgeColor: "text-gov-gold bg-gov-navy border-gov-gold/40",
+    statusText: "Official Registry",
+    title: "National Progress & Empirical Evidence Registry",
+    summary: "Official repository of statutory policies, capital infrastructure projects, and socioeconomic reforms across all 36 States + FCT.",
+    slug: "achievements",
+    keyStat: "36 + FCT",
+    keyStatLabel: "National Scope",
+  };
+
+  const currentSpotlight = spotlightAchievements[spotlightIndex] || defaultSpotlight;
 
   return (
     <section
@@ -374,7 +376,7 @@ export const HomeHero: React.FC = () => {
                     <ChevronLeft className="h-4 w-4" />
                   </button>
                   <span className="text-[11px] font-mono text-gray-400 px-1">
-                    {spotlightIndex + 1}/{spotlightAchievements.length}
+                    {spotlightAchievements.length > 0 ? `${spotlightIndex + 1}/${spotlightAchievements.length}` : "1/1"}
                   </span>
 
                   <button

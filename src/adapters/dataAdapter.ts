@@ -38,14 +38,20 @@ export function hydrateDataAdapter(snapshot: PublicDataSnapshot | null) {
   runtimeData = snapshot;
 }
 
-const achievements = () => runtimeData?.achievements ?? DEMO_ACHIEVEMENTS;
+const isPublicRecord = <T extends { isDemo?: boolean; id?: string }>(record: T): boolean => {
+  if (record.isDemo === true) return false;
+  if (typeof record.id === 'string' && /^(ACH|PRJ|POL|PRG|TLE|DS)-DEMO-/i.test(record.id)) return false;
+  return true;
+};
+
+const achievements = () => (runtimeData?.achievements ?? []).filter(isPublicRecord);
 const sectors = () => runtimeData?.sectors ?? CANONICAL_SECTORS;
-const projects = () => runtimeData?.projects ?? DEMO_PROJECTS;
-const policies = () => runtimeData?.policies ?? DEMO_POLICIES;
-const programmes = () => runtimeData?.programmes ?? DEMO_PROGRAMMES;
-const timelineEvents = () => runtimeData?.timelineEvents ?? DEMO_TIMELINE_EVENTS;
+const projects = () => (runtimeData?.projects ?? []).filter(isPublicRecord);
+const policies = () => (runtimeData?.policies ?? []).filter(isPublicRecord);
+const programmes = () => (runtimeData?.programmes ?? []).filter(isPublicRecord);
+const timelineEvents = () => (runtimeData?.timelineEvents ?? []).filter(isPublicRecord);
 const states = () => runtimeData?.states ?? DEMO_NIGERIA_STATES;
-const datasets = () => runtimeData?.datasets ?? DEMO_DATASETS;
+const datasets = () => (runtimeData?.datasets ?? []).filter(isPublicRecord);
 
 export interface AchievementFilterOptions {
   searchQuery?: string;
@@ -356,14 +362,13 @@ export const dataAdapter = {
     if (runtimeData) return runtimeData.macroCounters;
     return {
       timeframe: "29 May 2023 — August 2026",
-      verifiedAchievements: DEMO_ACHIEVEMENTS.length,
-      canonicalSectors: CANONICAL_SECTORS.length,
-      capitalProjectsActive: DEMO_PROJECTS.length,
-      subNationalStatesTracked: DEMO_NIGERIA_STATES.length,
+      verifiedAchievements: achievements().length,
+      canonicalSectors: sectors().length,
+      capitalProjectsActive: projects().length,
+      subNationalStatesTracked: states().length,
       studentBeneficiariesFormatted: "350,000+",
       externalReservesFormatted: "Strengthened Buffer",
       highwayKilometersFormatted: "2,400+ km",
-
       lastAuditSync: "2026-08-15"
     };
   },
@@ -534,7 +539,7 @@ export const dataAdapter = {
         `[Claim ${i+1}] ${c.claimText}\n  Sources: ${c.sources.map(s => `${s.title} (${s.publisher}, Level: ${s.sourceLevel})`).join('; ')}`
       ),
       ``,
-      `DATA WATERMARK: ${record.isDemo ? '[DEMO / SYNTHETIC RESEARCH RECORD]' : '[PUBLIC DATABASE RECORD]'}`,
+      `DATA STATUS: [CANONICAL PUBLIC RECORD]`,
       `===================================================================`
     ].join('\n');
 

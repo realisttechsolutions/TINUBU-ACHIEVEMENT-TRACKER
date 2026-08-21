@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
@@ -82,9 +82,6 @@ export const PolicyTimelineViewer: React.FC<PolicyTimelineViewerProps> = ({ even
                     <Badge variant="outline" className="text-[10px] font-bold border-gov-border">
                       {event.category}
                     </Badge>
-                    <Badge variant="outline" className="text-[10px] font-semibold bg-emerald-50 text-emerald-800 border-emerald-200">
-                      {event.verificationStatus}
-                    </Badge>
                   </div>
                 </div>
 
@@ -102,7 +99,7 @@ export const PolicyTimelineViewer: React.FC<PolicyTimelineViewerProps> = ({ even
                 {event.expectedOrMeasuredImpact && (
                   <div className="bg-gov-canvas dark:bg-gov-navy/60 p-3 rounded-lg border-l-4 border-gov-emerald text-xs space-y-1">
                     <span className="font-bold text-gov-navy dark:text-white block uppercase text-[10px] tracking-wider">
-                      Targeted / Verified Impact:
+                      Targeted / Measured Impact:
                     </span>
                     <p className="text-gov-navy dark:text-slate-200 font-medium">
                       {event.expectedOrMeasuredImpact}

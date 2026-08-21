@@ -1,7 +1,9 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import { dataAdapter, hydrateDataAdapter } from '@/adapters/dataAdapter';
+import { testPublicSnapshot } from '@/__tests__/testFixtures';
 
 describe('public data adapter search routes', () => {
+  beforeEach(() => hydrateDataAdapter(testPublicSnapshot));
   afterEach(() => hydrateDataAdapter(null));
 
   it('maps project, policy and programme results to their public record pages', () => {

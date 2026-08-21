@@ -3,7 +3,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import HomeHero from '@/components/home/HomeHero';
 import { MOTION_TOKENS } from '@/lib/animations';
-import { dataAdapter } from '@/adapters/dataAdapter';
+import { dataAdapter, hydrateDataAdapter } from '@/adapters/dataAdapter';
+import { testPublicSnapshot } from '@/__tests__/testFixtures';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 
 // Mock navigation
@@ -38,6 +39,8 @@ vi.mock('@/lib/animations', () => ({
     SPOTLIGHT_INTERVAL: 5000,
   },
   prefersReducedMotion: () => false,
+  formatCompactNumber: (val: number) => String(val),
+  formatCurrencyAbbreviated: (val: number) => `N${val}`,
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -51,10 +54,12 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    hydrateDataAdapter(testPublicSnapshot);
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    hydrateDataAdapter(null);
   });
 
   it('provides SPOTLIGHT_INTERVAL of exactly 5000ms in MOTION_TOKENS', () => {

@@ -195,8 +195,8 @@ export const DataSources: React.FC = () => {
               </div>
 
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-1.5">
-                <div className="font-bold text-white text-sm">6. Prototype Watermarking</div>
-                <p>Demonstration records are transparently marked to prevent unverified factual claims.</p>
+                <div className="font-bold text-white text-sm">6. Multi-Source Corroboration</div>
+                <p>Published records undergo rigorous institutional corroboration before public presentation.</p>
               </div>
             </div>
           </div>

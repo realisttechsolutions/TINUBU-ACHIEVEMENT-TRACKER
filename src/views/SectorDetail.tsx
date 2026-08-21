@@ -5,7 +5,6 @@ import { useParams, Link, useNavigate } from "@/lib/navigation";
 import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import AchievementCard from "@/components/achievements/AchievementCard";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { 
   ArrowLeft, 
@@ -55,7 +54,6 @@ export const SectorDetail: React.FC = () => {
         id: a.id,
         title: a.title,
         status: a.statusLabel,
-        verification_status: a.verificationStatus,
         lead_mda: a.leadMda,
         date: a.date,
         summary: a.summary
@@ -94,9 +92,6 @@ export const SectorDetail: React.FC = () => {
               <span>Download Sector Dataset (CSV)</span>
             </Button>
           </div>
-
-          {/* Prototype Demo Banner */}
-          {sector.isDemo && <DemoWatermark />}
 
           {/* Sector Hero Header Card */}
           <div className="p-6 sm:p-10 rounded-3xl bg-gov-navy text-white border border-gov-gold/30 shadow-2xl space-y-6 relative overflow-hidden">
@@ -173,7 +168,7 @@ export const SectorDetail: React.FC = () => {
               }`}
             >
               <Award className="h-4 w-4" />
-              <span>Verified Achievements ({sectorAchievements.length})</span>
+              <span>Achievements ({sectorAchievements.length})</span>
             </button>
 
             <button

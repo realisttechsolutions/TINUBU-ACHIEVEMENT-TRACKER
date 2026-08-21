@@ -1,11 +1,19 @@
 import React from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { deriveGeographicScope, getGeographicRelevanceRank } from "@/utils/geographyScope";
-import { dataAdapter } from "@/adapters/dataAdapter";
+import { dataAdapter, hydrateDataAdapter } from "@/adapters/dataAdapter";
+import { testPublicSnapshot } from "@/__tests__/testFixtures";
 import ScopeBadge from "@/components/common/ScopeBadge";
 
 describe("Geographic Scope Truth Utility", () => {
+  beforeEach(() => {
+    hydrateDataAdapter(testPublicSnapshot);
+  });
+
+  afterEach(() => {
+    hydrateDataAdapter(null);
+  });
   it("classifies nationwide policies correctly as nationwide", () => {
     const scopeNelfund = deriveGeographicScope({
       title: "National Student Loan Scheme (NELFUND)",
@@ -81,6 +89,14 @@ describe("Geographic Scope Truth Utility", () => {
 });
 
 describe("State Record Breakdown & Prioritized Relevancy in Data Adapter", () => {
+  beforeEach(() => {
+    hydrateDataAdapter(testPublicSnapshot);
+  });
+
+  afterEach(() => {
+    hydrateDataAdapter(null);
+  });
+
   it("returns truthful breakdown counts without losing nationwide records", () => {
     const breakdown = dataAdapter.getStateRecordBreakdown("Kaduna");
 

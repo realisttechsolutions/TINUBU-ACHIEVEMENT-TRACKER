@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { 
   Download, 

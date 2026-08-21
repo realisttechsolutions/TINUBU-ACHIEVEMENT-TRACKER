@@ -22,7 +22,7 @@ export const AchievementSourcesCard: React.FC<AchievementSourcesCardProps> = ({
           </h3>
         </div>
         <span className="text-xs text-gov-slate font-medium">
-          Verified as of: <strong className="text-gov-navy dark:text-white">{verificationDate}</strong>
+          Published as of: <strong className="text-gov-navy dark:text-white">{verificationDate}</strong>
         </span>
       </div>
 

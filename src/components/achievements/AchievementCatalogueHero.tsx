@@ -15,7 +15,7 @@ export const AchievementCatalogueHero: React.FC<AchievementCatalogueHeroProps> =
       action={{ text: "Explore All Achievements", href: "#catalogue-grid" }}
       backgroundImage="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
       highlightStats={[
-        { value: `${totalAchievementsCount}`, label: "Verified Milestones" },
+        { value: `${totalAchievementsCount}`, label: "Published Milestones" },
         { value: "100%", label: "Gazette & Primary Source" },
         { value: "36 + FCT", label: "National Reach" }
       ]}

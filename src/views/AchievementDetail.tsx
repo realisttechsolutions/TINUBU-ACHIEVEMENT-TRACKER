@@ -6,7 +6,6 @@ import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import DataClassificationBadge from "@/components/common/DataClassificationBadge";
 import SourceBadge from "@/components/common/SourceBadge";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import ScopeBadge from "@/components/common/ScopeBadge";
 import CitizenImpactSection from "@/components/impact/CitizenImpactSection";
 import { dataAdapter } from "@/adapters/dataAdapter";
@@ -150,9 +149,6 @@ export const AchievementDetail: React.FC = () => {
             </div>
           </div>
 
-          {/* Prototype Demo Watermark Banner */}
-          {achievement.isDemo && <DemoWatermark />}
-
           {/* Main Record Header Card */}
           <div className="p-6 sm:p-10 rounded-3xl bg-white dark:bg-gov-darkSurface border border-gov-border shadow-md space-y-6">
             {/* Top Badges Bar */}
@@ -160,7 +156,6 @@ export const AchievementDetail: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <StatusBadge status={achievement.status} size="md" />
                 <ScopeBadge scopeInfo={achievement.scopeInfo} statesCovered={achievement.statesCovered} size="md" />
-                <DataClassificationBadge type="verificationStatus" value={achievement.verificationStatus} size="md" />
                 <DataClassificationBadge type="valueNature" value={achievement.dataValueNature} size="md" />
               </div>
 
@@ -324,7 +319,7 @@ export const AchievementDetail: React.FC = () => {
                   <span>Atomic Evidence Citations</span>
                 </div>
                 <h3 className="text-lg font-bold font-display text-gov-navy dark:text-white">
-                  Verified Claims & Primary Source Documents
+                  Evidence Claims & Supporting Sources
                 </h3>
               </div>
               <span className="text-xs font-semibold text-gov-slate">
@@ -342,7 +337,6 @@ export const AchievementDetail: React.FC = () => {
                     <span className="font-bold text-gov-navy dark:text-white">
                       Claim {index + 1} ({claim.claimType})
                     </span>
-                    <DataClassificationBadge type="verificationStatus" value={claim.verificationStatus} size="sm" />
                   </div>
 
                   <p className="text-xs sm:text-sm text-gov-navy dark:text-gray-200 font-medium leading-relaxed">

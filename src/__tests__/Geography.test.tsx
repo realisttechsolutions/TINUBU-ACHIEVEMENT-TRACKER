@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { hydrateDataAdapter } from "@/adapters/dataAdapter";
+import { testPublicSnapshot } from "@/__tests__/testFixtures";
 import ImpactMapPage from "@/views/ImpactMapPage";
 import StatesCatalogue from "@/views/StatesCatalogue";
 import StateDetail from "@/views/StateDetail";
@@ -24,6 +26,13 @@ const renderWithProviders = (ui: React.ReactElement, initialEntries: string[]) =
 };
 
 describe("Geographic Intelligence Data Architecture", () => {
+  beforeEach(() => {
+    hydrateDataAdapter(testPublicSnapshot);
+  });
+
+  afterEach(() => {
+    hydrateDataAdapter(null);
+  });
   it("registers all 36 Nigerian States plus FCT Abuja (37 units total)", () => {
     const states = getAllStates();
     expect(states.length).toBe(37);

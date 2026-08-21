@@ -18,7 +18,6 @@ export const AchievementsCatalogue: React.FC = () => {
     publicGroup: searchParams.get("group") || "all",
     sectorId: searchParams.get("sector") || "all",
     status: searchParams.get("status") || "all",
-    verificationStatus: searchParams.get("verification") || "all",
     state: searchParams.get("state") || "all",
     year: searchParams.get("year") || "all",
     sortBy: (searchParams.get("sort") as any) || "newest"
@@ -48,7 +47,6 @@ export const AchievementsCatalogue: React.FC = () => {
       publicGroup: "all",
       sectorId: "all",
       status: "all",
-      verificationStatus: "all",
       state: "all",
       year: "all",
       sortBy: "newest"
@@ -61,7 +59,6 @@ export const AchievementsCatalogue: React.FC = () => {
       searchQuery: filters.searchQuery,
       sectorId: filters.sectorId,
       status: filters.status,
-      verificationStatus: filters.verificationStatus,
       state: filters.state,
       year: filters.year,
       sortBy: filters.sortBy
@@ -76,7 +73,6 @@ export const AchievementsCatalogue: React.FC = () => {
         sector: a.sectorName,
         group: a.publicNavigationGroupLabel,
         status: a.statusLabel,
-        verification_status: a.verificationStatus,
         lead_mda: a.leadMda,
         states: a.statesCovered.join("; "),
         date: a.date,
@@ -106,7 +102,7 @@ export const AchievementsCatalogue: React.FC = () => {
               <div className="space-y-2 max-w-3xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-gov-gold/40 text-gov-gold text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="h-3.5 w-3.5 text-gov-emerald" />
-                  <span>Verified National Progress Record • 2023 — 2026</span>
+                  <span>Official National Progress Record • 2023 — 2026</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">

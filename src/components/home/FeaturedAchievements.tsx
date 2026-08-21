@@ -16,7 +16,7 @@ export const FeaturedAchievements: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gov-gold uppercase tracking-wider">
               <Sparkles className="h-3.5 w-3.5 text-gov-emerald" />
-              <span>{t("featuredAchievements.eyebrow", { defaultValue: "Verified National Progress Highlights" })}</span>
+              <span>{t("featuredAchievements.eyebrow", { defaultValue: "National Progress Highlights" })}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gov-navy dark:text-white font-display">
               {t("featuredAchievements.title", { defaultValue: "Featured Achievement Stories" })}

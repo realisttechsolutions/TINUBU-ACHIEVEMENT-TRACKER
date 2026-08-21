@@ -22,7 +22,7 @@ export const TimelineFilterBar: React.FC<TimelineFilterBarProps> = ({
     { value: "appropriation", label: "Stage 3: Funding Allocated" },
     { value: "implementation", label: "Stage 4: Work Ongoing" },
     { value: "operational", label: "Stage 5: Operational / Live" },
-    { value: "impact", label: "Stage 6: Impact Verified" },
+    { value: "impact", label: "Stage 6: Impact Milestone" },
   ];
 
   const categories: { value: TimelineCategory | "all"; label: string }[] = [
@@ -55,7 +55,7 @@ export const TimelineFilterBar: React.FC<TimelineFilterBarProps> = ({
         {/* Results Counter & Reset */}
         <div className="flex items-center justify-between md:justify-end gap-3 text-xs">
           <span className="text-gov-slate font-medium">
-            Showing <strong className="text-gov-navy dark:text-white">{totalResultsCount}</strong> Verified Events
+            Showing <strong className="text-gov-navy dark:text-white">{totalResultsCount}</strong> Events
           </span>
 
           {(filters.stage !== "all" || filters.category !== "all" || (filters.year && filters.year !== "all") || filters.searchQuery) && (

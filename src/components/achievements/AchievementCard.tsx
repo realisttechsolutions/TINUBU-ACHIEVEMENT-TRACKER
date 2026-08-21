@@ -3,8 +3,6 @@ import { Link } from "@/lib/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ArrowRight, MapPin, Building2, Calendar, Banknote, Users } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
-import DataClassificationBadge from "../common/DataClassificationBadge";
-import DemoWatermark from "../common/DemoWatermark";
 import ScopeBadge from "../common/ScopeBadge";
 import { AchievementViewModel } from "@/adapters/types";
 
@@ -33,12 +31,10 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
         <div className="space-y-2.5 flex-grow min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={status} size="sm" />
-            <DataClassificationBadge type="verificationStatus" value={item.verificationStatus || "source_confirmed"} size="sm" />
             <ScopeBadge scopeInfo={item.scopeInfo} statesCovered={item.statesCovered} size="sm" />
             <span className="text-[10px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2.5 py-0.5 rounded-full">
               {sectorName}
             </span>
-            {item.isDemo && <DemoWatermark compact />}
           </div>
 
           <Link to={`/achievements/${slug}`}>
@@ -111,7 +107,6 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
               {sectorName.split(' ')[0]}
             </span>
           </div>
-          {item.isDemo && <DemoWatermark compact />}
         </div>
 
         {/* Title */}

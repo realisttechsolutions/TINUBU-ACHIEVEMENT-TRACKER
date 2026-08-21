@@ -5,7 +5,6 @@ import { Link } from "@/lib/navigation";
 import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import SourceBadge from "@/components/common/SourceBadge";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { 
   Clock, 
@@ -212,7 +211,6 @@ export const TimelinePage: React.FC = () => {
                         <span className="text-xs font-bold text-gov-emerald">
                           {event.eventTypeLabel}
                         </span>
-                        {event.isDemo && <DemoWatermark compact />}
                       </div>
                     </div>
 

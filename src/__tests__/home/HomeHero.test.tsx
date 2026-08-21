@@ -2,6 +2,8 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import HomeHero from '@/components/home/HomeHero';
+import { hydrateDataAdapter } from '@/adapters/dataAdapter';
+import { testPublicSnapshot } from '@/__tests__/testFixtures';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 
 // Mock navigation
@@ -33,8 +35,11 @@ vi.mock('@/lib/animations', () => ({
     STANDARD: 0.35,
     SLOW: 0.6,
     ROTATION_INTERVAL: 6000,
+    SPOTLIGHT_INTERVAL: 5000,
   },
   prefersReducedMotion: () => false,
+  formatCompactNumber: (val: number) => String(val),
+  formatCurrencyAbbreviated: (val: number) => `N${val}`,
 }));
 
 const renderWithProviders = (ui: React.ReactElement) => {
@@ -48,10 +53,12 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('PTAT HomeHero Component', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    hydrateDataAdapter(testPublicSnapshot);
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    hydrateDataAdapter(null);
   });
 
   it('renders stable H1 and official mandate eyebrow pill', () => {

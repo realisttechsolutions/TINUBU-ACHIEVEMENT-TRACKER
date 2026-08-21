@@ -10,12 +10,17 @@ export const ReportsResearchCTA: React.FC = () => {
   const datasets = dataAdapter.getDatasets().slice(0, 3);
 
   const handleDownloadDemoCsv = (dsTitle: string) => {
+    const records = dataAdapter.getAchievements().slice(0, 5);
     dataAdapter.exportToCsv(
-      [
-        { record_id: "ACH-001", title: "NELFUND Student Loan Scheme", sector: "Education", status: "Operational", verified_date: "2024-05-24" },
-        { record_id: "ACH-002", title: "Lagos-Calabar Coastal Highway", sector: "Infrastructure", status: "Implementation Ongoing", verified_date: "2024-03-01" },
-        { record_id: "ACH-003", title: "Electricity Act 2023 Devolution", sector: "Power", status: "Operational", verified_date: "2023-06-09" }
-      ],
+      records.map(r => ({
+        record_id: r.id,
+        title: r.title,
+        sector: r.sectorName,
+        status: r.statusLabel,
+        lead_mda: r.leadMda,
+        date: r.date,
+        summary: r.summary
+      })),
       `${dsTitle.toLowerCase().replace(/[^a-z0-9]/g, '_')}_dataset`
     );
   };

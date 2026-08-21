@@ -8,7 +8,7 @@ export interface FilterState {
   publicGroup: string;
   sectorId: string;
   status: string;
-  verificationStatus: string;
+  verificationStatus?: string;
   state: string;
   year: string;
   sortBy: 'newest' | 'oldest' | 'title' | 'status';
@@ -36,7 +36,6 @@ export const AchievementFilterBar: React.FC<AchievementFilterBarProps> = ({
     filters.publicGroup !== "all" ||
     filters.sectorId !== "all" ||
     filters.status !== "all" ||
-    filters.verificationStatus !== "all" ||
     filters.state !== "all" ||
     filters.year !== "all";
 
@@ -103,7 +102,7 @@ export const AchievementFilterBar: React.FC<AchievementFilterBarProps> = ({
       </div>
 
       {/* Secondary Multi-Faceted Filters */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-gov-border/60 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-gov-border/60 text-xs">
         {/* State Filter */}
         <div>
           <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">State / FCT</label>
@@ -118,22 +117,6 @@ export const AchievementFilterBar: React.FC<AchievementFilterBarProps> = ({
                 {st.name} ({st.geopoliticalZone})
               </option>
             ))}
-          </select>
-        </div>
-
-        {/* Verification Status */}
-        <div>
-          <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">Verification</label>
-          <select
-            value={filters.verificationStatus}
-            onChange={(e) => onFilterChange({ verificationStatus: e.target.value })}
-            className="w-full h-9 px-2.5 rounded-lg border border-gov-border bg-gov-canvas dark:bg-gov-darkSurface text-xs text-gov-navy dark:text-white cursor-pointer"
-          >
-            <option value="all">All Verification Tiers</option>
-            <option value="source_confirmed">Source Confirmed</option>
-            <option value="independently_corroborated">Independently Corroborated</option>
-            <option value="cross_referenced">Cross Referenced</option>
-            <option value="under_review">Under Review</option>
           </select>
         </div>
 
@@ -176,7 +159,7 @@ export const AchievementFilterBar: React.FC<AchievementFilterBarProps> = ({
             {totalResultsCount}
           </span>
           <span className="text-gov-slate">
-            verified record{totalResultsCount === 1 ? "" : "s"} match criteria
+            record{totalResultsCount === 1 ? "" : "s"} match your filters
           </span>
 
           {hasActiveFilters && (

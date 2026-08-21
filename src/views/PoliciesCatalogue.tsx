@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { FileText, Search, ShieldCheck, Scale, Calendar, Building2, FileSpreadsheet, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -124,7 +123,6 @@ export const PoliciesCatalogue: React.FC = () => {
                         {pol.policyTypeLabel}
                       </span>
                     </div>
-                    {pol.isDemo && <DemoWatermark compact />}
                   </div>
 
                   <h3 className="text-lg font-bold font-display text-gov-navy dark:text-white leading-snug">

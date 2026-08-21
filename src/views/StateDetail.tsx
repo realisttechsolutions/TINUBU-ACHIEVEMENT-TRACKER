@@ -6,7 +6,6 @@ import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
 import ScopeBadge from "@/components/common/ScopeBadge";
 import AchievementCard from "@/components/achievements/AchievementCard";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { 
   MapPin, 
@@ -79,7 +78,6 @@ export const StateDetail: React.FC = () => {
         scope: a.scopeInfo?.label || a.geographicScope,
         sector: a.sectorName,
         status: a.statusLabel,
-        verification_status: a.verificationStatus,
         lead_mda: a.leadMda,
         date: a.date,
         summary: a.summary
@@ -118,9 +116,6 @@ export const StateDetail: React.FC = () => {
               <span>Export {state.name} Dataset (CSV)</span>
             </Button>
           </div>
-
-          {/* Prototype Demo Banner */}
-          {state.isDemo && <DemoWatermark />}
 
           {/* State Hero Profile Card */}
           <div className="p-6 sm:p-10 rounded-3xl bg-gov-navy text-white border border-gov-gold/30 shadow-2xl space-y-6 relative overflow-hidden">
@@ -266,7 +261,7 @@ export const StateDetail: React.FC = () => {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold font-display text-gov-navy dark:text-white">
                 {selectedScopeTab === 'all' && `All Records Relevant to ${state.name} State`}
-                {selectedScopeTab === 'state_specific' && `${state.name}-Specific Verified Records`}
+                {selectedScopeTab === 'state_specific' && `${state.name}-Specific Records`}
                 {selectedScopeTab === 'multi_state' && `Multi-State & Corridor Projects Involving ${state.name}`}
                 {selectedScopeTab === 'nationwide' && `Nationwide Programmes Active in ${state.name}`}
               </h2>

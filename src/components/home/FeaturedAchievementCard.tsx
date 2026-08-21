@@ -1,8 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "@/lib/navigation";
 import { ArrowRight, MapPin, Building2 } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
-import DataClassificationBadge from "../common/DataClassificationBadge";
 import SourceBadge from "../common/SourceBadge";
 import { AchievementItemConfig } from "@/data/home/homepage.config";
 
@@ -31,7 +30,6 @@ export const FeaturedAchievementCard: React.FC<FeaturedAchievementCardProps> = (
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gov-border/60 pb-2">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <StatusBadge status={item.status} size="sm" />
-                <DataClassificationBadge classification={item.classification} size="sm" />
               </div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-gov-gold bg-gov-navy px-2 py-0.5 rounded">
                 {item.sector}

@@ -3,8 +3,6 @@
 import React, { useState, useMemo } from "react";
 import PageHead from "@/components/SEO/PageHead";
 import StatusBadge from "@/components/common/StatusBadge";
-import DataClassificationBadge from "@/components/common/DataClassificationBadge";
-import DemoWatermark from "@/components/common/DemoWatermark";
 import { dataAdapter } from "@/adapters/dataAdapter";
 import { 
   Database, 
@@ -29,7 +27,6 @@ export const DataExplorer: React.FC = () => {
   const [sectorFilter, setSectorFilter] = useState("all");
   const [stateFilter, setStateFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [verificationFilter, setVerificationFilter] = useState("all");
   const [yearFilter, setYearFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copied, setCopied] = useState(false);
@@ -39,17 +36,15 @@ export const DataExplorer: React.FC = () => {
       sectorId: sectorFilter,
       state: stateFilter,
       status: statusFilter,
-      verificationStatus: verificationFilter,
       year: yearFilter,
       searchQuery: searchQuery
     });
-  }, [sectorFilter, stateFilter, statusFilter, verificationFilter, yearFilter, searchQuery]);
+  }, [sectorFilter, stateFilter, statusFilter, yearFilter, searchQuery]);
 
   const handleReset = () => {
     setSectorFilter("all");
     setStateFilter("all");
     setStatusFilter("all");
-    setVerificationFilter("all");
     setYearFilter("all");
     setSearchQuery("");
   };
@@ -63,9 +58,6 @@ export const DataExplorer: React.FC = () => {
         group: r.publicNavigationGroupLabel,
         record_type: r.recordTypeLabel,
         status: r.statusLabel,
-        data_nature: r.dataValueNature,
-        source_origin: r.sourceOrigin,
-        verification_status: r.verificationStatus,
         lead_mda: r.leadMda,
         states: r.statesCovered.join("; "),
         date: r.date,
@@ -224,28 +216,10 @@ export const DataExplorer: React.FC = () => {
                 </select>
               </div>
 
-              {/* Verification */}
-              <div>
-                <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">
-                  4. Verification Tier
-                </label>
-                <select
-                  value={verificationFilter}
-                  onChange={(e) => setVerificationFilter(e.target.value)}
-                  className="w-full h-10 px-3 rounded-xl border border-gov-border bg-gov-canvas dark:bg-gov-navy/20 text-xs font-semibold text-gov-navy dark:text-white cursor-pointer"
-                >
-                  <option value="all">All Verification Tiers</option>
-                  <option value="source_confirmed">Source Confirmed</option>
-                  <option value="independently_corroborated">Independently Corroborated</option>
-                  <option value="cross_referenced">Cross Referenced</option>
-                  <option value="under_review">Under Review</option>
-                </select>
-              </div>
-
               {/* Mandate Year */}
               <div>
                 <label className="block text-[11px] font-bold text-gov-slate uppercase mb-1">
-                  5. Mandate Period
+                  4. Mandate Period
                 </label>
                 <select
                   value={yearFilter}
@@ -302,7 +276,6 @@ export const DataExplorer: React.FC = () => {
                     <th className="p-4">Title & Plain Summary</th>
                     <th className="p-4">Sector</th>
                     <th className="p-4">Status</th>
-                    <th className="p-4">Verification</th>
                     <th className="p-4">Lead Agency</th>
                     <th className="p-4 text-right">Action</th>
                   </tr>
@@ -328,9 +301,6 @@ export const DataExplorer: React.FC = () => {
                       </td>
                       <td className="p-4 whitespace-nowrap">
                         <StatusBadge status={row.status} size="sm" />
-                      </td>
-                      <td className="p-4 whitespace-nowrap">
-                        <DataClassificationBadge type="verificationStatus" value={row.verificationStatus} size="sm" />
                       </td>
                       <td className="p-4 text-gov-slate whitespace-nowrap">
                         {row.leadMda}
