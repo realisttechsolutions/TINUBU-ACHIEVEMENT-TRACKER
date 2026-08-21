@@ -131,12 +131,28 @@ export class PTATAIRetrievalService {
       };
 
       const dynamicMatched = matchEntitiesFromRecords(trimmedQuery, combinedRecords);
-      const entityNames = dynamicMatched.map((e) => e.name);
+      const entityNames =
+        dynamicMatched.length > 0
+          ? dynamicMatched.map((e) => e.name)
+          : [comp.first, comp.second];
 
-      return assembleAnswerContext(trimmedQuery, intent, constraints, entityNames, combinedResults, {
-        firstResults,
-        secondResults,
-      });
+      const cleanComparisonConstraints = {
+        ...constraints,
+        keywords: undefined,
+        entityName: undefined,
+      };
+
+      return assembleAnswerContext(
+        trimmedQuery,
+        intent,
+        cleanComparisonConstraints,
+        entityNames,
+        combinedResults,
+        {
+          firstResults,
+          secondResults,
+        }
+      );
     }
 
     // 3. Dynamic Database-Driven Retrieval

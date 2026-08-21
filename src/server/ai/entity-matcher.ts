@@ -1,4 +1,6 @@
 import type { PTATAIRecord } from '../../types/ai.types';
+import { buildGenericAcronymRegex } from './retrieval-engine';
+import { STOP_WORDS } from './intent-classifier';
 
 export interface EntityMatchResult {
   name: string;
@@ -6,13 +8,6 @@ export interface EntityMatchResult {
   recordType: string;
   confidence: number;
 }
-
-const STOP_WORDS = new Set([
-  'what', 'has', 'have', 'had', 'been', 'done', 'doing', 'in', 'tell', 'me', 'about',
-  'something', 'does', 'not', 'contain', 'show', 'which', 'records', 'how', 'much',
-  'who', 'where', 'when', 'the', 'a', 'an', 'of', 'for', 'to', 'and', 'or', 'is',
-  'are', 'was', 'were', 'with', 'tinubu', 'president', 'presidency', 'administration'
-]);
 
 /**
  * Generic string normalization for entity matching.
@@ -54,10 +49,23 @@ export function matchEntitiesFromRecords(query: string, records: PTATAIRecord[])
     } else if (normSummary.includes(cleanQueryPhrase)) {
       score = 0.75;
     } else {
-      // Significant token overlap
+      // Significant token overlap or Generic Acronym Expansion
       if (cleanQueryTokens.length > 0) {
-        const matches = cleanQueryTokens.filter((t) => normTitle.includes(t) || normSlug.includes(t));
-        score = (matches.length / cleanQueryTokens.length) * 0.8;
+        let matchCount = 0;
+        for (const t of cleanQueryTokens) {
+          if (normTitle.includes(t) || normSlug.includes(t)) {
+            matchCount++;
+          } else {
+            const acrPat = buildGenericAcronymRegex(t, 'js');
+            if (acrPat) {
+              const rx = new RegExp(acrPat, 'i');
+              if (rx.test(record.title) || rx.test(record.slug) || rx.test(record.summary)) {
+                matchCount++;
+              }
+            }
+          }
+        }
+        score = (matchCount / cleanQueryTokens.length) * 0.85;
       }
     }
 

@@ -82,6 +82,7 @@ export interface PTATAIRecord {
   publishedAt?: string;
   citizenImpactSummary?: string;
   route: string;
+  rankScore?: number;
 }
 
 export interface PTATAISource {

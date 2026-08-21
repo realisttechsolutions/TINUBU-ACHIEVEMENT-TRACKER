@@ -48,8 +48,14 @@ export class PTATGroundedSynthesisService {
     const retrievalLatencyMs = context.diagnostics.retrievalLatencyMs;
     const vertexCfg = this.vertexClient.getConfig();
 
-    // 2. Pre-Gate Check: If INSUFFICIENT_EVIDENCE, abort model call to prevent hallucinations
-    if (context.answerability === 'INSUFFICIENT_EVIDENCE' || context.records.length === 0) {
+    // 2. Pre-Gate Check (Unsupported-Evidence Boundary & Evidence-Containment Control):
+    // If INSUFFICIENT_EVIDENCE, abort model call to prevent unsupported factual assertions and eliminate token cost
+    if (
+      context.answerability === 'INSUFFICIENT_EVIDENCE' ||
+      context.records.length === 0 ||
+      context.claims.length === 0 ||
+      context.retrievalConfidence.confidenceTier === 'NONE'
+    ) {
       return {
         query: trimmedQuery,
         intent: context.parsedIntent,

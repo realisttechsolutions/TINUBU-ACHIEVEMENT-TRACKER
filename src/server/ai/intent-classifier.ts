@@ -91,7 +91,7 @@ const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   governance: { code: 'governance_public_service', label: 'Governance and Public Service' },
 };
 
-const STOP_WORDS = new Set([
+export const STOP_WORDS = new Set([
   'what', 'has', 'have', 'had', 'been', 'done', 'doing', 'in', 'tell', 'me', 'about',
   'something', 'does', 'not', 'contain', 'show', 'which', 'records', 'how', 'much',
   'who', 'where', 'when', 'the', 'a', 'an', 'of', 'for', 'to', 'and', 'or', 'is',
@@ -104,7 +104,21 @@ const STOP_WORDS = new Set([
   'programme', 'programmes', 'program', 'programs', 'disbursed', 'disbursement',
   'spent', 'spending', 'expenditure', 'commitment', 'commitments', 'budget', 'cost',
   'benefited', 'beneficiary', 'beneficiaries', 'insufficient', 'primary', 'source', 'sources',
-  'reform', 'reforms', 'centre', 'centres'
+  'reform', 'reforms', 'centre', 'centres', 'ptat', 'according', 'current', 'currently',
+  'government', 'governments', 'public', 'latest', 'recent', 'today', 'now', 'prime',
+  'minister', 'ministers', 'stock', 'stocks', 'prices', 'price', 'share', 'shares',
+  'database', 'system', 'app', 'application', 'platform', 'tracker', 'tracking',
+  'search', 'lookup', 'info', 'information', 'data', 'query', 'question', 'answer',
+  'list', 'listing', 'report', 'reported', 'reporting', 'record', 'recording',
+  'did', 'do', 'can', 'could', 'would', 'should', 'will', 'shall', 'may', 'might', 'must',
+  'implement', 'implements', 'implemented', 'implementing', 'implementation',
+  'technical', 'specifications', 'specification', 'spec', 'specs', 'feature', 'features',
+  'award', 'awards', 'won', 'win', 'winning', 'winner', 'picture', 'pictures',
+  'block', 'blocks', 'reward', 'rewards', 'final', 'finals', 'cup', 'cups', 'world',
+  'results', 'result', 'election', 'elections', 'parliament', 'parliaments',
+  'speed', 'high', 'construction', 'develop', 'development', 'facility', 'facilities',
+  'scheme', 'schemes', 'value', 'values', 'index', 'indices', 'rate', 'rates',
+  'ad', 'bc', 'era', 'centuries', 'century'
 ]);
 
 export function classifyIntentAndExtractConstraints(query: string): ClassifiedIntent {
@@ -276,7 +290,8 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     if (STOP_WORDS.has(token)) continue;
     if (matchedStateToken && (token === matchedStateToken || matchedStateToken.includes(token))) continue;
     if (matchedSectorToken && (token === matchedSectorToken || matchedSectorToken.includes(token))) continue;
-    if (token === '2023' || token === '2024' || token === '2025' || token === '2026') continue;
+    if (/^\d+$/.test(token)) continue;
+    if (token.length <= 2) continue;
 
     cleanTokens.push(token);
   }

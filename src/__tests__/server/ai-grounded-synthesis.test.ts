@@ -401,4 +401,127 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
       expect(sys).toContain('No recorded financial observation in PTAT" must NEVER be converted to "₦0 spent"');
     });
   });
+
+  describe('8. Generic Unsupported-Query Pre-Gate & Evidence-Containment Boundary', () => {
+    it('bypasses Vertex AI model invocation when retrieval produces zero records (modelLatencyMs = 0, tokens = 0)', async () => {
+      const mockEmptyContext: PTATAIContext = {
+        query: 'What is the average surface temperature of Mars according to PTAT?',
+        parsedIntent: 'ENTITY_LOOKUP',
+        parsedConstraints: { keywords: ['mars'] },
+        matchedEntities: [],
+        records: [],
+        claims: [],
+        sources: [],
+        financialRecords: [],
+        beneficiaryRecords: [],
+        timelineEvents: [],
+        geographies: [],
+        citationMap: [],
+        recordLinks: [],
+        retrievalConfidence: {
+          overallScore: 0,
+          entityMatchScore: 0,
+          constraintMatchScore: 0.8,
+          evidenceCoverageScore: 0,
+          sourceAuthenticityScore: 0,
+          geographicPrecisionScore: 0.8,
+          temporalPrecisionScore: 0.8,
+          confidenceTier: 'NONE',
+          explanation: 'No matching public PTAT evidence found for this query.',
+        },
+        answerability: 'INSUFFICIENT_EVIDENCE',
+        answerabilityReason: 'PTAT does not contain verified records matching this request.',
+        diagnostics: {
+          retrievalLatencyMs: 12,
+          recordsScanned: 0,
+          claimsScanned: 0,
+          sourcesScanned: 0,
+          dataTimestamp: new Date().toISOString(),
+        },
+      };
+
+      const mockDb: QueryExecutor = {
+        query: vi.fn(),
+      };
+
+      const synthesisService = new PTATGroundedSynthesisService(mockDb, {
+        project: 'tinubu-achievement-stg',
+        location: 'global',
+        model: 'gemini-3.6-flash',
+      });
+
+      const generateSpy = vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedContent');
+      vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue(mockEmptyContext);
+
+      // Execute synthesis
+      const answer = await synthesisService.answerQuestion(mockEmptyContext.query);
+
+      expect(generateSpy).not.toHaveBeenCalled();
+      expect(answer.answerability).toBe('INSUFFICIENT_EVIDENCE');
+      expect(answer.modelMetadata.modelLatencyMs).toBe(0);
+      expect(answer.modelMetadata.inputTokens).toBe(0);
+      expect(answer.modelMetadata.outputTokens).toBe(0);
+      expect(answer.citations).toHaveLength(0);
+      expect(answer.isGrounded).toBe(true);
+    });
+
+    it('bypasses Vertex AI when confidenceTier is NONE even if incidental records exist', async () => {
+      const mockIncidentalContext: PTATAIContext = {
+        query: 'What policies did the Roman Empire implement in 100 AD?',
+        parsedIntent: 'POLICY_QUERY',
+        parsedConstraints: { keywords: ['roman', 'empire'] },
+        matchedEntities: [],
+        records: [],
+        claims: [],
+        sources: [],
+        financialRecords: [],
+        beneficiaryRecords: [],
+        timelineEvents: [],
+        geographies: [],
+        citationMap: [],
+        recordLinks: [],
+        retrievalConfidence: {
+          overallScore: 0,
+          entityMatchScore: 0,
+          constraintMatchScore: 0.8,
+          evidenceCoverageScore: 0,
+          sourceAuthenticityScore: 0,
+          geographicPrecisionScore: 0.8,
+          temporalPrecisionScore: 0.8,
+          confidenceTier: 'NONE',
+          explanation: 'No matching public PTAT evidence found for this query.',
+        },
+        answerability: 'INSUFFICIENT_EVIDENCE',
+        answerabilityReason: 'PTAT does not contain verified records matching this request.',
+        diagnostics: {
+          retrievalLatencyMs: 15,
+          recordsScanned: 0,
+          claimsScanned: 0,
+          sourcesScanned: 0,
+          dataTimestamp: new Date().toISOString(),
+        },
+      };
+
+      const mockDb: QueryExecutor = {
+        query: vi.fn(),
+      };
+
+      const synthesisService = new PTATGroundedSynthesisService(mockDb, {
+        project: 'tinubu-achievement-stg',
+        location: 'global',
+        model: 'gemini-3.6-flash',
+      });
+
+      const generateSpy = vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedContent');
+      vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue(mockIncidentalContext);
+
+      const answer = await synthesisService.answerQuestion(mockIncidentalContext.query);
+
+      expect(generateSpy).not.toHaveBeenCalled();
+      expect(answer.answerability).toBe('INSUFFICIENT_EVIDENCE');
+      expect(answer.modelMetadata.modelLatencyMs).toBe(0);
+      expect(answer.modelMetadata.inputTokens).toBe(0);
+      expect(answer.citations).toHaveLength(0);
+    });
+  });
 });

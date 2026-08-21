@@ -62,8 +62,11 @@ export function assembleAnswerContext(
   let entityMatchScore = 0.5;
   if (matchedEntities.length > 0) {
     entityMatchScore = 1.0;
-  } else if (!constraints.entityName) {
+  } else if (!constraints.entityName && (!constraints.keywords || constraints.keywords.length === 0)) {
     entityMatchScore = 0.8;
+  } else {
+    const hasRankedEntityMatch = records.some((r) => (r.rankScore || (r as any).rank_score || 0) >= 35);
+    entityMatchScore = hasRankedEntityMatch ? 0.7 : 0.0;
   }
 
   let constraintMatchScore = 0.5;
@@ -92,7 +95,7 @@ export function assembleAnswerContext(
   );
 
   let confidenceTier: PTATAIConfidence['confidenceTier'] = 'LOW';
-  if (records.length === 0) {
+  if (records.length === 0 || entityMatchScore === 0.0) {
     confidenceTier = 'NONE';
   } else if (overallScore >= 0.8) {
     confidenceTier = 'HIGH';
@@ -101,7 +104,7 @@ export function assembleAnswerContext(
   }
 
   const retrievalConfidence: PTATAIConfidence = {
-    overallScore: records.length === 0 ? 0.0 : overallScore,
+    overallScore: (records.length === 0 || entityMatchScore === 0.0) ? 0.0 : overallScore,
     entityMatchScore,
     constraintMatchScore,
     evidenceCoverageScore,
@@ -110,7 +113,7 @@ export function assembleAnswerContext(
     temporalPrecisionScore,
     confidenceTier,
     explanation:
-      records.length === 0
+      (records.length === 0 || entityMatchScore === 0.0)
         ? 'No matching public PTAT evidence found for this query.'
         : `High-fidelity grounding based on ${records.length} canonical records, ${claims.length} claims, and ${sources.length} sources.`,
   };
@@ -119,10 +122,10 @@ export function assembleAnswerContext(
   let answerability: AnswerabilityStatus = 'INSUFFICIENT_EVIDENCE';
   let answerabilityReason = 'PTAT does not contain verified records matching this request.';
 
-  if (records.length > 0 && claims.length > 0 && sources.length > 0) {
+  if (confidenceTier !== 'NONE' && records.length > 0 && claims.length > 0 && sources.length > 0) {
     answerability = 'ANSWERABLE';
     answerabilityReason = `Authoritative PTAT evidence retrieved: ${records.length} records, ${claims.length} claims, ${sources.length} citations.`;
-  } else if (records.length > 0) {
+  } else if (confidenceTier !== 'NONE' && records.length > 0) {
     answerability = 'PARTIALLY_ANSWERABLE';
     answerabilityReason = `PTAT records located (${records.length}), but claim or source documentation is limited.`;
   }

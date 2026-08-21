@@ -114,8 +114,8 @@ export class PTATAIRetrievalEngine {
       )`);
     }
 
-    // Record Type Filter
-    if (constraints.recordType) {
+    // Record Type Filter (hard filter when no specific entity/keyword is searched)
+    if (constraints.recordType && (!constraints.keywords || constraints.keywords.length === 0)) {
       clauses.push(`record_type = ${bind(constraints.recordType)}`);
     }
 
@@ -160,18 +160,33 @@ export class PTATAIRetrievalEngine {
         const weight = isPhrase ? 15 : 10;
         const p = bind(term);
 
-        textConditions.push(`title ILIKE ('%' || ${p} || '%')`);
-        textConditions.push(`summary ILIKE ('%' || ${p} || '%')`);
-        textConditions.push(`slug ILIKE ('%' || ${p} || '%')`);
-        textConditions.push(`to_tsvector('english', title || ' ' || summary) @@ plainto_tsquery('english', ${p})`);
-        textConditions.push(`EXISTS (
-          SELECT 1 FROM jsonb_array_elements(institutions) AS inst
-          WHERE lower(inst->>'code') = lower(${p}) OR inst->>'name' ILIKE ('%' || ${p} || '%')
-        )`);
+        if (isPhrase) {
+          textConditions.push(`title ILIKE ('%' || ${p} || '%')`);
+          textConditions.push(`summary ILIKE ('%' || ${p} || '%')`);
+          textConditions.push(`slug ILIKE ('%' || ${p} || '%')`);
+          textConditions.push(`to_tsvector('english', title || ' ' || summary) @@ phraseto_tsquery('english', ${p})`);
+          textConditions.push(`EXISTS (
+            SELECT 1 FROM jsonb_array_elements(institutions) AS inst
+            WHERE inst->>'name' ILIKE ('%' || ${p} || '%')
+          )`);
 
-        rankScores.push(`CASE WHEN title ILIKE ('%' || ${p} || '%') THEN ${weight * 4} ELSE 0 END`);
-        rankScores.push(`CASE WHEN slug ILIKE ('%' || ${p} || '%') THEN ${weight * 3} ELSE 0 END`);
-        rankScores.push(`CASE WHEN summary ILIKE ('%' || ${p} || '%') THEN ${weight * 2} ELSE 0 END`);
+          rankScores.push(`CASE WHEN title ILIKE ('%' || ${p} || '%') THEN ${weight * 4} ELSE 0 END`);
+          rankScores.push(`CASE WHEN slug ILIKE ('%' || ${p} || '%') THEN ${weight * 3} ELSE 0 END`);
+          rankScores.push(`CASE WHEN summary ILIKE ('%' || ${p} || '%') THEN ${weight * 2} ELSE 0 END`);
+        } else {
+          textConditions.push(`title ~* ('\\m' || ${p} || '\\M')`);
+          textConditions.push(`summary ~* ('\\m' || ${p} || '\\M')`);
+          textConditions.push(`slug ~* ('\\m' || ${p} || '\\M')`);
+          textConditions.push(`to_tsvector('english', title || ' ' || summary) @@ plainto_tsquery('english', ${p})`);
+          textConditions.push(`EXISTS (
+            SELECT 1 FROM jsonb_array_elements(institutions) AS inst
+            WHERE lower(inst->>'code') = lower(${p}) OR inst->>'name' ~* ('\\m' || ${p} || '\\M')
+          )`);
+
+          rankScores.push(`CASE WHEN title ~* ('\\m' || ${p} || '\\M') THEN ${weight * 4} ELSE 0 END`);
+          rankScores.push(`CASE WHEN slug ~* ('\\m' || ${p} || '\\M') THEN ${weight * 3} ELSE 0 END`);
+          rankScores.push(`CASE WHEN summary ~* ('\\m' || ${p} || '\\M') THEN ${weight * 2} ELSE 0 END`);
+        }
 
         // Generic Data-Driven Acronym Matching
         const acrRegex = buildGenericAcronymRegex(term);
@@ -288,6 +303,7 @@ export class PTATAIRetrievalEngine {
         publishedAt: r.published_at ? new Date(r.published_at).toISOString() : undefined,
         citizenImpactSummary: r.public_description ? sanitizePublicPresentationText(String(r.public_description)) : undefined,
         route: `/records/${r.slug}`,
+        rankScore: Number(r.rank_score || 0),
       };
     });
 
