@@ -58,26 +58,73 @@ export function formatExactDecimal(value: string): string {
 
 export function sanitizePublicPresentationText(text: string | null | undefined): string {
   if (!text) return '';
-  const result = String(text)
-    .replace(/for the USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*/gi, 'for the ')
-    .replace(/of USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*approved/gi, 'approved')
-    .replace(/approval of USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*/gi, 'approval of ')
-    .replace(/Over USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*in\s*/gi, '')
-    .replace(/unlocking over USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*in\s*/gi, 'unlocking ')
-    .replace(/recovered to USD\s*[\d.]+\s*(?:billion|million|b|m)?\s*following/gi, 'strengthened following')
-    .replace(/balance reported at USD\s*[\d.]+\s*(?:billion|million|b|m)?/gi, 'balance reported')
-    .replace(/balance of USD\s*[\d.]+\s*(?:billion|million|b|m)?/gi, 'balance')
+  let result = String(text);
+
+  // 1. Contextual compound phrase cleanups
+  result = result
+    .replace(/for the (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*/gi, 'for the ')
+    .replace(/of (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*approved/gi, 'approved')
+    .replace(/approval of (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*/gi, 'approval of ')
+    .replace(/Over (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*in\s*/gi, '')
+    .replace(/over (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*in\s*/gi, '')
+    .replace(/unlocking over (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*in\s*/gi, 'unlocking ')
+    .replace(/recovered to (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?\s*following/gi, 'strengthened following')
+    .replace(/balance reported at (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?/gi, 'balance reported')
+    .replace(/balance of (?:USD|US\$|\$)\s*[\d.]+\s*(?:billion|million|trillion|b|m|t|bn)?/gi, 'balance')
+
+    // 2. Comparative exports & macroeconomic expansion phrases
+    .replace(/reports\s+(\d{4})\s+non-oil\s+exports\s+of\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m)?,\s*up\s+from\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m)?\s+in\s+(\d{4}),/gi, 'reports $1 non-oil exports growth compared to $2,')
+    .replace(/records\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m)?\s+non-oil\s+exports/gi, 'records non-oil exports expansion')
+    .replace(/non-oil\s+export\s+earnings\s+were\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m)?\.?/gi, 'non-oil export earnings recorded substantial expansion.')
+
+    // 3. Investment commitments & sector expansions
+    .replace(/commitments\s+exceed\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m|b)?\s+after/gi, 'commitments expand significantly after')
+    .replace(/committed\s+more\s+than\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m|b)?\s+in\s+fresh\s+investments/gi, 'committed substantial fresh investments')
+    .replace(/reported\s+more\s+than\s+(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|bn|m|b)?\s+in\s+fresh/gi, 'reported substantial fresh')
+
+    // 4. Parenthetical dollar expressions where Naira exists (preserve Naira)
+    .replace(/(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s*\(([₦N][\d.,]+\s*(?:trillion|billion|million|t|b|m)?)\)/gi, '$1')
+    .replace(/(?:&\s*|and\s+)?(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s*(?:forfeited|recovered|remitted)/gi, 'forfeited and remitted')
+    .replace(/(?:and\s+|&\s+)(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+/gi, '')
+
+    // 5. Subsidiary bracketed dollar amounts (e.g. ($570M))
+    .replace(/\s*\((?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\)/gi, '')
+
+    // 6. Idiomatic phrases
     .replace(/\bmulti-billion\s+dollar\s+recovery\b/gi, 'recovery')
     .replace(/\bmulti-billion\s+dollar\b/gi, 'foreign exchange')
+    .replace(/\bmulti-million\s+dollar\b/gi, 'major')
     .replace(/\bdollar\s+currency\s+arbitrage\b/gi, 'foreign exchange arbitrage')
-    .replace(/\bUSD\s*(\d+(?:\.\d+)?)\s*(billion|million|trillion|b|m|t)?\b/gi, 'bilateral facility')
-    .replace(/\bUSD\s*(\d+[\d,.]*)\b/gi, 'bilateral facility')
-    .replace(/\bUS\$\s*(\d+[\d,.]*)\b/gi, 'bilateral facility')
-    .replace(/\$\s*(\d+[\d,.]*)\s*(billion|million|trillion|b|m|t)?\b/gi, 'capital facility')
-    .replace(/\bUSD\b/g, 'bilateral')
+    .replace(/\ba\s+(?:\$|USD|US\$)\s*1\s*trillion\s+economy\b/gi, 'a major national economy')
+
+    // 7. Leading title currency amounts & qualifiers
+    .replace(/^(?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+/gi, '')
+    .replace(/under the (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+/gi, 'under the ')
+    .replace(/securing over (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+in\s+/gi, 'securing substantial ')
+    .replace(/secured and approved (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+in\s+/gi, 'secured and approved concessional ')
+    .replace(/pilot mobilises (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\.?/gi, 'pilot successfully mobilises capital.')
+    .replace(/investment value is reported at (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\.?/gi, 'investment value is confirmed.')
+    .replace(/of a (?:\$|USD|US\$)\s*[\d.]+\s*(?:billion|million|trillion|bn|m|b)?\s+/gi, 'of a ')
+
+    // 8. General fallback for remaining foreign currency quantities
+    .replace(/\b(?:USD|US\$)\s*(\d+(?:\.\d+)?)\s*(billion|million|trillion|bn|m|b|t)?\b/gi, '')
+    .replace(/\$\s*(\d+(?:\.\d+)?)\s*(billion|million|trillion|bn|m|b|t)?\b/gi, '')
+    .replace(/\b(\d+(?:\.\d+)?)\s*(billion|million|trillion|bn|m|b|t)?\s*(?:US\s+)?dollars?\b/gi, '')
+    .replace(/\bUSD\b/g, '')
+    .replace(/\bUS\$\b/g, '')
     .replace(/\bdollars?\b/gi, 'foreign exchange')
+
+    // 9. Clean up whitespace, punctuation residue, and double prepositions
     .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([,.:;])/g, '$1')
+    .replace(/,\s*,/g, ',')
+    .replace(/:\s*&/g, ':')
+    .replace(/&\s*&/g, '&')
+    .replace(/\b(in|of|for|at|under|with|to)\s*([,.:;])/gi, '$2')
     .trim();
+
+  // Clean trailing punctuation artifacts like " : " or " & "
+  result = result.replace(/^[:&,\s-]+/, '').replace(/[:&,\s-]+$/, '').trim();
 
   return result.replace(/^[a-z]/, (char) => char.toUpperCase());
 }

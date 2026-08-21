@@ -163,6 +163,56 @@ describe('public data mapping', () => {
     // Greenfield goal - no unverified "major" adjective added:
     const rawGoal = 'Aimed at unlocking over USD 5B in greenfield investments';
     expect(sanitizePublicPresentationText(rawGoal)).toBe('Aimed at unlocking greenfield investments');
+
+    // Regression: ACH-2024-0083 Title ($6.1bn non-oil exports)
+    const rawAch83Title = 'Nigeria records $6.1bn non-oil exports in 2025';
+    const cleanAch83Title = sanitizePublicPresentationText(rawAch83Title);
+    expect(cleanAch83Title).toBe('Nigeria records non-oil exports expansion in 2025');
+    expect(cleanAch83Title).not.toMatch(/\$|USD|dollar|capital facility/i);
+
+    // Regression: ACH-2024-0083 Summary ($6.1bn vs $5.46bn with 8.02m metric tonnes, 281 products, 120 countries)
+    const rawAch83Summary = 'NEPC reports 2025 non-oil exports of $6.1bn, up from $5.46bn in 2024, with 8.02m metric tonnes exported across 281 products to 120 countries.';
+    const cleanAch83Summary = sanitizePublicPresentationText(rawAch83Summary);
+    expect(cleanAch83Summary).toBe('NEPC reports 2025 non-oil exports growth compared to 2024, with 8.02m metric tonnes exported across 281 products to 120 countries.');
+    expect(cleanAch83Summary).not.toMatch(/\$|USD|dollar|capital facility/i);
+    expect(cleanAch83Summary).toContain('8.02m metric tonnes');
+    expect(cleanAch83Summary).toContain('281 products');
+    expect(cleanAch83Summary).toContain('120 countries');
+
+    // Regression: ACH-2024-0089 Title ($1bn telecom commitments)
+    const rawAch89Title = 'Telecom investment commitments exceed $1bn after 2025 regulatory reset';
+    const cleanAch89Title = sanitizePublicPresentationText(rawAch89Title);
+    expect(cleanAch89Title).toBe('Telecom investment commitments expand significantly after 2025 regulatory reset');
+    expect(cleanAch89Title).not.toMatch(/\$|USD|dollar|capital facility/i);
+
+    // Regression: ACH-2024-0089 Summary ($1bn in fresh investments)
+    const rawAch89Summary = 'NCC reports operators committed more than $1bn in fresh investments and deployed more than 2,900 additional capacity/coverage sites within seven months of 2025 regulatory changes.';
+    const cleanAch89Summary = sanitizePublicPresentationText(rawAch89Summary);
+    expect(cleanAch89Summary).toBe('NCC reports operators committed substantial fresh investments and deployed more than 2,900 additional capacity/coverage sites within seven months of 2025 regulatory changes.');
+    expect(cleanAch89Summary).not.toMatch(/\$|USD|dollar|capital facility/i);
+    expect(cleanAch89Summary).toContain('2,900 additional capacity/coverage sites');
+    expect(cleanAch89Summary).toContain('seven months');
+
+    // Regression: PRJ-2024-0068 Title ($400m Stellar Steel Plant)
+    const rawPrj68Title = '$400m Stellar Steel Plant investment reaches groundbreaking stage in Ogun';
+    const cleanPrj68Title = sanitizePublicPresentationText(rawPrj68Title);
+    expect(cleanPrj68Title).toBe('Stellar Steel Plant investment reaches groundbreaking stage in Ogun');
+    expect(cleanPrj68Title).not.toMatch(/\$|USD|dollar|capital facility/i);
+  });
+
+  it('preserves non-currency numbers and quantitative metrics without alteration', () => {
+    expect(sanitizePublicPresentationText('8.02m metric tonnes exported across 281 products to 120 countries')).toBe('8.02m metric tonnes exported across 281 products to 120 countries');
+    expect(sanitizePublicPresentationText('41,307 participants enrolled in skills programme')).toBe('41,307 participants enrolled in skills programme');
+    expect(sanitizePublicPresentationText('1,130 participants completed training')).toBe('1,130 participants completed training');
+    expect(sanitizePublicPresentationText('FHA delivered 100 housing units in Ajoda')).toBe('FHA delivered 100 housing units in Ajoda');
+    expect(sanitizePublicPresentationText('Program launched in 2025 across all states')).toBe('Program launched in 2025 across all states');
+  });
+
+  it('preserves legitimate Naira currency values without alteration', () => {
+    expect(sanitizePublicPresentationText('₦48bn approved for agricultural credit expansion')).toBe('₦48bn approved for agricultural credit expansion');
+    expect(sanitizePublicPresentationText('Disbursement of ₦73bn to state development agencies')).toBe('Disbursement of ₦73bn to state development agencies');
+    expect(sanitizePublicPresentationText('Tax refunds of ₦30.7bn processed')).toBe('Tax refunds of ₦30.7bn processed');
+    expect(sanitizePublicPresentationText('Federal pension contributions reach ₦203bn')).toBe('Federal pension contributions reach ₦203bn');
   });
 
   it('formats public contract values safely for NGN and foreign records', () => {
