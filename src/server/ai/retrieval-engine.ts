@@ -12,7 +12,18 @@ import type {
   RetrievalOptions,
 } from '../../types/ai.types';
 import { sanitizePublicPresentationText, formatPublicFinancialAmount } from './formatters';
-import { ACRONYM_EXPANSIONS } from './intent-classifier';
+
+export function buildGenericAcronymRegex(token: string, mode: 'postgres' | 'js' = 'postgres'): string | null {
+  const clean = token.trim().toLowerCase();
+  if (clean.length < 2 || clean.length > 8) return null;
+  const letters = clean.split('');
+  if (!letters.every((c) => /[a-z0-9]/.test(c))) return null;
+
+  const boundary = mode === 'postgres' ? '\\m' : '\\b';
+  const stopWordsPattern = '(?:\\s+(?:of|and|in|the|for|to|on|at|by|with)\\s+|\\s+|[-_])';
+  const parts = letters.map((l) => `${boundary}${l}[a-z0-9]*`);
+  return parts.join(stopWordsPattern);
+}
 
 export interface RawRetrievalResults {
   records: PTATAIRecord[];
@@ -128,7 +139,7 @@ export class PTATAIRetrievalEngine {
       clauses.push(`EXTRACT(YEAR FROM published_at) = ${bind(constraints.year)}`);
     }
 
-    // Entity / Keyword Filter (Data-driven ranked search across title, summary, slug, institutions)
+    // Entity / Keyword Filter (Data-driven ranked search across title, summary, slug, institutions, acronyms)
     let rankExpr = '0';
     if (constraints.entityId) {
       const entIdParam = bind(constraints.entityId);
@@ -139,15 +150,7 @@ export class PTATAIRetrievalEngine {
 
       const allSearchTerms = new Set<string>();
       if (searchPhrase.trim()) allSearchTerms.add(searchPhrase.trim());
-
-      for (const t of rawTokens) {
-        allSearchTerms.add(t);
-        if (ACRONYM_EXPANSIONS[t]) {
-          for (const exp of ACRONYM_EXPANSIONS[t]) {
-            allSearchTerms.add(exp);
-          }
-        }
-      }
+      for (const t of rawTokens) allSearchTerms.add(t);
 
       const textConditions: string[] = [];
       const rankScores: string[] = [];
@@ -169,6 +172,21 @@ export class PTATAIRetrievalEngine {
         rankScores.push(`CASE WHEN title ILIKE ('%' || ${p} || '%') THEN ${weight * 4} ELSE 0 END`);
         rankScores.push(`CASE WHEN slug ILIKE ('%' || ${p} || '%') THEN ${weight * 3} ELSE 0 END`);
         rankScores.push(`CASE WHEN summary ILIKE ('%' || ${p} || '%') THEN ${weight * 2} ELSE 0 END`);
+
+        // Generic Data-Driven Acronym Matching
+        const acrRegex = buildGenericAcronymRegex(term);
+        if (acrRegex) {
+          const acrParam = bind(acrRegex);
+          textConditions.push(`title ~* ${acrParam}`);
+          textConditions.push(`slug ~* ${acrParam}`);
+          textConditions.push(`EXISTS (
+            SELECT 1 FROM jsonb_array_elements(institutions) AS inst
+            WHERE inst->>'name' ~* ${acrParam} OR lower(inst->>'code') = lower(${p})
+          )`);
+
+          rankScores.push(`CASE WHEN title ~* ${acrParam} THEN 35 ELSE 0 END`);
+          rankScores.push(`CASE WHEN slug ~* ${acrParam} THEN 25 ELSE 0 END`);
+        }
       }
 
       if (textConditions.length > 0) {

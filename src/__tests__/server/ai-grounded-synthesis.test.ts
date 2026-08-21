@@ -144,20 +144,21 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
       const client = new PTATVertexClient();
       const cfg = client.getConfig();
       expect(cfg.project).toBeDefined();
-      expect(cfg.location).toBe('us-central1');
-      expect(cfg.model).toBe('gemini-2.5-flash');
+      expect(cfg.location).toBe('global');
+      expect(cfg.model).toBe('gemini-3.6-flash');
       expect(cfg.temperature).toBe(0.1);
       expect(cfg.maxOutputTokens).toBe(8192);
+      expect(cfg.thinkingLevel).toBe('LOW');
     });
 
     it('allows server-side environment overrides without touching client bundles', () => {
       const customClient = new PTATVertexClient({
-        model: 'gemini-2.5-pro',
-        location: 'us-central1',
+        model: 'gemini-3.6-pro',
+        location: 'global',
         temperature: 0.05,
       });
       const cfg = customClient.getConfig();
-      expect(cfg.model).toBe('gemini-2.5-pro');
+      expect(cfg.model).toBe('gemini-3.6-pro');
       expect(cfg.temperature).toBe(0.05);
     });
   });
@@ -330,8 +331,8 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
           limitations: [],
         },
         metadata: {
-          model: 'gemini-2.5-flash',
-          location: 'us-central1',
+          model: 'gemini-3.6-flash',
+          location: 'global',
           retrievalLatencyMs: 120,
           modelLatencyMs: 850,
           totalLatencyMs: 970,
@@ -354,7 +355,36 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
     });
   });
 
-  describe('6. Semantic Integrity & Discipline Invariants', () => {
+  describe('6. Generic Data-Driven Acronym Discovery & Synthetic Future Entities', () => {
+    it('generically derives regex initials for unseen synthetic entities (NIDC -> National Infrastructure Delivery Corporation)', async () => {
+      const { buildGenericAcronymRegex } = await import('../../server/ai/retrieval-engine');
+      const nidcRegexStr = buildGenericAcronymRegex('NIDC', 'js');
+      expect(nidcRegexStr).toBeDefined();
+      const nidcRegex = new RegExp(nidcRegexStr!, 'i');
+      expect(nidcRegex.test('National Infrastructure Delivery Corporation')).toBe(true);
+      expect(nidcRegex.test('Federal Ministry of Health')).toBe(false);
+    });
+
+    it('generically derives regex initials for unseen synthetic entities (FATP -> Federal Agricultural Technology Programme)', async () => {
+      const { buildGenericAcronymRegex } = await import('../../server/ai/retrieval-engine');
+      const fatpRegexStr = buildGenericAcronymRegex('FATP', 'js');
+      expect(fatpRegexStr).toBeDefined();
+      const fatpRegex = new RegExp(fatpRegexStr!, 'i');
+      expect(fatpRegex.test('Federal Agricultural Technology Programme')).toBe(true);
+      expect(fatpRegex.test('National Credit Guarantee Company')).toBe(false);
+    });
+
+    it('correctly discovers canonical entities without explicit dictionary mappings (NCGC, DICON)', async () => {
+      const { buildGenericAcronymRegex } = await import('../../server/ai/retrieval-engine');
+      const ncgcRegex = new RegExp(buildGenericAcronymRegex('NCGC', 'js')!, 'i');
+      expect(ncgcRegex.test('National Credit Guarantee Company established with ₦100bn initial capital')).toBe(true);
+
+      const diconRegex = new RegExp(buildGenericAcronymRegex('DICON', 'js')!, 'i');
+      expect(diconRegex.test('Defence Industries Corporation of Nigeria')).toBe(true);
+    });
+  });
+
+  describe('7. Semantic Integrity & Discipline Invariants', () => {
     it('strictly distinguishes financial commitment from expenditure in system instructions', () => {
       const sys = buildSystemInstruction();
       expect(sys).toMatch(/commitment.*expenditure/i);

@@ -257,6 +257,7 @@ export interface PTATVertexConfig {
   model: string;
   temperature?: number;
   maxOutputTokens?: number;
+  thinkingLevel?: 'MINIMAL' | 'LOW' | 'MEDIUM' | 'HIGH';
   thinkingBudget?: number;
   timeoutMs?: number;
   maxRetries?: number;

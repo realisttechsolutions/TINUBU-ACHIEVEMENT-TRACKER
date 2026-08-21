@@ -6,24 +6,6 @@ export interface ClassifiedIntent {
   rawQuery: string;
 }
 
-export const ACRONYM_EXPANSIONS: Record<string, string[]> = {
-  ncgc: ['national credit guarantee company', 'national credit guarantee', 'credit guarantee'],
-  dicon: ['defence industries corporation of nigeria', 'defence industries corporation', 'dicon'],
-  credicorp: ['nigerian consumer credit corporation', 'consumer credit corporation'],
-  nelfund: ['nigeria education loan fund', 'national student financial aid', 'student loan'],
-  '3mtt': ['three million technical talent', '3mtt fellows', 'technical talent'],
-  acresal: ['agro-climatic resilience in semi-arid landscapes', 'acresal'],
-  cng: ['presidential cng initiative', 'pi-cng', 'compressed natural gas'],
-  boi: ['bank of industry'],
-  rea: ['rural electrification agency', 'nep', 'nigeria electrification project'],
-  nsia: ['nigeria sovereign investment authority'],
-  mofi: ['ministry of finance incorporated'],
-  nadf: ['national agricultural development fund'],
-  linac: ['linear accelerator', 'radiotherapy'],
-  oncology: ['oncology and radiotherapy', 'cancer'],
-  cancer: ['cancer control', 'cancer sdoh', 'oncology'],
-};
-
 const NIGERIAN_STATES: Record<string, string> = {
   abia: 'NG-AB',
   adamawa: 'NG-AD',
@@ -282,14 +264,13 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     }
   }
 
-  // 10. Extract Entity Search Keywords & Acronym Expansions
+  // 10. Extract Entity Search Keywords (Generic Data-Driven Extraction)
   const rawTokens = normalized
     .replace(/[^\w\s-]/g, ' ')
     .split(/\s+/)
     .filter((t) => t.length > 1);
 
   const cleanTokens: string[] = [];
-  const expandedTokens: string[] = [];
 
   for (const token of rawTokens) {
     if (STOP_WORDS.has(token)) continue;
@@ -298,16 +279,10 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     if (token === '2023' || token === '2024' || token === '2025' || token === '2026') continue;
 
     cleanTokens.push(token);
-
-    if (ACRONYM_EXPANSIONS[token]) {
-      for (const exp of ACRONYM_EXPANSIONS[token]) {
-        expandedTokens.push(exp);
-      }
-    }
   }
 
-  if (cleanTokens.length > 0 || expandedTokens.length > 0) {
-    constraints.keywords = [...cleanTokens, ...expandedTokens];
+  if (cleanTokens.length > 0) {
+    constraints.keywords = cleanTokens;
     constraints.entityName = cleanTokens.join(' ');
   }
 
@@ -323,9 +298,7 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
   ].filter(Boolean).length;
 
   const hasEntityKeyword = Boolean(
-    cleanTokens.length > 0 &&
-    (cleanTokens.some((t) => ACRONYM_EXPANSIONS[t] || ['dicon', 'ncgc', 'credicorp', '3mtt', 'acresal', 'nelfund', 'cng', 'oncology', 'cancer'].includes(t)) ||
-      !constraints.financialType)
+    cleanTokens.length > 0 && !constraints.financialType
   );
 
   if (constraints.comparisonTargets || normalized.startsWith('compare ') || normalized.includes(' vs ')) {

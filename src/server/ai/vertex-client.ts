@@ -14,10 +14,11 @@ export class PTATVertexClient {
   constructor(customConfig?: Partial<PTATVertexConfig>) {
     this.config = {
       project: process.env.GOOGLE_CLOUD_PROJECT || 'tinubu-achievement-stg',
-      location: process.env.GOOGLE_CLOUD_LOCATION || 'us-central1',
-      model: process.env.PTAT_VERTEX_MODEL || 'gemini-2.5-flash',
+      location: process.env.GOOGLE_CLOUD_LOCATION || 'global',
+      model: process.env.PTAT_VERTEX_MODEL || 'gemini-3.6-flash',
       temperature: 0.1,
       maxOutputTokens: 8192,
+      thinkingLevel: 'LOW',
       timeoutMs: 30000,
       maxRetries: 2,
       ...customConfig,
@@ -52,6 +53,15 @@ export class PTATVertexClient {
     let retriesAttempted = 0;
     let lastError: Error | null = null;
 
+    const thinkingConfig: any = {};
+    if (this.config.thinkingLevel) {
+      thinkingConfig.thinkingLevel = this.config.thinkingLevel;
+    } else if (this.config.thinkingBudget !== undefined) {
+      thinkingConfig.thinkingBudget = this.config.thinkingBudget;
+    } else {
+      thinkingConfig.thinkingLevel = 'LOW';
+    }
+
     while (retriesAttempted <= (this.config.maxRetries ?? 2)) {
       try {
         const response = await ai.models.generateContent({
@@ -62,9 +72,7 @@ export class PTATVertexClient {
             temperature: this.config.temperature ?? 0.1,
             maxOutputTokens: this.config.maxOutputTokens ?? 8192,
             responseMimeType: 'application/json',
-            thinkingConfig: {
-              thinkingBudget: this.config.thinkingBudget ?? 0,
-            },
+            thinkingConfig,
           },
         });
 
