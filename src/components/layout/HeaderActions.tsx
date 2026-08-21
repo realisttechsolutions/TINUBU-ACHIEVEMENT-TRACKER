@@ -16,13 +16,13 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({ onOpenSearch }) =>
   const { currentLanguage, changeLanguage, availableLanguages } = useLanguage();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
       {/* Global Search Trigger */}
       <button
         type="button"
         onClick={onOpenSearch}
         aria-label={t("accessibility.openSearch", { defaultValue: "Open search dialog" })}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-gov-border bg-gov-canvas hover:bg-gov-border/30 text-gov-slate hover:text-gov-navy text-xs font-medium transition-colors"
+        className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-md border border-gov-border bg-gov-canvas hover:bg-gov-border/30 text-gov-slate hover:text-gov-navy text-xs font-medium transition-colors"
       >
         <Search className="h-4 w-4 text-gov-navy" />
         <span className="hidden md:inline">{t("common.search", { defaultValue: "Search..." })}</span>
