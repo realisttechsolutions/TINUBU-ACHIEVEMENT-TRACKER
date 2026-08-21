@@ -250,3 +250,137 @@ export interface RetrievalOptions {
   primarySourcesOnly?: boolean;
   minConfidenceThreshold?: number;
 }
+
+export interface PTATVertexConfig {
+  project: string;
+  location: string;
+  model: string;
+  temperature?: number;
+  maxOutputTokens?: number;
+  thinkingBudget?: number;
+  timeoutMs?: number;
+  maxRetries?: number;
+}
+
+export interface PTATEvidencePacket {
+  query: string;
+  intent: QueryIntent;
+  answerability: AnswerabilityStatus;
+  entities: string[];
+  records: Array<{
+    recordId: string;
+    slug: string;
+    recordType: string;
+    title: string;
+    summary: string;
+    implementationStatus: string;
+    verificationStatus: string;
+    geographicScope: string;
+    geographies: Array<{ name: string; code: string; scope: string }>;
+    sectors: Array<{ code: string; label: string }>;
+    institutions: Array<{ code: string; name: string }>;
+  }>;
+  claims: Array<{
+    claimId: string;
+    recordId: string;
+    recordSlug: string;
+    claimText: string;
+    claimType: string;
+    dataValueNature?: string;
+    verificationStatus?: string;
+    sources: Array<{
+      sourceId: string;
+      title: string;
+      publisher: string;
+      url?: string;
+      sourceLevel: string;
+      isPrimaryOfficial: boolean;
+      evidenceSummary?: string;
+    }>;
+  }>;
+  financials: Array<{
+    financialId: string;
+    recordSlug: string;
+    financialType: string;
+    financialTypeLabel: string;
+    amountExact: string;
+    formattedAmount: string;
+    currencyCode: string;
+    reportingPeriod?: string;
+  }>;
+  beneficiaries: Array<{
+    beneficiaryId: string;
+    recordSlug: string;
+    beneficiaryType: string;
+    beneficiaryStage: string;
+    beneficiaryStageLabel: string;
+    countValue: number;
+    formattedCount: string;
+    unit: string;
+    cumulative: boolean;
+    reportingPeriod?: string;
+  }>;
+  comparison?: {
+    firstSubjectName: string;
+    firstSubjectRecords: string[];
+    secondSubjectName: string;
+    secondSubjectRecords: string[];
+    dimensions: string[];
+  };
+}
+
+export interface PTATModelCitation {
+  claimId: string;
+  sourceId: string;
+  recordSlug: string;
+  sourceTitle?: string;
+  publisher?: string;
+  url?: string;
+  sourceLevel?: string;
+  quoteOrSummary?: string;
+  isValidated: boolean;
+}
+
+export interface PTATModelMetadata {
+  model: string;
+  location: string;
+  apiVersion?: string;
+  retrievalLatencyMs: number;
+  modelLatencyMs: number;
+  totalLatencyMs: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  totalTokens?: number;
+  thoughtTokens?: number;
+  retriesAttempted: number;
+}
+
+export interface CitationValidationResult {
+  valid: boolean;
+  totalCitations: number;
+  validCitations: number;
+  rejectedCitations: number;
+  rejectionReasons: string[];
+  validatedCitations: PTATModelCitation[];
+}
+
+export interface PTATGroundedAnswer {
+  query: string;
+  intent: QueryIntent;
+  answerability: AnswerabilityStatus;
+  answer: string;
+  summaryBulletPoints?: string[];
+  citations: PTATModelCitation[];
+  recordLinks: PTATAIRecordLink[];
+  limitations: string[];
+  confidence: PTATAIConfidence;
+  comparisonSummary?: {
+    firstSubject: string;
+    secondSubject: string;
+    keyDifferences: string[];
+  };
+  modelMetadata: PTATModelMetadata;
+  citationValidation: CitationValidationResult;
+  isGrounded: boolean;
+}
+

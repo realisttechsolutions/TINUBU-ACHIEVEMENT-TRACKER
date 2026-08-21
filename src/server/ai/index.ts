@@ -4,3 +4,8 @@ export { matchEntitiesFromRecords, validateSemanticSeparation, normalizeEntityTe
 export { PTATAIRetrievalEngine } from './retrieval-engine';
 export { assembleAnswerContext } from './answer-assembler';
 export { PTATAIRetrievalService } from './retrieval-service';
+export { PTATVertexClient } from './vertex-client';
+export { buildEvidencePacket } from './evidence-packet';
+export { buildSystemInstruction, buildSynthesisPrompt } from './synthesis-prompt';
+export { validateModelCitations } from './citation-validator';
+export { PTATGroundedSynthesisService } from './grounded-synthesis';
