@@ -6,6 +6,24 @@ export interface ClassifiedIntent {
   rawQuery: string;
 }
 
+export const ACRONYM_EXPANSIONS: Record<string, string[]> = {
+  ncgc: ['national credit guarantee company', 'national credit guarantee', 'credit guarantee'],
+  dicon: ['defence industries corporation of nigeria', 'defence industries corporation', 'dicon'],
+  credicorp: ['nigerian consumer credit corporation', 'consumer credit corporation'],
+  nelfund: ['nigeria education loan fund', 'national student financial aid', 'student loan'],
+  '3mtt': ['three million technical talent', '3mtt fellows', 'technical talent'],
+  acresal: ['agro-climatic resilience in semi-arid landscapes', 'acresal'],
+  cng: ['presidential cng initiative', 'pi-cng', 'compressed natural gas'],
+  boi: ['bank of industry'],
+  rea: ['rural electrification agency', 'nep', 'nigeria electrification project'],
+  nsia: ['nigeria sovereign investment authority'],
+  mofi: ['ministry of finance incorporated'],
+  nadf: ['national agricultural development fund'],
+  linac: ['linear accelerator', 'radiotherapy'],
+  oncology: ['oncology and radiotherapy', 'cancer'],
+  cancer: ['cancer control', 'cancer sdoh', 'oncology'],
+};
+
 const NIGERIAN_STATES: Record<string, string> = {
   abia: 'NG-AB',
   adamawa: 'NG-AD',
@@ -57,8 +75,6 @@ const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   healthcare: { code: 'healthcare_public_health', label: 'Healthcare and Public Health' },
   hospital: { code: 'healthcare_public_health', label: 'Healthcare and Public Health' },
   medical: { code: 'healthcare_public_health', label: 'Healthcare and Public Health' },
-  oncology: { code: 'healthcare_public_health', label: 'Healthcare and Public Health' },
-  cancer: { code: 'healthcare_public_health', label: 'Healthcare and Public Health' },
   agriculture: { code: 'agriculture_food_security', label: 'Agriculture and Food Security' },
   farming: { code: 'agriculture_food_security', label: 'Agriculture and Food Security' },
   food: { code: 'agriculture_food_security', label: 'Agriculture and Food Security' },
@@ -67,7 +83,6 @@ const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   electricity: { code: 'power_energy_natural_resources', label: 'Power, Energy and Natural Resources' },
   power: { code: 'power_energy_natural_resources', label: 'Power, Energy and Natural Resources' },
   energy: { code: 'power_energy_natural_resources', label: 'Power, Energy and Natural Resources' },
-  cng: { code: 'power_energy_natural_resources', label: 'Power, Energy and Natural Resources' },
   transport: { code: 'infrastructure_transportation', label: 'Infrastructure and Transportation' },
   road: { code: 'infrastructure_transportation', label: 'Infrastructure and Transportation' },
   rail: { code: 'infrastructure_transportation', label: 'Infrastructure and Transportation' },
@@ -80,7 +95,6 @@ const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   revenue: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
   fx: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
   banking: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
-  credit: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
   digital: { code: 'digital_economy_science_innovation', label: 'Digital Economy, Science and Innovation' },
   tech: { code: 'digital_economy_science_innovation', label: 'Digital Economy, Science and Innovation' },
   broadband: { code: 'digital_economy_science_innovation', label: 'Digital Economy, Science and Innovation' },
@@ -108,7 +122,7 @@ const STOP_WORDS = new Set([
   'programme', 'programmes', 'program', 'programs', 'disbursed', 'disbursement',
   'spent', 'spending', 'expenditure', 'commitment', 'commitments', 'budget', 'cost',
   'benefited', 'beneficiary', 'beneficiaries', 'insufficient', 'primary', 'source', 'sources',
-  'reform', 'reforms'
+  'reform', 'reforms', 'centre', 'centres'
 ]);
 
 export function classifyIntentAndExtractConstraints(query: string): ClassifiedIntent {
@@ -268,22 +282,32 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     }
   }
 
-  // 10. Extract Entity Search Keywords
+  // 10. Extract Entity Search Keywords & Acronym Expansions
   const rawTokens = normalized
     .replace(/[^\w\s-]/g, ' ')
     .split(/\s+/)
     .filter((t) => t.length > 1);
 
-  const cleanTokens = rawTokens.filter((token) => {
-    if (STOP_WORDS.has(token)) return false;
-    if (matchedStateToken && (token === matchedStateToken || matchedStateToken.includes(token))) return false;
-    if (matchedSectorToken && (token === matchedSectorToken || matchedSectorToken.includes(token))) return false;
-    if (token === '2023' || token === '2024' || token === '2025' || token === '2026') return false;
-    return true;
-  });
+  const cleanTokens: string[] = [];
+  const expandedTokens: string[] = [];
 
-  if (cleanTokens.length > 0) {
-    constraints.keywords = cleanTokens;
+  for (const token of rawTokens) {
+    if (STOP_WORDS.has(token)) continue;
+    if (matchedStateToken && (token === matchedStateToken || matchedStateToken.includes(token))) continue;
+    if (matchedSectorToken && (token === matchedSectorToken || matchedSectorToken.includes(token))) continue;
+    if (token === '2023' || token === '2024' || token === '2025' || token === '2026') continue;
+
+    cleanTokens.push(token);
+
+    if (ACRONYM_EXPANSIONS[token]) {
+      for (const exp of ACRONYM_EXPANSIONS[token]) {
+        expandedTokens.push(exp);
+      }
+    }
+  }
+
+  if (cleanTokens.length > 0 || expandedTokens.length > 0) {
+    constraints.keywords = [...cleanTokens, ...expandedTokens];
     constraints.entityName = cleanTokens.join(' ');
   }
 
@@ -298,6 +322,12 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     Boolean(constraints.statusConstraint),
   ].filter(Boolean).length;
 
+  const hasEntityKeyword = Boolean(
+    cleanTokens.length > 0 &&
+    (cleanTokens.some((t) => ACRONYM_EXPANSIONS[t] || ['dicon', 'ncgc', 'credicorp', '3mtt', 'acresal', 'nelfund', 'cng', 'oncology', 'cancer'].includes(t)) ||
+      !constraints.financialType)
+  );
+
   if (constraints.comparisonTargets || normalized.startsWith('compare ') || normalized.includes(' vs ')) {
     intent = 'COMPARISON_QUERY';
   } else if (filterCount >= 2) {
@@ -306,9 +336,15 @@ export function classifyIntentAndExtractConstraints(query: string): ClassifiedIn
     intent = 'SOURCE_QUERY';
   } else if (normalized.includes('what evidence') || normalized.includes('evidence supports') || normalized.includes('evidence exists') || normalized.includes('insufficient evidence')) {
     intent = 'EVIDENCE_QUERY';
-  } else if (constraints.financialType || normalized.includes('how much') || normalized.includes('disbursed') || normalized.includes('financial commitments')) {
+  } else if (normalized.includes('how much') || normalized.includes('disbursed') || normalized.includes('financial commitments') || (constraints.financialType && !hasEntityKeyword)) {
     intent = 'FINANCIAL_QUERY';
-  } else if (constraints.beneficiaryStage || normalized.includes('who benefited') || normalized.includes('beneficiaries') || normalized.includes('how many people')) {
+  } else if (normalized.includes('who benefited') || normalized.includes('how many people') || (constraints.beneficiaryStage && !hasEntityKeyword)) {
+    intent = 'BENEFICIARY_QUERY';
+  } else if (hasEntityKeyword && cleanTokens.length > 0 && !constraints.state && !constraints.sector && !constraints.recordType) {
+    intent = 'ENTITY_LOOKUP';
+  } else if (constraints.financialType) {
+    intent = 'FINANCIAL_QUERY';
+  } else if (constraints.beneficiaryStage) {
     intent = 'BENEFICIARY_QUERY';
   } else if (normalized.includes('timeline') || normalized.includes('when did') || normalized.includes('what happened in') || normalized.includes('history of')) {
     intent = 'TIMELINE_QUERY';

@@ -33,16 +33,15 @@ export function buildEvidencePacket(context: PTATAIContext): PTATEvidencePacket 
       recordSlug: c.recordExternalId,
       claimText: c.claimText,
       claimType: c.claimType,
-      dataValueNature: c.dataValueNature,
-      verificationStatus: c.verificationStatus,
+      ...(c.dataValueNature ? { dataValueNature: c.dataValueNature } : {}),
+      ...(c.verificationStatus ? { verificationStatus: c.verificationStatus } : {}),
       sources: c.sources.map((s) => ({
         sourceId: s.sourceId,
         title: s.title,
         publisher: s.publisher,
-        url: s.url,
+        ...(s.url ? { url: s.url } : {}),
         sourceLevel: s.sourceLevel,
         isPrimaryOfficial: s.isPrimaryOfficial,
-        evidenceSummary: s.evidenceSummary,
       })),
     })),
     financials: context.financialRecords.map((f) => ({
@@ -53,7 +52,7 @@ export function buildEvidencePacket(context: PTATAIContext): PTATEvidencePacket 
       amountExact: f.amountExact,
       formattedAmount: f.formattedAmount,
       currencyCode: f.currencyCode,
-      reportingPeriod: f.reportingPeriod,
+      ...(f.reportingPeriod ? { reportingPeriod: f.reportingPeriod } : {}),
     })),
     beneficiaries: context.beneficiaryRecords.map((b) => ({
       beneficiaryId: b.beneficiaryId,
@@ -65,7 +64,7 @@ export function buildEvidencePacket(context: PTATAIContext): PTATEvidencePacket 
       formattedCount: b.formattedCount,
       unit: b.unit,
       cumulative: b.cumulative,
-      reportingPeriod: b.reportingPeriod,
+      ...(b.reportingPeriod ? { reportingPeriod: b.reportingPeriod } : {}),
     })),
     comparison: context.comparison
       ? {

@@ -181,9 +181,9 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
   });
 
   describe('3. System Instruction & Grounding Prompts', () => {
-    it('embeds zero-hallucination doctrine and financial semantic rules', () => {
+    it('embeds evidence-containment doctrine and financial semantic rules', () => {
       const sys = buildSystemInstruction();
-      expect(sys).toContain('ZERO HALLUCINATION & EVIDENCE GROUNDING');
+      expect(sys).toContain('EVIDENCE-CONTAINMENT CONTROL & STRICT EVIDENCE GROUNDING');
       expect(sys).toContain('DO NOT use general training knowledge');
       expect(sys).toContain('DICON');
       expect(sys).toContain('NELFUND');

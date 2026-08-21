@@ -12,6 +12,7 @@ import type {
   RetrievalOptions,
 } from '../../types/ai.types';
 import { sanitizePublicPresentationText, formatPublicFinancialAmount } from './formatters';
+import { ACRONYM_EXPANSIONS } from './intent-classifier';
 
 export interface RawRetrievalResults {
   records: PTATAIRecord[];
@@ -127,25 +128,55 @@ export class PTATAIRetrievalEngine {
       clauses.push(`EXTRACT(YEAR FROM published_at) = ${bind(constraints.year)}`);
     }
 
-    // Entity / Keyword Filter (Data-driven search across title, summary, slug, institutions)
+    // Entity / Keyword Filter (Data-driven ranked search across title, summary, slug, institutions)
+    let rankExpr = '0';
     if (constraints.entityId) {
       const entIdParam = bind(constraints.entityId);
       clauses.push(`(slug = ${entIdParam} OR id::text = ${entIdParam})`);
     } else if (constraints.entityName || (constraints.keywords && constraints.keywords.length > 0)) {
       const searchPhrase = constraints.entityName || constraints.keywords!.join(' ');
-      const searchParam = bind(searchPhrase);
-      const textConditions: string[] = [
-        `to_tsvector('english', title || ' ' || summary) @@ plainto_tsquery('english', ${searchParam})`,
-        `title ~* ('\\m' || ${searchParam} || '\\M')`,
-        `slug ~* ('\\m' || ${searchParam} || '\\M')`,
-        `EXISTS (
-          SELECT 1 FROM jsonb_array_elements(institutions) AS inst
-          WHERE lower(inst->>'code') = lower(${searchParam})
-             OR inst->>'name' ~* ('\\m' || ${searchParam} || '\\M')
-        )`,
-      ];
+      const rawTokens = (constraints.keywords || searchPhrase.split(/\s+/)).map((t) => t.toLowerCase().trim()).filter(Boolean);
 
-      clauses.push(`(${textConditions.join(' OR ')})`);
+      const allSearchTerms = new Set<string>();
+      if (searchPhrase.trim()) allSearchTerms.add(searchPhrase.trim());
+
+      for (const t of rawTokens) {
+        allSearchTerms.add(t);
+        if (ACRONYM_EXPANSIONS[t]) {
+          for (const exp of ACRONYM_EXPANSIONS[t]) {
+            allSearchTerms.add(exp);
+          }
+        }
+      }
+
+      const textConditions: string[] = [];
+      const rankScores: string[] = [];
+
+      for (const term of allSearchTerms) {
+        const isPhrase = term.includes(' ');
+        const weight = isPhrase ? 15 : 10;
+        const p = bind(term);
+
+        textConditions.push(`title ILIKE ('%' || ${p} || '%')`);
+        textConditions.push(`summary ILIKE ('%' || ${p} || '%')`);
+        textConditions.push(`slug ILIKE ('%' || ${p} || '%')`);
+        textConditions.push(`to_tsvector('english', title || ' ' || summary) @@ plainto_tsquery('english', ${p})`);
+        textConditions.push(`EXISTS (
+          SELECT 1 FROM jsonb_array_elements(institutions) AS inst
+          WHERE lower(inst->>'code') = lower(${p}) OR inst->>'name' ILIKE ('%' || ${p} || '%')
+        )`);
+
+        rankScores.push(`CASE WHEN title ILIKE ('%' || ${p} || '%') THEN ${weight * 4} ELSE 0 END`);
+        rankScores.push(`CASE WHEN slug ILIKE ('%' || ${p} || '%') THEN ${weight * 3} ELSE 0 END`);
+        rankScores.push(`CASE WHEN summary ILIKE ('%' || ${p} || '%') THEN ${weight * 2} ELSE 0 END`);
+      }
+
+      if (textConditions.length > 0) {
+        clauses.push(`(${textConditions.join(' OR ')})`);
+      }
+      if (rankScores.length > 0) {
+        rankExpr = `(${rankScores.join(' + ')})`;
+      }
     }
 
     const where = clauses.length > 0 ? `WHERE ${clauses.join('\n AND ')}` : '';
@@ -154,10 +185,10 @@ export class PTATAIRetrievalEngine {
         id, slug, record_type, title, summary, implementation_status,
         publication_status, verification_status, evidence_profile,
         published_at, public_description, sectors, institutions,
-        geographies, timeline, type_details
+        geographies, timeline, type_details, ${rankExpr} as rank_score
       FROM public_record_catalog
       ${where}
-      ORDER BY published_at DESC NULLS LAST, id
+      ORDER BY rank_score DESC, published_at DESC NULLS LAST, id
       LIMIT ${bind(limit)};
     `;
 
