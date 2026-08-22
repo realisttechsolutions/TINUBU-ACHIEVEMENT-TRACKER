@@ -3,19 +3,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Sparkles,
-  ShieldCheck,
   Menu,
-  RotateCcw,
   User,
   AlertCircle,
   ArrowDown,
 } from 'lucide-react';
-import { Link } from '@/lib/navigation';
 import type { PTATGroundedAnswer } from '@/types/ai.types';
 import { AIComposer } from './AIComposer';
 import { AIWelcomeHero } from './AIWelcomeHero';
 import { AIAnswerCard } from './AIAnswerCard';
-import { AILoadingState } from './AILoadingState';
 import { AIEvidencePanel } from './AIEvidencePanel';
 import { AISidebar } from './AISidebar';
 
@@ -400,89 +396,34 @@ export const PTATAIExperienceClient: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* 1. Global Header */}
-      <header className="sticky top-0 z-40 h-14 sm:h-16 bg-slate-950/85 border-b border-slate-800/60 backdrop-blur-xl flex items-center justify-between px-3 sm:px-6">
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Mobile Sidebar Toggle */}
-          <button
-            type="button"
-            onClick={() => setSidebarOpen((prev) => !prev)}
-            aria-label="Toggle AI navigation sidebar"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 md:hidden transition-colors"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+    <div className="flex-1 flex overflow-hidden relative bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 min-h-[calc(100vh-7.5rem)]">
+      {/* Mobile Sidebar Toggle Button */}
+      <button
+        type="button"
+        onClick={() => setSidebarOpen((prev) => !prev)}
+        aria-label="Toggle AI navigation sidebar"
+        className="fixed top-24 left-3 z-30 p-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/70 text-slate-400 hover:text-white md:hidden shadow-lg backdrop-blur-md transition-all"
+      >
+        <Menu className="w-4 h-4" />
+      </button>
 
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center text-slate-950 font-extrabold font-mono text-xs sm:text-sm shadow-md group-hover:scale-105 transition-transform">
-              AI
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-sm sm:text-base text-slate-100 leading-tight">
-                PTAT AI
-              </span>
-              <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest hidden sm:block">
-                Public Intelligence
-              </span>
-            </div>
-          </Link>
-        </div>
+      {/* Sidebar */}
+      <AISidebar
+        onNewChat={handleNewChat}
+        recentQueries={recentQueries}
+        onSelectQuery={(q) => handleSendQuestion(q)}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-2">
-          {messages.length > 0 && (
-            <button
-              type="button"
-              onClick={handleNewChat}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs text-slate-300 hover:text-white transition-colors"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">New Chat</span>
-            </button>
-          )}
-
-          {activeEvidenceAnswer && (
-            <button
-              type="button"
-              onClick={() => setEvidencePanelOpen((prev) => !prev)}
-              aria-label="Toggle evidence panel"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 text-cyan-300 text-xs font-semibold transition-colors"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Evidence Rail</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            </button>
-          )}
-
-          <Link
-            to="/achievements"
-            className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition-colors hidden md:inline-flex"
-          >
-            Catalog
-          </Link>
-        </div>
-      </header>
-
-      {/* 2. Main Workspace Layout */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Sidebar */}
-        <AISidebar
-          onNewChat={handleNewChat}
-          recentQueries={recentQueries}
-          onSelectQuery={(q) => handleSendQuestion(q)}
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
-
-        {/* Main Conversation Container */}
-        <main
-          ref={mainScrollRef}
-          onScroll={handleScroll}
-          className="flex-1 flex flex-col h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] overflow-y-auto relative scroll-smooth"
-        >
-          {/* Subtle Ambient Glow */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+      {/* Main Conversation Container */}
+      <main
+        ref={mainScrollRef}
+        onScroll={handleScroll}
+        className="flex-1 flex flex-col h-[calc(100vh-7.5rem)] overflow-y-auto relative scroll-smooth"
+      >
+        {/* Subtle Ambient Glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex-1 w-full max-w-2xl lg:max-w-3xl mx-auto px-3.5 sm:px-6 py-3 sm:py-5 flex flex-col relative z-10">
             {/* Empty State Landing */}
@@ -583,7 +524,6 @@ export const PTATAIExperienceClient: React.FC = () => {
           onClearSelectedCitation={() => setSelectedCitationIndex(null)}
         />
       </div>
-    </div>
   );
 };
 
