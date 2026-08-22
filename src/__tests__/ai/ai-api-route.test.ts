@@ -48,8 +48,8 @@ describe('PTAT M08C: AI API Route (/api/ai/ask) Security & Validation Tests', ()
     expect(body.code).toBe('EMPTY_QUESTION');
   });
 
-  it('rejects questions exceeding 500 characters with 400 Bad Request', async () => {
-    const longQuestion = 'a'.repeat(501);
+  it('rejects questions exceeding 2000 characters with 400 Bad Request', async () => {
+    const longQuestion = 'a'.repeat(2001);
     const req = new NextRequest('http://localhost:3000/api/ai/ask', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

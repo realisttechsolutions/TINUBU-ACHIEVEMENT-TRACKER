@@ -15,7 +15,7 @@ The PTAT AI user interface operates on an untrusted public web environment. The 
          ▼
 [POST /api/ai/ask] ──(Input Validation & Sanitization)
          │           • Content-Type: application/json
-         │           • Question Length ≤ 500 chars
+         │           • Question Length ≤ 2000 chars
          │           • Rejection of Forbidden Overrides (model, systemInstruction, etc.)
          │
          ▼
@@ -44,7 +44,7 @@ The PTAT AI user interface operates on an untrusted public web environment. The 
 - Any request attempting to supply client-level model identifiers (`model`), system instructions (`systemInstruction`), temperatures (`temperature`), or Vertex configuration overrides is rejected with `400 Bad Request` (`FORBIDDEN_PARAMETER`).
 
 ### 2.3 Prompt Injection Defense
-- User inputs are bounded to 500 characters.
+- User inputs are bounded to 2000 characters.
 - System instructions for Vertex AI explicitly prohibit following user commands that attempt to override grounding rules, cite unverified sources, or engage in conversational speculation.
 
 ### 2.4 Error Masking & Information Leakage Prevention

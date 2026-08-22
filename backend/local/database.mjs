@@ -1,12 +1,11 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { PGlite } from '@electric-sql/pglite';
 
-export const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+export const repositoryRoot = process.cwd();
 
 export async function readRepositoryFile(relativePath) {
-  return readFile(path.join(repositoryRoot, relativePath), 'utf8');
+  return readFile(path.resolve(process.cwd(), relativePath), 'utf8');
 }
 
 export async function createLocalDatabase({ seed = true } = {}) {

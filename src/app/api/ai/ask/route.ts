@@ -6,9 +6,9 @@ import { resolveConversationContext, type ConversationTurn } from '@/server/ai/f
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const MAX_QUESTION_LENGTH = 500;
+const MAX_QUESTION_LENGTH = 2000;
 const MAX_HISTORY_TURNS = 6;
-const MAX_TURN_CONTENT_LENGTH = 500;
+const MAX_TURN_CONTENT_LENGTH = 2000;
 
 export async function POST(req: NextRequest) {
   try {

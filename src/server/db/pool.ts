@@ -5,7 +5,7 @@ import {
   type DriverOptions,
 } from '@google-cloud/cloud-sql-connector';
 import pg, { type Pool, type QueryResult, type QueryResultRow } from 'pg';
-import { readCloudSqlConfig } from './config';
+import { readCloudSqlConfig, isCloudSqlDataEnabled } from './config';
 
 const { types } = pg;
 
@@ -33,6 +33,8 @@ interface PoolQueryLike {
 declare global {
   // eslint-disable-next-line no-var
   var __tatCloudSqlState: RuntimeDatabaseState | undefined;
+  // eslint-disable-next-line no-var
+  var __tatLocalDb: any | undefined;
 }
 
 function ipType(value: 'PUBLIC' | 'PRIVATE' | 'PSC'): IpAddressTypes {
@@ -82,7 +84,31 @@ async function runtimeDatabaseState(): Promise<RuntimeDatabaseState> {
   return globalThis.__tatCloudSqlState;
 }
 
+async function getLocalDatabaseState(): Promise<QueryExecutor> {
+  if (!globalThis.__tatLocalDb) {
+    const path = await import('node:path');
+    const { createLocalDatabase } = await import('../../../backend/local/database.mjs');
+    const { executeM02Ingestion } = await import('../../../backend/ingestion/importer.mjs');
+    const db = await createLocalDatabase({ seed: false });
+    const snapshotDir = path.resolve(process.cwd(), 'data/research-snapshots/m02');
+    await executeM02Ingestion(db, { snapshotDir });
+    globalThis.__tatLocalDb = db;
+  }
+  const db = globalThis.__tatLocalDb;
+  return {
+    async query<Row extends QueryResultRow>(text: string, values: readonly unknown[] = []) {
+      if (typeof text !== 'string' || !text.trim()) throw new Error('Database query text is required.');
+      const result = await db.query(text, [...values]);
+      return { rows: result.rows, rowCount: result.rowCount ?? result.rows.length };
+    },
+  };
+}
+
 export async function getDatabaseConnection(): Promise<QueryExecutor> {
+  if (!isCloudSqlDataEnabled()) {
+    return getLocalDatabaseState();
+  }
+
   const { pool } = await runtimeDatabaseState();
   return {
     async query<Row extends QueryResultRow>(text: string, values: readonly unknown[] = []) {
@@ -106,6 +132,11 @@ export async function executeParameterizedQuery<Row extends QueryResultRow = Que
 }
 
 export async function closeDatabaseConnection(): Promise<void> {
+  if (globalThis.__tatLocalDb) {
+    await globalThis.__tatLocalDb.close();
+    globalThis.__tatLocalDb = undefined;
+  }
+
   const state = globalThis.__tatCloudSqlState;
   if (!state) return;
   if (!state.closing) {

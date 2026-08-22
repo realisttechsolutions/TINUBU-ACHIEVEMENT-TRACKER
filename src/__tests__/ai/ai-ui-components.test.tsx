@@ -52,10 +52,13 @@ describe('PTAT M08C: AI UI Components Test Suite', () => {
       expect(handleSubmit).not.toHaveBeenCalled();
     });
 
-    it('disables submit when empty or loading', () => {
+    it('disables submit when empty or loading and renders no character counter', () => {
       render(<AIComposer onSubmit={vi.fn()} isLoading={true} />);
       const submitBtn = screen.getByRole('button', { name: /Submit query to PTAT AI/i });
       expect(submitBtn.hasAttribute('disabled')).toBe(true);
+
+      // Verify no visible character counter exists
+      expect(screen.queryByText(/\/2000|\/500/i)).toBeNull();
     });
   });
 

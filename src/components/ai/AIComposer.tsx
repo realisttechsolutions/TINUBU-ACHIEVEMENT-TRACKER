@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowUp, Sparkles, X } from 'lucide-react';
+import { ArrowUp, X } from 'lucide-react';
 
 interface AIComposerProps {
   onSubmit: (question: string) => void;
@@ -42,7 +42,7 @@ export const AIComposer: React.FC<AIComposerProps> = ({
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const trimmed = value.trim();
-    if (!trimmed || isLoading) return;
+    if (!trimmed || isLoading || trimmed.length > 2000) return;
 
     onSubmit(trimmed);
     setValue('');
@@ -58,9 +58,7 @@ export const AIComposer: React.FC<AIComposerProps> = ({
     }
   };
 
-  const characterCount = value.length;
-  const isOverLimit = characterCount > 500;
-  const canSubmit = characterCount > 0 && !isOverLimit && !isLoading;
+  const canSubmit = value.trim().length > 0 && value.length <= 2000 && !isLoading;
 
   return (
     <form
@@ -77,32 +75,13 @@ export const AIComposer: React.FC<AIComposerProps> = ({
           placeholder={placeholder}
           disabled={isLoading}
           rows={1}
-          maxLength={500}
+          maxLength={2000}
           aria-label="Ask PTAT AI a question"
           className="w-full bg-transparent text-slate-100 placeholder:text-slate-400 text-sm sm:text-base md:text-lg resize-none outline-none focus:outline-none min-h-[56px] max-h-[200px] leading-relaxed pr-12 font-sans selection:bg-cyan-500/30"
         />
 
-        {/* Bottom Action Bar */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-800/60 mt-1 text-xs text-slate-400">
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] font-mono hidden sm:inline text-slate-400">
-              Grounded in PTAT Catalog • 270 Records
-            </span>
-            {characterCount > 0 && (
-              <span
-                className={`font-mono text-[10px] ${
-                  isOverLimit
-                    ? 'text-rose-400 font-bold'
-                    : characterCount > 450
-                    ? 'text-amber-400'
-                    : 'text-slate-400'
-                }`}
-              >
-                {characterCount}/500
-              </span>
-            )}
-          </div>
-
+        {/* Bottom Minimal Action Bar */}
+        <div className="flex items-center justify-end pt-2 border-t border-slate-800/40 mt-1">
           <div className="flex items-center gap-2">
             {value.length > 0 && (
               <button

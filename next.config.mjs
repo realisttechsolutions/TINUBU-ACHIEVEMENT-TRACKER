@@ -4,6 +4,7 @@ const staging = process.env.NEXT_PUBLIC_APP_ENV?.trim().toLowerCase() === 'stagi
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  serverExternalPackages: ['@electric-sql/pglite', 'pg', '@google-cloud/cloud-sql-connector'],
   webpack(config, { dev }) {
     // The production output is the deployable artifact; a persistent webpack
     // cache is unnecessary in constrained local/CI staging certification jobs.
