@@ -18,7 +18,8 @@ import {
   Download, 
   ShieldCheck, 
   LayoutDashboard,
-  Globe
+  Globe,
+  Sparkles
 } from "lucide-react";
 import BrandLockup from "./BrandLockup";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -99,28 +100,27 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label={t('accessibility.closeMenu', { defaultValue: "Close navigation drawer" })}
-            className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-gov-gold"
+            aria-label={t('accessibility.closeMenu', { defaultValue: "Close Navigation Menu" })}
+            className="p-2 rounded-md text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-gov-gold"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Quick Search Bar */}
-        <div className="p-3 border-b border-gov-border bg-gov-canvas dark:bg-white/5">
+        {/* Global Search Button in Drawer */}
+        <div className="p-4 pb-0">
           <button
             type="button"
             onClick={() => {
               onClose();
-              onOpenSearch?.();
+              if (onOpenSearch) onOpenSearch();
             }}
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-white dark:bg-gov-navy border border-gov-border text-xs text-gov-slate shadow-sm"
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-gov-canvas dark:bg-white/5 border border-gov-border text-sm text-gov-slate hover:border-gov-navy transition-colors text-left"
           >
             <span className="flex items-center gap-2">
               <Search className="h-4 w-4 text-gov-gold" />
               <span>{t('navigation.searchPlaceholder', { defaultValue: "Search achievements, sectors, states..." })}</span>
             </span>
-            <kbd className="px-1.5 py-0.5 rounded bg-gov-canvas text-[10px] font-mono border">⌘K</kbd>
           </button>
         </div>
 
@@ -132,6 +132,22 @@ export const MobileNavigationDrawer: React.FC<MobileNavigationDrawerProps> = ({
               {t('footer.explorePlatform', { defaultValue: "Core Platform" })}
             </div>
             
+            <Link
+              to="/ai"
+              onClick={onClose}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                isActive("/ai")
+                  ? "bg-cyan-950 text-cyan-300 border border-cyan-500/40"
+                  : "text-cyan-700 dark:text-cyan-300 bg-cyan-50/50 dark:bg-cyan-950/20 hover:bg-cyan-100/60"
+              }`}
+            >
+              <span className="flex items-center gap-2.5">
+                <Sparkles className="h-4 w-4 text-cyan-500" />
+                <span className="font-bold">PTAT AI Intelligence</span>
+              </span>
+              <ChevronRight className="h-4 w-4 opacity-50" />
+            </Link>
+
             <Link
               to="/"
               onClick={onClose}

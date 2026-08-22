@@ -11,7 +11,8 @@ import {
   Database, 
   Download, 
   ShieldCheck, 
-  LayoutDashboard
+  LayoutDashboard,
+  Sparkles
 } from "lucide-react";
 import { CANONICAL_SECTORS, CANONICAL_PUBLIC_GROUPS } from "@/adapters/canonicalData";
 
@@ -48,6 +49,18 @@ export const DesktopNavigation: React.FC = () => {
       ref={menuRef}
     >
       {/* 1. Direct Links */}
+      <Link
+        to="/ai"
+        className={`px-2 2xl:px-2.5 py-1.5 2xl:py-2 rounded-md transition-all whitespace-nowrap inline-flex items-center gap-1.5 ${
+          isActive("/ai")
+            ? "text-cyan-700 dark:text-cyan-300 font-bold bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-300 dark:border-cyan-500/40 shadow-sm"
+            : "text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 hover:bg-cyan-50/60 dark:hover:bg-cyan-950/30"
+        }`}
+      >
+        <Sparkles className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+        <span className="font-bold">PTAT AI</span>
+      </Link>
+
       <Link
         to="/achievements"
         className={`px-2 2xl:px-3 py-1.5 2xl:py-2 rounded-md transition-colors whitespace-nowrap ${

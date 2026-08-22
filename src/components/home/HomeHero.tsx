@@ -280,7 +280,7 @@ export const HomeHero: React.FC = () => {
               {/* Primary CTA */}
               <Button
                 size="lg"
-                className="bg-gov-emerald hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 h-12 shadow-lg transition-all gap-2 gold-ring-focus rounded-xl shrink-0"
+                className="bg-gov-emerald hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-3 h-12 shadow-lg transition-all gap-2 gold-ring-focus rounded-xl shrink-0"
                 asChild
               >
                 <Link to="/achievements">
@@ -289,15 +289,27 @@ export const HomeHero: React.FC = () => {
                 </Link>
               </Button>
 
+              {/* PTAT AI CTA */}
+              <Button
+                size="lg"
+                className="bg-cyan-950/80 hover:bg-cyan-900/90 border border-cyan-500/50 text-cyan-300 font-bold text-xs sm:text-sm px-5 py-3 h-12 gap-2 rounded-xl backdrop-blur-sm transition-all focus:ring-2 focus:ring-cyan-400 shrink-0 shadow-md hover:shadow-cyan-500/20"
+                asChild
+              >
+                <Link to="/ai">
+                  <Sparkles className="h-4 w-4 text-cyan-400" />
+                  <span>{t("hero.askAI", { defaultValue: "Ask PTAT AI" })}</span>
+                </Link>
+              </Button>
+
               {/* Secondary CTA */}
               <Button
                 size="lg"
-                className="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs sm:text-sm px-6 py-3 h-12 gap-2 rounded-xl backdrop-blur-sm transition-all focus:ring-2 focus:ring-gov-gold shrink-0"
+                className="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs sm:text-sm px-5 py-3 h-12 gap-2 rounded-xl backdrop-blur-sm transition-all focus:ring-2 focus:ring-gov-gold shrink-0"
                 asChild
               >
                 <Link to="/impact-map">
                   <Compass className="h-4 w-4 text-gov-gold" />
-                  <span className="text-white font-semibold">{t("hero.impactMap", { defaultValue: "Nigeria Impact Map" })}</span>
+                  <span className="text-white font-semibold">{t("hero.impactMap", { defaultValue: "Impact Map" })}</span>
                 </Link>
               </Button>
 

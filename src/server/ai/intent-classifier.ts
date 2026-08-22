@@ -6,7 +6,7 @@ export interface ClassifiedIntent {
   rawQuery: string;
 }
 
-const NIGERIAN_STATES: Record<string, string> = {
+export const NIGERIAN_STATES: Record<string, string> = {
   abia: 'NG-AB',
   adamawa: 'NG-AD',
   'akwa ibom': 'NG-AK',
@@ -48,7 +48,7 @@ const NIGERIAN_STATES: Record<string, string> = {
   zamfara: 'NG-ZA',
 };
 
-const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
+export const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   education: { code: 'education_human_capital', label: 'Education and Human Capital' },
   school: { code: 'education_human_capital', label: 'Education and Human Capital' },
   university: { code: 'education_human_capital', label: 'Education and Human Capital' },

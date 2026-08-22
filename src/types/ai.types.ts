@@ -146,6 +146,9 @@ export interface PTATAIBeneficiary {
   reportingPeriod?: string;
 }
 
+export type PTATAIFinancialRecord = PTATAIFinancial;
+export type PTATAIBeneficiaryRecord = PTATAIBeneficiary;
+
 export interface PTATAITimelineEvent {
   eventId: string;
   recordId: string;
@@ -180,11 +183,15 @@ export interface PTATAICitation {
 }
 
 export interface PTATAIRecordLink {
-  externalId: string;
+  externalId?: string;
+  slug?: string;
   title: string;
   recordType: string;
   route: string;
   primaryState?: string;
+  sectors?: string[];
+  stateNames?: string[];
+  implementationStatus?: string;
 }
 
 export interface PTATAIConfidence {
@@ -371,15 +378,27 @@ export interface PTATGroundedAnswer {
   intent: QueryIntent;
   answerability: AnswerabilityStatus;
   answer: string;
+  answerText?: string;
   summaryBulletPoints?: string[];
   citations: PTATModelCitation[];
   recordLinks: PTATAIRecordLink[];
   limitations: string[];
   confidence: PTATAIConfidence;
+  retrievalConfidence?: PTATAIConfidence;
   comparisonSummary?: {
     firstSubject: string;
     secondSubject: string;
     keyDifferences: string[];
+  };
+  financialSummary?: PTATAIFinancial[];
+  beneficiarySummary?: PTATAIBeneficiary[];
+  constraints?: QueryConstraints;
+  diagnostics?: {
+    retrievalLatencyMs: number;
+    recordsScanned: number;
+    claimsScanned: number;
+    sourcesScanned: number;
+    dataTimestamp: string;
   };
   modelMetadata: PTATModelMetadata;
   citationValidation: CitationValidationResult;

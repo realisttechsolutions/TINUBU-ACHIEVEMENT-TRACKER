@@ -62,6 +62,8 @@ export class PTATGroundedSynthesisService {
         answerability: 'INSUFFICIENT_EVIDENCE',
         answer:
           'The President Tinubu Achievement Tracker (PTAT) contains no recorded public evidence for this query. Substantive factual statements are strictly restricted to verified PTAT public records.',
+        answerText:
+          'The President Tinubu Achievement Tracker (PTAT) contains no recorded public evidence for this query. Substantive factual statements are strictly restricted to verified PTAT public records.',
         summaryBulletPoints: [
           'No matching public records, claims, or official sources found in the PTAT catalog.',
         ],
@@ -71,6 +73,11 @@ export class PTATGroundedSynthesisService {
           context.answerabilityReason || 'Zero evidence matches in the PTAT public catalog.',
         ],
         confidence: context.retrievalConfidence,
+        retrievalConfidence: context.retrievalConfidence,
+        financialSummary: [],
+        beneficiarySummary: [],
+        constraints: context.parsedConstraints,
+        diagnostics: context.diagnostics,
         modelMetadata: {
           model: vertexCfg.model,
           location: vertexCfg.location,
@@ -131,6 +138,7 @@ export class PTATGroundedSynthesisService {
       intent: context.parsedIntent,
       answerability: context.answerability,
       answer: rawAnswerText,
+      answerText: rawAnswerText,
       summaryBulletPoints: Array.isArray(parsed.summaryBulletPoints)
         ? parsed.summaryBulletPoints
         : undefined,
@@ -138,7 +146,12 @@ export class PTATGroundedSynthesisService {
       recordLinks: context.recordLinks,
       limitations,
       confidence: context.retrievalConfidence,
+      retrievalConfidence: context.retrievalConfidence,
       comparisonSummary: parsed.comparisonSummary,
+      financialSummary: context.financialRecords,
+      beneficiarySummary: context.beneficiaryRecords,
+      constraints: context.parsedConstraints,
+      diagnostics: context.diagnostics,
       modelMetadata: generationResult.metadata,
       citationValidation,
       isGrounded: citationValidation.valid,
