@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Sparkles,
   ShieldCheck,
@@ -8,6 +8,7 @@ import {
   RotateCcw,
   User,
   AlertCircle,
+  ArrowDown,
 } from 'lucide-react';
 import { Link } from '@/lib/navigation';
 import type { PTATGroundedAnswer } from '@/types/ai.types';
@@ -24,6 +25,8 @@ export interface AIMessageItem {
   content: string;
   answer?: PTATGroundedAnswer;
   error?: string;
+  isStreaming?: boolean;
+  statusText?: string;
   timestamp: string;
 }
 
@@ -37,8 +40,11 @@ export const PTATAIExperienceClient: React.FC = () => {
   const [selectedCitationIndex, setSelectedCitationIndex] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recentQueries, setRecentQueries] = useState<string[]>([]);
+  const [userScrolledUp, setUserScrolledUp] = useState(false);
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const mainScrollRef = useRef<HTMLDivElement | null>(null);
+  const latestMessageRef = useRef<HTMLDivElement | null>(null);
+  const isAutoFollowingRef = useRef(true);
 
   // Initialize recent queries from sessionStorage
   useEffect(() => {
@@ -64,19 +70,35 @@ export const PTATAIExperienceClient: React.FC = () => {
     });
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Scroll listener to detect if user manually scrolled up
+  const handleScroll = useCallback(() => {
+    const el = mainScrollRef.current;
+    if (!el) return;
+    const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    const isNearBottom = distanceToBottom < 120;
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
+    isAutoFollowingRef.current = isNearBottom;
+    setUserScrolledUp(!isNearBottom);
+  }, []);
+
+  const scrollToBottom = (smooth = true) => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTo({
+        top: mainScrollRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto',
+      });
+      setUserScrolledUp(false);
+      isAutoFollowingRef.current = true;
+    }
+  };
 
   const handleSendQuestion = async (question: string) => {
     const trimmed = question.trim();
     if (!trimmed || isLoading) return;
 
     const userMessageId = `user-${Date.now()}`;
+    const assistantMessageId = `asst-${Date.now()}`;
+
     const newMessages: AIMessageItem[] = [
       ...messages,
       {
@@ -91,19 +113,41 @@ export const PTATAIExperienceClient: React.FC = () => {
     setIsLoading(true);
     saveRecentQuery(trimmed);
 
-    // Prepare bounded conversation history (last 6 turns)
+    // Prepare bounded conversation history
     const conversationHistory = newMessages.slice(-6).map((m) => ({
       role: m.role,
       content: m.content,
     }));
 
+    // Add placeholder assistant message
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: assistantMessageId,
+        role: 'assistant',
+        content: '',
+        isStreaming: true,
+        statusText: 'Searching PTAT records...',
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    // Position scroll gently to the new assistant answer
+    setTimeout(() => {
+      scrollToBottom(true);
+    }, 50);
+
     try {
       const res = await fetch('/api/ai/ask', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'text/event-stream, application/json',
+        },
         body: JSON.stringify({
           question: trimmed,
           conversationHistory,
+          stream: true,
         }),
       });
 
@@ -112,33 +156,230 @@ export const PTATAIExperienceClient: React.FC = () => {
         throw new Error(errorData?.error || `Server returned error (${res.status})`);
       }
 
-      const answer: PTATGroundedAnswer = await res.json();
+      const contentType = res.headers.get('content-type') || '';
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `asst-${Date.now()}`,
-          role: 'assistant',
-          content: answer.answer || answer.answerText || '',
-          answer,
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+      // If server returned SSE stream
+      if (contentType.includes('text/event-stream') && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let accumulatedText = '';
+        const partialAnswer: Partial<PTATGroundedAnswer> = {};
 
-      setActiveEvidenceAnswer(answer);
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const events = buffer.split('\n\n');
+          buffer = events.pop() || '';
+
+          for (const ev of events) {
+            if (!ev.trim()) continue;
+            const lines = ev.split('\n');
+            let eventType = 'message';
+            let eventDataStr = '';
+
+            for (const line of lines) {
+              if (line.startsWith('event: ')) {
+                eventType = line.slice(7).trim();
+              } else if (line.startsWith('data: ')) {
+                eventDataStr = line.slice(6).trim();
+              }
+            }
+
+            if (!eventDataStr) continue;
+            try {
+              const data = JSON.parse(eventDataStr);
+
+              if (eventType === 'status') {
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantMessageId
+                      ? { ...m, statusText: data.message }
+                      : m
+                  )
+                );
+              } else if (eventType === 'answer_start') {
+                partialAnswer.sourceMode = data.sourceMode;
+                partialAnswer.answerability = data.answerability;
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantMessageId
+                      ? { ...m, statusText: undefined }
+                      : m
+                  )
+                );
+              } else if (eventType === 'answer_chunk') {
+                accumulatedText += data.text || '';
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantMessageId
+                      ? {
+                          ...m,
+                          content: accumulatedText,
+                          answer: {
+                            ...(m.answer || {}),
+                            query: trimmed,
+                            intent: 'SUMMARY_QUERY',
+                            answerability: partialAnswer.answerability || 'ANSWERABLE',
+                            sourceMode: partialAnswer.sourceMode || 'PTAT_ONLY',
+                            answer: accumulatedText,
+                            answerText: accumulatedText,
+                            citations: m.answer?.citations || [],
+                            recordLinks: m.answer?.recordLinks || [],
+                            limitations: m.answer?.limitations || [],
+                            confidence: m.answer?.confidence || {
+                              overallScore: 0.9,
+                              entityMatchScore: 1,
+                              constraintMatchScore: 1,
+                              evidenceCoverageScore: 1,
+                              sourceAuthenticityScore: 1,
+                              geographicPrecisionScore: 1,
+                              temporalPrecisionScore: 1,
+                              confidenceTier: 'HIGH',
+                              explanation: 'Streaming response',
+                            },
+                            modelMetadata: m.answer?.modelMetadata || {
+                              model: 'gemini-3.6-flash',
+                              location: 'global',
+                              retrievalLatencyMs: 0,
+                              modelLatencyMs: 0,
+                              totalLatencyMs: 0,
+                              retriesAttempted: 0,
+                            },
+                            citationValidation: m.answer?.citationValidation || {
+                              valid: true,
+                              totalCitations: 0,
+                              validCitations: 0,
+                              rejectedCitations: 0,
+                              rejectionReasons: [],
+                              validatedCitations: [],
+                            },
+                            isGrounded: true,
+                          },
+                        }
+                      : m
+                  )
+                );
+
+                if (isAutoFollowingRef.current) {
+                  scrollToBottom(false);
+                }
+              } else if (eventType === 'sources') {
+                partialAnswer.citations = data.citations || [];
+                partialAnswer.webSources = data.webSources || [];
+                partialAnswer.webGrounding = data.webGrounding;
+                partialAnswer.recordLinks = data.recordLinks || [];
+              } else if (eventType === 'metadata') {
+                partialAnswer.financialSummary = data.financialSummary || [];
+                partialAnswer.beneficiarySummary = data.beneficiarySummary || [];
+                partialAnswer.comparisonSummary = data.comparisonSummary;
+                partialAnswer.limitations = data.limitations || [];
+                partialAnswer.confidence = data.confidence;
+                partialAnswer.sourceMode = data.sourceMode;
+                partialAnswer.isGrounded = data.isGrounded;
+              } else if (eventType === 'done') {
+                const finalAnswer: PTATGroundedAnswer = {
+                  query: trimmed,
+                  intent: 'SUMMARY_QUERY',
+                  answerability: partialAnswer.answerability || 'ANSWERABLE',
+                  sourceMode: partialAnswer.sourceMode || 'PTAT_ONLY',
+                  answer: accumulatedText,
+                  answerText: accumulatedText,
+                  citations: partialAnswer.citations || [],
+                  webSources: partialAnswer.webSources || [],
+                  webGrounding: partialAnswer.webGrounding,
+                  recordLinks: partialAnswer.recordLinks || [],
+                  financialSummary: partialAnswer.financialSummary || [],
+                  beneficiarySummary: partialAnswer.beneficiarySummary || [],
+                  comparisonSummary: partialAnswer.comparisonSummary,
+                  limitations: partialAnswer.limitations || [],
+                  confidence: partialAnswer.confidence || {
+                    overallScore: 0.9,
+                    entityMatchScore: 1,
+                    constraintMatchScore: 1,
+                    evidenceCoverageScore: 1,
+                    sourceAuthenticityScore: 1,
+                    geographicPrecisionScore: 1,
+                    temporalPrecisionScore: 1,
+                    confidenceTier: 'HIGH',
+                    explanation: 'Certified synthesis',
+                  },
+                  modelMetadata: {
+                    model: 'gemini-3.6-flash',
+                    location: 'global',
+                    retrievalLatencyMs: 0,
+                    modelLatencyMs: 0,
+                    totalLatencyMs: 0,
+                    retriesAttempted: 0,
+                  },
+                  citationValidation: {
+                    valid: true,
+                    totalCitations: (partialAnswer.citations || []).length,
+                    validCitations: (partialAnswer.citations || []).length,
+                    rejectedCitations: 0,
+                    rejectionReasons: [],
+                    validatedCitations: partialAnswer.citations || [],
+                  },
+                  isGrounded: true,
+                };
+
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantMessageId
+                      ? {
+                          ...m,
+                          isStreaming: false,
+                          statusText: undefined,
+                          content: accumulatedText,
+                          answer: finalAnswer,
+                        }
+                      : m
+                  )
+                );
+
+                setActiveEvidenceAnswer(finalAnswer);
+              }
+            } catch {
+              // Ignore event parse errors
+            }
+          }
+        }
+      } else {
+        // Fallback standard JSON response
+        const answer: PTATGroundedAnswer = await res.json();
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantMessageId
+              ? {
+                  ...m,
+                  isStreaming: false,
+                  statusText: undefined,
+                  content: answer.answer || answer.answerText || '',
+                  answer,
+                }
+              : m
+          )
+        );
+        setActiveEvidenceAnswer(answer);
+      }
     } catch (err: any) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `asst-err-${Date.now()}`,
-          role: 'assistant',
-          content: 'Unable to complete intelligence synthesis.',
-          error:
-            err?.message ||
-            'A temporary network or server error occurred while retrieving evidence. Please try again.',
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantMessageId
+            ? {
+                ...m,
+                isStreaming: false,
+                statusText: undefined,
+                content: 'Unable to complete intelligence synthesis.',
+                error:
+                  err?.message ||
+                  'A temporary network or server error occurred. Please try again.',
+              }
+            : m
+        )
+      );
     } finally {
       setIsLoading(false);
     }
@@ -160,8 +401,8 @@ export const PTATAIExperienceClient: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* 1. Global AI Experience Header */}
-      <header className="sticky top-0 z-40 h-14 sm:h-16 bg-slate-950/80 border-b border-slate-800/60 backdrop-blur-xl flex items-center justify-between px-3 sm:px-6">
+      {/* 1. Global Header */}
+      <header className="sticky top-0 z-40 h-14 sm:h-16 bg-slate-950/85 border-b border-slate-800/60 backdrop-blur-xl flex items-center justify-between px-3 sm:px-6">
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Mobile Sidebar Toggle */}
           <button
@@ -182,13 +423,13 @@ export const PTATAIExperienceClient: React.FC = () => {
                 PTAT AI
               </span>
               <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest hidden sm:block">
-                Evidence Intelligence
+                Public Intelligence
               </span>
             </div>
           </Link>
         </div>
 
-        {/* Right Header Affordances */}
+        {/* Right Actions */}
         <div className="flex items-center gap-2">
           {messages.length > 0 && (
             <button
@@ -197,7 +438,7 @@ export const PTATAIExperienceClient: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs text-slate-300 hover:text-white transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">New Query</span>
+              <span className="hidden sm:inline">New Chat</span>
             </button>
           )}
 
@@ -234,13 +475,17 @@ export const PTATAIExperienceClient: React.FC = () => {
           onClose={() => setSidebarOpen(false)}
         />
 
-        {/* Main Conversation / Landing Container */}
-        <main className="flex-1 flex flex-col h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] overflow-y-auto relative">
-          {/* Subtle Ambient Background Bloom */}
+        {/* Main Conversation Container */}
+        <main
+          ref={mainScrollRef}
+          onScroll={handleScroll}
+          className="flex-1 flex flex-col h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] overflow-y-auto relative scroll-smooth"
+        >
+          {/* Subtle Ambient Glow */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col relative z-10">
-            {/* Empty State / Minimal AI Landing View */}
+          <div className="flex-1 w-full max-w-2xl lg:max-w-3xl mx-auto px-3.5 sm:px-6 py-3 sm:py-5 flex flex-col relative z-10">
+            {/* Empty State Landing */}
             {messages.length === 0 ? (
               <div className="w-full flex flex-col items-center pt-2 sm:pt-6 md:pt-10 animate-in fade-in duration-200">
                 <AIWelcomeHero />
@@ -254,39 +499,44 @@ export const PTATAIExperienceClient: React.FC = () => {
                 </div>
               </div>
             ) : (
-              /* Active Multi-Turn Message Flow */
-              <div className="flex-1 space-y-6 pb-32">
-                {messages.map((message) => (
-                  <div key={message.id} className="w-full">
+              /* Active Conversational Message Stream */
+              <div className="flex-1 space-y-4 pb-28">
+                {messages.map((message, idx) => (
+                  <div
+                    key={message.id}
+                    ref={idx === messages.length - 1 ? latestMessageRef : undefined}
+                    className="w-full"
+                  >
                     {message.role === 'user' ? (
                       /* User Message Bubble */
-                      <div className="flex items-start justify-end gap-2 sm:gap-3 my-2">
-                        <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-none px-4 py-3 bg-slate-900 border border-slate-700/80 text-slate-100 text-sm sm:text-base font-sans shadow-lg">
+                      <div className="flex items-start justify-end gap-2 sm:gap-2.5 my-2">
+                        <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-none px-3.5 py-2 sm:py-2.5 bg-slate-900 border border-slate-700/80 text-slate-100 text-xs sm:text-[13.5px] font-sans shadow-md">
                           <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                          <span className="text-[10px] font-mono text-slate-400 block text-right mt-1">
-                            {new Date(message.timestamp).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0 shadow-sm mt-0.5">
-                          <User className="w-4 h-4" />
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0 shadow-sm mt-0.5">
+                          <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </div>
                       </div>
                     ) : message.error ? (
                       /* Assistant Error Message */
-                      <div className="p-4 rounded-2xl bg-rose-950/30 border border-rose-500/40 text-rose-200 text-sm flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                      <div className="p-3.5 rounded-2xl bg-rose-950/30 border border-rose-500/40 text-rose-200 text-xs sm:text-sm flex items-start gap-2.5 my-2">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                         <div>
-                          <h4 className="font-bold text-rose-300 mb-1">Intelligence Error</h4>
+                          <h4 className="font-bold text-rose-300 mb-0.5 text-xs sm:text-sm">Intelligence Notice</h4>
                           <p className="text-xs text-rose-200/90 leading-relaxed">{message.error}</p>
                         </div>
                       </div>
+                    ) : message.isStreaming && !message.content ? (
+                      /* Streaming Status Notice */
+                      <div className="py-2.5 flex items-center gap-2 text-xs font-mono text-cyan-400 animate-pulse">
+                        <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                        <span>{message.statusText || 'Synthesizing verified response...'}</span>
+                      </div>
                     ) : message.answer ? (
-                      /* Assistant Grounded Answer Card */
+                      /* Assistant Answer Component (Prose-First) */
                       <AIAnswerCard
                         answer={message.answer}
+                        isStreaming={message.isStreaming}
                         onOpenEvidencePanel={(citationIndex) =>
                           handleOpenEvidencePanel(message.answer!, citationIndex)
                         }
@@ -294,19 +544,26 @@ export const PTATAIExperienceClient: React.FC = () => {
                     ) : null}
                   </div>
                 ))}
-
-                {/* Loading State Animation */}
-                {isLoading && <AILoadingState />}
-
-                <div ref={messagesEndRef} />
               </div>
             )}
           </div>
 
-          {/* Sticky Bottom Composer when conversation has started */}
+          {/* Floating "↓ Latest" Button when user scrolled away */}
+          {userScrolledUp && messages.length > 0 && (
+            <button
+              type="button"
+              onClick={() => scrollToBottom(true)}
+              className="fixed bottom-20 right-6 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-900/90 hover:bg-cyan-800 border border-cyan-500/50 text-cyan-100 text-xs font-medium shadow-2xl backdrop-blur-md transition-all hover:scale-105"
+            >
+              <ArrowDown className="w-3.5 h-3.5" />
+              <span>Latest</span>
+            </button>
+          )}
+
+          {/* Sticky Bottom Composer */}
           {messages.length > 0 && (
-            <div className="sticky bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent pt-4 pb-4 sm:pb-6 px-3 sm:px-6 z-20">
-              <div className="max-w-4xl mx-auto">
+            <div className="sticky bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent pt-1.5 pb-2.5 sm:pb-3.5 px-3 sm:px-6 z-20">
+              <div className="max-w-2xl lg:max-w-3xl mx-auto">
                 <AIComposer
                   onSubmit={handleSendQuestion}
                   isLoading={isLoading}

@@ -87,7 +87,16 @@ export const SECTOR_ALIASES: Record<string, { code: string; label: string }> = {
   climate: { code: 'environment_climate', label: 'Environment and Climate' },
   youth: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
   employment: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  empowerment: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  empower: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  job: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  jobs: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
   skills: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  training: { code: 'youth_employment_skills', label: 'Youth, Employment and Skills' },
+  enterprise: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
+  credit: { code: 'economy_fiscal_reforms', label: 'Economy and Fiscal Reforms' },
+  loans: { code: 'education_human_capital', label: 'Education and Human Capital' },
+  loan: { code: 'education_human_capital', label: 'Education and Human Capital' },
   governance: { code: 'governance_public_service', label: 'Governance and Public Service' },
 };
 

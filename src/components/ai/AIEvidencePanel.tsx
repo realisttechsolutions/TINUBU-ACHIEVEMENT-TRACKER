@@ -178,14 +178,14 @@ export const AIEvidencePanel: React.FC<AIEvidencePanelProps> = ({
         {/* TAB 1: SOURCES */}
         {activeTab === 'sources' && (
           <div className="space-y-3">
-            {citations.length > 0 ? (
+            {citations.length > 0 &&
               citations.map((citation, index) => {
                 const isSelected = selectedCitationIndex === index + 1;
                 const badge = getSourceLevelBadge(citation.sourceLevel || 'LEVEL_1');
 
                 return (
                   <div
-                    key={index}
+                    key={`cit-${index}`}
                     className={`p-3.5 rounded-xl border transition-all duration-200 ${
                       isSelected
                         ? 'bg-cyan-950/40 border-cyan-400 ring-2 ring-cyan-500/30'
@@ -230,10 +230,45 @@ export const AIEvidencePanel: React.FC<AIEvidencePanelProps> = ({
                     </div>
                   </div>
                 );
-              })
-            ) : (
+              })}
+
+            {/* Web Grounded Sources */}
+            {answer.webSources && answer.webSources.length > 0 &&
+              answer.webSources.map((web, idx) => (
+                <div
+                  key={`web-${idx}`}
+                  className="p-3.5 rounded-xl border bg-slate-900/80 border-slate-800 hover:border-slate-700 transition-all"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/40">
+                      Web Source
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">{web.domain}</span>
+                  </div>
+
+                  <h4 className="font-sans font-semibold text-xs text-slate-100 mb-1 leading-snug">
+                    {web.title}
+                  </h4>
+
+                  {web.url && (
+                    <div className="pt-2 border-t border-slate-800/80 text-[11px]">
+                      <a
+                        href={web.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium truncate"
+                      >
+                        <span className="truncate">{web.url}</span>
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+            {citations.length === 0 && (!answer.webSources || answer.webSources.length === 0) && (
               <div className="text-center py-10 text-xs text-slate-400">
-                No citations referenced for this response.
+                No citations or external web sources referenced for this response.
               </div>
             )}
           </div>

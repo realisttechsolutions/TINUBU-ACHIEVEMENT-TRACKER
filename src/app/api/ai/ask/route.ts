@@ -87,15 +87,98 @@ export async function POST(req: NextRequest) {
         }));
     }
 
-    // Resolve conversational follow-up context (e.g. state or topic continuity)
+    const wantsStream =
+      body.stream === true ||
+      req.headers.get('accept')?.includes('text/event-stream');
+
+    // Resolve conversational follow-up context
     const contextual = resolveConversationContext(question, sanitizedHistory);
 
-    // Initialize grounded synthesis with authoritative Cloud SQL connection
+    // Initialize grounded synthesis with Cloud SQL connection
     const db = await getDatabaseConnection();
     const synthesisService = new PTATGroundedSynthesisService(db);
 
-    const answer = await synthesisService.answerQuestion(contextual.effectiveQuery);
+    if (wantsStream) {
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        async start(controller) {
+          function send(type: string, data: any) {
+            try {
+              const payload = `event: ${type}\ndata: ${JSON.stringify(data)}\n\n`;
+              controller.enqueue(encoder.encode(payload));
+            } catch {
+              // Controller might already be closed
+            }
+          }
 
+          try {
+            send('status', { message: 'Searching PTAT records...' });
+
+            const answer = await synthesisService.answerQuestion(contextual.effectiveQuery);
+
+            send('status', { message: 'Preparing answer...' });
+            send('answer_start', {
+              sourceMode: answer.sourceMode || 'PTAT_ONLY',
+              answerability: answer.answerability,
+            });
+
+            // Emit validated answer text in natural readable semantic chunks
+            const fullText = answer.answerText || answer.answer || '';
+            const words = fullText.split(' ');
+            const chunkSize = 4; // Emit 3-5 words per chunk for smooth reading rhythm
+
+            for (let i = 0; i < words.length; i += chunkSize) {
+              const chunk = words.slice(i, i + chunkSize).join(' ') + (i + chunkSize < words.length ? ' ' : '');
+              send('answer_chunk', { text: chunk });
+              // Brief micro-delay between chunks to allow progressive client rendering
+              await new Promise((r) => setTimeout(r, 20));
+            }
+
+            // Emit structured sources & metadata
+            send('sources', {
+              citations: answer.citations || [],
+              webSources: answer.webSources || [],
+              webGrounding: answer.webGrounding,
+              recordLinks: answer.recordLinks || [],
+            });
+
+            send('metadata', {
+              financialSummary: answer.financialSummary || [],
+              beneficiarySummary: answer.beneficiarySummary || [],
+              comparisonSummary: answer.comparisonSummary,
+              limitations: answer.limitations || [],
+              confidence: answer.confidence,
+              isGrounded: answer.isGrounded,
+              sourceMode: answer.sourceMode,
+            });
+
+            send('done', { completed: true });
+          } catch (err: any) {
+            send('error', {
+              message: 'Unable to complete intelligence synthesis.',
+              code: 'STREAM_SYNTHESIS_ERROR',
+            });
+          } finally {
+            try {
+              controller.close();
+            } catch {
+              // Already closed
+            }
+          }
+        },
+      });
+
+      return new Response(stream, {
+        headers: {
+          'Content-Type': 'text/event-stream; charset=utf-8',
+          'Cache-Control': 'no-cache, no-transform',
+          'Connection': 'keep-alive',
+        },
+      });
+    }
+
+    // Standard Non-Streaming JSON Response
+    const answer = await synthesisService.answerQuestion(contextual.effectiveQuery);
     return NextResponse.json(answer, { status: 200 });
   } catch (error: any) {
     console.error('PTAT AI Ask API Error:', {

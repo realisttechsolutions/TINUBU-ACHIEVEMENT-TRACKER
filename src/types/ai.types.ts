@@ -350,6 +350,32 @@ export interface PTATModelCitation {
   isValidated: boolean;
 }
 
+export type PTATSourceMode =
+  | 'PTAT_ONLY'
+  | 'PTAT_PLUS_WEB'
+  | 'WEB_GROUNDED'
+  | 'GENERAL';
+
+export interface PTATWebSource {
+  title: string;
+  url: string;
+  domain: string;
+  snippet?: string;
+  publisher?: string;
+}
+
+export interface PTATWebGroundingMetadata {
+  webSearchQueries: string[];
+  groundingChunks: PTATWebSource[];
+  groundingSupports?: Array<{
+    segmentText: string;
+    startIndex?: number;
+    endIndex?: number;
+    groundingChunkIndices: number[];
+  }>;
+  searchEntryPointHtml?: string;
+}
+
 export interface PTATModelMetadata {
   model: string;
   location: string;
@@ -362,6 +388,7 @@ export interface PTATModelMetadata {
   totalTokens?: number;
   thoughtTokens?: number;
   retriesAttempted: number;
+  webGroundingApplied?: boolean;
 }
 
 export interface CitationValidationResult {
@@ -377,10 +404,13 @@ export interface PTATGroundedAnswer {
   query: string;
   intent: QueryIntent;
   answerability: AnswerabilityStatus;
+  sourceMode?: PTATSourceMode;
   answer: string;
   answerText?: string;
   summaryBulletPoints?: string[];
   citations: PTATModelCitation[];
+  webSources?: PTATWebSource[];
+  webGrounding?: PTATWebGroundingMetadata;
   recordLinks: PTATAIRecordLink[];
   limitations: string[];
   confidence: PTATAIConfidence;
@@ -403,5 +433,19 @@ export interface PTATGroundedAnswer {
   modelMetadata: PTATModelMetadata;
   citationValidation: CitationValidationResult;
   isGrounded: boolean;
+}
+
+export type PTATStreamEventType =
+  | 'status'
+  | 'answer_start'
+  | 'answer_chunk'
+  | 'sources'
+  | 'metadata'
+  | 'done'
+  | 'error';
+
+export interface PTATStreamEvent {
+  type: PTATStreamEventType;
+  data: any;
 }
 

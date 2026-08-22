@@ -182,14 +182,12 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
   });
 
   describe('3. System Instruction & Grounding Prompts', () => {
-    it('embeds evidence-containment doctrine and financial semantic rules', () => {
+    it('embeds natural conversation guidelines and core truth semantic rules', () => {
       const sys = buildSystemInstruction();
-      expect(sys).toContain('EVIDENCE-CONTAINMENT CONTROL & STRICT EVIDENCE GROUNDING');
-      expect(sys).toContain('DO NOT use general training knowledge');
-      expect(sys).toContain('DICON');
+      expect(sys).toContain('NATURAL CONVERSATION & PROFESSIONAL TONE');
+      expect(sys).toContain('CORE TRUTH & FACTUAL INTEGRITY');
       expect(sys).toContain('NELFUND');
-      expect(sys).toContain('CREDICORP is distinct from Pi-CNG');
-      expect(sys).toContain('3MTT "trained" does NOT mean "employed"');
+      expect(sys).toContain('trained fellows" does NOT mean "employed/placed"');
     });
 
     it('formats synthesis prompt with bounded JSON evidence packet', () => {
@@ -257,44 +255,7 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
     });
   });
 
-  describe('5. Grounded Synthesis Pre-Gate & Unsupported Evidence Handling', () => {
-    it('bypasses Vertex AI call when answerability is INSUFFICIENT_EVIDENCE', async () => {
-      const insufficientContext: PTATAIContext = {
-        ...mockContext,
-        query: 'What is the average temperature on planet Mars?',
-        answerability: 'INSUFFICIENT_EVIDENCE',
-        records: [],
-        claims: [],
-        sources: [],
-        financialRecords: [],
-        beneficiaryRecords: [],
-        recordLinks: [],
-        answerabilityReason: 'No public records found.',
-      };
-
-      const mockDb = { query: vi.fn() } as unknown as QueryExecutor;
-      const service = new PTATGroundedSynthesisService(mockDb);
-
-      // Mock retrievalService to return insufficientContext
-      vi.spyOn(service.getRetrievalService(), 'retrievePTATContext').mockResolvedValue(
-        insufficientContext
-      );
-
-      // Spy on vertexClient to ensure generateGroundedContent is NEVER called
-      const vertexSpy = vi.spyOn(service.getVertexClient(), 'generateGroundedContent');
-
-      const answer = await service.answerQuestion('What is the average temperature on planet Mars?');
-
-      expect(vertexSpy).not.toHaveBeenCalled();
-      expect(answer.answerability).toBe('INSUFFICIENT_EVIDENCE');
-      expect(answer.citations).toHaveLength(0);
-      expect(answer.recordLinks).toHaveLength(0);
-      expect(answer.modelMetadata.modelLatencyMs).toBe(0);
-      expect(answer.modelMetadata.inputTokens).toBe(0);
-      expect(answer.isGrounded).toBe(true);
-      expect(answer.answer).toContain('contains no recorded public evidence');
-    });
-
+  describe('5. Grounded Synthesis & Execution Flow', () => {
     it('executes full grounded synthesis when evidence is available', async () => {
       const mockDb = { query: vi.fn() } as unknown as QueryExecutor;
       const service = new PTATGroundedSynthesisService(mockDb);
@@ -387,25 +348,25 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
   describe('7. Semantic Integrity & Discipline Invariants', () => {
     it('strictly distinguishes financial commitment from expenditure in system instructions', () => {
       const sys = buildSystemInstruction();
-      expect(sys).toMatch(/commitment.*expenditure/i);
+      expect(sys).toMatch(/commitments.*expenditures/i);
       expect(sys).toMatch(/allocation.*disbursement/i);
     });
 
     it('strictly enforces beneficiary stage separation (trained vs employed)', () => {
       const sys = buildSystemInstruction();
-      expect(sys).toContain('trained" does NOT mean "employed"');
+      expect(sys).toContain('trained fellows" does NOT mean "employed/placed"');
     });
 
     it('preserves symmetrical bilateral comparison evaluation', () => {
       const sys = buildSystemInstruction();
-      expect(sys).toContain('No recorded financial observation in PTAT" must NEVER be converted to "₦0 spent"');
+      expect(sys).toContain('without assuming "₦0 spent" when unrecorded');
     });
   });
 
-  describe('8. Generic Unsupported-Query Pre-Gate & Evidence-Containment Boundary', () => {
-    it('bypasses Vertex AI model invocation when retrieval produces zero records (modelLatencyMs = 0, tokens = 0)', async () => {
+  describe('8. M08E Intelligent Routing & General/Web Grounding Behavior', () => {
+    it('routes general queries to GENERAL mode and calls generateGeneralContent', async () => {
       const mockEmptyContext: PTATAIContext = {
-        query: 'What is the average surface temperature of Mars according to PTAT?',
+        query: 'What is the average surface temperature of Mars?',
         parsedIntent: 'ENTITY_LOOKUP',
         parsedConstraints: { keywords: ['mars'] },
         matchedEntities: [],
@@ -450,26 +411,44 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
         model: 'gemini-3.6-flash',
       });
 
-      const generateSpy = vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedContent');
+      vi.spyOn((synthesisService as any).vertexClient, 'generateSimpleText').mockResolvedValue({
+        text: mockEmptyContext.query,
+      });
+
+      const generalSpy = vi
+        .spyOn((synthesisService as any).vertexClient, 'generateGeneralContent')
+        .mockResolvedValue({
+          rawText: 'The average surface temperature on Mars is approximately -60°C (-80°F).',
+          metadata: {
+            model: 'gemini-3.6-flash',
+            location: 'global',
+            retrievalLatencyMs: 12,
+            modelLatencyMs: 150,
+            totalLatencyMs: 162,
+            inputTokens: 100,
+            outputTokens: 30,
+            totalTokens: 130,
+            retriesAttempted: 0,
+          },
+        });
+
       vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue(mockEmptyContext);
 
       // Execute synthesis
       const answer = await synthesisService.answerQuestion(mockEmptyContext.query);
 
-      expect(generateSpy).not.toHaveBeenCalled();
-      expect(answer.answerability).toBe('INSUFFICIENT_EVIDENCE');
-      expect(answer.modelMetadata.modelLatencyMs).toBe(0);
-      expect(answer.modelMetadata.inputTokens).toBe(0);
-      expect(answer.modelMetadata.outputTokens).toBe(0);
+      expect(generalSpy).toHaveBeenCalled();
+      expect(answer.sourceMode).toBe('GENERAL');
+      expect(answer.answerText).toContain('Mars');
       expect(answer.citations).toHaveLength(0);
       expect(answer.isGrounded).toBe(true);
     });
 
-    it('bypasses Vertex AI when confidenceTier is NONE even if incidental records exist', async () => {
-      const mockIncidentalContext: PTATAIContext = {
-        query: 'What policies did the Roman Empire implement in 100 AD?',
-        parsedIntent: 'POLICY_QUERY',
-        parsedConstraints: { keywords: ['roman', 'empire'] },
+    it('routes factual current news queries with zero PTAT records to WEB_GROUNDED search mode', async () => {
+      const mockNewsContext: PTATAIContext = {
+        query: 'Who is the current President of South Africa?',
+        parsedIntent: 'ENTITY_LOOKUP',
+        parsedConstraints: { keywords: ['president', 'south', 'africa'] },
         matchedEntities: [],
         records: [],
         claims: [],
@@ -512,16 +491,42 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
         model: 'gemini-3.6-flash',
       });
 
-      const generateSpy = vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedContent');
-      vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue(mockIncidentalContext);
+      vi.spyOn((synthesisService as any).vertexClient, 'generateSimpleText').mockResolvedValue({
+        text: mockNewsContext.query,
+      });
 
-      const answer = await synthesisService.answerQuestion(mockIncidentalContext.query);
+      const searchSpy = vi
+        .spyOn((synthesisService as any).vertexClient, 'generateGroundedSearchContent')
+        .mockResolvedValue({
+          rawText: 'The current President of South Africa is Cyril Ramaphosa.',
+          metadata: {
+            model: 'gemini-3.6-flash',
+            location: 'global',
+            retrievalLatencyMs: 15,
+            modelLatencyMs: 250,
+            totalLatencyMs: 265,
+            inputTokens: 120,
+            outputTokens: 40,
+            totalTokens: 160,
+            retriesAttempted: 0,
+          },
+          webSources: [
+            {
+              title: 'The Presidency of South Africa',
+              url: 'https://thepresidency.gov.za',
+              domain: 'thepresidency.gov.za',
+            },
+          ],
+        });
 
-      expect(generateSpy).not.toHaveBeenCalled();
-      expect(answer.answerability).toBe('INSUFFICIENT_EVIDENCE');
-      expect(answer.modelMetadata.modelLatencyMs).toBe(0);
-      expect(answer.modelMetadata.inputTokens).toBe(0);
-      expect(answer.citations).toHaveLength(0);
+      vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue(mockNewsContext);
+
+      const answer = await synthesisService.answerQuestion(mockNewsContext.query);
+
+      expect(searchSpy).toHaveBeenCalled();
+      expect(answer.sourceMode).toBe('WEB_GROUNDED');
+      expect(answer.answerText).toContain('Cyril Ramaphosa');
+      expect(answer.webSources).toHaveLength(1);
     });
   });
 });

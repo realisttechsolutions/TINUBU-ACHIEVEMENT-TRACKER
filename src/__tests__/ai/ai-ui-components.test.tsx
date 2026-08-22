@@ -362,7 +362,7 @@ describe('PTAT M08C: AI UI Components Test Suite', () => {
       },
     };
 
-    it('renders Trust Strip and interactive inline citation chip [1]', () => {
+    it('renders clean answer prose, subtle source badge, and progressive sources disclosure', () => {
       const handleOpenEvidence = vi.fn();
       render(
         <AIAnswerCard
@@ -371,36 +371,49 @@ describe('PTAT M08C: AI UI Components Test Suite', () => {
         />
       );
 
-      expect(screen.getByText('Grounded in PTAT Public Evidence')).toBeDefined();
-      expect(screen.queryByText('High Evidence Grounding')).toBeNull();
-      expect(screen.getAllByText(/1 Verified Citation/i).length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText(/In Kaduna State, President Tinubu commissioned/i)).toBeDefined();
+      expect(screen.getByText('PTAT Verified')).toBeDefined();
+      expect(screen.getByText(/Sources · 1/i)).toBeDefined();
 
-      const citationBtn = screen.getByRole('button', { name: /Citation \[1\]/i });
-      expect(citationBtn).toBeDefined();
+      // Click Sources disclosure button
+      const sourcesBtn = screen.getByText(/Sources · 1/i);
+      fireEvent.click(sourcesBtn);
 
-      fireEvent.click(citationBtn);
-      expect(handleOpenEvidence).toHaveBeenCalledWith(1);
+      expect(screen.getByText(/REA Commissioning Report 2025/i)).toBeDefined();
+      const sourceLink = screen.getByText('https://rea.gov.ng/report').closest('a');
+      expect(sourceLink?.getAttribute('href')).toBe('https://rea.gov.ng/report');
     });
 
-    it('renders qualification notice when answerability is INSUFFICIENT_EVIDENCE', () => {
-      const insufficientAnswer: PTATGroundedAnswer = {
+    it('renders web grounded answers with Web Grounded badge and live web sources', () => {
+      const webAnswer: PTATGroundedAnswer = {
         ...mockAnswer,
-        answerability: 'INSUFFICIENT_EVIDENCE',
-        answer: 'PTAT does not currently contain verified records for this question.',
-        answerText: 'PTAT does not currently contain verified records for this question.',
+        sourceMode: 'WEB_GROUNDED',
+        answer: 'The current President of South Africa is Cyril Ramaphosa.',
+        answerText: 'The current President of South Africa is Cyril Ramaphosa.',
         citations: [],
-        recordLinks: [],
+        webSources: [
+          {
+            title: 'The Presidency of South Africa',
+            url: 'https://thepresidency.gov.za',
+            domain: 'thepresidency.gov.za',
+          },
+        ],
       };
 
       render(
         <AIAnswerCard
-          answer={insufficientAnswer}
+          answer={webAnswer}
           onOpenEvidencePanel={vi.fn()}
         />
       );
 
-      expect(screen.getByText('Insufficient Evidence in Public Catalog')).toBeDefined();
-      expect(screen.getByText(/PTAT does not currently contain verified records/i)).toBeDefined();
+      expect(screen.getByText(/Cyril Ramaphosa/i)).toBeDefined();
+      expect(screen.getByText('Web Grounded')).toBeDefined();
+      expect(screen.getByText(/Sources · 1/i)).toBeDefined();
+
+      // Open Sources
+      fireEvent.click(screen.getByText(/Sources · 1/i));
+      expect(screen.getByText('The Presidency of South Africa')).toBeDefined();
     });
   });
 });

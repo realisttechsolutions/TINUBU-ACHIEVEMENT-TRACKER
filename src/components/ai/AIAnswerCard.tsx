@@ -2,18 +2,18 @@
 
 import React, { useState } from 'react';
 import {
-  ShieldCheck,
-  AlertTriangle,
-  Info,
-  ChevronRight,
-  FileText,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
   Building2,
   CircleDollarSign,
   Users,
+  Globe,
+  ShieldCheck,
+  FileText,
   Sparkles,
-  ExternalLink,
 } from 'lucide-react';
-import type { PTATGroundedAnswer, PTATAIRecord } from '@/types/ai.types';
+import type { PTATGroundedAnswer } from '@/types/ai.types';
 import { AIRecordCard } from './AIRecordCard';
 import { AIFinancialCard } from './AIFinancialCard';
 import { AIBeneficiaryCard } from './AIBeneficiaryCard';
@@ -21,202 +21,301 @@ import { AIComparisonBlock } from './AIComparisonBlock';
 
 interface AIAnswerCardProps {
   answer: PTATGroundedAnswer;
-  onOpenEvidencePanel: (citationIndex?: number) => void;
+  onOpenEvidencePanel?: (citationIndex?: number) => void;
+  isStreaming?: boolean;
 }
 
 export const AIAnswerCard: React.FC<AIAnswerCardProps> = ({
   answer,
   onOpenEvidencePanel,
+  isStreaming = false,
 }) => {
-  const [activeTooltipIndex, setActiveTooltipIndex] = useState<number | null>(null);
+  const [sourcesExpanded, setSourcesExpanded] = useState(false);
+  const [showStructuredDetails, setShowStructuredDetails] = useState(false);
 
-  const isInsufficient = answer.answerability === 'INSUFFICIENT_EVIDENCE';
   const citations = answer.citations || [];
+  const webSources = answer.webSources || [];
   const recordLinks = answer.recordLinks || [];
   const financials = answer.financialSummary || [];
   const beneficiaries = answer.beneficiarySummary || [];
+  const sourceMode = answer.sourceMode || 'PTAT_ONLY';
 
-  // Parse inline citations in text ([1], [2], etc.) and render clickable chips
-  const renderFormattedAnswer = (text: string) => {
+  const totalSourcesCount = citations.length + webSources.length;
+
+  // Determine subtle badge label
+  let sourceBadgeLabel = 'PTAT Verified';
+  let sourceBadgeIcon = ShieldCheck;
+  if (sourceMode === 'WEB_GROUNDED') {
+    sourceBadgeLabel = 'Web Grounded';
+    sourceBadgeIcon = Globe;
+  } else if (sourceMode === 'PTAT_PLUS_WEB') {
+    sourceBadgeLabel = 'PTAT + Web';
+    sourceBadgeIcon = Sparkles;
+  } else if (sourceMode === 'GENERAL') {
+    sourceBadgeLabel = 'AI Assistant';
+    sourceBadgeIcon = Sparkles;
+  }
+
+  const BadgeIcon = sourceBadgeIcon;
+
+  // Render markdown text naturally (paragraphs, headers, bold, bullet points)
+  const renderProse = (text: string) => {
     if (!text) return null;
 
-    // Split text by bracket citations: e.g. [1], [2], [1, 2]
-    const parts = text.split(/(\[\d+(?:,\s*\d+)*\])/g);
+    // Clean inline bracket clutter like [1, 2] or [1] into subtle superscript tags
+    const paragraphs = text.split(/\n\n+/);
 
-    return parts.map((part, idx) => {
-      const match = part.match(/^\[(\d+(?:,\s*\d+)*)\]$/);
-      if (match) {
-        const citationNums = match[1].split(',').map((n) => parseInt(n.trim(), 10));
+    return paragraphs.map((para, pIdx) => {
+      const isBulletList = para.trim().startsWith('- ') || para.trim().startsWith('* ') || /^\d+\.\s/.test(para.trim());
 
+      if (isBulletList) {
+        const items = para.split(/\n/).filter((line) => line.trim().length > 0);
         return (
-          <span key={idx} className="inline-flex items-center gap-1 mx-1 align-baseline">
-            {citationNums.map((num) => {
-              const citation = citations[num - 1];
+          <ul key={pIdx} className="space-y-1.5 my-1.5 list-disc list-outside pl-4.5 text-slate-200 text-xs sm:text-[13.5px] md:text-[14px]">
+            {items.map((item, iIdx) => {
+              const cleaned = item.replace(/^[-*]\s+|\d+\.\s+/, '');
               return (
-                <button
-                  key={num}
-                  type="button"
-                  onClick={() => onOpenEvidencePanel(num)}
-                  onMouseEnter={() => setActiveTooltipIndex(num)}
-                  onMouseLeave={() => setActiveTooltipIndex(null)}
-                  className="relative inline-flex items-center justify-center px-1.5 py-0.2 rounded-md bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 hover:border-cyan-400 text-cyan-300 font-mono text-[11px] font-bold shadow-sm transition-all focus:outline-none focus:ring-1 focus:ring-cyan-400"
-                  aria-label={`Citation [${num}]: ${citation?.sourceTitle || 'View Evidence Source'}`}
-                >
-                  [{num}]
-                  {/* Hover Mini Popover */}
-                  {activeTooltipIndex === num && citation && (
-                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-64 p-2 rounded-lg bg-slate-950 border border-cyan-500/40 text-[11px] font-sans font-normal text-slate-200 shadow-2xl z-30 pointer-events-none text-left leading-tight">
-                      <span className="block font-bold text-cyan-300 font-mono text-[10px] uppercase mb-0.5">
-                        Source [{num}]: {citation.publisher || 'Official Document'}
-                      </span>
-                      {citation.sourceTitle}
-                    </span>
-                  )}
-                </button>
+                <li key={iIdx} className="leading-relaxed">
+                  {renderInlineFormatting(cleaned)}
+                </li>
               );
             })}
-          </span>
+          </ul>
         );
       }
 
-      // Format markdown paragraphs & bullet points cleanly
       return (
-        <span key={idx} className="whitespace-pre-wrap">
-          {part}
-        </span>
+        <p key={pIdx} className="leading-relaxed text-slate-200 my-1.5 text-xs sm:text-[13.5px] md:text-[14px]">
+          {renderInlineFormatting(para)}
+        </p>
       );
     });
   };
 
-  return (
-    <div className="w-full my-4 rounded-2xl bg-slate-900/80 dark:bg-slate-950/90 border border-slate-800 shadow-xl backdrop-blur-xl p-5 sm:p-7 text-left space-y-5 animate-in fade-in duration-200">
-      {/* 1. Trust & Provenance Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
-        <div className="flex items-center gap-2">
-          <div className="p-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-          <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
-            Grounded in PTAT Public Evidence
-          </span>
-        </div>
+  const renderInlineFormatting = (text: string) => {
+    // Replace markdown bold **text** and bracket citations [1]
+    const parts = text.split(/(\*\*[^*]+\*\*|\[\d+(?:,\s*\d+)*\])/g);
 
-        {citations.length > 0 && (
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            <span>
-              {citations.length} Verified {citations.length === 1 ? 'Citation' : 'Citations'}
-            </span>
-          </div>
+    return parts.map((part, idx) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={idx} className="font-semibold text-slate-100">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+
+      const citMatch = part.match(/^\[(\d+(?:,\s*\d+)*)\]$/);
+      if (citMatch) {
+        const num = citMatch[1];
+        return (
+          <sup
+            key={idx}
+            className="text-[10px] font-mono text-cyan-400 font-medium px-0.5 ml-0.5 cursor-pointer hover:underline"
+            onClick={() => onOpenEvidencePanel?.(parseInt(num, 10))}
+            title={`Citation [${num}]`}
+          >
+            [{num}]
+          </sup>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  return (
+    <div className="w-full my-1.5 text-left font-sans animate-in fade-in duration-200">
+      {/* 1. Main Natural AI Answer Prose (Transparent / Low-Chrome) */}
+      <div className="text-xs sm:text-[13.5px] md:text-[14px] text-slate-200 font-sans leading-relaxed space-y-1.5">
+        {renderProse(answer.answerText || answer.answer || '')}
+        {isStreaming && (
+          <span className="inline-block w-1.5 h-3.5 ml-1 bg-cyan-400 animate-pulse align-middle rounded-sm" />
         )}
       </div>
 
-      {/* 2. Structured Answer Synthesis / Insufficient State */}
-      {isInsufficient ? (
-        <div className="p-4 sm:p-5 rounded-xl bg-amber-950/20 border border-amber-500/30 text-slate-200 space-y-3">
-          <div className="flex items-start gap-2.5">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <h4 className="font-sans font-bold text-sm text-amber-300 mb-1">
-                Insufficient Evidence in Public Catalog
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {answer.answer ||
-                  answer.answerText ||
-                  'PTAT does not currently contain verified public records matching this request. The platform only synthesizes responses strictly anchored to verified federal achievements, projects, statutory policies, and empirical financial observations.'}
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="text-sm sm:text-base text-slate-100 font-sans leading-relaxed space-y-3">
-          {renderFormattedAnswer(answer.answer || answer.answerText || '')}
-        </div>
-      )}
-
-      {/* 3. Comparison View (if applicable) */}
+      {/* 2. Comparison Block (if applicable) */}
       {answer.intent === 'COMPARISON_QUERY' && (
-        <AIComparisonBlock
-          firstTarget={
-            answer.comparisonSummary?.firstSubject ||
-            answer.constraints?.comparisonTargets?.first ||
-            'Subject A'
-          }
-          secondTarget={
-            answer.comparisonSummary?.secondSubject ||
-            answer.constraints?.comparisonTargets?.second ||
-            'Subject B'
-          }
-          records={recordLinks as any}
-        />
-      )}
-
-      {/* 4. Financial Highlights (if applicable) */}
-      {financials.length > 0 && (
-        <div className="space-y-2 pt-2">
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider">
-            <CircleDollarSign className="w-3.5 h-3.5" />
-            <span>Verified Financial Disclosures (Naira-First)</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {financials.map((fin, i) => (
-              <AIFinancialCard key={i} financial={fin} />
-            ))}
-          </div>
+        <div className="mt-4">
+          <AIComparisonBlock
+            firstTarget={
+              answer.comparisonSummary?.firstSubject ||
+              answer.constraints?.comparisonTargets?.first ||
+              'Subject A'
+            }
+            secondTarget={
+              answer.comparisonSummary?.secondSubject ||
+              answer.constraints?.comparisonTargets?.second ||
+              'Subject B'
+            }
+            records={recordLinks as any}
+          />
         </div>
       )}
 
-      {/* 5. Beneficiary Highlights (if applicable) */}
-      {beneficiaries.length > 0 && (
-        <div className="space-y-2 pt-2">
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 font-semibold uppercase tracking-wider">
-            <Users className="w-3.5 h-3.5" />
-            <span>Documented Beneficiaries & Maturity Stages</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {beneficiaries.map((ben, i) => (
-              <AIBeneficiaryCard key={i} beneficiary={ben} />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* 3. Subtle Sources Disclosure & Trust Strip */}
+      {!isStreaming && (
+        <div className="mt-4 pt-3 border-t border-slate-800/60 flex flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-medium text-slate-300">
+                <BadgeIcon className="w-3 h-3 text-cyan-400" />
+                <span>{sourceBadgeLabel}</span>
+              </span>
 
-      {/* 6. Linked PTAT Records */}
-      {recordLinks.length > 0 && (
-        <div className="space-y-2 pt-2">
-          <div className="flex items-center justify-between gap-2 text-xs font-mono text-slate-400 font-semibold uppercase tracking-wider">
-            <div className="flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Referenced PTAT Catalog Records ({recordLinks.length})</span>
+              {totalSourcesCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSourcesExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-500/30 text-[11px] font-medium text-cyan-300 transition-colors"
+                  aria-expanded={sourcesExpanded}
+                >
+                  <span>Sources · {totalSourcesCount}</span>
+                  {sourcesExpanded ? (
+                    <ChevronUp className="w-3 h-3 ml-0.5" />
+                  ) : (
+                    <ChevronDown className="w-3 h-3 ml-0.5" />
+                  )}
+                </button>
+              )}
+
+              {(financials.length > 0 || beneficiaries.length > 0 || recordLinks.length > 0) && (
+                <button
+                  type="button"
+                  onClick={() => setShowStructuredDetails((prev) => !prev)}
+                  className="text-[11px] text-slate-400 hover:text-slate-200 underline decoration-slate-600 transition-colors"
+                >
+                  {showStructuredDetails ? 'Hide structured data' : 'View structured data'}
+                </button>
+              )}
             </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {recordLinks.map((rec, i) => (
-              <AIRecordCard key={i} record={rec} />
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* 7. Bottom Evidence Rail Trigger */}
-      {citations.length > 0 && (
-        <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span className="font-mono text-[11px] text-cyan-400">
-              {citations.length} Verified {citations.length === 1 ? 'Citation' : 'Citations'}
-            </span>
-            <span>•</span>
-            <span className="text-[11px]">Primary official sources allowlisted</span>
+            {citations.length > 0 && onOpenEvidencePanel && (
+              <button
+                type="button"
+                onClick={() => onOpenEvidencePanel()}
+                className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono transition-colors"
+              >
+                Evidence Drawer →
+              </button>
+            )}
           </div>
 
-          <button
-            type="button"
-            onClick={() => onOpenEvidencePanel()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-cyan-300 hover:text-cyan-200 transition-colors shadow-sm"
-          >
-            <span>Inspect Evidence Rail</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          {/* 4. Progressive Expandable Sources List */}
+          {sourcesExpanded && totalSourcesCount > 0 && (
+            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2.5 text-xs animate-in slide-in-from-top-1 duration-150">
+              <h5 className="font-semibold text-slate-300 text-[11px] uppercase tracking-wider font-mono">
+                Sourced Public Evidence
+              </h5>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {/* Verified PTAT Citations */}
+                {citations.map((c, i) => (
+                  <div
+                    key={`cit-${i}`}
+                    className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80 flex flex-col justify-between gap-1.5"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1 text-[10px] text-cyan-400 font-mono">
+                        <ShieldCheck className="w-3 h-3 shrink-0" />
+                        <span>PTAT Verified · {c.publisher || 'Official Record'}</span>
+                      </div>
+                      <p className="text-slate-200 font-medium line-clamp-2 mt-0.5">
+                        {c.sourceTitle || 'Official Government Document'}
+                      </p>
+                    </div>
+
+                    {c.url && (
+                      <a
+                        href={c.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 underline font-mono truncate"
+                      >
+                        <span className="truncate">{c.url}</span>
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </a>
+                    )}
+                  </div>
+                ))}
+
+                {/* Google Search Web Sources */}
+                {webSources.map((w, i) => (
+                  <div
+                    key={`web-${i}`}
+                    className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800/80 flex flex-col justify-between gap-1.5"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-mono">
+                        <Globe className="w-3 h-3 shrink-0" />
+                        <span>Public Web Source · {w.domain}</span>
+                      </div>
+                      <p className="text-slate-200 font-medium line-clamp-2 mt-0.5">{w.title}</p>
+                    </div>
+
+                    {w.url && (
+                      <a
+                        href={w.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:text-emerald-300 underline font-mono truncate"
+                      >
+                        <span className="truncate">{w.url}</span>
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 5. Optional Structured Financial / Beneficiary / Records Breakdown */}
+          {showStructuredDetails && (
+            <div className="space-y-4 pt-2 animate-in fade-in duration-150">
+              {financials.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider">
+                    <CircleDollarSign className="w-3.5 h-3.5" />
+                    <span>Financial Disclosures (Naira-First)</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {financials.map((fin, i) => (
+                      <AIFinancialCard key={i} financial={fin} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {beneficiaries.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-cyan-400 font-semibold uppercase tracking-wider">
+                    <Users className="w-3.5 h-3.5" />
+                    <span>Beneficiary Allocations & Stages</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {beneficiaries.map((ben, i) => (
+                      <AIBeneficiaryCard key={i} beneficiary={ben} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {recordLinks.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400 font-semibold uppercase tracking-wider">
+                    <Building2 className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Related Catalogue Records ({recordLinks.length})</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {recordLinks.map((rec, i) => (
+                      <AIRecordCard key={i} record={rec} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
