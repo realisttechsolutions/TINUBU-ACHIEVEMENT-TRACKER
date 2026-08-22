@@ -112,11 +112,11 @@ export async function POST(req: NextRequest) {
           }
 
           try {
-            send('status', { message: 'Searching PTAT records...' });
+            send('status', { message: 'Analyzing intelligence query...' });
 
             const answer = await synthesisService.answerQuestion(contextual.effectiveQuery);
 
-            send('status', { message: 'Preparing answer...' });
+            send('status', { message: 'Preparing validated response...' });
             send('answer_start', {
               sourceMode: answer.sourceMode || 'PTAT_ONLY',
               answerability: answer.answerability,

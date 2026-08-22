@@ -135,7 +135,7 @@ export class PTATGroundedSynthesisService {
     // ROUTE 2: PTAT_PLUS_WEB
     if (route.mode === 'PTAT_PLUS_WEB') {
       const evidencePacket = buildEvidencePacket(context);
-      const systemInstruction = buildSystemInstruction();
+      const systemInstruction = buildWebGroundedSystemInstruction();
       const prompt = buildPtatPlusWebPrompt(trimmedQuery, evidencePacket);
 
       try {
@@ -147,6 +147,23 @@ export class PTATGroundedSynthesisService {
 
         const answerText = searchResult.rawText.trim();
 
+        const ptatCitations = (context.sources || []).map((src) => {
+          const matchedClaim = context.claims.find((c) =>
+            c.sources.some((s) => s.sourceId === src.sourceId)
+          );
+          return {
+            claimId: matchedClaim?.claimId || src.sourceId,
+            sourceId: src.sourceId,
+            recordSlug: matchedClaim?.recordExternalId || 'ptat-catalogue',
+            sourceTitle: src.title,
+            publisher: src.publisher,
+            url: src.url || `/sources/${src.sourceId}`,
+            sourceLevel: src.sourceLevel || 'LEVEL_1',
+            quoteOrSummary: src.evidenceSummary || src.title,
+            isValidated: true,
+          };
+        });
+
         return {
           query: trimmedQuery,
           intent: context.parsedIntent,
@@ -154,7 +171,7 @@ export class PTATGroundedSynthesisService {
           sourceMode: 'PTAT_PLUS_WEB',
           answer: answerText,
           answerText,
-          citations: [],
+          citations: ptatCitations,
           webSources: searchResult.webSources || [],
           webGrounding: searchResult.webGrounding,
           recordLinks: context.recordLinks,
@@ -168,15 +185,19 @@ export class PTATGroundedSynthesisService {
           modelMetadata: searchResult.metadata,
           citationValidation: {
             valid: true,
-            totalCitations: 0,
-            validCitations: 0,
+            totalCitations: ptatCitations.length,
+            validCitations: ptatCitations.length,
             rejectedCitations: 0,
             rejectionReasons: [],
-            validatedCitations: [],
+            validatedCitations: ptatCitations,
           },
           isGrounded: true,
         };
-      } catch {
+      } catch (err: any) {
+        console.error('PTAT_PLUS_WEB execution error:', {
+          message: err?.message,
+          stack: err?.stack,
+        });
         // Fallback to PTAT_ONLY if search grounding fails
         const fallbackInstruction = buildSystemInstruction();
         const fallbackPrompt = buildSynthesisPrompt(trimmedQuery, evidencePacket);

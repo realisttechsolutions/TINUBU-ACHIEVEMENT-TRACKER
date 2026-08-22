@@ -51,9 +51,24 @@ describe('PTAT M08E: Intelligent Routing & Query Normalization Unit Tests', () =
       expect(decision.mode).toBe('PTAT_ONLY');
     });
 
-    it('routes PTAT queries with explicit 2026 freshness requests to PTAT_PLUS_WEB mode', () => {
-      const decision = determineIntelligenceRoute('What is the latest 2026 update on NELFUND as of now?', mockPtatContext);
+    it('routes PTAT queries with explicit freshness requests (e.g. latest update) to PTAT_PLUS_WEB mode', () => {
+      const decision = determineIntelligenceRoute('What is the latest available update on NELFUND?', mockPtatContext);
       expect(decision.mode).toBe('PTAT_PLUS_WEB');
+    });
+
+    it('routes regional PTAT queries without freshness to PTAT_ONLY mode', () => {
+      const decision = determineIntelligenceRoute('What has Tinubu done in Kaduna?', mockPtatContext);
+      expect(decision.mode).toBe('PTAT_ONLY');
+    });
+
+    it('routes regional PTAT queries with latest/current to PTAT_PLUS_WEB mode', () => {
+      const decision = determineIntelligenceRoute('What is the latest on federal projects affecting Kaduna?', mockPtatContext);
+      expect(decision.mode).toBe('PTAT_PLUS_WEB');
+    });
+
+    it('routes open-ended current news queries (e.g. today) to WEB_GROUNDED mode', () => {
+      const decision = determineIntelligenceRoute('What happened in Nigeria today?', mockPtatContext);
+      expect(decision.mode).toBe('WEB_GROUNDED');
     });
 
     it('routes political / government queries with zero PTAT records to WEB_GROUNDED mode', () => {

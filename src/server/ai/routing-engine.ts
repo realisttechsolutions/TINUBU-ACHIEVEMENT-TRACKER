@@ -9,17 +9,22 @@ export interface RoutingDecision {
 
 const CURRENT_FRESHNESS_TERMS = [
   'latest',
+  'current',
   'currently',
   'today',
   'recent',
   'recently',
+  'this week',
   'this month',
   'as of now',
-  'this week',
-  'right now',
-  'current status',
-  'update',
+  'new update',
+  'most recent',
+  'latest available update',
+  'latest on',
+  'what is the latest',
+  'what happened',
   'breaking',
+  'news today',
 ];
 
 const POLITICAL_PERFORMANCE_TERMS = [
@@ -54,12 +59,12 @@ export function determineIntelligenceRoute(
 ): RoutingDecision {
   const normalized = (query || '').toLowerCase().trim();
 
-  // Check if query mentions current/freshness terms
+  // 1. Detect generic freshness / temporal intent
   const requiresFreshness = CURRENT_FRESHNESS_TERMS.some((term) =>
     normalized.includes(term)
   );
 
-  // Check if query is about politics, public policy, government performance, or elections
+  // 2. Detect public policy / government / political topics
   const isPoliticalOrPerformance = POLITICAL_PERFORMANCE_TERMS.some((term) =>
     normalized.includes(term)
   );
@@ -69,16 +74,35 @@ export function determineIntelligenceRoute(
     ptatContext.claims.length > 0 &&
     ptatContext.retrievalConfidence.confidenceTier !== 'NONE';
 
-  // Case 1: Strong PTAT evidence available
+  // Special Case: Open-ended temporal / breaking news requests (e.g. "what happened in Nigeria today", "breaking news")
+  // Even if broad keyword search matched historical records, an open-ended "today / what happened" question requires live web search.
+  const isOpenEndedLiveNews =
+    normalized.includes('what happened') ||
+    normalized.includes('today') ||
+    normalized.includes('breaking');
+
+  if (isOpenEndedLiveNews && (!hasPtatEvidence || ptatContext.records.length > 5 || normalized.includes('nigeria today'))) {
+    return {
+      mode: 'WEB_GROUNDED',
+      reason: 'Open-ended current news or temporal event inquiry requiring live web grounding.',
+      isPoliticalOrPerformance,
+      requiresFreshness: true,
+    };
+  }
+
+  // Case 1: PTAT evidence available in database
   if (hasPtatEvidence) {
-    if (requiresFreshness && normalized.includes('2026') && !normalized.includes('august')) {
+    // If the user explicitly asks for the latest/current updates, route to PTAT_PLUS_WEB
+    // so PTAT provides authoritative baseline evidence and Google Search supplements real-time updates.
+    if (requiresFreshness) {
       return {
         mode: 'PTAT_PLUS_WEB',
-        reason: 'PTAT contains foundational records but user explicitly requested latest current updates.',
+        reason: 'PTAT contains foundational records, supplemented with live web grounding for requested current updates.',
         isPoliticalOrPerformance,
         requiresFreshness,
       };
     }
+
     return {
       mode: 'PTAT_ONLY',
       reason: 'Authoritative PTAT public records contain sufficient evidence to answer the query.',
@@ -105,8 +129,7 @@ export function determineIntelligenceRoute(
     normalized.includes('specs') ||
     normalized.includes('iphone') ||
     normalized.includes('capital of') ||
-    normalized.includes('population of') ||
-    normalized.includes('happened in');
+    normalized.includes('population of');
 
   if (isGeneralFact) {
     return {

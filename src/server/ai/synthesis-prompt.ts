@@ -90,15 +90,28 @@ export function buildPtatPlusWebPrompt(
   question: string,
   evidencePacket: PTATEvidencePacket
 ): string {
+  const recordsSummary = (evidencePacket.records || [])
+    .map(
+      (r) =>
+        `- ${r.title} (${r.recordType || 'programme'}, ${r.implementationStatus || 'operational'}): ${r.summary || ''}`
+    )
+    .join('\n');
+
+  const claimsSummary = (evidencePacket.claims || [])
+    .map((c) => `- Documented Fact: ${c.claimText}`)
+    .join('\n');
+
   return `USER QUESTION:
 "${question}"
 
-PTAT AUTHORITATIVE EVIDENCE (PRIVILEGED):
-${JSON.stringify(evidencePacket, null, 2)}
+PTAT OFFICIAL DATABASE BASELINE (AUTHORITATIVE RECORD):
+${recordsSummary || 'No specific record summary'}
+${claimsSummary || ''}
 
 INSTRUCTIONS:
-1. PTAT evidence has privileged authority for recorded facts and figures.
-2. Use web search grounding to supplement gaps, recent developments, or external context requested by the user.
-3. If web findings provide a more recent update than PTAT, naturally state: "PTAT records X, while recent updates report Y."
-4. Deliver a natural, seamless response answering the user directly.`;
+1. PTAT database evidence provided above establishes the authoritative baseline.
+2. Use Google Search grounding to retrieve the latest public developments, announcements, and current updates regarding this inquiry.
+3. If recent official announcements report newer figures or updates beyond PTAT's baseline, state clearly: "PTAT records X as of [date/baseline], while recent official updates report Y."
+4. Do not silently overwrite PTAT records.
+5. Provide a clear, natural, and comprehensive response.`;
 }
