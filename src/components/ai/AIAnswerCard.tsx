@@ -101,19 +101,14 @@ export const AIAnswerCard: React.FC<AIAnswerCardProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-          <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-cyan-300">
-            {(answer.confidence?.confidenceTier || answer.retrievalConfidence?.confidenceTier) === 'HIGH'
-              ? 'High Evidence Grounding'
-              : (answer.confidence?.confidenceTier || answer.retrievalConfidence?.confidenceTier) === 'MEDIUM'
-              ? 'Moderate Grounding'
-              : 'Bounded Evidence Scope'}
-          </span>
-          <span className="text-slate-400">•</span>
-          <span className="text-[11px]">
-            {answer.diagnostics?.recordsScanned || recordLinks.length} records verified
-          </span>
-        </div>
+        {citations.length > 0 && (
+          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span>
+              {citations.length} Verified {citations.length === 1 ? 'Citation' : 'Citations'}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 2. Structured Answer Synthesis / Insufficient State */}

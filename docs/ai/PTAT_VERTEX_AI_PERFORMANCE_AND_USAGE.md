@@ -19,8 +19,8 @@ This report summarizes end-to-end performance benchmarks, token economics, and l
 +------------------------+-------------------+-------------------+-------------------+
 ```
 
-- **Pre-Gate Latency**: Immediate bypass in under $400\text{ ms}$, saving 100% of LLM compute cost and eliminating hallucination risk.
-- **Average LLM Generation Latency**: $\approx 6.8\text{ seconds}$ on `gemini-2.5-flash` with `thinkingBudget: 0`.
+- **Pre-Gate Latency**: Immediate bypass in under $400\text{ ms}$, saving 100% of LLM compute cost with 0 unsupported factual assertions.
+- **Average LLM Generation Latency**: $\approx 6.8\text{ seconds}$ on `gemini-3.6-flash` with `thinkingBudget: 0`.
 - **Database Query Latency**: $\approx 1.8\text{ seconds}$ average against remote Cloud SQL staging in `europe-west1` via IAM proxy.
 
 ---

@@ -239,13 +239,13 @@ export const PTATAIExperienceClient: React.FC = () => {
           {/* Subtle Ambient Background Bloom */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col justify-between relative z-10">
+          <div className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col relative z-10">
             {/* Empty State / Minimal AI Landing View */}
             {messages.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center my-auto py-12 sm:py-16 animate-in fade-in duration-300">
+              <div className="w-full flex flex-col items-center pt-2 sm:pt-6 md:pt-10 animate-in fade-in duration-200">
                 <AIWelcomeHero />
 
-                <div className="w-full max-w-2xl lg:max-w-3xl mt-2">
+                <div className="w-full max-w-2xl lg:max-w-3xl mt-1 sm:mt-2">
                   <AIComposer
                     onSubmit={handleSendQuestion}
                     isLoading={isLoading}

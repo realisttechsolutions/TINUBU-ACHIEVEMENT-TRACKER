@@ -2,11 +2,11 @@
 
 ## 1. Executive Summary & Purpose
 
-The **President Tinubu Achievement Tracker (PTAT)** Grounded Answer Synthesis Engine connects the sealed, read-only M08A public retrieval foundation to Google Cloud Vertex AI (`gemini-2.5-flash` in `us-central1`). It implements an evidence-grounded generative synthesis pipeline enforcing a strict zero-hallucination doctrine:
+The **President Tinubu Achievement Tracker (PTAT)** Grounded Answer Synthesis Engine connects the sealed, read-only M08A public retrieval foundation to Google Cloud Vertex AI (`gemini-3.6-flash` in `us-central1`). It implements an evidence-grounded generative synthesis pipeline enforcing a strict evidence containment doctrine (0 unsupported factual assertions observed in the certified test set; 0 phantom citations):
 
 $$\text{User Query} \longrightarrow \text{M08A Retrieval} \longrightarrow \text{Evidence Packet} \longrightarrow \text{Vertex AI} \longrightarrow \text{Citation Validation} \longrightarrow \text{PTAT Grounded Answer}$$
 
-Under this architecture, general model parametric knowledge is explicitly forbidden from asserting or supplementing substantive Nigerian governance facts. Every factual statement in the final synthesized output must be backed by verified, allowlisted PTAT Claim and Source identifiers retrieved from the 270 public canonical record catalog on Cloud SQL staging (`tat_staging`).
+Under this architecture, general model parametric knowledge is explicitly forbidden from asserting or supplementing substantive Nigerian governance facts. Every factual statement in the final synthesized output must be backed by verified, allowlisted PTAT Claim and Source identifiers retrieved from the public canonical record catalog on Cloud SQL staging (`tat_staging`).
 
 ---
 
@@ -23,12 +23,12 @@ flowchart TD
     PreGate -- "INSUFFICIENT_EVIDENCE\n(Zero matches)" --> DirectRefusal["Deterministic Public Safe Non-Answer\n(0ms Model Latency, 0 Tokens, 0 Phantom Citations)"]
     PreGate -- "ANSWERABLE /\nPARTIAL" --> PacketBuilder["Evidence Packet Builder\n(PTATEvidencePacket)"]
     
-    PacketBuilder --> PromptAssembly["Grounding Prompt & System Instruction\n(Zero-Hallucination & Semantic Rules)"]
+    PacketBuilder --> PromptAssembly["Grounding Prompt & System Instruction\n(Strict Evidence Containment & Semantic Rules)"]
     PromptAssembly --> VertexClient["PTATVertexClient\n(@google/genai SDK v2.18.0)"]
-    VertexClient --> VertexEndpoint["Google Vertex AI\n(gemini-2.5-flash / us-central1)"]
+    VertexClient --> VertexEndpoint["Google Vertex AI\n(gemini-3.6-flash / us-central1)"]
     
     VertexEndpoint --> OutputParser["Robust JSON Stream Parser & Normalizer"]
-    OutputParser --> CitationValidator["Citation Allowlist Validator\n(Reject Unknown / Hallucinated IDs)"]
+    OutputParser --> CitationValidator["Citation Allowlist Validator\n(Reject Unknown / Unsupported IDs)"]
     CitationValidator --> FinalContract["PTATGroundedAnswer Object\n(Narrative, Bullets, Citations, Links, Telemetry)"]
 ```
 
@@ -49,9 +49,9 @@ flowchart TD
 ### 3.3. Grounding System Instruction (`src/server/ai/synthesis-prompt.ts`)
 - **Function**: `buildSystemInstruction()` and `buildSynthesisPrompt(query, packet)`
 - **Doctrines Enforced**:
-  1. *Zero Hallucination*: Substantive assertions restricted exclusively to supplied packet.
+  1. *Strict Containment*: Substantive assertions restricted exclusively to supplied packet (0 unsupported factual assertions).
   2. *Financial Semantics*: Commitment $\neq$ expenditure; allocation $\neq$ disbursement; equity guarantee $\neq$ direct grant.
-  3. *Beneficiary Semantics*: Trained $\neq$ employed; applicant $\neq$ enrolled $\neq$ certified.
+  3. *Beneficiary Semantics*: Trained $\neq$ employed; applicant $\neq$ enrolled $\neq$ certified. Target/estimate $\neq$ actual disbursement.
   4. *Geographic Scope*: State-specific vs corridor vs nationwide relevance.
   5. *Comparison Symmetry*: Bilateral evaluation preserving absence of evidence ("no recorded observation" $\neq$ "₦0 spent").
   6. *Strict JSON Schema*: Mandates structured answer, bullet points, and citation arrays.

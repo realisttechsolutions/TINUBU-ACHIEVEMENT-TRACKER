@@ -10,21 +10,36 @@ interface AIFinancialCardProps {
 
 function getFinancialTypeBadge(type: string): { label: string; bg: string } {
   switch (type?.toLowerCase()) {
+    case 'budget_allocation':
     case 'allocation':
       return {
-        label: 'Statutory Allocation',
+        label: 'Statutory Budget Allocation',
         bg: 'bg-blue-950/60 text-blue-300 border-blue-500/40',
       };
+    case 'approved_funding':
+      return {
+        label: 'Approved Funding Envelope (FEC)',
+        bg: 'bg-indigo-950/60 text-indigo-300 border-indigo-500/40',
+      };
     case 'commitment':
-    case 'programme_envelope':
       return {
         label: 'Financial Commitment',
         bg: 'bg-purple-950/60 text-purple-300 border-purple-500/40',
       };
-    case 'disbursement':
+    case 'programme_envelope':
+      return {
+        label: 'Programme Financial Envelope',
+        bg: 'bg-purple-950/60 text-purple-300 border-purple-500/40',
+      };
     case 'funding_released':
       return {
-        label: 'Funds Disbursed',
+        label: 'Treasury Funds Released (Warrant)',
+        bg: 'bg-teal-950/60 text-teal-300 border-teal-500/40',
+      };
+    case 'disbursement':
+    case 'funding_disbursed':
+      return {
+        label: 'Actual Funds Disbursed',
         bg: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40',
       };
     case 'reported_expenditure':
@@ -33,10 +48,20 @@ function getFinancialTypeBadge(type: string): { label: string; bg: string } {
         label: 'Reported Expenditure',
         bg: 'bg-amber-950/60 text-amber-300 border-amber-500/40',
       };
+    case 'contract_value':
+      return {
+        label: 'Commercial Contract Value',
+        bg: 'bg-cyan-950/60 text-cyan-300 border-cyan-500/40',
+      };
     case 'private_investment':
       return {
-        label: 'Private Capital Inflow',
+        label: 'Private Capital Inflow / Mobilized',
         bg: 'bg-teal-950/60 text-teal-300 border-teal-500/40',
+      };
+    case 'revenue_generated':
+      return {
+        label: 'Government Revenue Generated',
+        bg: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40',
       };
     default:
       return {
@@ -54,7 +79,7 @@ export const AIFinancialCard: React.FC<AIFinancialCardProps> = ({ financial }) =
       <div>
         <div className="flex items-center justify-between gap-2 mb-2">
           <span className={`px-2 py-0.5 rounded text-[10px] font-mono border ${badge.bg}`}>
-            {badge.label}
+            {financial.financialTypeLabel || badge.label}
           </span>
           {financial.reportingPeriod && (
             <span className="text-[10px] font-mono text-slate-400">

@@ -69,7 +69,7 @@ describe('PTAT M08C: AI UI Components Test Suite', () => {
       expect(screen.getByText(/What would you like to know\?/i)).toBeDefined();
       expect(screen.getByText(/PTAT AI • Evidence Intelligence/i)).toBeDefined();
       expect(
-        screen.getByText(/Ask anything about achievements, infrastructure projects/i)
+        screen.getByText(/Grounded in PTAT public evidence\./i)
       ).toBeDefined();
 
       // Certify HARD REQUIREMENT: 0 prompt chips or predefined question buttons
@@ -372,7 +372,8 @@ describe('PTAT M08C: AI UI Components Test Suite', () => {
       );
 
       expect(screen.getByText('Grounded in PTAT Public Evidence')).toBeDefined();
-      expect(screen.getByText('High Evidence Grounding')).toBeDefined();
+      expect(screen.queryByText('High Evidence Grounding')).toBeNull();
+      expect(screen.getAllByText(/1 Verified Citation/i).length).toBeGreaterThanOrEqual(1);
 
       const citationBtn = screen.getByRole('button', { name: /Citation \[1\]/i });
       expect(citationBtn).toBeDefined();

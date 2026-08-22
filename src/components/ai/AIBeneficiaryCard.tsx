@@ -10,37 +10,59 @@ interface AIBeneficiaryCardProps {
 
 function getMaturityStageBadge(stage: string): { label: string; bg: string; note: string } {
   switch (stage?.toLowerCase()) {
+    case 'disbursement_recipient':
+    case 'disbursed':
+      return {
+        label: 'Disbursed / Direct Recipient',
+        bg: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40',
+        note: 'Verified recipient of direct financial payment or statutory tuition disbursement.',
+      };
+    case 'active_beneficiary':
+      return {
+        label: 'Active Participant / Trainee',
+        bg: 'bg-teal-950/60 text-teal-300 border-teal-500/40',
+        note: 'Active participant or certified trainee; completed training does not indicate final employment.',
+      };
     case 'trained':
       return {
         label: 'Trained (Capacity Building)',
         bg: 'bg-cyan-950/60 text-cyan-300 border-cyan-500/40',
-        note: 'Completed training; does not indicate final employment.',
+        note: 'Completed training and skill certification; does not indicate final employment.',
       };
-    case 'supported':
-    case 'direct_recipients':
-      return {
-        label: 'Directly Supported',
-        bg: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/40',
-        note: 'Direct recipient of statutory intervention or grant.',
-      };
+    case 'registered_participant':
     case 'registered':
     case 'enrolled':
       return {
-        label: 'Registered / Enrolled',
+        label: 'Registered Applicant / Target Pool',
         bg: 'bg-blue-950/60 text-blue-300 border-blue-500/40',
-        note: 'Onboarded into verified national registry.',
+        note: 'Registered on official portal/registry; represents applicant onboarding pool, not completed disbursement.',
       };
-    case 'disbursed':
+    case 'applicant':
+    case 'eligible_applicant':
       return {
-        label: 'Disbursement Beneficiary',
+        label: 'Applicant / Screened Pool',
+        bg: 'bg-indigo-950/60 text-indigo-300 border-indigo-500/40',
+        note: 'Submitted application or formally screened; pending final sanction/disbursement.',
+      };
+    case 'approved_beneficiary':
+      return {
+        label: 'Approved for Benefit',
         bg: 'bg-purple-950/60 text-purple-300 border-purple-500/40',
-        note: 'Received direct financial disbursement.',
+        note: 'Sanctioned and approved for benefit; pending final cash release/disbursement.',
+      };
+    case 'target':
+    case 'projected':
+    case 'estimated':
+      return {
+        label: 'Target / Estimated Coverage',
+        bg: 'bg-amber-950/60 text-amber-300 border-amber-500/40',
+        note: 'Estimated or target administrative coverage; not an audited actual beneficiary total.',
       };
     default:
       return {
         label: stage?.replace(/_/g, ' ') || 'Beneficiary Metric',
         bg: 'bg-slate-800/60 text-slate-300 border-slate-700/40',
-        note: 'Documented beneficiary observation.',
+        note: 'Documented beneficiary observation with specific maturity scope.',
       };
   }
 }

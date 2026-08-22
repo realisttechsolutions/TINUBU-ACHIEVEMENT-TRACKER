@@ -15,7 +15,7 @@ const PHASES = [
   },
   {
     label: 'Querying PTAT public evidence repository',
-    detail: 'Filtering 270 canonical records, claims & financial records',
+    detail: 'Matching verified public records, claims & financial data',
     icon: Database,
   },
   {
@@ -25,7 +25,7 @@ const PHASES = [
   },
   {
     label: 'Synthesizing evidence-grounded answer',
-    detail: 'Strict evidence containment via Google Vertex AI',
+    detail: 'Strict evidence containment and grounded synthesis',
     icon: Cpu,
   },
 ];
