@@ -10,7 +10,8 @@ export const MOTION_TOKENS = {
   STANDARD: 0.35,   // 350ms - card transitions, spotlight switches
   SLOW: 0.6,        // 600ms - section reveals, modal entrances
   ROTATION_INTERVAL: 6000, // 6s - supporting statement rotation cycle
-  SPOTLIGHT_INTERVAL: 5000, // 5s - continuous spotlight forever loop cycle
+  SPOTLIGHT_INTERVAL: 7000, // 7s - reading interval for spotlight intelligence brief
+  SPOTLIGHT_TRANSITION: 0.55, // 550ms - graceful dissolve transition duration
 };
 
 

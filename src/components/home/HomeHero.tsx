@@ -142,22 +142,38 @@ export const HomeHero: React.FC = () => {
     );
   }, [statementIndex]);
 
-  // Advance spotlight in a continuous forever loop every 5s (Section 5)
-  useEffect(() => {
-    if (isPaused || spotlightAchievements.length <= 1) return;
-    const interval = setInterval(() => {
-      setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
-    }, MOTION_TOKENS.SPOTLIGHT_INTERVAL);
-    return () => clearInterval(interval);
+  // Advance spotlight in a continuous forever loop with timer reset capability
+  const spotlightTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const resetSpotlightTimer = useCallback(() => {
+    if (spotlightTimerRef.current) {
+      clearInterval(spotlightTimerRef.current);
+    }
+    if (!isPaused && spotlightAchievements.length > 1) {
+      spotlightTimerRef.current = setInterval(() => {
+        setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
+      }, MOTION_TOKENS.SPOTLIGHT_INTERVAL);
+    }
   }, [isPaused, spotlightAchievements.length]);
 
-  // Animate spotlight card transition on change
   useEffect(() => {
-    if (!spotlightCardRef.current || prefersReducedMotion()) return;
+    resetSpotlightTimer();
+    return () => {
+      if (spotlightTimerRef.current) clearInterval(spotlightTimerRef.current);
+    };
+  }, [resetSpotlightTimer]);
+
+  // Animate spotlight card inner content gracefully on change (executive dissolve)
+  useEffect(() => {
+    if (!spotlightCardRef.current) return;
+    if (prefersReducedMotion()) {
+      gsap.set(spotlightCardRef.current, { opacity: 1, y: 0, filter: "none" });
+      return;
+    }
     gsap.fromTo(
       spotlightCardRef.current,
-      { opacity: 0, x: 14 },
-      { opacity: 1, x: 0, duration: MOTION_TOKENS.STANDARD, ease: "power2.out" }
+      { opacity: 0, y: 8, filter: "blur(2px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: MOTION_TOKENS.SPOTLIGHT_TRANSITION, ease: "power2.out" }
     );
   }, [spotlightIndex]);
 
@@ -195,12 +211,14 @@ export const HomeHero: React.FC = () => {
   const handleNextSpotlight = useCallback(() => {
     if (spotlightAchievements.length <= 1) return;
     setSpotlightIndex((prev) => (prev + 1) % spotlightAchievements.length);
-  }, [spotlightAchievements.length]);
+    resetSpotlightTimer();
+  }, [spotlightAchievements.length, resetSpotlightTimer]);
 
   const handlePrevSpotlight = useCallback(() => {
     if (spotlightAchievements.length <= 1) return;
     setSpotlightIndex((prev) => (prev - 1 + spotlightAchievements.length) % spotlightAchievements.length);
-  }, [spotlightAchievements.length]);
+    resetSpotlightTimer();
+  }, [spotlightAchievements.length, resetSpotlightTimer]);
 
   const defaultSpotlight: SpotlightItem = {
     id: "overview",
@@ -402,9 +420,12 @@ export const HomeHero: React.FC = () => {
                 </div>
               </div>
 
-              {/* Active Dynamic Spotlight Card */}
-              <div ref={spotlightCardRef} className="space-y-3 min-h-[170px] flex flex-col justify-between">
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-gov-gold/40 transition-colors space-y-2.5">
+              {/* Active Dynamic Spotlight Card with Fixed Layout Bounds to Prevent Cumulative Layout Shift */}
+              <div
+                ref={spotlightCardRef}
+                className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-gov-gold/40 transition-colors space-y-2.5 min-h-[195px] flex flex-col justify-between"
+              >
+                <div className="space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-bold text-gov-emerald truncate">
                       {currentSpotlight.sector}
@@ -414,42 +435,28 @@ export const HomeHero: React.FC = () => {
                     </span>
                   </div>
 
-                  <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
+                  <h4 className="text-sm sm:text-base font-bold text-white leading-snug line-clamp-2 min-h-[2.5rem]">
                     {currentSpotlight.title}
                   </h4>
 
-                  <p className="text-xs text-gray-300 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-gray-300 leading-relaxed line-clamp-3 min-h-[3.375rem]">
                     {currentSpotlight.summary}
                   </p>
-
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                    <span className="text-gray-400">{t("hero.impactMetric", { defaultValue: "Impact Metric:" })}</span>
-                    <span className="font-bold text-gov-gold">
-                      {currentSpotlight.keyStat} <span className="text-[11px] font-normal text-gray-300">({currentSpotlight.keyStatLabel})</span>
-                    </span>
-                  </div>
                 </div>
-              </div>
 
-              {/* Progress Indicator Dots */}
-              <div className="flex items-center justify-center gap-1.5 pt-1">
-                {spotlightAchievements.map((item, idx) => (
-                  <button
-                    key={`${item.id}-${idx}`}
-                    type="button"
-                    onClick={() => setSpotlightIndex(idx)}
-                    aria-label={`View achievement ${idx + 1}: ${item.title}`}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      idx === spotlightIndex ? "w-6 bg-gov-gold" : "w-1.5 bg-white/20 hover:bg-white/40"
-                    }`}
-                  />
-                ))}
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs mt-auto">
+                  <span className="text-gray-400">{t("hero.impactMetric", { defaultValue: "Impact Metric:" })}</span>
+                  <span className="font-bold text-gov-gold">
+                    {currentSpotlight.keyStat} <span className="text-[11px] font-normal text-gray-300">({currentSpotlight.keyStatLabel})</span>
+                  </span>
+                </div>
               </div>
 
               {/* Direct Action Link to Selected Achievement */}
               <Link
                 to={`/achievements/${currentSpotlight.slug}`}
                 className="block text-center w-full py-2.5 rounded-xl bg-gov-canvas/10 hover:bg-gov-canvas/20 text-xs font-bold text-gov-gold hover:text-white transition-colors border border-gov-gold/20"
+                aria-label={`Inspect audited evidence record for ${currentSpotlight.title}`}
               >
                 {t("hero.inspectAuditedRecord", { defaultValue: "Inspect Audited Evidence Record →" })}
               </Link>

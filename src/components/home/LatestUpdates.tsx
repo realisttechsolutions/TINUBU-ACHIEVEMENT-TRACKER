@@ -4,10 +4,12 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { RefreshCw, ArrowRight } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import SourceBadge from "../common/SourceBadge";
-import { latestUpdatesData } from "@/data/home/homepage.config";
+import { dataAdapter } from "@/adapters/dataAdapter";
+import { formatDate } from "@/utils/formatters";
 
 export const LatestUpdates: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
+  const latestAchievements = dataAdapter.getAchievements({ sortBy: "newest" }).slice(0, 3);
 
   return (
     <section className="py-12 md:py-16 bg-white dark:bg-gov-darkSurface border-b border-gov-border font-sans">
@@ -28,40 +30,45 @@ export const LatestUpdates: React.FC = () => {
 
         {/* Updates Stack */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {latestUpdatesData.map((item) => (
-            <div
-              key={item.id}
-              className="bg-gov-canvas dark:bg-gov-navy/20 border border-gov-border rounded-xl p-5 shadow-xs space-y-3 flex flex-col justify-between"
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between border-b border-gov-border/40 pb-2 text-xs">
-                  <span className="font-bold text-gov-navy dark:text-white font-display">
-                    {item.date}
-                  </span>
-                  <StatusBadge status={item.status} size="sm" />
+          {latestAchievements.map((item) => {
+            const formattedDate = item.date ? formatDate(item.date, currentLanguage, "d MMM yyyy") : "";
+            const leadSource = item.evidenceClaims?.[0]?.sources?.[0]?.publisher || item.leadMda || "Federal Government of Nigeria";
+
+            return (
+              <div
+                key={item.id}
+                className="bg-gov-canvas dark:bg-gov-navy/20 border border-gov-border rounded-xl p-5 shadow-xs space-y-3 flex flex-col justify-between"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between border-b border-gov-border/40 pb-2 text-xs">
+                    <span className="font-bold text-gov-navy dark:text-white font-display">
+                      {formattedDate ? `Verified ${formattedDate}` : item.date}
+                    </span>
+                    <StatusBadge status={item.status} size="sm" />
+                  </div>
+
+                  <h4 className="text-base font-bold font-display text-gov-navy dark:text-white leading-snug line-clamp-2">
+                    {item.title}
+                  </h4>
+
+                  <p className="text-xs text-gov-slate leading-relaxed line-clamp-3">
+                    {item.summary}
+                  </p>
                 </div>
 
-                <h4 className="text-base font-bold font-display text-gov-navy dark:text-white leading-snug">
-                  {item.title}
-                </h4>
-
-                <p className="text-xs text-gov-slate leading-relaxed">
-                  {item.summary}
-                </p>
+                <div className="pt-3 border-t border-gov-border/40 flex items-center justify-between text-xs">
+                  <SourceBadge sourceName={leadSource} level={2} />
+                  <Link
+                    to={`/achievements/${item.slug || item.id}`}
+                    className="inline-flex items-center gap-1 font-bold text-gov-navy dark:text-gov-gold hover:text-gov-emerald text-xs transition-colors"
+                  >
+                    <span>{t("hero.inspectRecord", { defaultValue: "Inspect Record" })}</span>
+                    <ArrowRight className="h-3 w-3 text-gov-gold" />
+                  </Link>
+                </div>
               </div>
-
-              <div className="pt-3 border-t border-gov-border/40 flex items-center justify-between text-xs">
-                <SourceBadge sourceName={item.sourceName} level={2} />
-                <Link
-                  to="/data-sources"
-                  className="inline-flex items-center gap-1 font-bold text-gov-navy hover:text-gov-emerald text-xs"
-                >
-                  <span>{t("dataSources.title", { defaultValue: "Verification Log" })}</span>
-                  <ArrowRight className="h-3 w-3 text-gov-gold" />
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -36,7 +36,8 @@ vi.mock('@/lib/animations', () => ({
     STANDARD: 0.35,
     SLOW: 0.6,
     ROTATION_INTERVAL: 6000,
-    SPOTLIGHT_INTERVAL: 5000,
+    SPOTLIGHT_INTERVAL: 7000,
+    SPOTLIGHT_TRANSITION: 0.55,
   },
   prefersReducedMotion: () => false,
   formatCompactNumber: (val: number) => String(val),
@@ -62,8 +63,8 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
     hydrateDataAdapter(null);
   });
 
-  it('provides SPOTLIGHT_INTERVAL of exactly 5000ms in MOTION_TOKENS', () => {
-    expect(MOTION_TOKENS.SPOTLIGHT_INTERVAL).toBe(5000);
+  it('provides SPOTLIGHT_INTERVAL of exactly 7000ms in MOTION_TOKENS', () => {
+    expect(MOTION_TOKENS.SPOTLIGHT_INTERVAL).toBe(7000);
   });
 
   it('loads a substantial eligible pool of published achievements (> 4 records)', () => {
@@ -75,21 +76,21 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
     expect(screen.getByText(new RegExp(`1/${totalAchievements.length}`))).toBeDefined();
   });
 
-  it('executes a continuous forever loop advancing every 5000ms', () => {
+  it('executes a continuous forever loop advancing every 7000ms', () => {
     renderWithProviders(<HomeHero />);
     const totalCount = dataAdapter.getAchievements().length;
 
     expect(screen.getByText(new RegExp(`1/${totalCount}`))).toBeDefined();
 
-    // Advance 5 seconds (5000ms)
+    // Advance 7 seconds (7000ms)
     act(() => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(7000);
     });
     expect(screen.getByText(new RegExp(`2/${totalCount}`))).toBeDefined();
 
-    // Advance another 5 seconds
+    // Advance another 7 seconds
     act(() => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(7000);
     });
     expect(screen.getByText(new RegExp(`3/${totalCount}`))).toBeDefined();
   });
@@ -100,7 +101,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
 
     // Fast forward through all items to reach the end and wrap
     act(() => {
-      vi.advanceTimersByTime(5000 * totalCount);
+      vi.advanceTimersByTime(7000 * totalCount);
     });
     expect(screen.getByText(new RegExp(`1/${totalCount}`))).toBeDefined();
   });
@@ -143,7 +144,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
       if (section) fireEvent.mouseEnter(section);
     });
     act(() => {
-      vi.advanceTimersByTime(10000);
+      vi.advanceTimersByTime(14000);
     });
     // Should remain paused on item 1
     expect(screen.getByText(new RegExp(`1/${totalCount}`))).toBeDefined();
@@ -153,7 +154,7 @@ describe('PTAT HomeHero Data-Driven Spotlight Forever Loop', () => {
       if (section) fireEvent.mouseLeave(section);
     });
     act(() => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(7000);
     });
     // Should now advance to item 2
     expect(screen.getByText(new RegExp(`2/${totalCount}`))).toBeDefined();

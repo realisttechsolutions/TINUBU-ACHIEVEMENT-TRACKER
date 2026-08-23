@@ -61,13 +61,12 @@ export const ReportsResearchCTA: React.FC = () => {
 
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-white/20 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm px-6 h-12 rounded-xl gap-2"
+                  className="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-semibold text-xs sm:text-sm px-6 h-12 rounded-xl gap-2 shadow-sm transition-all inline-flex items-center justify-center focus:ring-2 focus:ring-gov-gold"
                   asChild
                 >
                   <Link to="/downloads">
-                    <Download className="h-4 w-4 text-purple-400" />
-                    <span>{t("reportsCta.downloadButton", { defaultValue: "Visit Download Centre" })}</span>
+                    <Download className="h-4 w-4 text-gov-gold" />
+                    <span>{t("reportsCta.downloadButton", { defaultValue: "Go to Download Centre" })}</span>
                   </Link>
                 </Button>
               </div>
