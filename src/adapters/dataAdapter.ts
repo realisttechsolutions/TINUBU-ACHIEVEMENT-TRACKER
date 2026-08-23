@@ -13,7 +13,8 @@ import {
   StateProfileViewModel,
   DatasetResourceViewModel,
   GlobalSearchResultItem,
-  PublicNavigationGroupId
+  PublicNavigationGroupId,
+  LatestUpdateItem
 } from "./types";
 
 import {
@@ -296,6 +297,92 @@ export const dataAdapter = {
 
   getProgrammeBySlug(slug: string): ProgrammeViewModel | undefined {
     return programmes().find(p => p.slug === slug || p.id === slug);
+  },
+
+  // Cross-Type Latest Updates
+  getLatestUpdates(limit = 3): LatestUpdateItem[] {
+    const achs: LatestUpdateItem[] = achievements().map((a) => ({
+      id: a.id,
+      slug: a.slug,
+      title: a.title,
+      summary: a.summary,
+      recordType: a.recordType || 'achievement',
+      recordTypeLabel: a.recordTypeLabel || 'Achievement',
+      status: a.status,
+      statusLabel: a.statusLabel,
+      leadMda: a.leadMda,
+      leadSource: a.evidenceClaims?.[0]?.sources?.[0]?.publisher || a.leadMda || 'Federal Government of Nigeria',
+      routePath: `/achievements/${a.slug || a.id}`,
+      eventDate: a.date,
+      publishedAt: a.publishedAt || a.date,
+      updatedAt: a.updatedAt || a.publishedAt || a.date,
+      verificationStatus: a.verificationStatus,
+    }));
+
+    const projs: LatestUpdateItem[] = projects().map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      summary: p.summary,
+      recordType: 'physical_project',
+      recordTypeLabel: p.projectTypeLabel || 'Capital Project',
+      status: p.status,
+      statusLabel: p.statusLabel,
+      leadMda: p.executingAgency,
+      leadSource: p.evidenceClaims?.[0]?.sources?.[0]?.publisher || p.executingAgency || 'Federal Ministry of Works',
+      routePath: `/projects/${p.slug || p.id}`,
+      eventDate: p.completionOrCurrentDate || p.startDate,
+      publishedAt: p.publishedAt || p.startDate,
+      updatedAt: p.updatedAt || p.publishedAt || p.startDate,
+      verificationStatus: undefined,
+    }));
+
+    const pols: LatestUpdateItem[] = policies().map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      summary: p.summary,
+      recordType: 'policy',
+      recordTypeLabel: p.policyTypeLabel || 'Statutory Policy',
+      status: p.status,
+      statusLabel: p.statusLabel,
+      leadMda: p.leadMinistry,
+      leadSource: p.evidenceClaims?.[0]?.sources?.[0]?.publisher || p.leadMinistry || 'Federal Ministry of Justice',
+      routePath: `/policies/${p.slug || p.id}`,
+      eventDate: p.effectiveDate || p.approvalDate,
+      publishedAt: p.publishedAt || p.approvalDate,
+      updatedAt: p.updatedAt || p.publishedAt || p.approvalDate,
+      verificationStatus: undefined,
+    }));
+
+    const prgs: LatestUpdateItem[] = programmes().map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      summary: p.summary,
+      recordType: 'programme',
+      recordTypeLabel: p.programmeTypeLabel || 'National Programme',
+      status: p.status,
+      statusLabel: p.statusLabel,
+      leadMda: p.coordinatingAgency,
+      leadSource: p.evidenceClaims?.[0]?.sources?.[0]?.publisher || p.coordinatingAgency || 'Federal Government of Nigeria',
+      routePath: `/programmes/${p.slug || p.id}`,
+      eventDate: p.launchDate,
+      publishedAt: p.publishedAt || p.launchDate,
+      updatedAt: p.updatedAt || p.publishedAt || p.launchDate,
+      verificationStatus: undefined,
+    }));
+
+    const allRecords = [...achs, ...projs, ...pols, ...prgs];
+
+    allRecords.sort((a, b) => {
+      const timeA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+      const timeB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return a.title.localeCompare(b.title);
+    });
+
+    return allRecords.slice(0, limit);
   },
 
   // Timeline Events

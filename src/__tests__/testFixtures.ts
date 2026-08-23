@@ -17,6 +17,8 @@ export const testPublicSnapshot: PublicDataSnapshot = {
   achievements: DEMO_ACHIEVEMENTS.map((a, i) => ({
     ...a,
     id: `ACH-${String(i + 1).padStart(3, "0")}`,
+    publishedAt: a.date || "2026-08-15",
+    updatedAt: a.date || "2026-08-15",
     isDemo: false,
   })),
   sectors: CANONICAL_SECTORS.map((s) => ({
@@ -26,16 +28,22 @@ export const testPublicSnapshot: PublicDataSnapshot = {
   projects: DEMO_PROJECTS.map((p, i) => ({
     ...p,
     id: `PRJ-${String(i + 1).padStart(3, "0")}`,
+    publishedAt: p.startDate || "2026-08-15",
+    updatedAt: p.startDate || "2026-08-15",
     isDemo: false,
   })),
   policies: DEMO_POLICIES.map((p, i) => ({
     ...p,
     id: `POL-${String(i + 1).padStart(3, "0")}`,
+    publishedAt: p.approvalDate || "2026-08-15",
+    updatedAt: p.approvalDate || "2026-08-15",
     isDemo: false,
   })),
   programmes: DEMO_PROGRAMMES.map((p, i) => ({
     ...p,
     id: `PRG-${String(i + 1).padStart(3, "0")}`,
+    publishedAt: p.launchDate || "2026-08-15",
+    updatedAt: p.launchDate || "2026-08-15",
     isDemo: false,
   })),
   timelineEvents: DEMO_TIMELINE_EVENTS.map((t, i) => ({

@@ -239,6 +239,8 @@ function baseRecord(record: QueryResultRow, evidence: QueryResultRow[]) {
   const sector = primarySector(record);
   const claims = claimsFor(evidence);
   const status = String(record.implementation_status);
+  const publishedAt = isoDate(record.published_at);
+  const updatedAt = isoDate(record.updated_at ?? record.published_at);
   return {
     id: String(record.id),
     slug: String(record.slug),
@@ -249,7 +251,9 @@ function baseRecord(record: QueryResultRow, evidence: QueryResultRow[]) {
     sectorName: String(sector.label ?? 'Unclassified'),
     status,
     statusLabel: label(status),
-    date: isoDate(record.published_at),
+    date: publishedAt,
+    publishedAt,
+    updatedAt,
     datePrecision: 'exact_day' as DatePrecision,
     leadMda: leadInstitution(record),
     statesCovered: geographyNames(record),
@@ -347,6 +351,8 @@ function projectModel(record: QueryResultRow, evidence: QueryResultRow[], financ
     statesCovered: base.statesCovered,
     startDate: base.date,
     completionOrCurrentDate: base.date,
+    publishedAt: base.publishedAt,
+    updatedAt: base.updatedAt,
     datePrecision: base.datePrecision,
     contractValue: contract ? formatPublicContractValue(assertExactDecimal(contract.amount_exact), contract.currency_code) : undefined,
     evidenceClaims: base.evidenceClaims,
@@ -371,6 +377,8 @@ function policyModel(record: QueryResultRow, evidence: QueryResultRow[]): Policy
     statusLabel: base.statusLabel,
     approvalDate: base.date,
     effectiveDate: base.date,
+    publishedAt: base.publishedAt,
+    updatedAt: base.updatedAt,
     gazetteNumber: details.referenceNumber ? String(details.referenceNumber) : undefined,
     datePrecision: base.datePrecision,
     evidenceClaims: base.evidenceClaims,
@@ -395,6 +403,8 @@ function programmeModel(record: QueryResultRow, evidence: QueryResultRow[], bene
     status: base.status,
     statusLabel: base.statusLabel,
     launchDate: base.date,
+    publishedAt: base.publishedAt,
+    updatedAt: base.updatedAt,
     datePrecision: base.datePrecision,
     targetBeneficiaryType: String(details.targetGroupNarrative ?? metrics[0]?.beneficiaryType ?? 'individuals'),
     targetBeneficiaryTypeLabel: label(details.targetGroupNarrative ?? metrics[0]?.beneficiaryType ?? 'individuals'),

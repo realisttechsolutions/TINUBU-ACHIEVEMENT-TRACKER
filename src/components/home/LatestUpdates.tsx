@@ -9,7 +9,7 @@ import { formatDate } from "@/utils/formatters";
 
 export const LatestUpdates: React.FC = () => {
   const { t, currentLanguage } = useTranslation();
-  const latestAchievements = dataAdapter.getAchievements({ sortBy: "newest" }).slice(0, 3);
+  const latestUpdates = dataAdapter.getLatestUpdates(3);
 
   return (
     <section className="py-12 md:py-16 bg-white dark:bg-gov-darkSurface border-b border-gov-border font-sans">
@@ -30,21 +30,26 @@ export const LatestUpdates: React.FC = () => {
 
         {/* Updates Stack */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {latestAchievements.map((item) => {
-            const formattedDate = item.date ? formatDate(item.date, currentLanguage, "d MMM yyyy") : "";
-            const leadSource = item.evidenceClaims?.[0]?.sources?.[0]?.publisher || item.leadMda || "Federal Government of Nigeria";
+          {latestUpdates.map((item) => {
+            const formattedDate = item.updatedAt ? formatDate(item.updatedAt, currentLanguage, "d MMM yyyy") : "";
 
             return (
               <div
-                key={item.id}
+                key={`${item.recordType}-${item.id}`}
                 className="bg-gov-canvas dark:bg-gov-navy/20 border border-gov-border rounded-xl p-5 shadow-xs space-y-3 flex flex-col justify-between"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between border-b border-gov-border/40 pb-2 text-xs">
                     <span className="font-bold text-gov-navy dark:text-white font-display">
-                      {formattedDate ? `Verified ${formattedDate}` : item.date}
+                      {formattedDate ? `Updated ${formattedDate}` : item.updatedAt}
                     </span>
                     <StatusBadge status={item.status} size="sm" />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gov-navy/5 dark:bg-white/10 text-gov-navy dark:text-gray-300 uppercase tracking-wide">
+                      {item.recordTypeLabel}
+                    </span>
                   </div>
 
                   <h4 className="text-base font-bold font-display text-gov-navy dark:text-white leading-snug line-clamp-2">
@@ -57,10 +62,11 @@ export const LatestUpdates: React.FC = () => {
                 </div>
 
                 <div className="pt-3 border-t border-gov-border/40 flex items-center justify-between text-xs">
-                  <SourceBadge sourceName={leadSource} level={2} />
+                  <SourceBadge sourceName={item.leadSource} level={2} />
                   <Link
-                    to={`/achievements/${item.slug || item.id}`}
+                    to={item.routePath}
                     className="inline-flex items-center gap-1 font-bold text-gov-navy dark:text-gov-gold hover:text-gov-emerald text-xs transition-colors"
+                    aria-label={`Inspect record for ${item.title}`}
                   >
                     <span>{t("hero.inspectRecord", { defaultValue: "Inspect Record" })}</span>
                     <ArrowRight className="h-3 w-3 text-gov-gold" />

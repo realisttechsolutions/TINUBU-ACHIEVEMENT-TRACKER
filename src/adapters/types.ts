@@ -133,6 +133,8 @@ export interface AchievementViewModel {
   statusLabel: string;
   statusCategory: 'planning' | 'execution' | 'delivered' | 'outcome';
   date: string;
+  publishedAt?: string;
+  updatedAt?: string;
   datePrecision: DatePrecision;
   leadMda: string;
   statesCovered: string[];
@@ -213,6 +215,8 @@ export interface ProjectViewModel {
   statesCovered: string[];
   startDate: string;
   completionOrCurrentDate: string;
+  publishedAt?: string;
+  updatedAt?: string;
   datePrecision: DatePrecision;
   contractValue?: string;
   disbursedValue?: string;
@@ -235,6 +239,8 @@ export interface PolicyViewModel {
   statusLabel: string;
   approvalDate: string;
   effectiveDate?: string;
+  publishedAt?: string;
+  updatedAt?: string;
   gazetteNumber?: string;
   datePrecision: DatePrecision;
   citizenImpact?: CitizenImpactViewModel;
@@ -255,6 +261,8 @@ export interface ProgrammeViewModel {
   status: string;
   statusLabel: string;
   launchDate: string;
+  publishedAt?: string;
+  updatedAt?: string;
   datePrecision: DatePrecision;
   targetBeneficiaryType: string;
   targetBeneficiaryTypeLabel: string;
@@ -263,6 +271,24 @@ export interface ProgrammeViewModel {
   citizenImpact?: CitizenImpactViewModel;
   evidenceClaims: AtomicClaimViewModel[];
   isDemo: boolean;
+}
+
+export interface LatestUpdateItem {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  recordType: 'achievement' | 'physical_project' | 'policy' | 'programme' | string;
+  recordTypeLabel: string;
+  status: string;
+  statusLabel?: string;
+  leadMda: string;
+  leadSource: string;
+  routePath: string;
+  eventDate?: string;
+  publishedAt?: string;
+  updatedAt: string;
+  verificationStatus?: string;
 }
 
 export interface TimelineEventViewModel {

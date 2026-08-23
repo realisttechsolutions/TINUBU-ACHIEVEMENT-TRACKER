@@ -109,36 +109,161 @@ describe('PTAT M08H Regression Suite — Spotlight, Latest Updates, and CTA Inte
     });
   });
 
-  describe('2. Dynamic Latest Verified Updates', () => {
-    it('dynamically queries dataAdapter for newest published records', () => {
-      renderWithProviders(<LatestUpdates />);
-      const expectedLatest = dataAdapter.getAchievements({ sortBy: 'newest' }).slice(0, 3);
+  describe('2. Dynamic Cross-Type Latest Updates & Truthful Semantics (M08H.1)', () => {
+    it('proves section is cross-type and not achievements-only', () => {
+      const customSnapshot: typeof testPublicSnapshot = {
+        ...testPublicSnapshot,
+        projects: [
+          {
+            ...testPublicSnapshot.projects[0],
+            title: 'Lagos-Calabar Coastal Superhighway Project',
+            updatedAt: '2026-08-25',
+          },
+        ],
+        policies: [
+          {
+            ...testPublicSnapshot.policies[0],
+            title: 'National Digital Economy Statutory Policy',
+            updatedAt: '2026-08-24',
+          },
+        ],
+        achievements: [
+          {
+            ...testPublicSnapshot.achievements[0],
+            title: 'Civil Service Biometric Reform Achievement',
+            updatedAt: '2026-08-23',
+          },
+        ],
+      };
 
-      expectedLatest.forEach((record) => {
-        expect(screen.getByText(record.title)).toBeDefined();
-      });
+      hydrateDataAdapter(customSnapshot);
+      renderWithProviders(<LatestUpdates />);
+
+      expect(screen.getByText('Lagos-Calabar Coastal Superhighway Project')).toBeDefined();
+      expect(screen.getByText('National Digital Economy Statutory Policy')).toBeDefined();
+      expect(screen.getByText('Civil Service Biometric Reform Achievement')).toBeDefined();
     });
 
-    it('renders semantically clear verification date labels without stale static dates', () => {
+    it('proves newest updated project can outrank an older achievement', () => {
+      const customSnapshot: typeof testPublicSnapshot = {
+        ...testPublicSnapshot,
+        achievements: [
+          {
+            ...testPublicSnapshot.achievements[0],
+            title: 'Older Achievement Delivered in 2024',
+            date: '2024-01-01',
+            publishedAt: '2026-08-10',
+            updatedAt: '2026-08-10',
+          },
+        ],
+        projects: [
+          {
+            ...testPublicSnapshot.projects[0],
+            title: 'Brand New Project Update 2026',
+            startDate: '2024-01-01',
+            publishedAt: '2026-08-15',
+            updatedAt: '2026-08-26',
+          },
+        ],
+      };
+
+      hydrateDataAdapter(customSnapshot);
+      const updates = dataAdapter.getLatestUpdates(3);
+
+      expect(updates[0].title).toBe('Brand New Project Update 2026');
+      expect(updates[0].recordType).toBe('physical_project');
+      expect(updates[0].routePath).toBe(`/projects/${updates[0].slug || updates[0].id}`);
+    });
+
+    it('proves newest updated policy can appear and links to /policies/[slug]', () => {
+      const customSnapshot: typeof testPublicSnapshot = {
+        ...testPublicSnapshot,
+        policies: [
+          {
+            ...testPublicSnapshot.policies[0],
+            title: 'Critical National Infrastructure Protection Order',
+            slug: 'critical-national-infrastructure-protection-order',
+            approvalDate: '2024-05-15',
+            publishedAt: '2026-08-20',
+            updatedAt: '2026-08-27',
+          },
+        ],
+      };
+
+      hydrateDataAdapter(customSnapshot);
+      const updates = dataAdapter.getLatestUpdates(3);
+
+      expect(updates[0].title).toBe('Critical National Infrastructure Protection Order');
+      expect(updates[0].recordType).toBe('policy');
+      expect(updates[0].routePath).toBe('/policies/critical-national-infrastructure-protection-order');
+    });
+
+    it('proves historical event date does not control ranking (ranking is controlled by updatedAt)', () => {
+      const customSnapshot: typeof testPublicSnapshot = {
+        ...testPublicSnapshot,
+        achievements: [
+          {
+            ...testPublicSnapshot.achievements[0],
+            title: 'Historical 2023 Enactment Revised in Late August 2026',
+            date: '2023-06-01', // Historical event date in 2023
+            publishedAt: '2026-08-01',
+            updatedAt: '2026-08-28', // Most recent update
+          },
+          {
+            ...testPublicSnapshot.achievements[1],
+            title: 'Recent 2026 Milestone Not Updated Since Early August',
+            date: '2026-08-10', // Historical event date in 2026
+            publishedAt: '2026-08-10',
+            updatedAt: '2026-08-10', // Older update
+          },
+        ],
+      };
+
+      hydrateDataAdapter(customSnapshot);
+      const updates = dataAdapter.getLatestUpdates(3);
+
+      // The 2023 historical record revised on 2026-08-28 must rank ahead of 2026-08-10
+      expect(updates[0].title).toBe('Historical 2023 Enactment Revised in Late August 2026');
+    });
+
+    it('displays truthful Updated [date] label matching actual update semantics rather than false verified_at', () => {
       renderWithProviders(<LatestUpdates />);
-      // Should not contain hardcoded stale dates from 2025 static config
+
+      // Stale 2025 static config strings eliminated
       expect(screen.queryByText('April 2025')).toBeNull();
       expect(screen.queryByText('March 2025')).toBeNull();
       expect(screen.queryByText('February 2025')).toBeNull();
 
-      // Should display verified date prefixes
-      const verifiedLabels = screen.getAllByText(/Verified/i);
-      expect(verifiedLabels.length).toBeGreaterThanOrEqual(1);
+      // Displays truthful Updated date labels
+      const updatedLabels = screen.getAllByText(/Updated/i);
+      expect(updatedLabels.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('links each latest update card directly to its audited record page', () => {
-      renderWithProviders(<LatestUpdates />);
-      const expectedLatest = dataAdapter.getAchievements({ sortBy: 'newest' }).slice(0, 3);
+    it('automatically changes ordering when future update timestamp changes on existing record', () => {
+      const initialSnapshot = { ...testPublicSnapshot };
+      hydrateDataAdapter(initialSnapshot);
+      const initialTop = dataAdapter.getLatestUpdates(1)[0];
 
-      expectedLatest.forEach((record) => {
-        const link = screen.getAllByRole('link', { name: /Inspect Record/i });
-        expect(link.length).toBe(3);
-      });
+      // Simulate a future database revision on a different record tomorrow
+      const modifiedSnapshot: typeof testPublicSnapshot = {
+        ...testPublicSnapshot,
+        programmes: [
+          {
+            ...testPublicSnapshot.programmes[0],
+            title: 'National Social Safety Net Recalibrated',
+            launchDate: '2024-01-01',
+            updatedAt: '2026-09-01', // Future timestamp
+          },
+        ],
+      };
+
+      hydrateDataAdapter(modifiedSnapshot);
+      const futureTop = dataAdapter.getLatestUpdates(1)[0];
+
+      expect(futureTop.title).toBe('National Social Safety Net Recalibrated');
+      expect(futureTop.recordType).toBe('programme');
+      expect(futureTop.routePath).toBe(`/programmes/${futureTop.slug || futureTop.id}`);
+      expect(futureTop.title).not.toBe(initialTop.title);
     });
   });
 
