@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useLocation } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 import SkipNavigation from "./SkipNavigation";
 import GlobalHeader from "./GlobalHeader";
 import GlobalContextBar from "./GlobalContextBar";
@@ -18,11 +19,16 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const isAIPage = pathname === '/ai';
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased selection:bg-gov-navy selection:text-gov-gold">
+    <div
+      className={cn(
+        "flex flex-col bg-background text-foreground font-sans antialiased selection:bg-gov-navy selection:text-gov-gold",
+        isAIPage ? "h-screen max-h-screen overflow-hidden" : "min-h-screen"
+      )}
+    >
       <SkipNavigation />
       <GlobalHeader />
       <GlobalContextBar />
-      <PageMain className={isAIPage ? "flex-1 flex flex-col overflow-hidden" : ""}>
+      <PageMain className={isAIPage ? "flex-1 min-h-0 flex flex-col overflow-hidden" : ""}>
         {children}
       </PageMain>
       {!isAIPage && <GlobalFooter />}
