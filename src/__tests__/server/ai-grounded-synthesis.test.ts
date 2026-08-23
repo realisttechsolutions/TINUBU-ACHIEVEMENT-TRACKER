@@ -528,5 +528,86 @@ describe('PTAT M08B: Vertex AI Grounded Synthesis & Citation Validation Unit Tes
       expect(answer.answerText).toContain('Cyril Ramaphosa');
       expect(answer.webSources).toHaveLength(1);
     });
+
+    it('M08G.0: asserts normal public answers NEVER contain forbidden catalog-refusal phrases', async () => {
+      const forbiddenPhrases = [
+        'Insufficient Evidence in Public Catalog',
+        'contains no recorded public evidence for this query',
+        'strictly restricted to verified PTAT public records',
+      ];
+
+      const mockDb: QueryExecutor = { query: vi.fn().mockResolvedValue({ rows: [] }) };
+      const synthesisService = new PTATGroundedSynthesisService(mockDb);
+
+      vi.spyOn((synthesisService as any).vertexClient, 'generateSimpleText').mockResolvedValue({
+        rawText: 'education, student loans, NELFUND',
+      });
+
+      vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedSearchContent').mockResolvedValue({
+        rawText: 'President Tinubu has reformed tertiary education funding and disbursed student loans via NELFUND.',
+        metadata: { model: 'gemini-3.6-flash', location: 'global' },
+        webSources: [{ title: 'NELFUND Portal', url: 'https://nelf.gov.ng', domain: 'nelf.gov.ng' }],
+      });
+
+      vi.spyOn((synthesisService as any).vertexClient, 'generateGeneralContent').mockResolvedValue({
+        rawText: 'The average temperature on Mars is about -60°C (-80°F).',
+        metadata: { model: 'gemini-3.6-flash', location: 'global' },
+      });
+
+      const queriesToTest = [
+        'What has president tinubu done so far in education',
+        'What has Tinubu done for young people?',
+        'What has Tinubu done in agriculture?',
+        'What empowerment programs tinubu did in 2024',
+        'Who is the current President of South Africa?',
+        'What is the average temperature on Mars?',
+        'what tinubu do students',
+        'tinubu achievement education pls',
+      ];
+
+      for (const q of queriesToTest) {
+        const res = await synthesisService.answerQuestion(q);
+        const text = res.answerText || res.answer || '';
+        for (const phrase of forbiddenPhrases) {
+          expect(text.toLowerCase()).not.toContain(phrase.toLowerCase());
+        }
+      }
+    });
+
+    it('M08G.0: guarantees graceful natural fallback message if web search grounding fails', async () => {
+      const mockDb: QueryExecutor = { query: vi.fn().mockResolvedValue({ rows: [] }) };
+      const synthesisService = new PTATGroundedSynthesisService(mockDb);
+
+      vi.spyOn((synthesisService as any).vertexClient, 'generateSimpleText').mockResolvedValue({
+        rawText: 'nigeria news',
+      });
+
+      vi.spyOn((synthesisService as any).retrievalService, 'retrievePTATContext').mockResolvedValue({
+        records: [],
+        claims: [],
+        sources: [],
+        financialRecords: [],
+        beneficiaryRecords: [],
+        timelineEvents: [],
+        geographies: [],
+        citationMap: [],
+        recordLinks: [],
+        retrievalConfidence: { confidenceTier: 'NONE', overallScore: 0 },
+        answerability: 'INSUFFICIENT_EVIDENCE',
+        diagnostics: { retrievalLatencyMs: 5 },
+      } as any);
+
+      vi.spyOn((synthesisService as any).vertexClient, 'generateGroundedSearchContent').mockRejectedValue(
+        new Error('Network timeout connecting to Vertex search endpoint')
+      );
+
+      const res = await synthesisService.answerQuestion('What is the latest breaking news on Nigerian fiscal reforms?');
+      expect(res.sourceMode).toBe('WEB_GROUNDED');
+      expect(res.answerText).toBe(
+        "I couldn't verify enough reliable public information to answer that question properly right now."
+      );
+      expect(res.answerText).not.toContain('Catalog');
+      expect(res.answerText).not.toContain('database');
+    });
   });
 });

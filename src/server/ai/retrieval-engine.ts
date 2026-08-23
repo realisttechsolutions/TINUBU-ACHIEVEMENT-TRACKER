@@ -226,7 +226,17 @@ export class PTATAIRetrievalEngine {
     `;
 
     const recordsRes = await this.db.query(recordsSql, values);
-    const rawRecords = recordsRes.rows;
+    const rawRecords = Array.isArray(recordsRes?.rows) ? recordsRes.rows : [];
+
+    // Resilience: If structured search with keywords matched 0 records, relax keywords to recover structured records
+    if (
+      rawRecords.length === 0 &&
+      (constraints.sectorCode || constraints.sector || constraints.stateCode || constraints.state || constraints.recordType) &&
+      (constraints.keywords && constraints.keywords.length > 0)
+    ) {
+      const relaxedConstraints = { ...constraints, keywords: undefined, entityName: undefined };
+      return this.retrieve(relaxedConstraints, options);
+    }
 
     const timelines: PTATAITimelineEvent[] = [];
     const allGeographies: PTATAIGeography[] = [];
