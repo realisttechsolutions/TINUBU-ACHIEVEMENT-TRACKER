@@ -19,13 +19,13 @@ export const AIComposer: React.FC<AIComposerProps> = ({
   const [value, setValue] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // Auto-resize textarea smoothly based on content
+  // Auto-resize textarea smoothly based on content (1 line min ~24px, max ~130px)
   const adjustHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = 'auto';
       const scrollHeight = textarea.scrollHeight;
-      textarea.style.height = `${Math.min(Math.max(scrollHeight, 38), 160)}px`;
+      textarea.style.height = `${Math.min(Math.max(scrollHeight, 24), 130)}px`;
     }
   };
 
@@ -47,7 +47,7 @@ export const AIComposer: React.FC<AIComposerProps> = ({
     onSubmit(trimmed);
     setValue('');
     if (textareaRef.current) {
-      textareaRef.current.style.height = '38px';
+      textareaRef.current.style.height = '24px';
     }
   };
 
@@ -65,7 +65,7 @@ export const AIComposer: React.FC<AIComposerProps> = ({
       onSubmit={handleSubmit}
       className="w-full max-w-2xl lg:max-w-3xl mx-auto transition-all"
     >
-      <div className="relative flex items-end gap-2 rounded-xl sm:rounded-2xl bg-slate-900/90 dark:bg-slate-950/90 border border-slate-700/70 hover:border-slate-600 focus-within:border-cyan-500/70 focus-within:ring-2 focus-within:ring-cyan-500/10 shadow-lg backdrop-blur-xl transition-all duration-200 px-3 py-1.5 sm:px-3.5 sm:py-2">
+      <div className="relative flex items-center gap-2 rounded-xl sm:rounded-2xl bg-slate-900/95 dark:bg-slate-950/95 border border-slate-700/80 hover:border-slate-600 focus-within:border-cyan-500/70 focus-within:ring-2 focus-within:ring-cyan-500/10 shadow-lg backdrop-blur-xl transition-all duration-150 px-3 py-1.5 sm:px-3.5 sm:py-2 min-h-[48px] sm:min-h-[52px]">
         {/* Text Area */}
         <textarea
           ref={textareaRef}
@@ -77,18 +77,18 @@ export const AIComposer: React.FC<AIComposerProps> = ({
           rows={1}
           maxLength={2000}
           aria-label="Ask PTAT AI a question"
-          className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-400 text-xs sm:text-sm md:text-[14.5px] resize-none outline-none focus:outline-none min-h-[38px] max-h-[160px] py-1.5 leading-relaxed font-sans selection:bg-cyan-500/30"
+          className="flex-1 bg-transparent text-slate-100 placeholder:text-slate-400 text-xs sm:text-sm resize-none outline-none focus:outline-none min-h-[24px] max-h-[130px] py-1 leading-relaxed font-sans selection:bg-cyan-500/30 overflow-y-auto"
         />
 
         {/* Inline Actions */}
-        <div className="flex items-center gap-1.5 shrink-0 pb-0.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           {value.length > 0 && (
             <button
               type="button"
               onClick={() => {
                 setValue('');
                 if (textareaRef.current) {
-                  textareaRef.current.style.height = '38px';
+                  textareaRef.current.style.height = '24px';
                   textareaRef.current.focus();
                 }
               }}
