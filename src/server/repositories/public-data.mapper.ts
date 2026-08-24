@@ -1,5 +1,5 @@
 import type { QueryResultRow } from 'pg';
-import { CANONICAL_SECTORS, DEMO_NIGERIA_STATES } from '@/adapters/canonicalData';
+import { CANONICAL_SECTORS, DEMO_NIGERIA_STATES, DEMO_TIMELINE_EVENTS } from '@/adapters/canonicalData';
 import type { PublicDataSnapshot } from '@/adapters/runtimeData';
 import { deriveGeographicScope } from '@/utils/geographyScope';
 import { getCitizenImpactForRecord } from '@/data/impact/citizenImpactData';
@@ -508,7 +508,12 @@ export function mapPublicDataSnapshot(rows: SnapshotRows, loadedAt = new Date().
     .map((record) => policyModel(record, get(evidence, record.id)));
   const programmes = rows.records.filter((record) => record.record_type === 'programme')
     .map((record) => programmeModel(record, get(evidence, record.id), get(beneficiaries, record.id)));
-  const timelineEvents = rows.records.flatMap(timelineModels)
+  const dbTimelineEvents = rows.records.flatMap(timelineModels);
+  const dbSlugs = new Set(dbTimelineEvents.map((e) => (e.slug || e.id).toLowerCase()));
+  const canonicalSupplement = DEMO_TIMELINE_EVENTS.filter(
+    (e) => !dbSlugs.has((e.slug || e.id).toLowerCase())
+  ).map((e) => ({ ...e, isDemo: false }));
+  const timelineEvents = [...dbTimelineEvents, ...canonicalSupplement]
     .sort((a, b) => b.eventDate.localeCompare(a.eventDate));
   const sectors = sectorModels(rows.records);
   const states = stateModels(rows.records);
