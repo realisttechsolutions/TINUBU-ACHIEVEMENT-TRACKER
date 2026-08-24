@@ -1,0 +1,111 @@
+indicator_id,observation_date,observation_period,value,unit,source_id,series_version,methodology_version,comparable_with_previous,break_id,qualification_note
+real_gdp_growth,2023-03-31,Q1 2023,2.31,%,SRC-NBS-GDP-Q1-2023,v1.0,2010 Base,TRUE,,Pre-administration benchmark
+real_gdp_growth,2023-06-30,Q2 2023,2.51,%,SRC-NBS-GDP-Q2-2023,v1.0,2010 Base,TRUE,,Inaugural administration quarter baseline
+real_gdp_growth,2023-09-30,Q3 2023,2.54,%,SRC-NBS-GDP-Q3-2023,v1.0,2010 Base,TRUE,,Post-reform adjustment period
+real_gdp_growth,2023-12-31,Q4 2023,3.46,%,SRC-NBS-GDP-Q4-2023,v1.0,2010 Base,TRUE,,Year-end expansion driven by services
+real_gdp_growth,2024-03-31,Q1 2024,2.98,%,SRC-NBS-GDP-Q1-2024,v1.0,2010 Base,TRUE,,YoY growth supported by ICT and financial institutions
+real_gdp_growth,2024-06-30,Q2 2024,3.19,%,SRC-NBS-GDP-Q2-2024,v1.0,2010 Base,TRUE,,Expansion across non-oil services
+real_gdp_growth,2024-09-30,Q3 2024,3.46,%,SRC-NBS-GDP-Q3-2024,v1.0,2010 Base,TRUE,,Agricultural harvest support
+real_gdp_growth,2024-12-31,Q4 2024,3.76,%,SRC-NBS-GDP-Q4-2024,v1.0,2010 Base,TRUE,,Full year 2024 GDP reached 3.38%
+real_gdp_growth,2025-03-31,Q1 2025,3.13,%,SRC-NBS-GDP-Q1-2025,v1.0,2010 Base,TRUE,,Resilient domestic trade and services
+real_gdp_growth,2025-06-30,Q2 2025,4.23,%,SRC-NBS-GDP-Q2-2025,v1.0,2010 Base,TRUE,,Strong manufacturing and services momentum
+real_gdp_growth,2025-09-30,Q3 2025,3.98,%,SRC-NBS-GDP-Q3-2025,v1.0,2010 Base,TRUE,,Solid non-oil contribution
+real_gdp_growth,2025-12-31,Q4 2025,4.07,%,SRC-NBS-GDP-Q4-2025,v1.0,2010 Base,TRUE,,Full year 2025 GDP reached 3.87%
+real_gdp_growth,2026-03-31,Q1 2026,3.89,%,SRC-NBS-GDP-Q1-2026,v1.0,2010 Base,TRUE,,Latest verified statutory reading; non-oil 96.08%
+headline_cpi,2023-05-31,May 2023,22.41,%,SRC-NBS-CPI-05-2023,v1.0,2009 Base,TRUE,,Inaugural baseline (2009 base year)
+headline_cpi,2023-06-30,Jun 2023,22.79,%,SRC-NBS-CPI-06-2023,v1.0,2009 Base,TRUE,,Immediate post-subsidy price adjustment
+headline_cpi,2023-07-31,Jul 2023,24.08,%,SRC-NBS-CPI-07-2023,v1.0,2009 Base,TRUE,,Transport cost pass-through
+headline_cpi,2023-08-31,Aug 2023,25.80,%,SRC-NBS-CPI-08-2023,v1.0,2009 Base,TRUE,,Food logistics pressures
+headline_cpi,2023-09-30,Sep 2023,26.72,%,SRC-NBS-CPI-09-2023,v1.0,2009 Base,TRUE,,FX pass-through effect
+headline_cpi,2023-10-31,Oct 2023,27.33,%,SRC-NBS-CPI-10-2023,v1.0,2009 Base,TRUE,,Core price momentum
+headline_cpi,2023-11-30,Nov 2023,28.20,%,SRC-NBS-CPI-11-2023,v1.0,2009 Base,TRUE,,Pre-holiday demand surge
+headline_cpi,2023-12-31,Dec 2023,28.92,%,SRC-NBS-CPI-12-2023,v1.0,2009 Base,TRUE,,Year-end festive price pressure
+headline_cpi,2024-01-31,Jan 2024,29.90,%,SRC-NBS-CPI-01-2024,v1.0,2009 Base,TRUE,,Post-holiday adjustments
+headline_cpi,2024-02-29,Feb 2024,31.70,%,SRC-NBS-CPI-02-2024,v1.0,2009 Base,TRUE,,Currency depreciation pass-through
+headline_cpi,2024-03-31,Mar 2024,33.20,%,SRC-NBS-CPI-03-2024,v1.0,2009 Base,TRUE,,Accelerated FX pass-through
+headline_cpi,2024-04-30,Apr 2024,33.69,%,SRC-NBS-CPI-04-2024,v1.0,2009 Base,TRUE,,Energy and food inflation
+headline_cpi,2024-05-31,May 2024,33.95,%,SRC-NBS-CPI-05-2024,v1.0,2009 Base,TRUE,,Disinflation deceleration begins
+headline_cpi,2024-06-30,Jun 2024,34.19,%,SRC-NBS-CPI-06-2024,v1.0,2009 Base,TRUE,,Pre-rebasing 2009-base series peak
+headline_cpi,2024-07-31,Jul 2024,33.40,%,SRC-NBS-CPI-07-2024,v1.0,2009 Base,TRUE,,First deceleration in 19 months
+headline_cpi,2024-12-31,Dec 2024,34.80,%,SRC-NBS-CPI-12-2024,v1.0,2009 Base,TRUE,,Final period under 2009 base framework
+headline_cpi,2025-05-31,May 2025,22.97,%,SRC-NBS-CPI-05-2025,v2.0,2024 Base,FALSE,BRK-CPI-2025,Methodology break: rebased to 2024=100 base year and 2023 NLSS weights
+headline_cpi,2025-12-31,Dec 2025,18.40,%,SRC-NBS-CPI-12-2025,v2.0,2024 Base,TRUE,,Rebased series moderation
+headline_cpi,2026-03-31,Mar 2026,16.80,%,SRC-NBS-CPI-03-2026,v2.0,2024 Base,TRUE,,Rebased series deceleration
+headline_cpi,2026-05-31,May 2026,15.93,%,SRC-NBS-CPI-05-2026,v2.0,2024 Base,TRUE,,Continued disinflation under monetary tightening
+headline_cpi,2026-06-30,Jun 2026,15.91,%,SRC-NBS-CPI-06-2026,v2.0,2024 Base,TRUE,,MoM 1.66%
+headline_cpi,2026-07-31,Jul 2026,15.43,%,SRC-NBS-CPI-07-2026,v2.0,2024 Base,TRUE,,Latest verified statutory reading; MoM 1.57%
+food_cpi,2023-05-31,May 2023,24.82,%,SRC-NBS-CPI-05-2023,v1.0,2009 Base,TRUE,,Inaugural baseline (2009 base year)
+food_cpi,2023-12-31,Dec 2023,33.93,%,SRC-NBS-CPI-12-2023,v1.0,2009 Base,TRUE,,Logistics and seasonal pressure
+food_cpi,2024-06-30,Jun 2024,40.87,%,SRC-NBS-CPI-06-2024,v1.0,2009 Base,TRUE,,Pre-rebasing peak under 2009 weights
+food_cpi,2024-07-31,Jul 2024,39.53,%,SRC-NBS-CPI-07-2024,v1.0,2009 Base,TRUE,,First moderation under 2009 weights
+food_cpi,2025-12-31,Dec 2025,21.50,%,SRC-NBS-CPI-12-2025,v2.0,2024 Base,FALSE,BRK-CPI-2025,Methodology break: rebased to 2024=100 base year
+food_cpi,2026-05-31,May 2026,16.96,%,SRC-NBS-CPI-05-2026,v2.0,2024 Base,TRUE,,Rebased food inflation series
+food_cpi,2026-06-30,Jun 2026,17.52,%,SRC-NBS-CPI-06-2026,v2.0,2024 Base,TRUE,,Food inflation acceleration started
+food_cpi,2026-07-31,Jul 2026,20.31,%,SRC-NBS-CPI-07-2026,v2.0,2024 Base,TRUE,,Latest verified statutory reading; MoM 5.56%
+nafem_fx_rate,2023-05-31,May 2023,461.50,NGN/USD,SRC-CBN-FX-05-2023,v1.0,Official Peg,TRUE,,Pre-reform official peg baseline (parallel at ~₦760)
+nafem_fx_rate,2023-06-30,Jun 2023,769.25,NGN/USD,SRC-CBN-FX-06-2023,v2.0,Autonomous NAFEX/NAFEM,FALSE,BRK-FX-2023,Methodology break: official FX unification and float
+nafem_fx_rate,2023-12-31,Dec 2023,899.39,NGN/USD,SRC-CBN-FX-12-2023,v2.0,Autonomous NAFEM,TRUE,,Initial market clearing discovery
+nafem_fx_rate,2024-03-31,Mar 2024,1330.26,NGN/USD,SRC-CBN-FX-03-2024,v2.0,Autonomous NAFEM,TRUE,,CBN cleared $7B legacy FX forward backlog
+nafem_fx_rate,2024-06-30,Jun 2024,1470.19,NGN/USD,SRC-CBN-FX-06-2024,v2.0,Autonomous NAFEM,TRUE,,Market rate stabilization
+nafem_fx_rate,2024-12-31,Dec 2024,1535.00,NGN/USD,SRC-CBN-FX-12-2024,v2.0,Autonomous NAFEM,TRUE,,Year-end market rate
+nafem_fx_rate,2025-06-30,Jun 2025,1450.00,NGN/USD,SRC-CBN-FX-06-2025,v2.0,Autonomous NAFEM,TRUE,,Improved liquidity from non-oil exports
+nafem_fx_rate,2025-12-31,Dec 2025,1410.00,NGN/USD,SRC-CBN-FX-12-2025,v2.0,Autonomous NAFEM,TRUE,,Enhanced remittance inflows
+nafem_fx_rate,2026-06-30,Jun 2026,1375.50,NGN/USD,SRC-CBN-FX-06-2026,v2.0,Autonomous NAFEM,TRUE,,Narrowed parallel spread (<4%)
+nafem_fx_rate,2026-08-19,Aug 2026,1350.41,NGN/USD,SRC-CBN-FX-08-2026,v2.0,Autonomous NAFEM,TRUE,,Latest verified statutory volume-weighted rate (closing ₦1351.00)
+external_reserves,2023-05-31,May 2023,35.10,Billion USD,SRC-CBN-RES-05-2023,v1.0,Gross Official,TRUE,,Inaugural baseline
+external_reserves,2023-12-31,Dec 2023,32.91,Billion USD,SRC-CBN-RES-12-2023,v1.0,Gross Official,TRUE,,Net reserve settlement of debt obligations
+external_reserves,2024-06-30,Jun 2024,34.19,Billion USD,SRC-CBN-RES-06-2024,v1.0,Gross Official,TRUE,,Reserve rebuilding commenced
+external_reserves,2024-12-31,Dec 2024,40.41,Billion USD,SRC-CBN-RES-12-2024,v1.0,Gross Official,TRUE,,Significant FX liquidity replenishment
+external_reserves,2025-06-30,Jun 2025,43.20,Billion USD,SRC-CBN-RES-06-2025,v1.0,Gross Official,TRUE,,Oil tax and diaspora remittance boost
+external_reserves,2025-12-31,Dec 2025,46.02,Billion USD,SRC-CBN-RES-12-2025,v1.0,Gross Official,TRUE,,Strongest position in 5 years
+external_reserves,2026-03-31,Mar 2026,48.40,Billion USD,SRC-CBN-RES-03-2026,v1.0,Gross Official,TRUE,,Continued accretion
+external_reserves,2026-05-31,May 2026,50.47,Billion USD,SRC-CBN-RES-05-2026,v1.0,Gross Official,TRUE,,Crossed $50B mark
+external_reserves,2026-06-30,Jun 2026,51.29,Billion USD,SRC-CBN-RES-06-2026,v1.0,Gross Official,TRUE,,Sustained accretion
+external_reserves,2026-07-31,Jul 2026,51.92,Billion USD,SRC-CBN-RES-07-2026,v1.0,Gross Official,TRUE,,Peaked at $52.52B on July 17 2026
+external_reserves,2026-08-23,Aug 2026,52.66,Billion USD,SRC-CBN-RES-08-2026,v1.0,Gross Official,TRUE,,Latest verified statutory reading (17-year multi-year high)
+monetary_policy_rate,2023-05-31,May 2023,18.50,%,SRC-CBN-MPC-05-2023,v1.0,Standard MPC,TRUE,,Inaugural baseline
+monetary_policy_rate,2023-07-31,Jul 2023,18.75,%,SRC-CBN-MPC-07-2023,v1.0,Standard MPC,TRUE,,+25 bps hike
+monetary_policy_rate,2024-02-27,Feb 2024,22.75,%,SRC-CBN-MPC-02-2024,v1.0,Standard MPC,TRUE,,+400 bps aggressive tightening by new CBN leadership
+monetary_policy_rate,2024-03-26,Mar 2024,24.75,%,SRC-CBN-MPC-03-2024,v1.0,Standard MPC,TRUE,,+200 bps hike
+monetary_policy_rate,2024-05-21,May 2024,26.25,%,SRC-CBN-MPC-05-2024,v1.0,Standard MPC,TRUE,,+150 bps hike
+monetary_policy_rate,2024-07-23,Jul 2024,26.75,%,SRC-CBN-MPC-07-2024,v1.0,Standard MPC,TRUE,,+50 bps hike
+monetary_policy_rate,2024-09-24,Sep 2024,27.25,%,SRC-CBN-MPC-09-2024,v1.0,Standard MPC,TRUE,,+50 bps hike
+monetary_policy_rate,2024-11-26,Nov 2024,27.50,%,SRC-CBN-MPC-11-2024,v1.0,Standard MPC,TRUE,,Tightening cycle terminal peak
+monetary_policy_rate,2025-09-23,Sep 2025,27.00,%,SRC-CBN-MPC-09-2025,v1.0,Standard MPC,TRUE,,-50 bps easing step
+monetary_policy_rate,2026-02-24,Feb 2026,26.50,%,SRC-CBN-MPC-02-2026,v1.0,Standard MPC,TRUE,,-50 bps reduction at 304th MPC Meeting
+monetary_policy_rate,2026-05-20,May 2026,26.50,%,SRC-CBN-MPC-05-2026,v1.0,Standard MPC,TRUE,,Retained at 26.50% at 305th MPC Meeting
+monetary_policy_rate,2026-07-21,Jul 2026,26.50,%,SRC-CBN-MPC-07-2026,v1.0,Standard MPC,TRUE,,Latest verified statutory decision at 306th MPC Meeting
+crude_oil_production,2023-05-31,May 2023,1.184,mbpd,SRC-NUPRC-05-2023,v1.0,Direct Metering,TRUE,,Inaugural baseline crude-only (total liquids 1.427 mbpd)
+crude_oil_production,2023-12-31,Dec 2023,1.335,mbpd,SRC-NUPRC-12-2023,v1.0,Direct Metering,TRUE,,Improved maritime security interventions
+crude_oil_production,2024-06-30,Jun 2024,1.276,mbpd,SRC-NUPRC-06-2024,v1.0,Direct Metering,TRUE,,Pipeline maintenance downtime
+crude_oil_production,2024-07-31,Jul 2024,1.307,mbpd,SRC-NUPRC-07-2024,v1.0,Direct Metering,TRUE,,Mid-year recovery (total liquids 1.533 mbpd)
+crude_oil_production,2024-12-31,Dec 2024,1.417,mbpd,SRC-NUPRC-12-2024,v1.0,Direct Metering,TRUE,,Year-end production recovery
+crude_oil_production,2025-06-30,Jun 2025,1.480,mbpd,SRC-NUPRC-06-2025,v1.0,Direct Metering,TRUE,,Total liquids reached 1.69 mbpd
+crude_oil_production,2025-12-31,Dec 2025,1.450,mbpd,SRC-NUPRC-12-2025,v1.0,Direct Metering,TRUE,,2025 full year liquids average 1.64 mbpd
+crude_oil_production,2026-03-31,Mar 2026,1.546,mbpd,SRC-NUPRC-03-2026,v1.0,Direct Metering,TRUE,,Surpassed OPEC quota of 1.50 mbpd
+crude_oil_production,2026-05-31,May 2026,1.530,mbpd,SRC-NUPRC-05-2026,v1.0,Direct Metering,TRUE,,Total liquids 1.700 mbpd
+crude_oil_production,2026-06-30,Jun 2026,1.560,mbpd,SRC-NUPRC-06-2026,v1.0,Direct Metering,TRUE,,74-month high (total liquids 1.735 mbpd)
+crude_oil_production,2026-07-31,Jul 2026,1.505,mbpd,SRC-NUPRC-07-2026,v1.0,Direct Metering,TRUE,,Latest verified statutory reading; condensate 0.165 mbpd total liquids 1.670 mbpd
+total_public_debt,2023-06-30,Q2 2023,87.38,Trillion NGN,SRC-DMO-Q2-2023,v1.0,DMO Standard,TRUE,,Inaugural baseline: Domestic ₦54.13T External ₦33.25T ($43.16B at ₦770.38/$)
+total_public_debt,2023-09-30,Q3 2023,87.91,Trillion NGN,SRC-DMO-Q3-2023,v1.0,DMO Standard,TRUE,,USD value = $114.35B
+total_public_debt,2023-12-31,Q4 2023,97.34,Trillion NGN,SRC-DMO-Q4-2023,v1.0,DMO Standard,TRUE,,Domestic ₦59.12T External ₦38.22T ($42.50B at ₦899.39/$)
+total_public_debt,2024-03-31,Q1 2024,121.67,Trillion NGN,SRC-DMO-Q1-2024,v1.0,DMO Standard,TRUE,,Currency translation revaluation of external debt at ₦1330.26/$
+total_public_debt,2024-06-30,Q2 2024,134.30,Trillion NGN,SRC-DMO-Q2-2024,v1.0,DMO Standard,TRUE,,Domestic ₦71.22T External ₦63.07T ($42.90B at ₦1470.19/$)
+total_public_debt,2024-09-30,Q3 2024,142.10,Trillion NGN,SRC-DMO-Q3-2024,v1.0,DMO Standard,TRUE,,USD value = $94.20B
+total_public_debt,2024-12-31,Q4 2024,148.50,Trillion NGN,SRC-DMO-Q4-2024,v1.0,DMO Standard,TRUE,,Domestic debt domestic issuance expansion
+total_public_debt,2025-06-30,Q2 2025,152.40,Trillion NGN,SRC-DMO-Q2-2025,v1.0,DMO Standard,TRUE,,USD value = $105.10B
+total_public_debt,2025-12-31,Q4 2025,156.80,Trillion NGN,SRC-DMO-Q4-2025,v1.0,DMO Standard,TRUE,,Domestic FGN debt refinancing
+total_public_debt,2026-03-31,Q1 2026,159.35,Trillion NGN,SRC-DMO-Q1-2026,v1.0,DMO Standard,TRUE,,Latest verified statutory bulletin published June 30 2026: ₦159.3516T ($114.9544B at ₦1386.21/$)
+faac_distributable_revenue,2023-05-31,May 2023,0.786,Trillion NGN,SRC-OAGF-05-2023,v1.0,FAAC Standard,TRUE,,Inaugural pre-subsidy removal baseline (₦786.16 Billion)
+faac_distributable_revenue,2023-06-30,Jun 2023,0.907,Trillion NGN,SRC-OAGF-06-2023,v1.0,FAAC Standard,TRUE,,First post-subsidy removal distribution (₦907 Billion)
+faac_distributable_revenue,2023-12-31,Dec 2023,1.127,Trillion NGN,SRC-OAGF-12-2023,v1.0,FAAC Standard,TRUE,,Crossed ₦1.1T monthly threshold
+faac_distributable_revenue,2024-06-30,Jun 2024,1.354,Trillion NGN,SRC-OAGF-06-2024,v1.0,FAAC Standard,TRUE,,Enhanced non-oil revenue collections
+faac_distributable_revenue,2024-07-31,Jul 2024,1.358,Trillion NGN,SRC-OAGF-07-2024,v1.0,FAAC Standard,TRUE,,Gross revenue ₦2.613T shared August 2024
+faac_distributable_revenue,2024-12-31,Dec 2024,1.411,Trillion NGN,SRC-OAGF-12-2024,v1.0,FAAC Standard,TRUE,,Year-end statutory disbursements
+faac_distributable_revenue,2025-06-30,Jun 2025,1.650,Trillion NGN,SRC-OAGF-06-2025,v1.0,FAAC Standard,TRUE,,Tax reform optimization
+faac_distributable_revenue,2025-12-31,Dec 2025,1.820,Trillion NGN,SRC-OAGF-12-2025,v1.0,FAAC Standard,TRUE,,Increased non-oil VAT and customs duties
+faac_distributable_revenue,2026-01-31,Jan 2026,1.960,Trillion NGN,SRC-OAGF-01-2026,v1.0,FAAC Standard,TRUE,BRK-FAAC-2026,Implementation of Nigeria Tax Act 2025 VAT reforms
+faac_distributable_revenue,2026-03-31,Mar 2026,2.040,Trillion NGN,SRC-OAGF-03-2026,v1.0,FAAC Standard,TRUE,,Crossed ₦2T monthly threshold
+faac_distributable_revenue,2026-05-31,May 2026,2.300,Trillion NGN,SRC-OAGF-05-2026,v1.0,FAAC Standard,TRUE,,Strong CIT and PPT inflows
+faac_distributable_revenue,2026-06-30,Jun 2026,2.550,Trillion NGN,SRC-OAGF-06-2026,v1.0,FAAC Standard,TRUE,,Accelerated customs and statutory receipts
+faac_distributable_revenue,2026-07-31,Jul 2026,3.007,Trillion NGN,SRC-OAGF-07-2026,v1.0,FAAC Standard,TRUE,,Latest verified statutory reading; all-time federation record crossing ₦3T threshold

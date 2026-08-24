@@ -1,0 +1,15 @@
+indicator_id,indicator_name,frequency,normal_release_lag_days,current_threshold_days,recent_threshold_days,stale_threshold_days,fallback_behavior,governing_statutory_rule
+real_gdp_growth,Real GDP Growth Rate,Quarterly,55,95,180,270,RETAIN_LAST_OFFICIAL,NBS publishes quarterly GDP ~55 days after quarter close (e.g. Q1 published late May; Q2 late August)
+headline_cpi,Headline CPI Inflation,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NBS publishes CPI bulletin on the 15th day of the subsequent calendar month
+food_cpi,Food CPI Inflation,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NBS publishes Food CPI alongside headline CPI on the 15th of each month
+core_cpi,Core CPI Inflation,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NBS publishes Core CPI alongside headline CPI on the 15th of each month
+nafem_fx_rate,Official NAFEM FX Rate,Daily (Business Days),0,2,7,14,RETAIN_LAST_OFFICIAL,CBN publishes daily closing and weighted rates on business days
+external_reserves,Gross External Reserves,Daily (Business Days),0,3,10,20,RETAIN_LAST_OFFICIAL,CBN publishes 30-day moving average gross reserves daily
+monetary_policy_rate,Monetary Policy Rate (MPR),Bi-Monthly (MPC Cycle),0,65,120,180,RETAIN_LAST_OFFICIAL,CBN MPC meets bi-monthly (6 times per year) and announces policy rate changes immediately
+crude_oil_production,Crude Oil Production,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NUPRC reconciles wellhead metering and publishes by mid-subsequent month
+condensate_production,Condensate Production,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NUPRC publishes condensate data alongside crude oil monthly bulletin
+total_liquids_production,Total Liquid Petroleum Production,Monthly,15,35,65,95,RETAIN_LAST_OFFICIAL,NUPRC aggregates crude plus blended/unblended condensates monthly
+total_public_debt,Total Public Debt Stock,Quarterly,90,120,210,365,RETAIN_LAST_OFFICIAL,DMO publishes complete quarterly debt bulletin ~75-90 days after quarter close
+domestic_public_debt,Domestic Public Debt Stock,Quarterly,90,120,210,365,RETAIN_LAST_OFFICIAL,DMO domestic component breakdown published with quarterly bulletin
+external_public_debt,External Public Debt Stock,Quarterly,90,120,210,365,RETAIN_LAST_OFFICIAL,DMO external component breakdown published with quarterly bulletin
+faac_distributable_revenue,FAAC Distributable Revenue,Monthly,18,35,65,95,RETAIN_LAST_OFFICIAL,FAAC meets between 15th-20th of each month to allocate prior month statutory revenue

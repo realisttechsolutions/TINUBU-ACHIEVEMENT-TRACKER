@@ -63,7 +63,9 @@ export const FiscalExternalObservatory: React.FC<FiscalExternalObservatoryProps>
             <div className="mt-4 space-y-3">
               <div>
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-semibold text-foreground">Domestic Debt (₦73.87T / $51.08B)</span>
+                  <span className="font-semibold text-foreground">
+                    Domestic Debt (₦{debtData.domesticDebtNaira.toFixed(2)}T / ${debtData.domesticDebtUSD.toFixed(2)}B)
+                  </span>
                   <span className="font-mono font-bold text-gov-gold">{debtData.domesticSharePercent}%</span>
                 </div>
                 <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
@@ -76,7 +78,9 @@ export const FiscalExternalObservatory: React.FC<FiscalExternalObservatoryProps>
 
               <div>
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-semibold text-foreground">External Debt (₦60.93T / $42.02B)</span>
+                  <span className="font-semibold text-foreground">
+                    External Debt (₦{debtData.externalDebtNaira.toFixed(2)}T / ${debtData.externalDebtUSD.toFixed(2)}B)
+                  </span>
                   <span className="font-mono font-bold text-sky-600 dark:text-sky-400">{debtData.externalSharePercent}%</span>
                 </div>
                 <div className="w-full bg-muted h-2 rounded-full overflow-hidden">

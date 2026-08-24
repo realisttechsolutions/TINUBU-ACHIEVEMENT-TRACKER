@@ -385,28 +385,163 @@ export const dataAdapter = {
     return allRecords.slice(0, limit);
   },
 
+  // Adjacent Achievements Navigation
+  getAdjacentAchievements(slug: string): { prev: AchievementViewModel | null; next: AchievementViewModel | null } {
+    const list = this.getAchievements({ sortBy: 'newest' });
+    const index = list.findIndex(a => a.slug === slug || a.id === slug);
+    if (index === -1) return { prev: null, next: null };
+    const prev = index > 0 ? list[index - 1] : null;
+    const next = index < list.length - 1 ? list[index + 1] : null;
+    return { prev, next };
+  },
+
+  getRelatedAchievements(achievement: AchievementViewModel, limit = 3): AchievementViewModel[] {
+    const all = this.getAchievements();
+    return all
+      .filter(a => (a.slug !== achievement.slug && a.id !== achievement.id) && (
+        a.sectorId === achievement.sectorId ||
+        a.publicNavigationGroup === achievement.publicNavigationGroup ||
+        a.date.slice(0, 4) === achievement.date.slice(0, 4)
+      ))
+      .slice(0, limit);
+  },
+
+  getTimelineEventsForAchievement(slugOrId: string): TimelineEventViewModel[] {
+    const ach = this.getAchievementBySlug(slugOrId);
+    const allEvents = this.getTimelineEvents();
+    if (!ach) return [];
+    return allEvents.filter(e =>
+      e.recordId === ach.id ||
+      e.recordId === ach.slug ||
+      e.recordSlug === ach.slug ||
+      (ach.title && e.title && ach.title.toLowerCase().includes(e.title.toLowerCase().slice(0, 20)))
+    );
+  },
+
   // Timeline Events
   getTimelineEvents(filters?: TimelineFilterOptions): TimelineEventViewModel[] {
-    let events = [...timelineEvents()];
+    const allAchs = achievements();
+    const allProjs = projects();
+    const allPols = policies();
+    const allPrgs = programmes();
+
+    let events = timelineEvents().map(e => {
+      const slug = e.slug || e.id.toLowerCase();
+      let associatedRecordId = e.associatedRecordId || e.recordId;
+      let associatedRecordSlug = e.associatedRecordSlug || e.recordSlug;
+      let associatedRecordType = e.associatedRecordType || (e.recordType as any);
+      let associatedRecordTitle = e.associatedRecordTitle;
+      let associatedRecordRoute: string | undefined = undefined;
+
+      if (associatedRecordId || associatedRecordSlug) {
+        const ach = allAchs.find(a => a.id === associatedRecordId || a.slug === associatedRecordId || a.slug === associatedRecordSlug || (a.title && e.title && a.title.toLowerCase().includes(e.title.toLowerCase().slice(0, 20))));
+        if (ach) {
+          associatedRecordSlug = ach.slug;
+          associatedRecordType = 'achievement';
+          associatedRecordTitle = ach.title;
+          associatedRecordRoute = `/achievements/${ach.slug}`;
+        } else {
+          const prj = allProjs.find(p => p.id === associatedRecordId || p.slug === associatedRecordId || p.slug === associatedRecordSlug);
+          if (prj) {
+            associatedRecordSlug = prj.slug;
+            associatedRecordType = 'project';
+            associatedRecordTitle = prj.title;
+            associatedRecordRoute = `/projects/${prj.slug}`;
+          } else {
+            const pol = allPols.find(p => p.id === associatedRecordId || p.slug === associatedRecordId || p.slug === associatedRecordSlug);
+            if (pol) {
+              associatedRecordSlug = pol.slug;
+              associatedRecordType = 'policy';
+              associatedRecordTitle = pol.title;
+              associatedRecordRoute = `/policies/${pol.slug}`;
+            } else {
+              const prg = allPrgs.find(pr => pr.id === associatedRecordId || pr.slug === associatedRecordId || pr.slug === associatedRecordSlug);
+              if (prg) {
+                associatedRecordSlug = prg.slug;
+                associatedRecordType = 'programme';
+                associatedRecordTitle = prg.title;
+                associatedRecordRoute = `/programmes/${prg.slug}`;
+              }
+            }
+          }
+        }
+      }
+
+      return {
+        ...e,
+        slug,
+        routePath: `/timeline/${slug}`,
+        associatedRecordId,
+        associatedRecordSlug,
+        associatedRecordType,
+        associatedRecordTitle,
+        recordSlug: associatedRecordSlug,
+        recordType: associatedRecordType || 'achievement',
+      };
+    });
 
     if (filters) {
       if (filters.year && filters.year !== 'all') {
-        events = events.filter(e => e.eventDate.startsWith(filters.year!));
+        events = events.filter(e => e.eventDate.startsWith(filters.year!) || String(e.year) === filters.year);
       }
       if (filters.sectorId && filters.sectorId !== 'all') {
-        events = events.filter(e => e.sectorId === filters.sectorId);
+        events = events.filter(e => e.sectorId === filters.sectorId || (e as any).sectorSlug === filters.sectorId);
       }
       if (filters.eventType && filters.eventType !== 'all') {
-        events = events.filter(e => e.eventType === filters.eventType);
+        events = events.filter(e => e.eventType === filters.eventType || e.stage === filters.eventType);
       }
       if (filters.searchQuery && filters.searchQuery.trim() !== '') {
         const q = filters.searchQuery.toLowerCase().trim();
-        events = events.filter(e => e.title.toLowerCase().includes(q) || e.summary.toLowerCase().includes(q) || e.leadActor.toLowerCase().includes(q));
+        events = events.filter(e => 
+          e.title.toLowerCase().includes(q) || 
+          e.summary.toLowerCase().includes(q) || 
+          (e.details && e.details.toLowerCase().includes(q)) ||
+          e.leadActor.toLowerCase().includes(q)
+        );
       }
     }
 
     events.sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
     return events;
+  },
+
+  getTimelineEventByIdOrSlug(idOrSlug: string): TimelineEventViewModel | undefined {
+    if (!idOrSlug) return undefined;
+    const clean = idOrSlug.toLowerCase().trim();
+    const parts = clean.split('/').filter(Boolean);
+    const candidateSlug = parts[parts.length - 1];
+    const candidateId = parts[0];
+
+    const allEvents = this.getTimelineEvents();
+    return allEvents.find(e => 
+      e.slug.toLowerCase() === clean ||
+      e.id.toLowerCase() === clean ||
+      e.slug.toLowerCase() === candidateSlug ||
+      e.id.toLowerCase() === candidateId ||
+      e.id.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '') ||
+      e.slug.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '')
+    );
+  },
+
+  getAdjacentTimelineEvents(idOrSlug: string): { prev: TimelineEventViewModel | null; next: TimelineEventViewModel | null } {
+    const allEvents = this.getTimelineEvents();
+    const current = this.getTimelineEventByIdOrSlug(idOrSlug);
+    if (!current) return { prev: null, next: null };
+
+    const index = allEvents.findIndex(e => e.id === current.id || e.slug === current.slug);
+    if (index === -1) return { prev: null, next: null };
+
+    return {
+      prev: index > 0 ? allEvents[index - 1] : null,
+      next: index < allEvents.length - 1 ? allEvents[index + 1] : null,
+    };
+  },
+
+  getRelatedTimelineEvents(event: TimelineEventViewModel, limit = 3): TimelineEventViewModel[] {
+    const allEvents = this.getTimelineEvents();
+    return allEvents
+      .filter(e => e.id !== event.id && (e.sectorId === event.sectorId || e.category === event.category || e.year === event.year))
+      .slice(0, limit);
   },
 
   // States & Geography

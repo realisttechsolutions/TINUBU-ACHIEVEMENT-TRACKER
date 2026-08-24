@@ -293,17 +293,46 @@ export interface LatestUpdateItem {
 
 export interface TimelineEventViewModel {
   id: string;
-  recordId: string;
+  slug: string;
+  recordId?: string;
+  recordSlug?: string;
+  recordType?: string;
+  routePath?: string;
   title: string;
   summary: string;
+  details?: string;
   eventType: string;
   eventTypeLabel: string;
+  stage?: string;
+  stageLabel?: string;
+  category?: string;
   eventDate: string;
+  year?: number | string;
+  quarter?: string;
   datePrecision: DatePrecision;
   sectorId: string;
   sectorName: string;
   leadActor: string;
+  leadAgency?: string;
+  statesCovered?: string[];
+  geopoliticalZone?: string;
+  expectedOrMeasuredImpact?: string;
+  metrics?: { label: string; value: string; unit?: string }[];
+  associatedRecordId?: string;
+  associatedRecordType?: 'achievement' | 'project' | 'policy' | 'programme';
+  associatedRecordSlug?: string;
+  associatedRecordTitle?: string;
+  primarySources?: {
+    name: string;
+    url?: string;
+    documentType?: string;
+    publisher?: string;
+    documentNumber?: string;
+    evidenceLocation?: string;
+    sourceLevel?: SourceHierarchyLevel;
+  }[];
   sourceCitation?: SourceCitationViewModel;
+  verificationStatus?: string;
   isDemo: boolean;
 }
 

@@ -24,7 +24,8 @@ export type ReportingFrequency =
 export type InterpretationDirection =
   | 'higher_favorable'
   | 'lower_favorable'
-  | 'contextual_neutral';
+  | 'contextual_neutral'
+  | 'context_dependent';
 
 export type TimeMode = 'latest' | 'baseline';
 

@@ -418,20 +418,35 @@ function programmeModel(record: QueryResultRow, evidence: QueryResultRow[], bene
 function timelineModels(record: QueryResultRow): TimelineEventViewModel[] {
   const sector = primarySector(record);
   const leadActor = leadInstitution(record);
-  return array<Record<string, unknown>>(record.timeline).map((event) => ({
-    id: String(event.id),
-    recordId: String(record.id),
-    title: String(event.title),
-    summary: String(event.description ?? event.title),
-    eventType: String(event.eventType),
-    eventTypeLabel: label(event.eventType),
-    eventDate: isoDate(event.dateValue ?? event.periodStart),
-    datePrecision: String(event.datePrecision) as DatePrecision,
-    sectorId: String(sector.code ?? ''),
-    sectorName: String(sector.label ?? 'Unclassified'),
-    leadActor,
-    isDemo: false,
-  }));
+  const recordSlug = String(record.slug);
+  const recordType = String(record.record_type);
+  const routePrefix = recordType === 'physical_project' ? 'projects' : recordType === 'policy' ? 'policies' : recordType === 'programme' ? 'programmes' : 'achievements';
+  return array<Record<string, unknown>>(record.timeline).map((event) => {
+    const eventId = String(event.id);
+    const eventSlug = String(event.slug ?? event.id ?? `tle-${eventId}`).toLowerCase();
+    return {
+      id: eventId,
+      slug: eventSlug,
+      recordId: String(record.id),
+      recordSlug,
+      recordType,
+      associatedRecordId: String(record.id),
+      associatedRecordSlug: recordSlug,
+      associatedRecordType: (recordType === 'physical_project' ? 'project' : recordType) as any,
+      associatedRecordTitle: String(record.title),
+      routePath: `/timeline/${eventSlug}`,
+      title: String(event.title),
+      summary: String(event.description ?? event.title),
+      eventType: String(event.eventType),
+      eventTypeLabel: label(event.eventType),
+      eventDate: isoDate(event.dateValue ?? event.periodStart),
+      datePrecision: String(event.datePrecision) as DatePrecision,
+      sectorId: String(sector.code ?? ''),
+      sectorName: String(sector.label ?? 'Unclassified'),
+      leadActor,
+      isDemo: false,
+    };
+  });
 }
 
 function sectorModels(records: QueryResultRow[]): SectorViewModel[] {

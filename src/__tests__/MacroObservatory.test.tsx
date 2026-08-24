@@ -44,30 +44,30 @@ describe('PTAT National Macro Intelligence Observatory', () => {
     expect(screen.getByRole('heading', { level: 1, name: /National Macro Intelligence Observatory/i })).toBeInTheDocument();
     expect(screen.getByText(/Statutory Data Feeds/i)).toBeInTheDocument();
 
-    // Verify all 8 core macro indicators are rendered
+    // Verify all 8 core macro indicators are rendered with verified statutory figures
     expect(screen.getByText('Real GDP Growth Rate')).toBeInTheDocument();
-    expect(screen.getByText('+3.12%')).toBeInTheDocument();
+    expect(screen.getByText('+3.89%')).toBeInTheDocument();
 
     expect(screen.getByText('Headline CPI Inflation')).toBeInTheDocument();
-    expect(screen.getByText('31.85%')).toBeInTheDocument();
+    expect(screen.getByText('15.43%')).toBeInTheDocument();
 
     expect(screen.getByText('Food CPI Inflation')).toBeInTheDocument();
-    expect(screen.getByText('37.20%')).toBeInTheDocument();
+    expect(screen.getByText('20.31%')).toBeInTheDocument();
 
-    expect(screen.getByText('Official NFEM FX Rate')).toBeInTheDocument();
-    expect(screen.getByText('₦1,565.00')).toBeInTheDocument();
+    expect(screen.getByText('Official NAFEM FX Rate')).toBeInTheDocument();
+    expect(screen.getByText('₦1,350.41')).toBeInTheDocument();
 
     expect(screen.getAllByText('Gross External Reserves').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('$38.92 Billion')).toBeInTheDocument();
+    expect(screen.getByText('$52.66 Billion')).toBeInTheDocument();
 
     expect(screen.getAllByText('Monetary Policy Rate (MPR)').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('27.25%')).toBeInTheDocument();
+    expect(screen.getByText('26.50%')).toBeInTheDocument();
 
     expect(screen.getByText('Crude Oil & Condensate Output')).toBeInTheDocument();
-    expect(screen.getByText('1.68 mbpd')).toBeInTheDocument();
+    expect(screen.getByText('1.670 mbpd')).toBeInTheDocument();
 
     expect(screen.getByText('Total Public Debt Stock')).toBeInTheDocument();
-    expect(screen.getAllByText(/134.80 Trillion/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/134.30 Trillion/i).length).toBeGreaterThan(0);
   });
 
   it('toggles time mode between "Latest Official Reading" and "Since May 2023 Baseline Mode"', () => {
@@ -151,11 +151,11 @@ describe('PTAT National Macro Intelligence Observatory', () => {
     expect(screen.getByText(/Reform → Economy Transmission Matrix/i)).toBeInTheDocument();
 
     // Check all 5 reforms
-    expect(screen.getByText(/Foreign Exchange Market Liberalization & Unification/i)).toBeInTheDocument();
-    expect(screen.getByText(/PMS Fuel Subsidy Rationalization & Deregulation/i)).toBeInTheDocument();
-    expect(screen.getByText(/Fiscal Policy & Tax Administration Modernization/i)).toBeInTheDocument();
-    expect(screen.getByText(/Electricity Act 2023 & Sub-National Power Devolution/i)).toBeInTheDocument();
-    expect(screen.getByText(/Human Capital Access & Consumer Credit Architecture/i)).toBeInTheDocument();
+    expect(screen.getByText(/Foreign Exchange Market Unification & Price Discovery/i)).toBeInTheDocument();
+    expect(screen.getByText(/PMS Petrol Subsidy Elimination & Fiscal Recovery/i)).toBeInTheDocument();
+    expect(screen.getByText(/National Tax Harmonization & Fiscal Consolidation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Orthodox Monetary Policy & Aggressive Disinflation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upstream Petroleum Security & Output Recovery/i)).toBeInTheDocument();
 
     // Verify 3 transmission steps are present
     expect(screen.getByText('Policy Mechanism')).toBeInTheDocument();
@@ -173,32 +173,32 @@ describe('PTAT National Macro Intelligence Observatory', () => {
     expect(screen.getByText('19.85% of GDP')).toBeInTheDocument();
 
     expect(screen.getAllByText('Agriculture').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('23.42% of GDP')).toBeInTheDocument();
+    expect(screen.getByText('23.16% of GDP')).toBeInTheDocument();
 
-    expect(screen.getByText('Wholesale & Retail Trade')).toBeInTheDocument();
-    expect(screen.getByText('15.6% of GDP')).toBeInTheDocument();
+    expect(screen.getByText('Trade & Commerce')).toBeInTheDocument();
+    expect(screen.getByText('15.8% of GDP')).toBeInTheDocument();
 
     // Click on Agriculture to see detailed subsectors
     const agSectors = screen.getAllByText('Agriculture');
     fireEvent.click(agSectors[0]);
     expect(screen.getByText('Key Economic Subsectors')).toBeInTheDocument();
-    expect(screen.getByText('Crop Production (87.2%)')).toBeInTheDocument();
+    expect(screen.getByText('Crop Production (88.4%)')).toBeInTheDocument();
   });
 
   it('renders Fiscal & External Intelligence with DMO public debt composition and FAAC distribution', () => {
     renderDashboard();
 
-    expect(screen.getByText(/Public Debt Portfolio Composition \(Q1 2026\)/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/134.80 Trillion/i).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('$93.20 Billion')).toBeInTheDocument();
-    expect(screen.getByText(/Domestic Debt \(₦73.87T \/ \$51.08B\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Public Debt Portfolio Composition \(Q2 2024\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/134.30 Trillion/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('$91.35 Billion')).toBeInTheDocument();
+    expect(screen.getByText(/Domestic Debt \(₦71.22T \/ \$48.45B\)/i)).toBeInTheDocument();
 
     // Check FAAC Distribution
     expect(screen.getByText(/Federation Account Distributions \(July 2026\)/i)).toBeInTheDocument();
-    expect(screen.getByText('₦1.420 Trillion')).toBeInTheDocument();
-    expect(screen.getByText('₦485B')).toBeInTheDocument(); // Federal
-    expect(screen.getByText('₦472B')).toBeInTheDocument(); // State
-    expect(screen.getByText('₦348B')).toBeInTheDocument(); // LGA
+    expect(screen.getByText('₦3.007 Trillion')).toBeInTheDocument();
+    expect(screen.getByText('₦1058B')).toBeInTheDocument(); // Federal
+    expect(screen.getByText('₦1040B')).toBeInTheDocument(); // State
+    expect(screen.getByText('₦646B')).toBeInTheDocument(); // LGA
   });
 
   it('renders What Changed? 2026 statutory intelligence briefings', () => {
@@ -206,7 +206,7 @@ describe('PTAT National Macro Intelligence Observatory', () => {
 
     expect(screen.getByText(/What Changed\? \(2026 Macro Analysis\)/i)).toBeInTheDocument();
     expect(screen.getByText('Headline CPI Deceleration')).toBeInTheDocument();
-    expect(screen.getByText('External Reserves Exceed $38.9B')).toBeInTheDocument();
+    expect(screen.getByText('External Reserves Exceed $52.6B')).toBeInTheDocument();
     expect(screen.getByText('Services & ICT Lead Expansion')).toBeInTheDocument();
     expect(screen.getByText('Federation Revenue Broadening')).toBeInTheDocument();
   });

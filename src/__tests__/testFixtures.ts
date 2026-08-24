@@ -46,9 +46,9 @@ export const testPublicSnapshot: PublicDataSnapshot = {
     updatedAt: p.launchDate || "2026-08-15",
     isDemo: false,
   })),
-  timelineEvents: DEMO_TIMELINE_EVENTS.map((t, i) => ({
+  timelineEvents: DEMO_TIMELINE_EVENTS.map((t) => ({
     ...t,
-    id: `TLE-${String(i + 1).padStart(3, "0")}`,
+    recordId: t.recordId ? t.recordId.replace('ACH-DEMO-', 'ACH-') : undefined,
     isDemo: false,
   })),
   states: DEMO_NIGERIA_STATES.map((s) => ({

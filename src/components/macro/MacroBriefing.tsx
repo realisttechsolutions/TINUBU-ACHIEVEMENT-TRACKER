@@ -47,7 +47,7 @@ export const MacroBriefing: React.FC = () => {
               Headline CPI Deceleration
             </h3>
             <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
-              Headline inflation moderated to 31.85% in July 2026 from peak levels of 34.10% (April 2025), supported by aggressive monetary tightening (MPR at 27.25%) and base-effect stabilization across imported food items.
+              Headline inflation moderated to 15.43% in July 2026 under the rebased 2024=100 CPI framework, supported by orthodox monetary tightening (MPR at 26.50%) while food inflation stands at 20.31% YoY.
             </p>
           </div>
           <div className="mt-3 pt-3 border-t border-border/40 text-[10px] text-muted-foreground font-mono">
@@ -61,14 +61,14 @@ export const MacroBriefing: React.FC = () => {
             <div className="flex items-center justify-between text-xs mb-2">
               <span className="font-mono text-[10px] uppercase text-muted-foreground">External Sector</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-status-green border border-status-green/30">
-                RESERVES RECOVERY
+                17-YEAR HIGH
               </span>
             </div>
             <h3 className="text-sm font-bold text-foreground">
-              External Reserves Exceed $38.9B
+              External Reserves Exceed $52.6B
             </h3>
             <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
-              Gross external reserves reached $38.92 Billion in August 2026, driven by higher autonomous export conversions, clearance of verified FX backlogs, and improved upstream crude production averaging 1.68 mbpd.
+              Gross external reserves reached a 17-year high of $52.66 Billion in August 2026, driven by higher autonomous export conversions, clearance of verified FX backlogs, and crude production of 1.505 mbpd.
             </p>
           </div>
           <div className="mt-3 pt-3 border-t border-border/40 text-[10px] text-muted-foreground font-mono">
@@ -89,7 +89,7 @@ export const MacroBriefing: React.FC = () => {
               Services & ICT Lead Expansion
             </h3>
             <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
-              Real GDP recorded +3.12% YoY growth in Q1 2026, underpinned by sustained momentum in Information & Communications (+6.28%), Financial Services (+22.40%), and an upstream oil sector recovery (+8.75%).
+              Real GDP recorded +3.89% YoY growth in Q1 2026, underpinned by non-oil output (96.08% of real GDP), robust services expansion (+4.31%), and an agricultural recovery (+3.15%).
             </p>
           </div>
           <div className="mt-3 pt-3 border-t border-border/40 text-[10px] text-muted-foreground font-mono">
@@ -103,14 +103,14 @@ export const MacroBriefing: React.FC = () => {
             <div className="flex items-center justify-between text-xs mb-2">
               <span className="font-mono text-[10px] uppercase text-muted-foreground">Fiscal Balance</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-500/30">
-                FAAC EXPANSION
+                RECORD ₦3T DISBURSEMENT
               </span>
             </div>
             <h3 className="text-sm font-bold text-foreground">
               Federation Revenue Broadening
             </h3>
             <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
-              Distributable federation revenue expanded to ₦1.420 Trillion in July 2026. Sub-national state allocations reached ₦472 Billion, enabling enhanced capital infrastructure matching grants and healthcare disbursements.
+              Distributable federation revenue expanded to a record ₦3.007 Trillion in July 2026. Sub-national state allocations exceeded ₦1.04 Trillion under revised Nigeria Tax Act 2025 VAT sharing.
             </p>
           </div>
           <div className="mt-3 pt-3 border-t border-border/40 text-[10px] text-muted-foreground font-mono">
