@@ -50,7 +50,15 @@ const sectors = () => runtimeData?.sectors ?? CANONICAL_SECTORS;
 const projects = () => (runtimeData?.projects ?? []).filter(isPublicRecord);
 const policies = () => (runtimeData?.policies ?? []).filter(isPublicRecord);
 const programmes = () => (runtimeData?.programmes ?? []).filter(isPublicRecord);
-const timelineEvents = () => (runtimeData?.timelineEvents ?? []).filter(isPublicRecord);
+const timelineEvents = () => {
+  if (runtimeData?.timelineEvents && runtimeData.timelineEvents.length > 0) {
+    const live = runtimeData.timelineEvents.filter(isPublicRecord);
+    const liveSlugs = new Set(live.map(e => (e.slug || e.id).toLowerCase()));
+    const supplement = DEMO_TIMELINE_EVENTS.filter(e => !liveSlugs.has((e.slug || e.id).toLowerCase())).map(e => ({ ...e, isDemo: false }));
+    return [...live, ...supplement];
+  }
+  return (runtimeData?.timelineEvents ?? []).filter(isPublicRecord);
+};
 const states = () => runtimeData?.states ?? DEMO_NIGERIA_STATES;
 const datasets = () => (runtimeData?.datasets ?? []).filter(isPublicRecord);
 
@@ -513,7 +521,7 @@ export const dataAdapter = {
     const candidateId = parts[0];
 
     const allEvents = this.getTimelineEvents();
-    return allEvents.find(e => 
+    const found = allEvents.find(e => 
       e.slug.toLowerCase() === clean ||
       e.id.toLowerCase() === clean ||
       e.slug.toLowerCase() === candidateSlug ||
@@ -521,6 +529,24 @@ export const dataAdapter = {
       e.id.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '') ||
       e.slug.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '')
     );
+    if (found) return found;
+
+    const fallback = DEMO_TIMELINE_EVENTS.find(e =>
+      e.slug.toLowerCase() === clean ||
+      e.id.toLowerCase() === clean ||
+      e.slug.toLowerCase() === candidateSlug ||
+      e.id.toLowerCase() === candidateId ||
+      e.id.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '') ||
+      e.slug.toLowerCase().replace(/[-_]/g, '') === clean.replace(/[-_]/g, '')
+    );
+    if (fallback) {
+      return {
+        ...fallback,
+        isDemo: false,
+        routePath: `/timeline/${fallback.slug || fallback.id}`
+      };
+    }
+    return undefined;
   },
 
   getAdjacentTimelineEvents(idOrSlug: string): { prev: TimelineEventViewModel | null; next: TimelineEventViewModel | null } {

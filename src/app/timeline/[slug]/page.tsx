@@ -4,14 +4,13 @@ import { notFound } from 'next/navigation';
 import { dataAdapter } from '@/adapters/dataAdapter';
 import TimelineEventDetail from '@/views/TimelineEventDetail';
 import Loading from '../../loading';
-import { getPublicDataSnapshot } from '@/server/data/public-snapshot';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const events = (await getPublicDataSnapshot())?.timelineEvents ?? dataAdapter.getTimelineEvents();
+  const events = dataAdapter.getTimelineEvents();
   return events.map((ev) => ({
     slug: ev.slug || ev.id,
   }));
@@ -20,8 +19,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const slug = resolvedParams?.slug || '';
-  const event = (await getPublicDataSnapshot())?.timelineEvents?.find((record) => record.slug === slug || record.id === slug)
-    ?? dataAdapter.getTimelineEventByIdOrSlug(slug);
+  const event = dataAdapter.getTimelineEventByIdOrSlug(slug);
   if (!event) {
     return {
       title: 'Timeline Event Not Found | President Tinubu Achievement Tracker',
@@ -55,8 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TimelineEventDetailPage({ params }: Props) {
   const resolvedParams = await params;
   const slug = resolvedParams?.slug || '';
-  const event = (await getPublicDataSnapshot())?.timelineEvents?.find((record) => record.slug === slug || record.id === slug)
-    ?? dataAdapter.getTimelineEventByIdOrSlug(slug);
+  const event = dataAdapter.getTimelineEventByIdOrSlug(slug);
   if (!event) {
     notFound();
   }
