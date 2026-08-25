@@ -6,7 +6,7 @@ import { CSRF_HEADER_NAME, CSRF_HEADER_EXPECTED_VALUE } from '@/lib/auth/types';
 const auth = new GoogleAuth();
 
 export function getAdminControlPlaneUrl(): string {
-  return process.env.ADMIN_CONTROL_PLANE_URL || 'http://localhost:8080';
+  return process.env.ADMIN_CONTROL_PLANE_URL || 'https://tat-admin-api-staging-jhekxvkq5q-uc.a.run.app';
 }
 
 /**

@@ -24,11 +24,13 @@ export default function RecordEditorClient({
 
   const [record, setRecord] = useState(detail.record);
   const [profile, setProfile] = useState<any>(detail.profile || {});
-  const [claims, setClaims] = useState(detail.claims);
-  const [sources, setSources] = useState(detail.sources);
-  const [financials, setFinancials] = useState(detail.financials);
-  const [beneficiaries, setBeneficiaries] = useState(detail.beneficiaries);
-  const [timeline, setTimeline] = useState(detail.timeline);
+  const [claims, setClaims] = useState(detail.claims || []);
+  const [sources, setSources] = useState(detail.sources || []);
+  const [financials, setFinancials] = useState(detail.financials || []);
+  const [beneficiaries, setBeneficiaries] = useState(detail.beneficiaries || []);
+  const [timeline, setTimeline] = useState(detail.timeline || []);
+
+  const normalizeStatus = (s: string) => (s === 'implementation_ongoing' ? 'in_progress' : s);
 
   const [saving, setSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -411,8 +413,8 @@ export default function RecordEditorClient({
     { id: 'financials', label: '4. Financials', count: financials.length },
     { id: 'beneficiaries', label: '5. Beneficiaries', count: beneficiaries.length },
     { id: 'timeline', label: '6. Timeline', count: timeline.length },
-    { id: 'geography', label: '7. Geography', count: detail.geographies.length },
-    { id: 'institutions', label: '8. Institutions', count: detail.institutions.length },
+    { id: 'geography', label: '7. Geography', count: detail.geographies?.length || 0 },
+    { id: 'institutions', label: '8. Institutions', count: detail.institutions?.length || 0 },
     { id: 'indicators', label: '9. Indicators', count: null },
     { id: 'corrections', label: '10. Corrections', count: correctionsList.length },
     { id: 'history', label: '11. Version & Decision Trail', count: historyList.length },

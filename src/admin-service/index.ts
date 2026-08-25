@@ -13,6 +13,7 @@ import {
   workflowTransitionSchema,
   openCorrectionSchema,
   updateCorrectionDraftSchema,
+  listAdminRecordsSchema,
 } from './validation';
 
 let dbInstance: AdminControlPlaneDb | null = null;
@@ -78,6 +79,26 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       return sendJson(res, 200, result);
     }
 
+    // GET /api/records (List Records)
+    if (pathname === '/api/records' && method === 'GET') {
+      await authenticateAdminRequest(req.headers, 'read');
+      const rawQuery = {
+        q: url.searchParams.get('q') || undefined,
+        type: url.searchParams.get('type') || undefined,
+        sector: url.searchParams.get('sector') || undefined,
+        status: url.searchParams.get('status') || undefined,
+        publication_status: url.searchParams.get('publication_status') || undefined,
+        page: url.searchParams.get('page') || 1,
+        limit: url.searchParams.get('limit') || 20,
+      };
+      const parsed = listAdminRecordsSchema.safeParse(rawQuery);
+      if (!parsed.success) {
+        return sendJson(res, 400, { error: 'Invalid query parameters', details: parsed.error.flatten() });
+      }
+      const result = await manager.listRecords(parsed.data);
+      return sendJson(res, 200, result);
+    }
+
     // POST /api/records (Create Draft Record)
     if (pathname === '/api/records' && method === 'POST') {
       const staff = await authenticateAdminRequest(req.headers, 'write');
@@ -122,6 +143,16 @@ export const server = http.createServer(async (req: IncomingMessage, res: Server
       const recordId = match[1];
       const subpath = match[2];
       const subsubpath = match[3];
+
+      // GET /api/records/:id (Get Detail)
+      if (!subpath && method === 'GET') {
+        await authenticateAdminRequest(req.headers, 'read');
+        const detail = await manager.getRecordDetail(recordId);
+        if (!detail) {
+          return sendJson(res, 404, { error: 'Record not found' });
+        }
+        return sendJson(res, 200, detail);
+      }
 
       // POST /api/records/:id/workflow (Workflow Transition)
       if (subpath === 'workflow' && method === 'POST') {

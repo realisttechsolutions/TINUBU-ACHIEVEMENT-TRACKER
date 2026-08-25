@@ -73,8 +73,21 @@ export async function createAdminControlPlaneDb(): Promise<AdminControlPlaneDb> 
       text: string,
       values: readonly unknown[] = [],
     ) {
-      const result = await pool.query<Row>(text, [...values]);
-      return { rows: result.rows, rowCount: result.rowCount };
+      const client = await pool.connect();
+      try {
+        try {
+          await client.query('SET ROLE tat_admin_writer_m10f');
+        } catch {
+          // If role not yet set, proceed under IAM login
+        }
+        const result = await client.query<Row>(text, [...values]);
+        return { rows: result.rows, rowCount: result.rowCount };
+      } finally {
+        try {
+          await client.query('RESET ROLE');
+        } catch {}
+        client.release();
+      }
     },
 
     async withTransaction<T>(callback: (client: AdminTransactionClient) => Promise<T>): Promise<T> {

@@ -146,235 +146,59 @@ export interface AdminRecordDetail {
   }>;
 }
 
-// 1. List Admin Records (Read-Only via Public Catalog/Repo)
+// 1. List Admin Records (Proxied to Dedicated Admin Control Plane)
 export async function listAdminRecords(query: ListAdminRecordsQuery): Promise<AdminRecordListResult> {
-  const db = await getDatabaseConnection();
-  const conditions: string[] = [];
-  const params: unknown[] = [];
-  let paramIndex = 1;
+  const searchParams = new URLSearchParams();
+  if (query.q) searchParams.set('q', query.q);
+  if (query.type) searchParams.set('type', query.type);
+  if (query.sector) searchParams.set('sector', query.sector);
+  if (query.status) searchParams.set('status', query.status);
+  if (query.publication_status) searchParams.set('publication_status', query.publication_status);
+  if (query.page) searchParams.set('page', String(query.page));
+  if (query.limit) searchParams.set('limit', String(query.limit));
 
-  if (query.q && query.q.trim()) {
-    conditions.push(`(r.title ILIKE $${paramIndex} OR r.summary ILIKE $${paramIndex} OR r.slug ILIKE $${paramIndex})`);
-    params.push(`%${query.q.trim()}%`);
-    paramIndex++;
+  const res = await forwardToAdminControlPlane(`/api/records?${searchParams.toString()}`, {
+    method: 'GET',
+  });
+
+  if (res.status === 200 && res.data && Array.isArray(res.data.records)) {
+    return res.data;
   }
 
-  if (query.type) {
-    conditions.push(`r.record_type = $${paramIndex}`);
-    params.push(query.type);
-    paramIndex++;
+  if (res.status === 401) {
+    throw new Error('UNAUTHENTICATED');
   }
 
-  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  if (res.status === 403) {
+    throw new Error('FORBIDDEN');
+  }
 
-  const countResult = await db.query<{ count: string }>(
-    `SELECT count(*) as count FROM public_record_catalog r ${whereClause}`,
-    params,
-  );
-  const total = parseInt(countResult.rows[0]?.count || '0', 10);
-
-  const offset = (query.page - 1) * query.limit;
-  const recordsResult = await db.query<any>(
-    `
-    SELECT
-      r.id,
-      r.record_type,
-      r.title,
-      r.slug,
-      r.summary as short_summary,
-      r.implementation_status,
-      r.publication_status,
-      true as is_public,
-      r.updated_at::text,
-      r.published_at::text as created_at
-    FROM public_record_catalog r
-    ${whereClause}
-    ORDER BY r.updated_at DESC
-    LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `,
-    [...params, query.limit, offset],
-  );
-
-  return {
-    records: recordsResult.rows,
-    total,
-    page: query.page,
-    limit: query.limit,
-    totalPages: Math.ceil(total / query.limit) || 1,
-  };
+  throw new Error(`ADMIN_CONTROL_PLANE_UNAVAILABLE: ${res.data?.error || 'Failed to list administrative records'}`);
 }
 
-// 2. Get Admin Record Detail (Read-Only)
+// 2. Get Admin Record Detail (Proxied to Dedicated Admin Control Plane)
 export async function getAdminRecordDetail(recordId: string): Promise<AdminRecordDetail | null> {
-  const db = await getDatabaseConnection();
+  const res = await forwardToAdminControlPlane(`/api/records/${encodeURIComponent(recordId)}`, {
+    method: 'GET',
+  });
 
-  const recordResult = await db.query<any>(
-    `
-    SELECT
-      id,
-      slug,
-      record_type,
-      title,
-      summary as short_summary,
-      public_description as full_description,
-      implementation_status,
-      publication_status,
-      true as is_public,
-      false as provisional,
-      updated_at::text,
-      published_at::text as created_at,
-      type_details,
-      sectors,
-      institutions,
-      geographies,
-      timeline,
-      indicators
-    FROM public_record_catalog
-    WHERE id = $1 OR slug = $1
-    `,
-    [recordId],
-  );
+  if (res.status === 200 && res.data && res.data.record) {
+    return res.data;
+  }
 
-  if (recordResult.rows.length === 0) {
+  if (res.status === 404) {
     return null;
   }
 
-  const r = recordResult.rows[0];
-
-  // Fetch linked evidence claims
-  const claimsRes = await db.query<any>(
-    `
-    SELECT
-      claim_id as id,
-      claim_type,
-      claim_text,
-      value_numeric::text,
-      value_text,
-      unit_code,
-      currency_code,
-      reporting_period_label,
-      data_value_nature,
-      source_origin,
-      verification_status,
-      limitations,
-      source_id,
-      source_title,
-      publisher_name,
-      original_url
-    FROM public_claim_evidence
-    WHERE record_id = $1
-    `,
-    [r.id],
-  );
-
-  const claimsMap: Record<string, any> = {};
-  for (const row of claimsRes.rows) {
-    if (!claimsMap[row.id]) {
-      claimsMap[row.id] = {
-        id: row.id,
-        claim_type: row.claim_type,
-        claim_text: row.claim_text,
-        value_numeric: row.value_numeric,
-        value_text: row.value_text,
-        unit_code: row.unit_code,
-        currency_code: row.currency_code,
-        reporting_period_label: row.reporting_period_label,
-        data_value_nature: row.data_value_nature,
-        source_origin: row.source_origin,
-        verification_status: row.verification_status,
-        limitations: row.limitations,
-        sources: [],
-      };
-    }
-    if (row.source_id) {
-      claimsMap[row.id].sources.push({
-        id: row.source_id,
-        title: row.source_title,
-        publisher_name: row.publisher_name,
-        original_url: row.original_url,
-      });
-    }
+  if (res.status === 401) {
+    throw new Error('UNAUTHENTICATED');
   }
 
-  // Fetch financials & beneficiaries
-  const [finRes, benRes] = await Promise.all([
-    db.query<any>(`SELECT * FROM public_financial_records WHERE record_id = $1`, [r.id]),
-    db.query<any>(`SELECT * FROM public_beneficiary_records WHERE record_id = $1`, [r.id]),
-  ]);
+  if (res.status === 403) {
+    throw new Error('FORBIDDEN');
+  }
 
-  return {
-    record: {
-      id: r.id,
-      record_type: r.record_type,
-      title: r.title,
-      slug: r.slug,
-      short_summary: r.short_summary,
-      full_description: r.full_description,
-      lead_sector_id: null,
-      lead_institution_id: null,
-      implementation_status: r.implementation_status,
-      workflow_status: r.workflow_status || (r.publication_status === 'published' ? 'ready_for_publication' : 'draft'),
-      publication_status: r.publication_status,
-      is_public: true,
-      current_revision: r.current_revision || 1,
-      provisional: false,
-
-      announced_date: null,
-      announced_date_precision: null,
-      start_date: null,
-      start_date_precision: null,
-      completion_date: null,
-      completion_date_precision: null,
-      geographic_scope: 'national',
-      created_at: r.created_at,
-      updated_at: r.updated_at,
-    },
-    profile: r.type_details || {},
-    sectors: r.sectors || [],
-    institutions: r.institutions || [],
-    geographies: r.geographies || [],
-    claims: Object.values(claimsMap),
-    sources: [],
-    financials: finRes.rows.map((f: any) => ({
-      id: f.id,
-      financial_type: f.financial_type,
-      amount: f.amount_exact,
-      currency_code: f.currency_code,
-      reporting_period_label: f.reporting_period_label,
-      period_start: f.period_start,
-      period_end: f.period_end,
-      nominal_or_real: f.nominal_or_real,
-      methodology: f.methodology,
-      limitations: f.limitations,
-    })),
-    beneficiaries: benRes.rows.map((b: any) => ({
-      id: b.id,
-      beneficiary_type: b.beneficiary_type,
-      beneficiary_stage: b.beneficiary_stage,
-      count_value: parseInt(b.count_value, 10) || 0,
-      unit: b.unit,
-      count_basis: b.count_basis,
-      cumulative: b.cumulative,
-      reporting_period_label: b.reporting_period_label,
-      period_start: b.period_start,
-      period_end: b.period_end,
-      limitations: b.limitations,
-    })),
-    timeline: (r.timeline || []).map((t: any) => ({
-      id: t.id,
-      event_type: t.eventType,
-      title: t.title,
-      description: t.description,
-      date_value: t.dateValue,
-      date_precision: t.datePrecision,
-      period_start: t.periodStart,
-      period_end: t.periodEnd,
-      reporting_period_label: t.reportingPeriodLabel,
-      provisional: t.provisional,
-      is_public: true,
-    })),
-    history: [],
-  };
+  throw new Error(`ADMIN_CONTROL_PLANE_UNAVAILABLE: ${res.data?.error || 'Failed to retrieve administrative record detail'}`);
 }
 
 // 3. Create Record (Proxied to Dedicated Admin Control Plane)

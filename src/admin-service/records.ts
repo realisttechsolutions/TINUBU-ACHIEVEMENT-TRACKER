@@ -12,6 +12,7 @@ import type {
   WorkflowTransitionInput,
   OpenCorrectionInput,
   UpdateCorrectionDraftInput,
+  ListAdminRecordsQuery,
 } from './validation';
 
 const SYSTEM_ACTOR_ID = '00000000-0000-4000-8000-000000000005';
@@ -2545,6 +2546,339 @@ export class AdminRecordsManager {
       versions: versionsRes.rows,
       reviewDecisions: decisionsRes.rows,
       corrections: correctionsRes.rows,
+    };
+  }
+
+  // 18. Get Record Detail (Administrative View)
+  async getRecordDetail(recordId: string): Promise<any | null> {
+    const recRes = await this.db.query(`
+      SELECT
+        r.id::text as id,
+        r.external_id,
+        r.slug,
+        r.record_type,
+        r.title,
+        r.summary as short_summary,
+        r.body as full_description,
+        r.implementation_status,
+        r.workflow_status,
+        r.publication_status,
+        r.verification_status,
+        r.is_public,
+        r.created_at::text,
+        r.updated_at::text,
+        (SELECT rs.sector_id::text FROM record_sectors rs WHERE rs.record_id = r.id AND rs.role_code = 'primary' LIMIT 1) as lead_sector_id,
+        (SELECT ri.institution_id::text FROM record_institutions ri WHERE ri.record_id = r.id AND ri.role_code = 'lead' LIMIT 1) as lead_institution_id
+      FROM records r
+      WHERE r.id::text = $1 OR r.slug = $1
+    `, [recordId]);
+
+    if (recRes.rows.length === 0) return null;
+    const r: any = recRes.rows[0];
+
+    // Profile
+    let profile: any = null;
+    if (r.record_type === 'achievement') {
+      const p = await this.db.query('SELECT * FROM achievement_profiles WHERE record_id = $1', [r.id]);
+      if (p.rows.length > 0) {
+        const row: any = p.rows[0];
+        profile = {
+          verified_impact_summary: row.public_impact_narrative,
+          milestone_type: row.public_qualification,
+          flagship_tier: row.display_priority || 0,
+        };
+      }
+    } else if (r.record_type === 'policy') {
+      const p = await this.db.query('SELECT * FROM policy_details WHERE record_id = $1', [r.id]);
+      if (p.rows.length > 0) {
+        const row: any = p.rows[0];
+        profile = {
+          legal_instrument_type: row.legal_authority,
+          gazette_or_order_number: row.reference_number,
+          policy_scope: row.effect_scope,
+        };
+      }
+    } else if (r.record_type === 'project') {
+      const p = await this.db.query('SELECT * FROM project_details WHERE record_id = $1', [r.id]);
+      if (p.rows.length > 0) {
+        const row: any = p.rows[0];
+        profile = {
+          target_completion_year: row.contract_reference?.replace('Target: ', '') || null,
+          physical_asset_type: row.project_reference,
+          infrastructure_subsector: row.location_narrative,
+        };
+      }
+    } else if (r.record_type === 'programme') {
+      const p = await this.db.query('SELECT * FROM programme_details WHERE record_id = $1', [r.id]);
+      if (p.rows.length > 0) {
+        const row: any = p.rows[0];
+        profile = {
+          target_beneficiary_group: row.target_group_narrative,
+          recurring_or_fixed: row.enrolment_model,
+        };
+      }
+    }
+
+    // Sectors & Institutions & Geographies
+    const [sectorsRes, instRes, geoRes] = await Promise.all([
+      this.db.query(`
+        SELECT s.id::text as id, s.code, s.label, rs.role_code
+        FROM record_sectors rs
+        JOIN sectors s ON s.id = rs.sector_id
+        WHERE rs.record_id = $1
+      `, [r.id]),
+      this.db.query(`
+        SELECT i.id::text as id, i.canonical_name, i.short_name, ri.role_code
+        FROM record_institutions ri
+        JOIN institutions i ON i.id = ri.institution_id
+        WHERE ri.record_id = $1
+      `, [r.id]),
+      this.db.query(`
+        SELECT g.id::text as id, g.name, g.code, g.geography_type, rg.coverage_role
+        FROM record_geographies rg
+        JOIN geographic_units g ON g.id = rg.geographic_unit_id
+        WHERE rg.record_id = $1
+      `, [r.id]),
+    ]);
+
+    // Claims
+    const claimsRes = await this.db.query(`
+      SELECT
+        c.id::text as id, c.claim_type, c.claim_text, c.value_numeric::text, c.value_text,
+        c.unit_code, c.currency_code, c.reporting_period_label, c.data_value_nature,
+        c.source_origin, c.verification_status, c.limitations,
+        s.id::text as source_id, s.title as source_title, s.publisher_name, s.original_url
+      FROM evidence_claims c
+      LEFT JOIN claim_source_relationships csr ON csr.claim_id = c.id
+      LEFT JOIN sources s ON s.id = csr.source_id
+      WHERE c.record_id = $1
+    `, [r.id]);
+
+    const claimsMap: Record<string, any> = {};
+    for (const row of claimsRes.rows as any[]) {
+      if (!claimsMap[row.id]) {
+        claimsMap[row.id] = {
+          id: row.id,
+          claim_type: row.claim_type,
+          claim_text: row.claim_text,
+          value_numeric: row.value_numeric,
+          value_text: row.value_text,
+          unit_code: row.unit_code,
+          currency_code: row.currency_code,
+          reporting_period_label: row.reporting_period_label,
+          data_value_nature: row.data_value_nature,
+          source_origin: row.source_origin,
+          verification_status: row.verification_status,
+          limitations: row.limitations,
+          sources: [],
+        };
+      }
+      if (row.source_id) {
+        claimsMap[row.id].sources.push({
+          id: row.source_id,
+          title: row.source_title,
+          publisher_name: row.publisher_name,
+          original_url: row.original_url,
+        });
+      }
+    }
+
+    // Financials, Beneficiaries, Timeline
+    const [finRes, benRes, timeRes] = await Promise.all([
+      this.db.query(`
+        SELECT
+          id::text as id, financial_type, amount::text, currency_code, reporting_period_label,
+          period_start::text, period_end::text, nominal_or_real, methodology, limitations
+        FROM financial_records
+        WHERE record_id = $1
+      `, [r.id]),
+      this.db.query(`
+        SELECT
+          id::text as id, beneficiary_type, beneficiary_stage, count_value, unit,
+          count_basis, cumulative, reporting_period_label,
+          period_start::text, period_end::text, limitations
+        FROM beneficiary_records
+        WHERE record_id = $1
+      `, [r.id]),
+      this.db.query(`
+        SELECT
+          id::text as id, event_type, title, description, date_value::text,
+          date_precision, period_start::text, period_end::text,
+          reporting_period_label, provisional, is_public
+        FROM timeline_events
+        WHERE record_id = $1
+        ORDER BY created_at ASC
+      `, [r.id]),
+    ]);
+
+    return {
+      record: {
+        id: r.id,
+        record_type: r.record_type,
+        title: r.title,
+        slug: r.slug,
+        short_summary: r.short_summary,
+        full_description: r.full_description,
+        lead_sector_id: r.lead_sector_id || null,
+        lead_institution_id: r.lead_institution_id || null,
+        implementation_status: r.implementation_status,
+        workflow_status: r.workflow_status,
+        publication_status: r.publication_status,
+        is_public: r.is_public,
+        provisional: false,
+        announced_date: null,
+        announced_date_precision: null,
+        start_date: null,
+        start_date_precision: null,
+        completion_date: null,
+        completion_date_precision: null,
+        geographic_scope: 'national',
+        created_at: r.created_at,
+        updated_at: r.updated_at,
+      },
+      profile,
+      sectors: sectorsRes.rows,
+      institutions: instRes.rows,
+      geographies: geoRes.rows,
+      claims: Object.values(claimsMap),
+      sources: [],
+      financials: (finRes.rows as any[]).map((f) => ({
+        id: f.id,
+        financial_type: f.financial_type,
+        amount: f.amount,
+        currency_code: f.currency_code,
+        reporting_period_label: f.reporting_period_label,
+        period_start: f.period_start,
+        period_end: f.period_end,
+        nominal_or_real: f.nominal_or_real,
+        methodology: f.methodology,
+        limitations: f.limitations,
+      })),
+      beneficiaries: (benRes.rows as any[]).map((b) => ({
+        id: b.id,
+        beneficiary_type: b.beneficiary_type,
+        beneficiary_stage: b.beneficiary_stage,
+        count_value: parseInt(b.count_value, 10) || 0,
+        unit: b.unit,
+        count_basis: b.count_basis,
+        cumulative: b.cumulative,
+        reporting_period_label: b.reporting_period_label,
+        period_start: b.period_start,
+        period_end: b.period_end,
+        limitations: b.limitations,
+      })),
+      timeline: (timeRes.rows as any[]).map((t) => ({
+        id: t.id,
+        event_type: t.event_type,
+        title: t.title,
+        description: t.description,
+        date_value: t.date_value,
+        date_precision: t.date_precision,
+        period_start: t.period_start,
+        period_end: t.period_end,
+        reporting_period_label: t.reporting_period_label,
+        provisional: t.provisional,
+        is_public: t.is_public,
+      })),
+      history: [],
+    };
+  }
+
+  // 19. List Records (Administrative View)
+  async listRecords(query: ListAdminRecordsQuery): Promise<{
+    records: any[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    const conditions: string[] = [];
+    const params: any[] = [];
+    let paramIndex = 1;
+
+    if (query.q && query.q.trim()) {
+      conditions.push(`(r.title ILIKE $${paramIndex} OR r.summary ILIKE $${paramIndex} OR r.slug ILIKE $${paramIndex})`);
+      params.push(`%${query.q.trim()}%`);
+      paramIndex++;
+    }
+
+    if (query.type) {
+      conditions.push(`r.record_type = $${paramIndex}`);
+      params.push(query.type);
+      paramIndex++;
+    }
+
+    if (query.sector) {
+      conditions.push(`EXISTS (SELECT 1 FROM record_sectors rs WHERE rs.record_id = r.id AND rs.sector_id = $${paramIndex})`);
+      params.push(query.sector);
+      paramIndex++;
+    }
+
+    if (query.status) {
+      conditions.push(`(r.implementation_status = $${paramIndex} OR r.implementation_status = $${paramIndex + 1})`);
+      params.push(query.status, mapImplementationStatus(query.status));
+      paramIndex += 2;
+    }
+
+    if (query.publication_status) {
+      conditions.push(`(r.publication_status = $${paramIndex} OR r.workflow_status = $${paramIndex})`);
+      params.push(query.publication_status);
+      paramIndex++;
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const countRes = await this.db.query<{ count: string }>(
+      `SELECT count(*) as count FROM records r ${whereClause}`,
+      params,
+    );
+    const total = parseInt(countRes.rows[0]?.count || '0', 10);
+
+    const page = query.page || 1;
+    const limit = query.limit || 20;
+    const offset = (page - 1) * limit;
+
+    const recordsRes = await this.db.query<any>(
+      `
+      SELECT
+        r.id::text as id,
+        r.record_type,
+        r.title,
+        r.slug,
+        r.summary as short_summary,
+        r.implementation_status,
+        r.publication_status,
+        r.workflow_status,
+        r.is_public,
+        r.created_at::text,
+        r.updated_at::text,
+        (
+          SELECT s.label FROM record_sectors rs
+          JOIN sectors s ON s.id = rs.sector_id
+          WHERE rs.record_id = r.id AND rs.role_code = 'primary'
+          LIMIT 1
+        ) as lead_sector_label,
+        (
+          SELECT i.canonical_name FROM record_institutions ri
+          JOIN institutions i ON i.id = ri.institution_id
+          WHERE ri.record_id = r.id AND ri.role_code = 'lead'
+          LIMIT 1
+        ) as lead_institution_name,
+        'national' as geographic_scope
+      FROM records r
+      ${whereClause}
+      ORDER BY r.updated_at DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+      `,
+      [...params, limit, offset],
+    );
+
+    return {
+      records: recordsRes.rows,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit) || 1,
     };
   }
 }

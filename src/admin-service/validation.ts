@@ -310,4 +310,16 @@ export const workflowTransitionSchema = z.object({
 
 export type WorkflowTransitionInput = z.infer<typeof workflowTransitionSchema>;
 
+export const listAdminRecordsSchema = z.object({
+  q: z.string().optional(),
+  type: z.enum(RECORD_TYPES).optional(),
+  sector: z.string().optional(),
+  status: z.enum(IMPLEMENTATION_STATUSES).optional(),
+  publication_status: z.enum(['draft', 'unpublished', 'published', 'archived', 'corrected']).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
+
+export type ListAdminRecordsQuery = z.infer<typeof listAdminRecordsSchema>;
+
 
