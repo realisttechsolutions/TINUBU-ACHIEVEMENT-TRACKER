@@ -1,11 +1,11 @@
 {
-    "name": "Renewed Hope Achievements Tracker",
-    "short_name": "RH Tracker",
-    "description": "A data-driven progress hub showcasing President Bola Tinubu's economic and financial policies and achievements since May 2023.",
+    "name": "President Tinubu Achievement Tracker",
+    "short_name": "PTAT",
+    "description": "Official empirical tracker documenting President Bola Ahmed Tinubu's achievements, infrastructure projects, statutory policies, and economic reforms.",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#2E3192",
+    "background_color": "#020617",
+    "theme_color": "#020617",
     "orientation": "portrait-primary",
     "icons": [
         {
@@ -14,16 +14,22 @@
             "type": "image/x-icon"
         },
         {
-            "src": "/icon-192.png",
+            "src": "/brand/ptat-icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
-            "src": "/icon-512.png",
+            "src": "/brand/ptat-icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/brand/ptat-icon-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "categories": [
@@ -36,4 +42,4 @@
     "scope": "/",
     "screenshots": [],
     "prefer_related_applications": false
-}
+}

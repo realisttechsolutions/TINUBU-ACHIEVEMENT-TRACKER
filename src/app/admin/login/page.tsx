@@ -3,6 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { clientStaffSignIn, clientStaffSignOut } from '@/lib/auth/firebase-client';
 import { CSRF_HEADER_NAME, CSRF_HEADER_EXPECTED_VALUE } from '@/lib/auth/types';
 
@@ -76,19 +77,25 @@ function LoginForm() {
 
   return (
     <div className="w-full max-w-md p-8 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-2xl backdrop-blur">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-3">
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
+      <div className="text-center mb-8 flex flex-col items-center">
+        <div className="relative w-[240px] h-[58px] mb-4">
+          <Image
+            src="/brand/ptat-header-logo.png"
+            alt="President Tinubu Achievement Tracker"
+            fill
+            priority
+            sizes="240px"
+            className="object-contain"
+          />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">
-          Staff Administration Login
+        <h1 className="text-lg font-bold text-white tracking-tight">
+          Staff Administration Console
         </h1>
-        <p className="text-xs text-slate-300 mt-1">
+        <p className="text-xs text-slate-400 mt-1">
           Authorized editorial, research, and governance personnel only
         </p>
       </div>
+
 
       {errorMessage && (
         <div

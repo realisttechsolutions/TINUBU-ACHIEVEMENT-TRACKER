@@ -13,14 +13,14 @@ const staging = isStagingEnvironment();
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinubutracker.ng'),
+  applicationName: 'PTAT',
   title: {
-    default: 'President Tinubu Achievement Tracker - Nigeria National Progress & Evidence Hub (2023 - 2026)',
-    template: '%s | President Tinubu Achievement Tracker',
+    default: 'PTAT — President Tinubu Achievement Tracker (2023 - 2026)',
+    template: '%s | PTAT',
   },
   description:
     "Official empirical tracker documenting President Bola Ahmed Tinubu's achievements, infrastructure projects, statutory policies, and economic reforms backed by primary institutional evidence.",
   keywords: [
-    'President Tinubu Achievement Tracker',
     'PTAT',
     'President Tinubu Achievement Tracker',
     'Nigeria Federal Government',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     'Nigeria Progress Dashboard',
     'National Development',
   ],
-  authors: [{ name: 'President Tinubu Achievement Tracker Research & Data Team' }],
+  authors: [{ name: 'PTAT Research & Data Intelligence Team' }],
   creator: 'Federal Republic of Nigeria Data Intelligence',
   publisher: 'President Tinubu Achievement Tracker',
   robots: {
@@ -50,32 +50,39 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_NG',
     url: 'https://tinubutracker.ng',
-    siteName: 'President Tinubu Achievement Tracker',
-    title: 'President Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
+    siteName: 'President Tinubu Achievement Tracker (PTAT)',
+    title: 'PTAT — President Tinubu Achievement Tracker',
     description:
       "Comprehensive data-driven platform tracking President Bola Ahmed Tinubu's national achievements, infrastructure investments, and statutory policies.",
     images: [
       {
-        url: '/assets/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'President Tinubu Achievement Tracker - National Progress Platform',
+        url: '/brand/ptat-header-logo.png',
+        width: 1024,
+        height: 341,
+        alt: 'PTAT — President Tinubu Achievement Tracker',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'President Tinubu Achievement Tracker - Empirical Progress & Evidence Hub',
+    title: 'PTAT — President Tinubu Achievement Tracker',
     description:
       "Verified achievements, infrastructure delivery, and macroeconomic data under the administration of President Bola Ahmed Tinubu (2023 - 2026).",
-    images: ['/assets/og-image.jpg'],
+    images: ['/brand/ptat-header-logo.png'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/brand/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/brand/ptat-icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/assets/apple-touch-icon.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
   },
 };
+
 
 
 export const viewport: Viewport = {

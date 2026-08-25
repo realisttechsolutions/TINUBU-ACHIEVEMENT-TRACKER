@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   type StaffUser,
@@ -90,10 +91,19 @@ export function AdminHeader({ user }: AdminHeaderProps) {
 
           <Link
             href="/admin"
-            className="font-bold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm hover:text-emerald-400 transition-colors shrink-0"
+            className="font-bold tracking-tight text-white flex items-center gap-2 text-xs sm:text-sm hover:text-emerald-400 transition-colors shrink-0"
           >
-            <span className="inline-block w-2 sm:w-2.5 h-2 sm:h-2.5 rounded bg-emerald-500" />
-            <span className="truncate">PTAT Admin Console</span>
+            <div className="relative w-6 h-6 rounded overflow-hidden border border-emerald-500/40 shadow-sm shrink-0">
+              <Image
+                src="/brand/ptat-icon-master.png"
+                alt="PTAT"
+                width={24}
+                height={24}
+                priority
+                className="object-contain w-full h-full"
+              />
+            </div>
+            <span className="truncate font-semibold">PTAT Admin Console</span>
           </Link>
 
           <span

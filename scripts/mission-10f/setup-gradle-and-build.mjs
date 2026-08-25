@@ -133,7 +133,7 @@ async function main() {
   );
 
   // Zipalign & Sign Public APK
-  await runCmd(`"${zipalignBin}"`, ['-v', '-p', '4', `"${unsignedPublicApk}"`, `"${alignedPublicApk}"`], process.cwd(), buildEnv);
+  await runCmd(`"${zipalignBin}"`, ['-f', '-v', '-p', '4', `"${unsignedPublicApk}"`, `"${alignedPublicApk}"`], process.cwd(), buildEnv);
   await runCmd(
     `"${apksignerBin}"`,
     [
@@ -162,7 +162,7 @@ async function main() {
   );
 
   // Zipalign & Sign Admin APK
-  await runCmd(`"${zipalignBin}"`, ['-v', '-p', '4', `"${unsignedAdminApk}"`, `"${alignedAdminApk}"`], process.cwd(), buildEnv);
+  await runCmd(`"${zipalignBin}"`, ['-f', '-v', '-p', '4', `"${unsignedAdminApk}"`, `"${alignedAdminApk}"`], process.cwd(), buildEnv);
   await runCmd(
     `"${apksignerBin}"`,
     [
