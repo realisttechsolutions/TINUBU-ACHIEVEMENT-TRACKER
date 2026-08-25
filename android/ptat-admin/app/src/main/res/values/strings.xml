@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PTAT Admin</string>
+    <string name="start_url">https://tat-staging--tinubu-achievement-stg.us-central1.hosted.app/admin/login</string>
+</resources>
