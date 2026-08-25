@@ -73,7 +73,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             className="font-bold tracking-tight text-white flex items-center gap-2 text-sm hover:text-emerald-400 transition-colors"
           >
             <span className="inline-block w-2.5 h-2.5 rounded bg-emerald-500" />
-            <span>TAT Admin Console</span>
+            <span>PTAT Admin Console</span>
           </Link>
 
           <span
