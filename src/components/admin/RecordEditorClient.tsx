@@ -646,27 +646,47 @@ export default function RecordEditorClient({
         </div>
       )}
 
-      {/* Navigation Bar */}
-      <div className="flex overflow-x-auto border-b border-slate-800 gap-1 pb-px scrollbar-thin">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setActiveTab(t.id as any)}
-            className={`px-4 py-2.5 text-xs font-medium rounded-t-lg transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activeTab === t.id
-                ? 'bg-slate-900 text-emerald-400 border-t-2 border-emerald-500 border-x border-slate-800'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
-            }`}
+      {/* Navigation Bar & Mobile Section Selector */}
+      <div className="space-y-2">
+        {/* Mobile Dropdown (sm:hidden) */}
+        <div className="sm:hidden">
+          <label htmlFor="mobile-tab-select" className="sr-only">Select Record Section</label>
+          <select
+            id="mobile-tab-select"
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value as any)}
+            className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
-            <span>{t.label}</span>
-            {t.count !== null && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono">
-                {t.count}
-              </span>
-            )}
-          </button>
-        ))}
+            {tabs.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.label} {t.count !== null ? `(${t.count})` : ''}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Scrollable Horizontal Tabs (all viewports) */}
+        <div className="flex overflow-x-auto border-b border-slate-800 gap-1 pb-px scrollbar-none touch-pan-x">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setActiveTab(t.id as any)}
+              className={`px-3.5 sm:px-4 py-2.5 text-xs font-medium rounded-t-lg transition-all whitespace-nowrap flex items-center gap-1.5 shrink-0 ${
+                activeTab === t.id
+                  ? 'bg-slate-900 text-emerald-400 border-t-2 border-emerald-500 border-x border-slate-800'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/40'
+              }`}
+            >
+              <span>{t.label}</span>
+              {t.count !== null && (
+                <span className="px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono">
+                  {t.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* TAB CONTENT AREAS */}

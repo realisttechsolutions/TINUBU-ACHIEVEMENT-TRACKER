@@ -27,6 +27,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const allowedRoutes = getAllowedRoutesForRole(user.role);
 
@@ -64,20 +65,39 @@ export function AdminHeader({ user }: AdminHeaderProps) {
     publisher: 'bg-emerald-950/80 text-emerald-300 border-emerald-700/50',
   };
 
+  const filteredNav = NAV_ITEMS.filter(item => allowedRoutes.includes(item.href));
+
   return (
-    <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur px-6 py-3 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+    <header className="border-b border-slate-800 bg-slate-900/95 backdrop-blur px-4 sm:px-6 py-2.5 sm:py-3 sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+        {/* Brand Lockup & Role Badge */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle Admin Navigation Menu"
+            aria-expanded={mobileMenuOpen}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 md:hidden focus:outline-none focus:ring-2 focus:ring-emerald-500 shrink-0"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
           <Link
             href="/admin"
-            className="font-bold tracking-tight text-white flex items-center gap-2 text-sm hover:text-emerald-400 transition-colors"
+            className="font-bold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm hover:text-emerald-400 transition-colors shrink-0"
           >
-            <span className="inline-block w-2.5 h-2.5 rounded bg-emerald-500" />
-            <span>PTAT Admin Console</span>
+            <span className="inline-block w-2 sm:w-2.5 h-2 sm:h-2.5 rounded bg-emerald-500" />
+            <span className="truncate">PTAT Admin Console</span>
           </Link>
 
           <span
-            className={`px-2 py-0.5 rounded text-[11px] font-mono border uppercase tracking-wider font-semibold ${
+            className={`px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-mono border uppercase tracking-wider font-semibold shrink-0 ${
               roleColors[user.role] || 'bg-slate-800 text-slate-300 border-slate-700'
             }`}
           >
@@ -85,9 +105,9 @@ export function AdminHeader({ user }: AdminHeaderProps) {
           </span>
         </div>
 
-        {/* Dynamic Navigation for allowed roles */}
-        <nav aria-label="Admin Navigation" className="flex items-center gap-1 overflow-x-auto py-1">
-          {NAV_ITEMS.filter(item => allowedRoutes.includes(item.href)).map(item => {
+        {/* Desktop Navigation for allowed roles */}
+        <nav aria-label="Admin Desktop Navigation" className="hidden md:flex items-center gap-1">
+          {filteredNav.map(item => {
             const isActive = pathname === item.href;
             return (
               <Link
@@ -106,25 +126,56 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         </nav>
 
         {/* User Identity & Logout Button */}
-        <div className="flex items-center gap-3 text-xs">
+        <div className="flex items-center gap-2 sm:gap-3 text-xs shrink-0">
           <div className="hidden lg:flex flex-col text-right">
-            <span className="text-slate-200 font-medium truncate max-w-[220px]">
+            <span className="text-slate-200 font-medium truncate max-w-[200px]">
               {user.email}
             </span>
-            <span className="text-[10px] text-slate-300 font-mono">
-              UID: {user.uid.slice(0, 10)}...
+            <span className="text-[10px] text-slate-400 font-mono">
+              UID: {user.uid.slice(0, 8)}...
             </span>
           </div>
 
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="px-3 py-1.5 rounded bg-red-950/60 hover:bg-red-900/80 text-red-300 border border-red-800/50 font-medium transition-colors disabled:opacity-50 text-xs flex items-center gap-1.5"
+            className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-red-950/60 hover:bg-red-900/80 text-red-300 border border-red-800/50 font-medium transition-colors disabled:opacity-50 text-[11px] sm:text-xs flex items-center gap-1"
           >
             {loggingOut ? 'Signing out...' : 'Sign Out'}
           </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer / Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden pt-3 pb-2 border-t border-slate-800 mt-2.5 space-y-2 animate-fade-in">
+          <div className="px-2 py-1 text-[11px] font-mono text-slate-400 border-b border-slate-800/60 pb-1.5 mb-1.5 flex items-center justify-between">
+            <span className="truncate">{user.email}</span>
+            <span className="text-emerald-400 uppercase font-semibold">{user.role}</span>
+          </div>
+          <nav aria-label="Admin Mobile Navigation" className="grid grid-cols-2 gap-1.5">
+            {filteredNav.map(item => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-3 py-2.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
+                    isActive
+                      ? 'bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/40'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60 border border-slate-800'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
+
