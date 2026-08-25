@@ -85,7 +85,9 @@ export async function createAdminControlPlaneDb(): Promise<AdminControlPlaneDb> 
       } finally {
         try {
           await client.query('RESET ROLE');
-        } catch {}
+        } catch {
+          // ignore reset role on client release
+        }
         client.release();
       }
     },
